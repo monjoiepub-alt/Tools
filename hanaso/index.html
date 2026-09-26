@@ -1011,7 +1011,7 @@ const REVIEW_MISSIONS = [
    say:[['すみません、 {駅|えき} ^は どこ です か？','Excuse me, where is the station?'],['ありがとう ございます！','Thank you!']],
    aya:'Answer like a real local, a bit fast, so he has to use もう一度お願いします.'},
   {task:'Road trip talk: on your next drive, name the signs, the weather and the food you see, in Japanese.',
-   say:[['あれ ^は {何|なん}？','What\'s that?'],['{雪|ゆき} だ！','Snow!'],['お{腹|なか} {空|す}いた。','I\'m hungry.']],
+   say:[['あれ ^は {何|なに}？','What\'s that?'],['{雪|ゆき} だ！','Snow!'],['お{腹|なか} {空|す}いた。','I\'m hungry.']],
    aya:'Point at things on the way and ask あれは何？'},
   {task:'Full ski shop role play: welcome, sizes, gear and return time. Aya is the customer.',
    say:[['{返却|へんきゃく} ^は {午後|ごご} {五時|ごじ} まで です。','Please return it by 5 pm.'],['お{待|ま}たせ しました。','Sorry to keep you waiting.']],
@@ -1377,7 +1377,35 @@ function pickVoice() {
 try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', () => { pickVoice(); if (tab === 'settings') render(); }); } catch (e) {}
 let utter = null, speakCheck = null;
 const NO_VOICE_HELP = 'On iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese. On Android: Settings → Text-to-speech → install Japanese.';
+/* Recorded audio (audio/<deck>.json, generated with OpenJTalk) plays first; the phone's voice is only a backup. */
+const AUDIO = {}, audioLoading = {};
+const bundleOf = it => it.loose ? 'say' : it.deck.id;
+const audioKey = it => it.kanji.replace(/[…「」]/g, '');
+function loadBundle(b) {
+  if (AUDIO[b]) return Promise.resolve(AUDIO[b]);
+  if (!audioLoading[b]) audioLoading[b] = fetch('audio/' + b + '.json').then(r => r.ok ? r.json() : {}).catch(() => ({})).then(d => (AUDIO[b] = d));
+  return audioLoading[b];
+}
+function preloadFor(items) { new Set(items.map(bundleOf)).forEach(loadBundle); }
+const player = new Audio();
+const RATE_TO_SPEED = {0.65: 0.8, 0.85: 1, 1: 1.15};
 function speak(it, fromUser = true) {
+  const b = bundleOf(it), key = audioKey(it);
+  const play = data => {
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+    player.pause();
+    player.src = 'data:audio/mpeg;base64,' + data;
+    player.playbackRate = RATE_TO_SPEED[S.settings.rate] || 1;
+    player.play().catch(err => {
+      if (!fromUser) return;
+      if (err && err.name === 'NotAllowedError') toast('Tap Listen to play the sound.');
+      else speakTTS(it, fromUser);
+    });
+  };
+  if (AUDIO[b]) return AUDIO[b][key] ? play(AUDIO[b][key]) : speakTTS(it, fromUser);
+  loadBundle(b).then(d => d[key] ? play(d[key]) : speakTTS(it, fromUser));
+}
+function speakTTS(it, fromUser = true) {
   const synth = window.speechSynthesis;
   if (!synth || typeof SpeechSynthesisUtterance === 'undefined') {
     if (fromUser) toast('This app window cannot read aloud. Open the link in Safari (iPhone) or Chrome (Android).');
@@ -1667,7 +1695,7 @@ function viewSettings() {
         ${seg('dirs', [['both', 'Both ways'], ['jp', 'Only JP → EN'], ['en', 'Only EN → JP']])}</div>
       <div class="setting"><h3>Read Japanese aloud automatically</h3>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
       <div class="setting"><h3>Voice speed</h3>${seg('rate', [[0.65, 'Slow'], [0.85, 'Normal'], [1, 'Natural']])}
-        <p class="muted" style="font-size:14px">${jaVoice ? 'Japanese voice: ' + esc(jaVoice.name) : 'No Japanese voice found yet. On iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese. On Android: Settings → Text-to-speech → install Japanese.'}</p>
+        <p class="muted" style="font-size:14px">Every card has its own recorded Japanese audio, so no setup is needed. ${jaVoice ? 'Backup voice: ' + esc(jaVoice.name) + '.' : ''}</p>
         <div><button class="mini" data-act="testvoice">${ICON_SPEAK} Test voice</button></div></div>
     </div>
   </section>
@@ -1692,6 +1720,7 @@ function render() {
   const s = streakNow();
   document.getElementById('streakPill').textContent = s ? s + (s === 1 ? ' day' : ' days') + ' in a row' : 'Day 1';
   if (tab === 'phrases') {
+    preloadFor(DECKS.filter(d => phraseDeck === 'all' || d.id === phraseDeck).map(d => DECK_ITEMS[d.id][0]));
     const inp = document.getElementById('phraseSearch');
     inp.addEventListener('input', () => { phraseQuery = inp.value; document.getElementById('plist').innerHTML = phraseRows(); });
   }
@@ -1705,6 +1734,7 @@ function startSession(extraNew = 0) {
   const q = buildQueue(extraNew);
   if (!q.length) return;
   sess = {queue: q, pos: 0, answered: 0};
+  preloadFor(q.map(e => e.it));
   document.getElementById('study').hidden = false;
   document.body.style.overflow = 'hidden';
   showCard();
@@ -1830,6 +1860,7 @@ function startLesson() {
   const L = lessonFor(S.course.day);
   const q = lessonQueue(L);
   sess = {mode: 'lesson', L, queue: q, pos: 0, answered: 0, xp0: S.xp};
+  preloadFor([...q.map(e => e.it), ...L.mission.sayItems, ...(L.g ? L.g.ex.map(([n]) => ITEMS['grammar|' + kanaText(parse(n))]) : [])]);
   openStudy();
   if (L.g || L.cards) showIntro(); else if (q.length) showCard(); else finishLesson();
 }
@@ -1972,4 +2003,5 @@ document.addEventListener('keydown', e => {
 });
 
 render();
+loadBundle('basics'); loadBundle('say');
 </script>

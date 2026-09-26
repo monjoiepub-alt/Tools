@@ -53,7 +53,8 @@ Aya's family, with strangers, and with Aya.
 - **Writing grows with each card:** romaji → kana (after 1 week) →
   kanji with furigana (after 3 weeks) → kanji only (after 2 months).
   Signs and menu words start in kanji with furigana.
-- **Audio** with the phone's Japanese voice, a searchable **phrasebook**,
+- **Recorded audio for every card** (`audio/`, made offline with OpenJTalk; see
+  `tools/make_audio.md`). The phone's own voice is only a backup, a searchable **phrasebook**,
   and a "show big" mode to show a sentence to someone.
 
 Progress is saved in the browser (localStorage). Use Settings → Backup to
