@@ -1167,7 +1167,7 @@ LESSONS.forEach(l => { if (!l.review) l.cards = [...l.items.map(r => BY_REF[r]),
    ============================================================ */
 const KEY = 'hanaso.v1';
 const CORE_ON = ['v-time','v-people','v-food','v-home','v-places','v-nature','v-verbs','v-adj','v-colour','v-small','v-work'];
-const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay: true, rate: 0.85,
+const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay: false, autoplayOffV2: true, rate: 0.85,
   decks: {grammar:true, basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
     ...Object.fromEntries(CORE_ON.map(id => [id, true]))}};
 const blankCourse = () => ({day: 1, last: 0, pending: null, cur: null});
@@ -1176,6 +1176,7 @@ function fromSaved(s) {
   const cards = {};
   // Older saves had one card per phrase; they become the "understand" (JP → EN) card.
   for (const k in (s.cards || {})) cards[k.includes('>') ? k : k + '>jp'] = s.cards[k];
+  if (s.settings && !s.settings.autoplayOffV2) { s.settings.autoplay = false; s.settings.autoplayOffV2 = true; }
   return {cards, prio: s.prio || {}, wlvl: s.wlvl || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
           day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0, ...(s.streak || {})}, total: s.total || 0,
           xp: s.xp || 0, talks: s.talks || 0, log: s.log || {}, course: {...blankCourse(), ...(s.course || {})}};
@@ -1693,7 +1694,7 @@ function viewSettings() {
         ${seg('script', [['auto', 'Auto'], [0, 'Romaji'], [1, 'Kana'], [2, 'Kanji + furigana'], [3, 'Kanji']])}</div>
       <div class="setting"><h3>Card directions</h3><p class="muted" style="font-size:14px">Both ways: each phrase has an understand card (JP → EN) and a speaking card (EN → JP). The speaking card unlocks after the first one.</p>
         ${seg('dirs', [['both', 'Both ways'], ['jp', 'Only JP → EN'], ['en', 'Only EN → JP']])}</div>
-      <div class="setting"><h3>Read Japanese aloud automatically</h3>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
+      <div class="setting"><h3>Read Japanese aloud automatically</h3><p class="muted" style="font-size:14px">Off: the sound only plays when you tap Listen.</p>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
       <div class="setting"><h3>Voice speed</h3>${seg('rate', [[0.65, 'Slow'], [0.85, 'Normal'], [1, 'Natural']])}
         <p class="muted" style="font-size:14px">Every card has its own recorded Japanese audio, so no setup is needed. ${jaVoice ? 'Backup voice: ' + esc(jaVoice.name) + '.' : ''}</p>
         <div><button class="mini" data-act="testvoice">${ICON_SPEAK} Test voice</button></div></div>
