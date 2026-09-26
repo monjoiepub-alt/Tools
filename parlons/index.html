@@ -262,6 +262,10 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 .st-tile{border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-weight:700;font-size:16px;padding:6px 4px;text-align:center;line-height:1.2}
 .st-tile small{display:block;font-weight:400;font-size:12px}
 .st-tile.got{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip.retry{color:var(--hard);border-color:var(--hard);background:var(--surface)}
+.mix .ks{color:var(--accent);font-weight:700}
+.mix .hp{color:var(--muted);font-weight:400}
+.mix .hp .nas{opacity:.55}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:1fr}.grade{font-size:14px}}
 </style>
@@ -1093,7 +1097,7 @@ const SOUNDS = [
   {id:'in', label:'in, ain, un', say:'ehn', order:10, re:`(?:[iy]en|ain|aim|ein|in|im|un|um|yn)(?![${V_}nm])`,
    trick:'Nasal "eh" through the nose: vin, pain, bien, un. The mouth is wide open, like a small smile.',
    ex:['vin','pain','bien'], vs:[['vin','vent'],['pain','pont']]},
-  {id:'e2', label:'è, ê, ai', say:'eh', order:22, re:`[èêë]|a[iî](?![nm])|ei(?![nlm])|(?<!${L_})(?:est|es)(?!${L_})|(?<=${L_}{2})et(?!${L_})`,
+  {id:'e2', label:'è, ê, ai', say:'eh', order:22, re:`[èêë]|a[iî](?![nm](?![${V_}]))|ei(?!l|[nm](?![${V_}]))|(?<!${L_})(?:est|es)(?!${L_})|(?<=${L_}{2})et(?!${L_})`,
    trick:'An open "eh", like in English "bed": mère, fête, mais. Also "est" (is) and "tu es".',
    ex:['mère','fête','mais'], vs:[['mais','mes']]},
   {id:'o', label:'au, eau', say:'oh', order:9, re:`eau|au`,
@@ -1314,6 +1318,7 @@ function plan(extraNew = 0) {
 }
 function buildQueue(extraNew = 0) {
   const {due, fresh} = plan(extraNew), q = [];
+  shuffle(fresh);   // random order every time, so you can't guess a card from its position
   let i = 0, j = 0;
   while (i < due.length || j < fresh.length) {
     for (let k = 0; k < 3 && i < due.length; k++) q.push(due[i++]);
@@ -1324,7 +1329,7 @@ function buildQueue(extraNew = 0) {
 
 /* Pronunciation ladder: 0 = French + help, 1 = all its sounds known (help hidden), 2 = known well (3+ weeks). */
 const knowsAll = it => it.units.every(u => S.snd[u]);
-const LEVELS = ['With help', 'Sounds known', 'Known well'];
+const LEVELS = ['Pronunciation + your sounds', 'French', 'Known well'];
 function levelFor(it) {
   const h = S.settings.help;
   if (h === 'always') return 0;
@@ -1338,6 +1343,34 @@ function huntStats(items) {
   let all = 0, known = 0;
   items.forEach(it => it.spans.forEach(sp => { all++; if (S.snd[sp.u]) known++; }));
   return {all, known};
+}
+/* Mixed pronunciation: the sounds you have learned are shown in normal French spelling (highlighted),
+   the sounds you have not learned yet keep the easy pronunciation help, and plain letters stay as they are.
+   Silent letters you have not learned yet are left out, like in the full help. */
+const PIECE = {
+  ou: () => 'oo', u: () => 'ü', end: () => '', r: () => 'r', uh: () => 'uh', on: () => 'ohⁿ', an: () => 'ahⁿ',
+  e1: t => t.replace(/é|er$|ez$|et$|es$|e$/, 'ay'),
+  in: t => /^[iy]en/.test(t) ? 'yehⁿ' : /^u/.test(t) ? 'uhⁿ' : 'ehⁿ',
+  e2: () => 'eh', o: () => 'oh', oi: t => t.startsWith('oin') ? 'wehⁿ' : 'wa', ch: () => 'sh', zh: () => 'zh', eu: () => 'ö',
+  qu: t => t[0] === 'q' ? 'k' : 'g', h: t => t === 'ph' ? 'f' : t === 'th' ? 't' : '', s: () => 's', z: () => 'z',
+  ill: t => (t.startsWith('ou') ? 'oo' : /^(eu|œu)/.test(t) ? 'ö' : t[0] === 'a' ? 'ah' : t[0] === 'e' ? 'eh' : 'ee') + 'y',
+  gn: () => 'ny', tion: () => 'syohⁿ', ui: () => 'wee', liaison: t => /[sxz]/.test(t) ? 'z' : 't', ent: () => '',
+};
+function mixHTML(it) {
+  let h = '', i = 0;
+  const nas = x => esc(x).replace(/ⁿ/g, '<span class="nas">n</span>');
+  for (const sp of it.spans) {
+    h += frText(it.fr.slice(i, sp.s));
+    const orig = it.fr.slice(sp.s, sp.e);
+    if (S.snd[sp.u]) h += `<b class="ks">${esc(orig)}</b>`;
+    else {
+      let p = PIECE[sp.u](orig.toLowerCase());
+      if (p && orig[0] !== orig[0].toLowerCase()) p = p[0].toUpperCase() + p.slice(1);
+      if (p) h += `<span class="hp">${nas(p)}</span>`;
+    }
+    i = sp.e;
+  }
+  return h + frText(it.fr.slice(i));
 }
 function pronHTML(it) {
   const p = PRON[spoken(it.fr)];
@@ -1373,28 +1406,37 @@ function lessonFor(n) {
   return {n, auto: true, deck: d.id, t: d.name, fr: d.fr, cards, mission: missionFor(n, d.id)};
 }
 function lessonQueue(L) {
-  const dir = S.settings.dirs === 'en' ? 'en' : 'fr';
-  const fresh = (L.cards || []).filter(it => !S.cards[keyOf(it, dir)]).map(it => ({it, dir, k: keyOf(it, dir)}));
-  const inLesson = new Set((L.cards || []).map(it => it.id));
+  // Today's new words come twice, from both sides: first French → English (understand),
+  // then later in the same lesson English → French (speak).
+  const both = S.settings.dirs === 'both', first = S.settings.dirs === 'en' ? 'en' : 'fr', per = both ? 2 : 1;
+  const words = [...(L.cards || [])];
+  const inLesson = new Set(words.map(it => it.id));
   const P = plan(0);
   let due = P.due.filter(e => !inLesson.has(e.it.id));
-  due = due.slice(0, L.review ? 45 : Math.max(15, 42 - fresh.length));
-  // Early days have few reviews: add the most important new cards (within the daily limit) so the lesson still has ~30 cards.
-  if (!L.review && fresh.length + due.length < 30) due.push(...P.fresh.filter(e => !inLesson.has(e.it.id)).slice(0, 30 - fresh.length - due.length));
-  // Aim for about 20 minutes (~40 cards): if there are not enough reviews, practise the youngest cards you already know.
-  const target = Math.max(0, 40 - fresh.length);
+  // Early days have few reviews: add the most important new words (within the daily limit) so the lesson still has ~30 cards.
+  if (!L.review && words.length * per + due.length < 30) {
+    const extra = P.fresh.map(e => e.it).filter(it => !inLesson.has(it.id) && !S.cards[keyOf(it, first)]);
+    extra.slice(0, Math.ceil((30 - words.length * per - due.length) / per)).forEach(it => { words.push(it); inLesson.add(it.id); });
+    due = due.filter(e => !inLesson.has(e.it.id));
+  }
+  const fresh = words.filter(it => !S.cards[keyOf(it, first)]).map(it => ({it, dir: first, k: keyOf(it, first)}));
+  const fresh2 = both ? words.filter(it => !S.cards[keyOf(it, 'en')]).map(it => ({it, dir: 'en', k: keyOf(it, 'en')})) : [];
+  const newCount = fresh.length + fresh2.length;
+  // Today's words take twice the space now, so fewer extra reviews: the lesson stays around 40 cards (~20 minutes).
+  due = due.slice(0, L.review ? 45 : Math.max(10, 42 - newCount));
+  const target = Math.max(0, 40 - newCount);
   if (due.length < target) {
     const have = new Set([...inLesson, ...due.map(e => e.it.id)]);
     Object.keys(S.cards).map(k => ({k, it: itemOfKey(k)})).filter(x => x.it && !have.has(x.it.id))
       .sort((a, b) => S.cards[a.k].ivl - S.cards[b.k].ivl)
       .forEach(x => { if (due.length < target && !have.has(x.it.id)) { have.add(x.it.id); due.push({it: x.it, dir: x.k.slice(x.k.lastIndexOf('>') + 1), k: x.k}); } });
   }
-  const q = []; let i = 0, j = 0;
-  while (i < fresh.length || j < due.length) {
-    for (let c = 0; c < 2 && i < fresh.length; c++) q.push(fresh[i++]);
-    if (j < due.length) q.push(due[j++]);
-  }
-  return q;
+  // Random order every time, so you can't guess a card from its position.
+  shuffle(fresh); shuffle(fresh2); shuffle(due);
+  const half = Math.ceil(due.length / 2);
+  const mix = (a, b) => { const q = []; let i = 0, j = 0; while (i < a.length || j < b.length) { for (let c = 0; c < 2 && i < a.length; c++) q.push(a[i++]); if (j < b.length) q.push(b[j++]); } return q; };
+  // Part 1: understand today's words. Part 2: say them (every speaking card comes after its understanding card).
+  return [...mix(fresh, due.slice(0, half)), ...mix(fresh2, due.slice(half))];
 }
 const minutesFor = (q, L) => Math.max(5, Math.round((q.length * 18 + (L.g ? 150 : 0) + (L.review ? 60 : 240) + 120) / 60));
 
@@ -1605,16 +1647,16 @@ function todayPanel() {
 function viewHome() {
   const lc = ladderCounts();
   const steps = [
-    {lab: 'With help', when: 'new cards', sample: '<span class="fr">bonjour</span><span class="pron">bohn-ZHOOR</span>'},
-    {lab: 'Sounds known', when: 'when you know all its sounds', sample: '<span class="fr">bonjour</span><span class="pron">&nbsp;</span>'},
-    {lab: 'Known well', when: 'after 3 weeks', sample: '<span class="fr">bonjour ✓</span><span class="pron">&nbsp;</span>'},
+    {lab: 'Pronunciation + your sounds', when: 'new cards', sample: '<span class="fr mix">b<span class="hp">oh<span class="nas">n</span></span>zh<b class="ks">ou</b>r</span>'},
+    {lab: 'French', when: 'when you know all its sounds', sample: '<span class="fr">bonjour</span>'},
+    {lab: 'Known well', when: 'after 3 weeks', sample: '<span class="fr">bonjour ✓</span>'},
   ];
   return `
   ${todayPanel()}
 
   <section class="section">
     <div><h2>How the help fades</h2>
-    <p class="muted small" style="margin-top:4px">New cards show an easy pronunciation help under the French. When you know every sound in a card (from the sounds of the day), the help goes away. The numbers show your cards at each step.</p></div>
+    <p class="muted small" style="margin-top:4px">New cards show the easy pronunciation, but every sound you have learned (in the sounds of the day) already appears in normal French spelling, in <b style="color:var(--accent)">teal</b>. Sound by sound, the card becomes normal French. The numbers show your cards at each step.</p></div>
     <div class="ladder">
       ${steps.map((s, i) => `<div class="step"><span class="sample">${s.sample}</span><span class="lab">${s.lab}</span><span class="when">${s.when}</span><span class="cnt">${lc[i]}</span></div>`).join('')}
     </div>
@@ -1740,7 +1782,7 @@ function viewProgress() {
     <ol>
       <li>Do one lesson a day. It takes about 20 minutes.</li>
       <li>When a card shows English, say the French <b>out loud</b> before you check.</li>
-      <li>Be honest with the buttons. <b>See again</b> brings the card back in a few cards. <b>I know the meaning</b> (but not the pronunciation) shows it again without the help, and it stays without help from then on. <b>I know it</b> pushes it further into the future.</li>
+      <li>Be honest with the buttons. <b>See again</b> gives the card one second try a few cards later. If it is still hard, it comes back tomorrow, so every lesson has a fixed size. <b>I know the meaning</b> (but not the pronunciation) gives it a second try without the help, and it stays without help from then on. <b>I know it</b> pushes it further into the future.</li>
       <li>Every phrase has two cards: first you learn to <b>understand</b> it (French → English). Once you pass that, a <b>speaking</b> card (English → French) unlocks.</li>
       <li>Stars show how important a card is. ★★★ cards come first and come back more often. Tap the stars on a card to change them.</li>
       <li>Use the phrases with him and his family. Real conversations are the best practice. Mistakes are fine!</li>
@@ -1769,8 +1811,8 @@ function viewSettings() {
     <div class="panel" style="padding-block:4px">
       <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[10, '10'], [15, '15'], [20, '20'], [30, '30']])}</div>
       <div class="setting"><h3>New sounds per lesson</h3><p class="muted small">Reading and listening only, one sound at a time, with a memory trick and a short quiz.</p>${seg('soundsPerDay', [[2, '2'], [3, '3'], [4, '4']])}</div>
-      <div class="setting"><h3>Pronunciation help</h3><p class="muted small">Auto: the help under the French disappears when you know all the sounds in that card.</p>
-        ${seg('help', [['auto', 'Auto'], ['always', 'Always show'], ['never', 'Hide (tap to see)']])}</div>
+      <div class="setting"><h3>Pronunciation help</h3><p class="muted small">Auto: cards show the pronunciation, with the sounds you have learned in normal French spelling. When you know all the sounds in a card, it is shown fully in French.</p>
+        ${seg('help', [['auto', 'Auto'], ['always', 'Always mixed'], ['never', 'French only (tap to see)']])}</div>
       <div class="setting"><h3>Card directions</h3><p class="muted small">Both ways: each phrase has an understand card (FR → EN) and a speaking card (EN → FR). The speaking card unlocks after the first one.</p>
         ${seg('dirs', [['both', 'Both ways'], ['fr', 'Only FR → EN'], ['en', 'Only EN → FR']])}</div>
       <div class="setting"><h3>Play French automatically</h3><p class="muted small">Off: the sound only plays when you tap Listen.</p>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
@@ -1834,21 +1876,25 @@ function frBlock(it, lvl, noHelp) {
   const len = it.fr.length;
   const size = len <= 8 ? 44 : len <= 16 ? 36 : len <= 30 ? 29 : 24;
   const help = pronHTML(it);
-  const main = `<div class="fr-main fr" style="font-size:${size}px">${lvl === 0 ? hunt(it) : frText(it.fr)}</div>`;
+  const main = `<div class="fr-main fr${lvl === 0 ? ' mix' : ''}" style="font-size:${size}px">${lvl === 0 ? mixHTML(it) : frText(it.fr)}</div>`;
   if (!help) return main;
-  if (lvl === 0) return main + `<div class="pron fr-help">${help}</div>`;
   return main + (noHelp ? '' : `<div class="pron fr-help" data-peek="help" hidden>${help}</div>`);
 }
 function peekButtons(it, lvl, noHelp) {
   let b = listenBtn(it);
-  if (lvl > 0 && !noHelp && PRON[spoken(it.fr)]) b += `<button class="mini" data-act="peek">Show help</button>`;
+  if (!noHelp && PRON[spoken(it.fr)]) b += `<button class="mini" data-act="peek">Show pronunciation</button>`;
   return `<div class="row-btns">${b}</div>`;
 }
 function showCard() {
   const box = document.getElementById('studyIn');
+  // A second try waits until its turn (3–6 cards later). When no other cards are left, it comes now.
+  const waiting = sess.retries || [];
+  const ready = waiting.filter(r => r.at <= sess.answered || sess.pos >= sess.queue.length).sort((a, b) => a.at - b.at)[0];
+  if (ready) { waiting.splice(waiting.indexOf(ready), 1); sess.queue.splice(sess.pos, 0, ready.entry); }
   const entry = sess.queue[sess.pos];
-  const pct = Math.round(sess.pos / sess.queue.length * 100);
-  const top = `<div class="study-top"><button class="icon-btn" data-act="close" aria-label="Stop studying">${ICON_CLOSE}</button><div class="prog"><i style="width:${pct}%"></i></div><span class="count">${sess.pos}/${sess.queue.length}</span></div>`;
+  const total = sess.queue.length + waiting.length;
+  const pct = Math.round(sess.pos / total * 100);
+  const top = `<div class="study-top"><button class="icon-btn" data-act="close" aria-label="Stop studying">${ICON_CLOSE}</button><div class="prog"><i style="width:${pct}%"></i></div><span class="count">${sess.pos}/${total}</span></div>`;
   if (!entry) {
     sess.cur = null;
     if (sess.mode === 'lesson') return finishLesson();
@@ -1861,7 +1907,7 @@ function showCard() {
   const noHelp = !!entry.noHelp;
   const lvl = noHelp ? Math.max(1, levelFor(it)) : levelFor(it);
   sess.cur = {it, lvl, dir, k, noHelp, revealed: false};
-  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}<span class="chip">${dir === 'fr' ? 'understand' : 'speak'}</span>${REG_LABEL[it.reg] ? `<span class="chip">${it.reg}</span>` : ''}${it.be ? '<span class="chip bechip">Belgian</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${entry.retry ? '<span class="chip retry">second try</span>' : st ? '' : '<span class="chip">new</span>'}<span class="chip">${dir === 'fr' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>${REG_LABEL[it.reg] ? `<span class="chip">${it.reg}</span>` : ''}${it.be ? '<span class="chip bechip">Belgian</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
   let front;
   if (dir === 'fr') {
     front = `<div class="ask">${noHelp ? 'Again, without the help. Can you say it?' : 'What does this mean?'}</div><div class="front">${frBlock(it, lvl, noHelp)}${peekButtons(it, lvl, noHelp)}</div>`;
@@ -1907,15 +1953,21 @@ function grade(g) {
   const st = S.cards[k] || blankState();
   const r = nextOf(st, g, it);
   st.ease = r.ease;
+  // Each card gets ONE second try in a session, 3 to 6 cards later. If it is still hard,
+  // it comes back in tomorrow's lesson, so every lesson ends at its planned size.
+  const entry = sess.queue[sess.pos];
+  const retry = e => (sess.retries || (sess.retries = [])).push({entry: e, at: sess.answered + 3 + Math.floor(Math.random() * 4)});
   if (r.sound) {
-    // From now on this phrase is shown without the pronunciation help. It comes back in a few cards to try again.
+    // From now on this phrase is shown without the pronunciation help.
     S.nohelp[it.id] = 1;
     if (isNew) { st.due = t; st.tried = true; }
-    sess.queue.splice(Math.min(sess.queue.length, sess.pos + 5), 0, {...sess.queue[sess.pos], noHelp: true});
+    if (!entry.retry) retry({...entry, noHelp: true, retry: true});
+    else if (st.due <= t) st.due = t + 1;
   } else if (r.again) {
     if (r.lapsed) st.lapses++;
-    st.ivl = r.ivl; st.due = t; st.lapsed = r.lapsed || st.lapsed; st.tried = true;
-    sess.queue.splice(Math.min(sess.queue.length, sess.pos + 4), 0, {...sess.queue[sess.pos], noHelp: false});
+    st.ivl = r.ivl; st.lapsed = r.lapsed || st.lapsed; st.tried = true;
+    if (!entry.retry) { st.due = t; retry({...entry, retry: true}); }
+    else st.due = t + 1;
   } else {
     st.ivl = r.ivl; st.due = t + r.ivl; st.reps++; delete st.lapsed; delete st.tried;
   }
@@ -1975,7 +2027,7 @@ function quizFrom(u, n) {
 function startSoundQuiz() {
   const K = sess.snd;
   const known = shuffle(SOUNDS.filter(u => S.snd[u.id] && !K.units.includes(u))).slice(0, K.units.length ? 4 : 8);
-  K.quiz = [...K.units.flatMap(u => quizFrom(u, 2)), ...shuffle(known.flatMap(u => quizFrom(u, 1)))];
+  K.quiz = shuffle([...K.units.flatMap(u => quizFrom(u, 2)), ...known.flatMap(u => quizFrom(u, 1))]);
   K.qi = 0; K.missed = new Set();
   if (!K.quiz.length) return finishSounds();
   showSoundQuestion();
