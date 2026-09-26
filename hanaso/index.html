@@ -235,6 +235,29 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 
 .toast{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;max-width:528px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;font-size:15px;box-shadow:var(--shadow)}
 .grade .g-sub{font-size:12px;font-weight:400;color:var(--muted);line-height:1.2}
+.kn{color:var(--good);font-weight:inherit}
+b.kn{font-weight:700}
+.hunt-line{font-size:14.5px;color:var(--muted);margin-bottom:8px}
+.letter-card{align-items:center;text-align:center;gap:12px}
+.letter-card .eyebrow{align-self:flex-start}
+.letter-big{font-size:120px;line-height:1.1}
+.letter-rom{font-size:30px;font-weight:700;font-family:var(--font-display)}
+.trick{font-size:18px;line-height:1.45;max-width:30ch}
+.example{background:var(--surface-2);border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;gap:2px;width:100%}
+.ex-word{font-size:28px}
+.hl{background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:0 3px}
+.pairs{display:flex;flex-direction:column;gap:6px;width:100%}
+.pair{display:grid;grid-template-columns:1fr auto 1fr auto;gap:10px;align-items:center;background:var(--surface-2);border-radius:12px;padding:6px 12px}
+.pair .jp{font-size:26px}
+.pair .arrow{color:var(--muted)}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-top:8px}
+.qopt{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;min-height:60px;font-size:22px;font-weight:700;cursor:pointer}
+.qopt.ok{background:var(--good);border-color:var(--good);color:var(--surface)}
+.qopt.bad{background:var(--again);border-color:var(--again);color:var(--surface)}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:4px}
+.kgrid.marks{grid-template-columns:repeat(auto-fill,minmax(38px,1fr))}
+.kt{aspect-ratio:1;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--line);font-size:20px}
+.kt.got{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
@@ -1050,6 +1073,62 @@ const KANA_DECKS = [
 ];
 
 /* ============================================================
+   LETTERS OF THE DAY: reading only, a few letters per lesson.
+   Order: hiragana, then the marks (゛ ゜ っ ゃ), then katakana and ー.
+   ============================================================ */
+const HIRA_TRICKS = {
+  'あ':'A cross with a big loop: "Ah! X marks the treasure."', 'い':'Two eels side by side: "ii" (ee).', 'う':'Someone bowing with a little hat: "oo".',
+  'え':'A dancer kicking a leg out: "eh!"', 'お':'Like あ with a ball flying off to the right: "Oh!"',
+  'か':'A karate chop with a spark flying: "KA!"', 'き':'A key with two teeth: "KEY".', 'く':'A bird\'s open beak: "coo".',
+  'け':'A keg standing next to a post: "KE".', 'こ':'Two coins lying down: "KO".',
+  'さ':'A face looking left, a bit sad: "SA".', 'し':'A fishing hook: "SHE caught a fish".', 'す':'A swing with a loop in the rope: "SU".',
+  'せ':'A chair seen from the side: "SE(at)".', 'そ':'A zig-zag thread when you sew: "SO".',
+  'た':'It looks like the letters t and a: "TA".', 'ち':'A cheerleader stretching: "CHI".', 'つ':'A tsunami wave: "TSU".',
+  'て':'A tennis racket swing: "TE".', 'と':'A toe with a thorn in it: "TO".',
+  'な':'A cross and a knot: "NA(il) and knot".', 'に':'A post and two lines, like a knee: "NI".', 'ぬ':'Noodles held by chopsticks: "NU".',
+  'ね':'A cat curling its tail (neko = cat): "NE".', 'の':'A "no entry" sign: "NO".',
+  'は':'Someone laughing next to a wall: "HA!" As a particle it is read "wa".', 'ひ':'A big grin: "HEE hee".', 'ふ':'Mount Fuji with clouds around it: "FU".',
+  'へ':'A small hill: "HEy, the top!" As a particle it is read "e".', 'ほ':'Like は with a roof on top: a HOuse.',
+  'ま':'A present with a ribbon for MAma: "MA".', 'み':'A musical note: do re MI.', 'む':'A cow\'s face: "MOO".',
+  'め':'An eye (me means eye in Japanese!): "ME".', 'も':'A fishing hook with MOre bait: "MO".',
+  'や':'A yak with horns: "YA".', 'ゆ':'A fish making a U-turn: "YU".', 'よ':'A yo-yo on a string: "YO".',
+  'ら':'A rapper with a cap: "RA".', 'り':'Two reeds by the river: "RI".', 'る':'A road ending in a roundabout: "RU".',
+  'れ':'Like ね, but the tail kicks out: "RE".', 'ろ':'Like る, but no roundabout: "RO".',
+  'わ':'Like ね, but the end curls in: "WA".', 'を':'Only used as the particle "o": a person doing a big "whOa!"', 'ん':'Like a handwritten n: "N".',
+};
+const KATA_TRICKS = {
+  'ア':'An axe: "A".', 'イ':'An easel leaning over: "I" (ee).', 'ウ':'う with a roof: "U".', 'エ':'A steel beam, like a big I: "E".', 'オ':'An opera singer with arms open: "O".',
+  'カ':'か without the spark: "KA".', 'キ':'A key with two teeth: "KI".', 'ク':'A cookie with a bite: "KU".', 'ケ':'A letter K leaning: "KE".', 'コ':'The corner of a box: "KO".',
+  'サ':'A salad fork: "SA".', 'シ':'A smiling face, eyes on the left: "SHI". Strokes go up from the left.', 'ス':'A superhero\'s cape: "SU".', 'セ':'Like せ: "SE".', 'ソ':'A sewing needle from the top: "SO".',
+  'タ':'ク with an extra line: "TA".', 'チ':'A cheerleader with arms out: "CHI".', 'ツ':'A tsunami from above: "TSU". Dots on top, strokes go down.', 'テ':'A telephone pole: "TE".', 'ト':'A totem pole: "TO".',
+  'ナ':'A nail cross: "NA".', 'ニ':'Two lines, like に: "NI".', 'ヌ':'Chopsticks crossing noodles: "NU".', 'ネ':'A necklace: "NE".', 'ノ':'One single stroke: "NO!"',
+  'ハ':'A hat with two sides: "HA".', 'ヒ':'A heel: "HI".', 'フ':'Like ふ, a funnel: "FU".', 'ヘ':'Same shape as へ: "HE".', 'ホ':'A holy cross: "HO".',
+  'マ':'A mama\'s apron: "MA".', 'ミ':'Three lines: "ME, ME, ME" (mi).', 'ム':'A cow\'s head: "MU".', 'メ':'An X like a crossed-out eye: "ME".', 'モ':'Like も with more lines: "MO".',
+  'ヤ':'Like や: "YA".', 'ユ':'A U-shape lying down: "YU".', 'ヨ':'A backwards E, a yoga mat: "YO".',
+  'ラ':'A rake: "RA".', 'リ':'Like り: "RI".', 'ル':'Two roots: "RU".', 'レ':'A check mark: "RE".', 'ロ':'A square room: "RO".',
+  'ワ':'A watering can: "WA".', 'ヲ':'The particle "o". You will rarely see it.', 'ン':'Like ソ, but the long stroke goes up: "N".',
+};
+const MARK_UNITS = [
+  {ch:'゛', rom:'゛', name:'Two dots (゛)', kind:'mark', text:'Two small dots change the sound: か ka → が ga, さ sa → ざ za, た ta → だ da, は ha → ば ba.',
+   pairs:[['か','が','ga'],['さ','ざ','za'],['た','だ','da'],['は','ば','ba']], quiz:[['が','ga'],['ざ','za'],['だ','da'],['ば','ba'],['ぎ','gi'],['じ','ji'],['ご','go'],['ぶ','bu']]},
+  {ch:'゜', rom:'゜', name:'Small circle (゜)', kind:'mark', text:'A small circle on the は row makes a "p": は ha → ぱ pa, ひ hi → ぴ pi, ぽ po.',
+   pairs:[['は','ぱ','pa'],['ひ','ぴ','pi'],['ふ','ぷ','pu'],['ほ','ぽ','po']], quiz:[['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']]},
+  {ch:'っ', rom:'っ', name:'Small つ (っ)', kind:'mark', text:'A small っ is a tiny pause: it doubles the next sound. まって = ma-t-te, ちょっと = cho-t-to.',
+   pairs:[['まて','まって','matte'],['きて','きって','kitte']], quiz:[['まって','matte'],['きって','kitte'],['いっしょ','issho'],['ちょっと','chotto']]},
+  {ch:'ゃ', rom:'ゃ', name:'Small や ゆ よ', kind:'mark', text:'A small ゃ ゅ ょ joins the letter before: き + ゃ = きゃ kya, し + ゃ = しゃ sha, ち + ょ = ちょ cho.',
+   pairs:[['き+ゃ','きゃ','kya'],['し+ゃ','しゃ','sha'],['ち+ょ','ちょ','cho'],['じ+ゅ','じゅ','ju']], quiz:[['きゃ','kya'],['しゃ','sha'],['ちょ','cho'],['じゅ','ju'],['りょ','ryo']]},
+];
+const LONG_UNIT = {ch:'ー', rom:'ー', name:'Long line (ー)', kind:'mark', text:'In katakana, a line ー makes the sound before it longer: コーヒー = ko-o-hi-i (coffee), スキー = su-ki-i (ski).',
+  pairs:[['コヒ','コーヒー','koohii'],['スキ','スキー','sukii']], quiz:[['コーヒー','koohii'],['スキー','sukii'],['ビール','biiru'],['ケーキ','keeki']]};
+const toKata = c => String.fromCharCode(c.charCodeAt(0) + 0x60);
+const KANA_UNITS = [
+  ...KANA_ROWS.split(',').map(p => { const [ch, rom] = p.split(' '); return {ch, rom, kind: 'hira', trick: HIRA_TRICKS[ch]}; }),
+  ...MARK_UNITS,
+  ...KANA_ROWS.split(',').map(p => { const [h, rom] = p.split(' '); const ch = toKata(h); return {ch, rom, kind: 'kata', trick: KATA_TRICKS[ch]}; }),
+  LONG_UNIT,
+];
+
+/* ============================================================
    KANA → ROMAJI
    ============================================================ */
 const ROM = {};
@@ -1167,17 +1246,20 @@ LESSONS.forEach(l => { if (!l.review) l.cards = [...l.items.map(r => BY_REF[r]),
    ============================================================ */
 const KEY = 'hanaso.v1';
 const CORE_ON = ['v-time','v-people','v-food','v-home','v-places','v-nature','v-verbs','v-adj','v-colour','v-small','v-work'];
-const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay: false, autoplayOffV2: true, rate: 0.85,
+const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay: false, autoplayOffV2: true, lettersPerDay: 3, rate: 0.85,
   decks: {grammar:true, basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
     ...Object.fromEntries(CORE_ON.map(id => [id, true]))}};
 const blankCourse = () => ({day: 1, last: 0, pending: null, cur: null});
-function blankSave() { return {cards: {}, prio: {}, wlvl: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
+function blankSave() { return {cards: {}, prio: {}, wlvl: {}, kana: {}, kanaPos: 0, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
 function fromSaved(s) {
   const cards = {};
   // Older saves had one card per phrase; they become the "understand" (JP → EN) card.
   for (const k in (s.cards || {})) cards[k.includes('>') ? k : k + '>jp'] = s.cards[k];
   if (s.settings && !s.settings.autoplayOffV2) { s.settings.autoplay = false; s.settings.autoplayOffV2 = true; }
-  return {cards, prio: s.prio || {}, wlvl: s.wlvl || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
+  // Letters already studied as cards before the letter lessons existed count as known.
+  const kana = s.kana || {};
+  if (!s.kana) for (const k in cards) { const m = k.match(/^(hira|kata)\|(.)>/); if (m && cards[k].reps > 0) kana[m[2]] = 1; }
+  return {cards, prio: s.prio || {}, wlvl: s.wlvl || {}, kana, kanaPos: s.kanaPos || 0, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
           day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0, ...(s.streak || {})}, total: s.total || 0,
           xp: s.xp || 0, talks: s.talks || 0, log: s.log || {}, course: {...blankCourse(), ...(s.course || {})}};
 }
@@ -1248,6 +1330,7 @@ function plan(extraNew = 0) {
       dirs.forEach(dir => {
         const k = keyOf(it, dir), st = S.cards[k];
         if (st) { if (st.due <= t) due.push({it, dir, k}); return; }
+        if (it.isKana && !S.kana[it.kana]) return;  // letters are introduced by the letter lessons
         // The speaking card unlocks once you have passed the understanding card.
         if (dir === 'en' && dirs.includes('jp')) { const js = S.cards[keyOf(it, 'jp')]; if (!js || js.reps < 1) return; }
         const p = prioOf(it);
@@ -1278,7 +1361,35 @@ function buildQueue(extraNew = 0) {
   return q;
 }
 
-/* Writing level: 0 romaji, 1 kana, 2 kanji+furigana, 3 kanji (follows the understand card) */
+/* Which letters he can read. Marks (゛ ゜ っ ゃ ー) are learned once and work for both scripts. */
+const DAKU = 'がぎぐげござじずぜぞだぢづでどばびぶべぼ', DAKU_BASE = 'かきくけこさしすせそたちつてとはひふへほ';
+const HANDA = 'ぱぴぷぺぽ', HANDA_BASE = 'はひふへほ';
+const isKanaChar = c => /[\u3041-\u30f6ー]/.test(c);
+function knownChar(c) {
+  if (!isKanaChar(c)) return true;
+  if (c === 'ー') return !!S.kana['ー'];
+  const code = c.charCodeAt(0), kata = code >= 0x30A1;
+  const h = kata ? String.fromCharCode(code - 0x60) : c;
+  const base = b => !!S.kana[kata ? toKata(b) : b];
+  if ('ゃゅょ'.includes(h)) return !!S.kana['ゃ'];
+  if (h === 'っ') return !!S.kana['っ'];
+  if ('ぁぃぅぇぉ'.includes(h)) return !!S.kana['ゃ'] && base('あいうえお'['ぁぃぅぇぉ'.indexOf(h)]);
+  let i = DAKU.indexOf(h); if (i >= 0) return !!S.kana['゛'] && base(DAKU_BASE[i]);
+  i = HANDA.indexOf(h); if (i >= 0) return !!S.kana['゜'] && base(HANDA_BASE[i]);
+  if (h === 'ゔ') return !!S.kana['゛'] && base('う');
+  return base(h);
+}
+const readable = it => [...it.kana].every(knownChar);
+/* "Letter hunt": letters he can already read light up. */
+const hunt = text => [...text].map(c => isKanaChar(c) && knownChar(c) ? `<b class="kn">${esc(c)}</b>` : esc(c)).join('');
+function huntStats(items) {
+  let all = 0, known = 0;
+  items.forEach(it => [...it.kana].forEach(c => { if (isKanaChar(c)) { all++; if (knownChar(c)) known++; } }));
+  return {all, known};
+}
+
+/* Writing level: 0 romaji, 1 kana, 2 kanji+furigana, 3 kanji.
+   A card leaves romaji as soon as you know all of its letters. */
 const LEVELS = ['Romaji', 'Kana', 'Kanji + furigana', 'Kanji'];
 function levelFor(it) {
   const s = S.settings.script;
@@ -1286,7 +1397,8 @@ function levelFor(it) {
   const st = S.cards[keyOf(it, 'jp')] || S.cards[keyOf(it, 'en')]; const ivl = st ? st.ivl : 0;
   const min = S.wlvl[it.id] || 0;
   if (it.reg === 'read') return Math.max(min, ivl >= 21 ? 3 : 2);
-  return Math.max(min, ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0);
+  if (it.isKana || !readable(it)) return min;
+  return Math.max(min, it.hasKanji && ivl >= 60 ? 3 : it.hasKanji && ivl >= 21 ? 2 : 1);
 }
 
 /* ============================================================
@@ -1338,7 +1450,7 @@ function lessonQueue(L) {
   }
   return q;
 }
-const minutesFor = (q, L) => Math.max(5, Math.round((q.length * 14 + (L.g ? 120 : 0) + 120) / 60));
+const minutesFor = (q, L) => Math.max(5, Math.round((q.length * 14 + (L.g ? 120 : 0) + 120 + (L.review ? 60 : 200)) / 60));
 
 function logToday() { const t = today(); return S.log[t] || (S.log[t] = {n: 0}); }
 function knownCount() {
@@ -1462,8 +1574,8 @@ function deckCounts(d) {
 function ladderCounts() {
   const c = [0, 0, 0, 0];
   DECKS.forEach(d => DECK_ITEMS[d.id].forEach(it => {
-    const st = S.cards[keyOf(it, 'jp')] || S.cards[keyOf(it, 'en')]; if (!st) return;
-    const ivl = st.ivl; c[ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0]++;
+    if (!S.cards[keyOf(it, 'jp')] && !S.cards[keyOf(it, 'en')]) return;
+    c[levelFor(it)]++;
   }));
   return c;
 }
@@ -1514,9 +1626,9 @@ function todayPanel() {
     main = `
       <div><div class="eyebrow">Today · day ${L.n}${L.n <= LESSONS.length ? ' of ' + LESSONS.length : ''}</div>
       <h1 class="lesson-title">${esc(L.t)} <span class="jp">${esc(L.jp)}</span></h1></div>
-      <div class="chips">${L.g ? `<span class="chip">grammar: <span class="jp">${esc(L.g.p)}</span></span>` : `<span class="chip">${L.review ? 'review day' : 'new words'}</span>`}<span class="chip">about ${minutesFor(q, L)} min</span><span class="chip">${(L.cards || []).length} new · ${q.length - (L.cards || []).length} review</span></div>
+      <div class="chips">${L.g ? `<span class="chip">grammar: <span class="jp">${esc(L.g.p)}</span></span>` : `<span class="chip">${L.review ? 'review day' : 'new words'}</span>`}${!L.review && kanaChunk().length ? `<span class="chip">letters: <span class="jp">${kanaChunk().map(u => esc(u.ch)).join(' ')}</span></span>` : ''}<span class="chip">about ${minutesFor(q, L)} min</span><span class="chip">${(L.cards || []).length} new · ${q.length - (L.cards || []).length} review</span></div>
       <button class="btn btn-primary" data-act="lesson" style="min-height:60px;font-size:19px">Start today's lesson</button>
-      <p class="muted" style="font-size:14px">Topic and grammar → cards → tonight's conversation with Aya.</p>`;
+      <p class="muted" style="font-size:14px">Letters of the day → topic and grammar → cards → tonight's conversation with Aya.</p>`;
   } else {
     main = `
       <div><div class="eyebrow">Today</div><h1 class="lesson-title">Lesson done! <span class="jp">お疲れさま</span></h1></div>
@@ -1540,7 +1652,7 @@ function viewHome() {
   const lc = ladderCounts();
   const steps = [
     {lab: 'Romaji', when: 'new cards', sample: '<span class="sample rom">hana</span>'},
-    {lab: 'Kana', when: 'after 1 week', sample: '<span class="sample jp">はな</span>'},
+    {lab: 'Kana', when: 'when you know its letters', sample: '<span class="sample jp">はな</span>'},
     {lab: 'Kanji + furigana', when: 'after 3 weeks', sample: '<span class="sample jp"><ruby>花<rt>はな</rt></ruby></span>'},
     {lab: 'Kanji', when: 'after 2 months', sample: '<span class="sample jp">花</span>'},
   ];
@@ -1549,7 +1661,7 @@ function viewHome() {
 
   <section class="section">
     <div><h2>How the writing grows</h2>
-    <p class="muted" style="font-size:15px;margin-top:4px">Each card starts in romaji. When you know it well, it moves to kana, then kanji. The numbers show your cards at each step.</p></div>
+    <p class="muted" style="font-size:15px;margin-top:4px">Each card starts in romaji. As soon as you know all of its letters, it switches to kana. Later come kanji. The numbers show your cards at each step.</p></div>
     <div class="ladder">
       ${steps.map((s, i) => `<div class="step">${s.sample}<span class="lab">${s.lab}</span><span class="when">${s.when}</span><span class="cnt">${lc[i]}</span></div>`).join('')}
     </div>
@@ -1634,6 +1746,11 @@ function viewProgress() {
     <div class="legend"><span><i class="light"></i>studied</span><span><i></i>lesson done</span><span><b class="stamp-mini">話</b> talked with Aya</span></div>
   </section>
   <section class="section">
+    <h2>Letters you can read</h2>
+    <p class="muted" style="font-size:15px">${KANA_UNITS.filter(u => S.kana[u.ch]).length} of ${KANA_UNITS.length} letters and reading rules. 3 new ones come with each lesson.</p>
+    ${['hira', 'mark', 'kata'].map(kind => `<div class="kgrid ${kind === 'mark' ? 'marks' : ''}">${KANA_UNITS.filter(u => u.kind === kind).map(u => `<span class="kt jp ${S.kana[u.ch] ? 'got' : ''}" title="${esc(u.rom)}">${esc(u.ch)}</span>`).join('')}</div>`).join('')}
+  </section>
+  <section class="section">
     <h2>Badges</h2>
     <div class="badges">${BADGES.map(([k, name, desc, test]) => { const ok = test(); return `<div class="badge ${ok ? 'got' : ''}"><span class="jp">${k}</span><div><b>${name}</b><p>${esc(desc)}</p></div></div>`; }).join('')}</div>
   </section>
@@ -1690,7 +1807,8 @@ function viewSettings() {
     <h2>Settings</h2>
     <div class="panel" style="padding-block:4px">
       <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[10, '10'], [15, '15'], [20, '20'], [30, '30']])}</div>
-      <div class="setting"><h3>Writing</h3><p class="muted" style="font-size:14px">Auto moves each card from romaji to kana to kanji as you learn it.</p>
+      <div class="setting"><h3>New letters per lesson</h3><p class="muted" style="font-size:14px">Reading only, one letter at a time, with a memory trick and a short quiz.</p>${seg('lettersPerDay', [[2, '2'], [3, '3'], [5, '5']])}</div>
+      <div class="setting"><h3>Writing</h3><p class="muted" style="font-size:14px">Auto: a card switches from romaji to kana as soon as you know all of its letters, then to kanji later.</p>
         ${seg('script', [['auto', 'Auto'], [0, 'Romaji'], [1, 'Kana'], [2, 'Kanji + furigana'], [3, 'Kanji']])}</div>
       <div class="setting"><h3>Card directions</h3><p class="muted" style="font-size:14px">Both ways: each phrase has an understand card (JP → EN) and a speaking card (EN → JP). The speaking card unlocks after the first one.</p>
         ${seg('dirs', [['both', 'Both ways'], ['jp', 'Only JP → EN'], ['en', 'Only EN → JP']])}</div>
@@ -1751,7 +1869,7 @@ function jpBlock(it, lvl, big) {
   const len = it.kana.length;
   if (it.isKana) return `<div class="jp-main jp" style="font-size:96px;line-height:1.2">${esc(it.kana)}</div>`;
   const size = big ? (len <= 5 ? 50 : len <= 10 ? 38 : len <= 18 ? 30 : 25) : (len <= 10 ? 28 : 24);
-  if (lvl === 0) return `<div class="jp-main rom" style="font-size:${Math.round(size * .8)}px">${esc(it.romaji)}</div><div class="jp-sub jp">${esc(it.kana)}</div>`;
+  if (lvl === 0) return `<div class="jp-main rom" style="font-size:${Math.round(size * .8)}px">${esc(it.romaji)}</div><div class="jp-sub jp">${hunt(it.kana)}</div>`;
   if (lvl === 1) return `<div class="jp-main jp" style="font-size:${size}px">${esc(it.kana)}</div><div class="jp-sub" data-peek="rom" hidden>${esc(it.romaji)}</div>`;
   if (lvl === 2 || !it.hasKanji) return `<div class="jp-main jp" style="font-size:${size}px">${it.ruby}</div>`;
   return `<div class="jp-main jp hide-rt" style="font-size:${size}px" data-peek="rt">${it.ruby}</div>`;
@@ -1857,13 +1975,113 @@ function sayRow(it) {
   return `<div class="say"><div><div class="jp">${it.ruby}</div><div class="rom">${esc(it.romaji)}</div><div class="en">${esc(it.en)}</div></div>
     <button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button></div>`;
 }
+/* ---------- Step 1: letters of the day ---------- */
+function kanaChunk() {
+  const out = [];
+  for (let i = S.kanaPos || 0; i < KANA_UNITS.length && out.length < (S.settings.lettersPerDay || 3); i++) if (!S.kana[KANA_UNITS[i].ch]) out.push(KANA_UNITS[i]);
+  return out;
+}
+const unitItem = u => u.kind === 'mark' ? null : ITEMS[(u.kind === 'hira' ? 'hira|' : 'kata|') + u.ch];
+function exampleFor(ch) {
+  let best = null;
+  DECKS.forEach(d => { if (d.id === 'grammar') return; DECK_ITEMS[d.id].forEach(it => {
+    if (!it.kana.includes(ch) || it.kana.length > 9) return;
+    const score = it.prio * 10 - it.kana.length + (d.group === 'talk' ? 3 : 0);
+    if (!best || score > best.s) best = {it, s: score};
+  }); });
+  return best && best.it;
+}
+function reviewUnits(n) {
+  const known = KANA_UNITS.filter(u => S.kana[u.ch] && !sess.kana.units.includes(u));
+  return shuffle(known).slice(0, n);
+}
+function quizFrom(u) {
+  if (u.kind === 'mark') return shuffle([...u.quiz]).slice(0, 2).map(([q, a]) => ({q, a, u, pool: u.quiz.map(x => x[1])}));
+  return [{q: u.ch, a: u.rom, u, pool: KANA_UNITS.filter(x => x.kind === u.kind).map(x => x.rom)}];
+}
+function afterLetters() {
+  const {L, queue} = sess;
+  if (L.g || L.cards) showIntro(); else if (queue.length) showCard(); else finishLesson();
+}
+function lettersTop(label, pct) {
+  return `<div class="study-top"><button class="icon-btn" data-act="close" aria-label="Close">${ICON_CLOSE}</button><div class="prog"><i style="width:${pct}%"></i></div><span class="count">${label}</span></div>`;
+}
+function showLetter() {
+  const K = sess.kana, u = K.units[K.i], it = unitItem(u);
+  let body;
+  if (u.kind === 'mark') {
+    body = `<div class="letter-big jp" style="font-size:88px">${esc(u.ch)}</div>
+      <h2>${esc(u.name)}</h2><p class="trick">${esc(u.text)}</p>
+      <div class="pairs">${u.pairs.map(([a, b, r]) => `<div class="pair"><span class="jp">${esc(a)}</span><span class="arrow">→</span><span class="jp">${esc(b)}</span><b>${esc(r)}</b></div>`).join('')}</div>`;
+  } else {
+    const ex = exampleFor(u.ch);
+    const twin = u.kind === 'kata' ? String.fromCharCode(u.ch.charCodeAt(0) - 0x60) : null;
+    body = `<div class="letter-big jp">${esc(u.ch)}</div>
+      <div class="letter-rom">${esc(u.rom)}</div>
+      <div class="row-btns"><button class="mini" data-act="speak" data-id="${esc(it.id)}">${ICON_SPEAK} Listen</button></div>
+      <p class="trick">${esc(u.trick)}</p>
+      ${twin ? `<p class="muted" style="font-size:15px">Same sound as hiragana <span class="jp" style="font-size:20px">${twin}</span></p>` : ''}
+      ${ex ? `<div class="example"><div class="eyebrow">In a word you are learning</div><div class="jp ex-word">${[...ex.kana].map(c => c === u.ch ? `<b class="hl">${esc(c)}</b>` : esc(c)).join('')}</div><div class="muted">${esc(ex.romaji)} · ${esc(ex.en)}</div></div>` : ''}`;
+  }
+  document.getElementById('studyIn').innerHTML = lettersTop(`Letter ${K.i + 1}/${K.units.length}`, (K.i / (K.units.length + 1)) * 100) + `
+    <div class="card letter-card"><div class="eyebrow">${u.kind === 'kata' ? 'Katakana' : u.kind === 'hira' ? 'Hiragana' : 'Reading rule'} · letters of the day</div>${body}</div>
+    <div><button class="btn btn-primary" data-act="nextletter">${K.i + 1 < K.units.length ? 'Next letter' : 'Quick quiz'}</button></div>`;
+}
+function startKanaQuiz() {
+  const K = sess.kana;
+  K.quiz = [...K.units.flatMap(quizFrom), ...shuffle(reviewUnits(K.units.length ? 4 : 8).flatMap(quizFrom))];
+  K.qi = 0; K.missed = new Set();
+  if (!K.quiz.length) return finishLetters();
+  showKanaQuestion();
+}
+function showKanaQuestion() {
+  const K = sess.kana, Q = K.quiz[K.qi];
+  const opts = shuffle([Q.a, ...shuffle([...new Set(Q.pool)].filter(x => x !== Q.a)).slice(0, 3)]);
+  K.answered = false;
+  document.getElementById('studyIn').innerHTML = lettersTop(`Quiz ${K.qi + 1}/${K.quiz.length}`, 50 + (K.qi / K.quiz.length) * 50) + `
+    <div class="card letter-card"><div class="eyebrow">How do you read this?</div>
+      <div class="letter-big jp" style="${Q.q.length > 2 ? 'font-size:64px' : ''}">${esc(Q.q)}</div>
+      <div class="quiz-opts">${opts.map(o => `<button class="qopt" data-act="kq" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+    </div>`;
+}
+function answerKana(v, el) {
+  const K = sess.kana, Q = K.quiz[K.qi];
+  if (K.answered) return;
+  K.answered = true;
+  const ok = v === Q.a;
+  document.querySelectorAll('.qopt').forEach(b => { if (b.dataset.v === Q.a) b.classList.add('ok'); });
+  if (!ok) { el.classList.add('bad'); if (!K.missed.has(Q.q)) { K.missed.add(Q.q); K.quiz.push(Q); } }
+  else { S.xp++; }
+  setTimeout(() => { K.qi++; if (K.qi < K.quiz.length) showKanaQuestion(); else finishLetters(); }, ok ? 550 : 1400);
+}
+function finishLetters() {
+  const K = sess.kana, t = today();
+  K.units.forEach(u => {
+    S.kana[u.ch] = S.course.day;
+    const it = unitItem(u);
+    if (it) {
+      const k = keyOf(it, 'jp');
+      if (!S.cards[k]) S.cards[k] = {ivl: 1, ease: 2.5, reps: 1, lapses: 0, due: t + 1};
+      if (u.kind === 'kata') S.settings.decks.kata = true;
+    }
+  });
+  // Letters missed in the review quiz come back in today's cards.
+  K.quiz.forEach(Q => { if (K.missed.has(Q.q) && !K.units.includes(Q.u)) { const it = unitItem(Q.u); if (it && S.cards[keyOf(it, 'jp')]) S.cards[keyOf(it, 'jp')].due = t; } });
+  if (K.units.length) S.kanaPos = KANA_UNITS.indexOf(K.units[K.units.length - 1]) + 1;
+  save();
+  afterLetters();
+}
+
 function startLesson() {
   const L = lessonFor(S.course.day);
   const q = lessonQueue(L);
   sess = {mode: 'lesson', L, queue: q, pos: 0, answered: 0, xp0: S.xp};
+  sess.kana = {units: L.review ? [] : kanaChunk(), i: 0};
   preloadFor([...q.map(e => e.it), ...L.mission.sayItems, ...(L.g ? L.g.ex.map(([n]) => ITEMS['grammar|' + kanaText(parse(n))]) : [])]);
   openStudy();
-  if (L.g || L.cards) showIntro(); else if (q.length) showCard(); else finishLesson();
+  if (sess.kana.units.length) showLetter();
+  else if (KANA_UNITS.filter(u => S.kana[u.ch]).length >= 4) startKanaQuiz();
+  else afterLetters();
 }
 function showIntro() {
   const {L, queue} = sess;
@@ -1879,10 +2097,11 @@ function showIntro() {
         <p>${esc(L.g.e)}</p>
         <div class="says">${L.g.ex.map(([n]) => sayRow(ITEMS['grammar|' + kanaText(parse(n))])).join('')}</div>
       </div>` : ''}
-      ${newCount ? `<div><div class="eyebrow" style="margin-bottom:8px">New today · ${newCount}</div>
-        <div class="wordchips">${L.cards.map(it => `<span class="wchip"><span class="jp">${it.ruby}</span> ${esc(it.en.length > 28 ? it.en.slice(0, 26) + '…' : it.en)}</span>`).join('')}</div></div>` : ''}
+      ${newCount ? (() => { const h = huntStats(L.cards); return `<div><div class="eyebrow" style="margin-bottom:4px">New today · ${newCount}</div>
+        ${h.all ? `<p class="hunt-line">Letter hunt: you can already read <b class="kn">${h.known}</b> of ${h.all} letters in today's words.</p>` : ''}
+        <div class="wordchips">${L.cards.map(it => `<span class="wchip"><span class="jp">${hunt(it.kana)}</span> ${esc(it.en.length > 28 ? it.en.slice(0, 26) + '…' : it.en)}</span>`).join('')}</div></div>`; })() : ''}
     </div>
-    <div><button class="btn btn-primary" data-act="startcards">Start the cards · ${queue.length} cards · about ${minutesFor(queue, L) - (L.g ? 2 : 0) - 2} min</button></div>`;
+    <div><button class="btn btn-primary" data-act="startcards">Start the cards · ${queue.length} cards · about ${Math.max(3, Math.round(queue.length * 14 / 60))} min</button></div>`;
 }
 function finishLesson() {
   const {L} = sess;
@@ -1948,6 +2167,8 @@ document.addEventListener('click', e => {
   const act = el.dataset.act;
   if (act === 'start') startSession();
   else if (act === 'lesson') startLesson();
+  else if (act === 'nextletter') { sess.kana.i++; if (sess.kana.i < sess.kana.units.length) showLetter(); else startKanaQuiz(); }
+  else if (act === 'kq') answerKana(el.dataset.v, el);
   else if (act === 'startcards') { if (sess.queue.length) showCard(); else finishLesson(); }
   else if (act === 'talked') talked();
   else if (act === 'mission') openMission();
@@ -1966,7 +2187,7 @@ document.addEventListener('click', e => {
   else if (act === 'pdeck') { phraseDeck = el.dataset.id; render(); }
   else if (act === 'set') {
     let v = el.dataset.v; const k = el.dataset.k;
-    if (k === 'newPerDay' || k === 'rate') v = +v;
+    if (k === 'newPerDay' || k === 'rate' || k === 'lettersPerDay') v = +v;
     else if (k === 'autoplay') v = v === 'true';
     S.settings[k] = v; save(); render();
   }

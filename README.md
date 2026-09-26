@@ -22,7 +22,10 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 A flashcard app for learning Japanese on a phone, made for talking with
 Aya's family, with strangers, and with Aya.
 
-- **A daily 15-minute lesson:** open the app, tap *Start today's lesson*:
+- **A daily ~20-minute lesson:** open the app, tap *Start today's lesson*:
+  0. Letters of the day: 3 new letters, one at a time (sound, memory trick,
+     a word he is learning), then a short quiz with older letters. Reading
+     only. Order: hiragana → ゛ ゜ っ ゃ → katakana → ー.
   1. Topic of the day + one grammar pattern with examples and audio.
   2. Cards: the day's new words mixed with reviews (~40 cards).
   3. Tonight's conversation: a mission to do with Aya, with starter
@@ -50,7 +53,9 @@ Aya's family, with strangers, and with Aya.
   the card comes back without romaji, and stays without romaji) / I know it.
 - **Priority stars (★★★ / ★★ / ★):** new cards come in order of importance,
   and ★★★ cards come back more often. Tap the stars on a card to change them.
-- **Writing grows with each card:** romaji → kana (after 1 week) →
+- **Letter hunt:** letters he can already read light up in green.
+- **Writing grows with each card:** romaji → kana (as soon as he knows all
+  of the card's letters) →
   kanji with furigana (after 3 weeks) → kanji only (after 2 months).
   Signs and menu words start in kanji with furigana.
 - **Recorded audio for every card** (`audio/`, made offline with OpenJTalk; see
