@@ -1,0 +1,983 @@
+<title>Hanasō</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2B4C8C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Klee+One:wght@600&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#EDF0F5; --surface:#FFFFFF; --surface-2:#F4F6FA; --ink:#18202F; --muted:#525D71; --line:#D5DBE5;
+  --accent:#2B4C8C; --accent-ink:#FFFFFF; --accent-soft:#DCE4F3; --shu:#C8412A;
+  --again:#B3372B; --hard:#9A6208; --good:#2E7D4F; --easy:#2B4C8C;
+  --font-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-display:"Zen Maru Gothic", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-jp:"Klee One", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+  --shadow:0 1px 2px rgba(24,32,47,.06), 0 6px 20px rgba(24,32,47,.07);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#10141C; --surface:#181E29; --surface-2:#1F2633; --ink:#E6EAF2; --muted:#A3ADBF; --line:#2D3546;
+    --accent:#93B2EE; --accent-ink:#10141C; --accent-soft:#1F2C47; --shu:#E0674F;
+    --again:#F08A7E; --hard:#E3B45A; --good:#6FCF97; --easy:#93B2EE;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#10141C; --surface:#181E29; --surface-2:#1F2633; --ink:#E6EAF2; --muted:#A3ADBF; --line:#2D3546;
+  --accent:#93B2EE; --accent-ink:#10141C; --accent-soft:#1F2C47; --shu:#E0674F;
+  --again:#F08A7E; --hard:#E3B45A; --good:#6FCF97; --easy:#93B2EE;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.2;text-wrap:balance;margin:0}
+p{margin:0}
+.jp{font-family:var(--font-jp);font-weight:600}
+rt{font-family:var(--font-jp);font-size:.48em;color:var(--muted);font-weight:600}
+.hide-rt rt{visibility:hidden}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+.app{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:14px 110px;display:flex;flex-direction:column;gap:22px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.hanko{width:42px;height:42px;border-radius:9px;background:var(--shu);color:#fff;display:grid;place-items:center;font-family:var(--font-jp);font-size:24px;transform:rotate(-4deg);flex:none}
+.wordmark{font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.1}
+.wordmark small{font-family:var(--font-jp);font-size:14px;color:var(--muted);margin-left:6px}
+.tagline{font-size:13.5px;color:var(--muted)}
+.pill{font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.section{display:flex;flex-direction:column;gap:12px}
+.section h2{font-size:19px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+
+.today{display:flex;flex-direction:column;gap:16px}
+.today-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.num{display:flex;flex-direction:column;gap:2px}
+.num b{font-family:var(--font-display);font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.num span{font-size:13.5px;color:var(--muted)}
+.btn{border:0;border-radius:14px;padding:14px 18px;font-weight:700;font-size:17px;cursor:pointer;min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--accent);color:var(--accent-ink);width:100%}
+.btn-primary:disabled{opacity:.45;cursor:default}
+.btn-soft{background:var(--accent-soft);color:var(--accent)}
+.btn-line{background:transparent;border:1.5px solid var(--line)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-row .btn{flex:1 1 140px}
+
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;align-items:stretch}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 6px 9px;text-align:center;display:flex;flex-direction:column;gap:4px;position:relative}
+.step .sample{font-size:22px;min-height:40px;display:flex;align-items:flex-end;justify-content:center;line-height:1.1}
+.step .sample.rom{font-family:var(--font-body);font-weight:700;font-size:19px}
+.step .lab{font-size:12px;font-weight:700;line-height:1.2}
+.step .when{font-size:11.5px;color:var(--muted);line-height:1.2}
+.step .cnt{font-family:var(--font-display);font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.step + .step::before{content:"";position:absolute;left:-6px;top:30px;width:6px;height:2px;background:var(--line)}
+
+.decks{display:flex;flex-direction:column;gap:8px}
+.deck{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.dot{width:12px;height:12px;border-radius:4px;background:var(--c)}
+.deck-name{font-weight:700;line-height:1.25}
+.deck-name .jp{font-size:13px;color:var(--muted);margin-left:6px;font-weight:600}
+.deck-meta{font-size:13px;color:var(--muted)}
+.bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:6px;display:flex}
+.bar i{display:block;height:100%;background:var(--c)}
+.bar i + i{opacity:.4}
+.switch{appearance:none;-webkit-appearance:none;width:48px;height:28px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;flex:none;margin:0;transition:background .15s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.switch:checked{background:var(--accent)}
+.switch:checked::after{transform:translateX(20px)}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.tabs-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{background:none;border:0;padding:9px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer}
+.tab svg{width:24px;height:24px}
+.tab[aria-current="page"]{color:var(--accent)}
+
+/* Study */
+.study{position:fixed;inset:0;background:var(--bg);z-index:10;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.study-in{max-width:560px;width:100%;margin:0 auto;flex:1;display:flex;flex-direction:column;gap:14px;padding-inline:16px;padding-block:12px 16px;min-height:0}
+.study-top{display:flex;align-items:center;gap:12px}
+.icon-btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex:none}
+.icon-btn svg{width:22px;height:22px}
+.prog{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.count{font-size:14px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;min-width:48px;text-align:right}
+.card{flex:1;min-height:0;overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.chip.deckchip{color:var(--ink)}
+.chip.deckchip::before{content:"";display:inline-block;width:8px;height:8px;border-radius:3px;background:var(--c);margin-right:6px;vertical-align:1px}
+.ask{font-size:14px;color:var(--muted);font-weight:700}
+.front{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:10px;padding-block:8px;min-height:150px}
+.jp-main{line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+.jp-main.rom{font-family:var(--font-body);font-weight:700}
+.jp-sub{font-size:17px;color:var(--muted)}
+.jp-sub.jp{font-size:19px}
+.en-main{font-family:var(--font-display);font-weight:700;line-height:1.3}
+.hint{font-size:14px;color:var(--muted)}
+.row-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.mini{border:1px solid var(--line);background:var(--surface-2);border-radius:99px;padding:6px 12px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;gap:6px;align-items:center;min-height:36px}
+.mini svg{width:18px;height:18px}
+.answer{border-top:1.5px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.forms{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;align-items:baseline}
+.forms dt{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.forms dd{margin:0;font-size:18px}
+.forms dd.jp{font-size:21px}
+.note{font-size:15px;background:var(--surface-2);border-radius:12px;padding:10px 12px;border-left:3px solid var(--shu)}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.grade{border:0;border-radius:14px;padding:10px 4px;min-height:62px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700;background:var(--surface);border:1.5px solid var(--g);color:var(--g)}
+.grade small{font-size:12.5px;font-weight:400;color:var(--muted)}
+.grade[data-g="0"]{--g:var(--again)} .grade[data-g="1"]{--g:var(--hard)} .grade[data-g="2"]{--g:var(--good)} .grade[data-g="3"]{--g:var(--easy)}
+.done{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
+.done .jp{font-size:30px}
+
+/* Phrases */
+.search{width:100%;font:inherit;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.filter{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.filter button{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-size:14px;font-weight:700;cursor:pointer;color:var(--muted)}
+.filter button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.plist{display:flex;flex-direction:column;gap:8px}
+.phrase{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+.phrase .jp{font-size:21px;line-height:1.7}
+.phrase .rom{font-weight:700}
+.phrase .en{color:var(--muted);font-size:15.5px}
+.phrase .acts{grid-row:1 / span 3;grid-column:2;display:flex;flex-direction:column;gap:6px}
+.group-h{font-size:15px;margin-top:8px;display:flex;align-items:center;gap:8px}
+
+/* Progress & settings */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat b{font-family:var(--font-display);font-size:28px;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:13.5px;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--accent);margin-right:6px;vertical-align:0}
+.legend i.light{opacity:.4}
+.setting{display:flex;flex-direction:column;gap:8px;padding-block:14px;border-bottom:1px solid var(--line)}
+.setting:last-child{border-bottom:0}
+.setting h3{font-size:16px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px;font-size:15px;font-weight:700;cursor:pointer;min-height:42px}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;padding:10px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink)}
+.msg{font-size:14px;font-weight:700;color:var(--good)}
+.msg.err{color:var(--again)}
+.howto{display:flex;flex-direction:column;gap:10px;font-size:15.5px}
+.howto ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+
+/* Big show overlay */
+.big{position:fixed;inset:0;z-index:20;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px;padding:24px 16px;cursor:pointer}
+.big .jp{font-size:clamp(34px,11vw,72px);line-height:1.5}
+.big .sub{font-size:20px;color:var(--muted)}
+.big .close-hint{font-size:14px;color:var(--muted);position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}.grades{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <span class="hanko" aria-hidden="true">話</span>
+      <div>
+        <div class="wordmark">Hanasō<small>話そう</small></div>
+        <div class="tagline">Japanese for family, strangers and Aya</div>
+      </div>
+    </div>
+    <span class="pill" id="streakPill"></span>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-in">
+    <button class="tab" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/></svg>Study</button>
+    <button class="tab" data-tab="phrases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Phrases</button>
+    <button class="tab" data-tab="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progress</button>
+    <button class="tab" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Settings</button>
+  </div>
+</nav>
+
+<div class="study" id="study" hidden>
+  <div class="study-in" id="studyIn"></div>
+</div>
+<div class="big" id="big" hidden></div>
+
+<script>
+/* ============================================================
+   CONTENT
+   Notation: spaces = word breaks (used for romaji, hidden in Japanese)
+             {漢字|かな} = kanji with its reading
+             ^は = the particle は (read "wa"), ^へ = particle へ (read "e")
+   Each card: [japanese, english, note?, register?]
+   ============================================================ */
+const DECKS = [
+  {id:'basics', name:'First steps', jp:'はじめの一歩', who:'Anyone', reg:'polite', color:'#2B4C8C', cards:[
+    ['おはよう ございます。','Good morning.','With Aya or close friends, just おはよう (ohayou).'],
+    ['こんにち^は。','Hello. / Good afternoon.','The は at the end is read "wa", like the particle.'],
+    ['こんばん^は。','Good evening.'],
+    ['ありがとう ございます。','Thank you.','Polite. With Aya, just ありがとう.'],
+    ['すみません。','Excuse me. / Sorry.','Very useful: to get attention, to say sorry, and even to say thanks.'],
+    ['ごめんなさい。','I\'m sorry.','More personal than すみません. With Aya: ごめんね.'],
+    ['はい。','Yes.'],
+    ['いいえ。','No.','A direct "no" can feel strong. People often say ちょっと… instead.'],
+    ['お{願|ねが}い します。','Please. (when asking for something)','Put it after a thing: コーヒー、お願いします = Coffee, please.'],
+    ['{大丈夫|だいじょうぶ} です。','It\'s okay. / I\'m fine. / No, thank you.','Also a polite way to say no to an offer.'],
+    ['わかりました。','I understand. / Got it.'],
+    ['わかりません。','I don\'t understand.'],
+    ['もう {一度|いちど} お{願|ねが}い します。','One more time, please.'],
+    ['ゆっくり {話|はな}して ください。','Please speak slowly.'],
+    ['ちょっと {待|ま}って ください。','Please wait a moment.'],
+    ['{日本語|にほんご} で {何|なん} と {言|い}います か？','How do you say it in Japanese?'],
+    ['どうぞ。','Please, go ahead. / Here you are.'],
+    ['お{疲|つか}れさま でした。','Thank you for your hard work.','Said at the end of work, a trip or any effort. Very common.'],
+    ['{失礼|しつれい} します。','Excuse me. (entering or leaving a room)'],
+    ['さようなら。','Goodbye.','Sounds quite final. With family, じゃあ、また (jaa, mata) is more natural.'],
+    ['じゃあ、 また。','See you.','Casual. Fine with family members you know well.','casual'],
+  ]},
+  {id:'family', name:'With Aya\'s family', jp:'家族と', who:'To Aya\'s family', reg:'polite', color:'#C8641E', cards:[
+    ['はじめまして。','Nice to meet you.','Only the first time you meet someone.'],
+    ['よろしく お{願|ねが}い します。','Nice to meet you. / Please be kind to me.','Said after you introduce yourself. One of the most important phrases in Japanese.'],
+    ['お{邪魔|じゃま} します。','Sorry to disturb you. (when entering a home)','Say it at the door of someone else\'s home.'],
+    ['お{邪魔|じゃま} しました。','Thank you for having me. (when leaving a home)'],
+    ['ただいま。','I\'m home.','Said when you come back home.'],
+    ['お{帰|かえ}り なさい。','Welcome home.','The answer to ただいま.'],
+    ['お{久|ひさ}しぶり です。','Long time no see.'],
+    ['お{元気|げんき} です か？','How are you?','Used when you have not seen someone for a while, not every day.'],
+    ['{元気|げんき} です。','I\'m well.'],
+    ['お{世話|せわ} に なって います。','Thank you for taking care of me.','A set phrase for in-laws and people who help you.'],
+    ['これ、 お{土産|みやげ} です。','This is a little gift for you.','Omiyage: bringing a gift when you visit is important in Japan.'],
+    ['ベルギー の チョコレート です。','It\'s Belgian chocolate.'],
+    ['{何|なに} か {手伝|てつだ}いましょう か？','Can I help with anything?'],
+    ['{座|すわ}って ください。','Please sit down.','You will hear this. You can also say it to guests.'],
+    ['{遠慮|えんりょ} しないで ください。','Don\'t hold back. / Make yourself at home.','You will probably hear this a lot!'],
+    ['{本当|ほんとう} に ありがとう ございます。','Thank you so much.'],
+    ['あや ^は とても {優|やさ}しい です。','Aya is very kind.','When you talk about your own family, don\'t add さん.'],
+    ['あや を {大切|たいせつ} に します。','I will take good care of Aya.'],
+    ['{写真|しゃしん} を {撮|と}りましょう！','Let\'s take a photo!'],
+    ['また {来|き}ます ね。','I\'ll come again.'],
+    ['お{体|からだ} に {気|き} を つけて ください。','Please take care of yourself.'],
+    ['{明日|あした} ^は {何時|なんじ} に {起|お}きます か？','What time do we get up tomorrow?'],
+    ['{眠|ねむ}い です。','I\'m sleepy.'],
+    ['おやすみ なさい。','Good night.'],
+  ]},
+  {id:'table', name:'At the table', jp:'食卓で', who:'At a meal', reg:'polite', color:'#5E8A2E', cards:[
+    ['いただきます。','Let\'s eat. (said before eating)','Say it with your hands together before every meal.'],
+    ['ごちそうさま でした。','Thank you for the meal. (after eating)','The cook will be very happy to hear this.'],
+    ['おいしい です！','It\'s delicious!'],
+    ['とても おいしい です。','It\'s very delicious.'],
+    ['これ ^は {何|なん} です か？','What is this?'],
+    ['{初|はじ}めて {食|た}べました。','This is my first time eating this.'],
+    ['おかわり お{願|ねが}い します。','Another helping, please.','おかわり = a second serving. Very common for rice.'],
+    ['{少|すこ}し だけ お{願|ねが}い します。','Just a little, please.'],
+    ['お{腹|なか} が いっぱい です。','I\'m full.'],
+    ['{辛|から}い です か？','Is it spicy?'],
+    ['{苦手|にがて} な {物|もの} ^は ありません。','There is no food I dislike.'],
+    ['{納豆|なっとう} ^は ちょっと…','Natto is a bit… (a polite "no")','Stopping the sentence at ちょっと… is the soft Japanese way to say no.'],
+    ['{料理|りょうり} が {上手|じょうず} です ね。','You are a great cook.'],
+    ['{作|つく}り{方|かた} を {教|おし}えて ください。','Please teach me how to make it.'],
+    ['{乾杯|かんぱい}！','Cheers!'],
+    ['お{水|みず} を ください。','Water, please.'],
+    ['お{茶|ちゃ} を どうぞ。','Please have some tea.','You will hear this. Answer: ありがとうございます.'],
+  ]},
+  {id:'me', name:'About me', jp:'自己紹介', who:'Talking about yourself', reg:'polite', color:'#7A4FA0', cards:[
+    ['ベルギー から {来|き}ました。','I\'m from Belgium.'],
+    ['ベルギー{人|じん} です。','I\'m Belgian.'],
+    ['フィンランド に {住|す}んで います。','I live in Finland.'],
+    ['{妻|つま} ^は {日本人|にほんじん} です。','My wife is Japanese.','妻 (tsuma) = my wife, when you talk to other people.'],
+    ['{結婚|けっこん} して います。','I\'m married.'],
+    ['{日本語|にほんご} を {勉強|べんきょう} して います。','I\'m studying Japanese.'],
+    ['{日本|にほん} が {大好|だいす}き です。','I love Japan.'],
+    ['{日本|にほん} の {食|た}べ{物|もの} が {好|す}き です。','I like Japanese food.'],
+    ['ベルギー ^は チョコレート と ビール が {有名|ゆうめい} です。','Belgium is famous for chocolate and beer.'],
+    ['フィンランド ^は とても {寒|さむ}い です。','Finland is very cold.'],
+  ]},
+  {id:'aya', name:'With Aya', jp:'あやと', who:'To Aya', reg:'casual', color:'#C04A74', cards:[
+    ['おはよう。','Good morning.'],
+    ['おやすみ。','Good night.'],
+    ['{大好|だいす}き。','I love you. / I really like you.','Used much more often than 愛してる.'],
+    ['{愛|あい}してる。','I love you.','Strong and romantic. Save it for special moments.'],
+    ['ありがとう。','Thanks.'],
+    ['ごめん ね。','Sorry.'],
+    ['お{腹|なか} {空|す}いた？','Are you hungry?'],
+    ['{何|なに} {食|た}べたい？','What do you want to eat?'],
+    ['{疲|つか}れた。','I\'m tired.'],
+    ['{大丈夫|だいじょうぶ}？','Are you okay?'],
+    ['{今日|きょう} ^は どう だった？','How was your day?'],
+    ['{行|い}って きます。','I\'m heading out. (see you later)','The answer is 行ってらっしゃい.'],
+    ['{行|い}って らっしゃい。','Have a good day. (to someone leaving)'],
+    ['{一緒|いっしょ} に {行|い}こう。','Let\'s go together.'],
+    ['{待|ま}って！','Wait!'],
+    ['コーヒー {飲|の}む？','Do you want some coffee?'],
+    ['{寒|さむ}い ね。','It\'s cold, isn\'t it?'],
+    ['{楽|たの}しかった ね。','That was fun, wasn\'t it?'],
+    ['{会|あ}いたい。','I miss you.','Literally "I want to see you".'],
+    ['{今|いま} {何|なに} して る？','What are you doing now?'],
+    ['{手伝|てつだ}おう か？','Shall I help?'],
+    ['これ、 {日本語|にほんご} で {何|なん} て {言|い}う の？','What is this called in Japanese?'],
+    ['{可愛|かわい}い ね。','You\'re cute.'],
+    ['もう {寝|ね}よう。','Let\'s go to sleep.'],
+  ]},
+  {id:'out', name:'Out and about', jp:'外で', who:'To a stranger', reg:'polite', color:'#1F7A80', cards:[
+    ['すみません、 ちょっと いい です か？','Excuse me, do you have a moment?'],
+    ['{英語|えいご} を {話|はな}せます か？','Do you speak English?'],
+    ['{日本語|にほんご} ^は まだ {下手|へた} です。','My Japanese is still bad.','Humble. People will probably answer 上手ですね！ (jouzu desu ne) = "You\'re good!"'],
+    ['トイレ ^は どこ です か？','Where is the toilet?'],
+    ['{駅|えき} ^は どこ です か？','Where is the station?'],
+    ['{道|みち} に {迷|まよ}いました。','I\'m lost.'],
+    ['この {電車|でんしゃ} ^は {東京|とうきょう} に {行|い}きます か？','Does this train go to Tokyo?'],
+    ['これ ^は いくら です か？','How much is this?'],
+    ['これ を ください。','I\'ll take this, please.'],
+    ['カード で {払|はら}えます か？','Can I pay by card?'],
+    ['{袋|ふくろ} ^は いりません。','I don\'t need a bag.'],
+    ['{二人|ふたり} です。','Two people, please. (at a restaurant)'],
+    ['{英語|えいご} の メニュー ^は あります か？','Do you have an English menu?'],
+    ['おすすめ ^は {何|なん} です か？','What do you recommend?'],
+    ['お{会計|かいけい} お{願|ねが}い します。','The bill, please.'],
+    ['{写真|しゃしん} を {撮|と}って もらえます か？','Could you take a photo of us?'],
+    ['どうも ありがとう。','Thanks a lot.'],
+    ['{大丈夫|だいじょうぶ} です か？','Are you okay?'],
+    ['{助|たす}けて ください！','Help!'],
+    ['{救急車|きゅうきゅうしゃ} を {呼|よ}んで ください！','Please call an ambulance!','The emergency number in Japan is 119 (ambulance and fire).'],
+  ]},
+  {id:'kin', name:'Family words', jp:'家族のことば', who:'Word', reg:'word', color:'#A0522D', cards:[
+    ['{家族|かぞく}','family'],
+    ['{妻|つま}','my wife','When you talk to other people about your wife.'],
+    ['お{義父|とう}さん','father-in-law','Written 義父 (in-law), spoken おとうさん. You can call him this directly.'],
+    ['お{義母|かあ}さん','mother-in-law','Written 義母, spoken おかあさん. You can call her this directly.'],
+    ['{両親|りょうしん}','parents'],
+    ['おじいちゃん','grandpa'],
+    ['おばあちゃん','grandma'],
+    ['お{兄|にい}さん','older brother'],
+    ['お{姉|ねえ}さん','older sister'],
+    ['{弟|おとうと}','younger brother'],
+    ['{妹|いもうと}','younger sister'],
+    ['{子供|こども}','child'],
+    ['{親戚|しんせき}','relatives'],
+    ['{友達|ともだち}','friend'],
+  ]},
+  {id:'words', name:'Everyday words', jp:'毎日のことば', who:'Word', reg:'word', color:'#56627A', cards:[
+    ['{水|みず}','water'],
+    ['ご{飯|はん}','rice / a meal'],
+    ['パン','bread'],
+    ['コーヒー','coffee'],
+    ['おいしい','delicious'],
+    ['{家|いえ}','house / home'],
+    ['{駅|えき}','station'],
+    ['トイレ','toilet'],
+    ['{今日|きょう}','today'],
+    ['{明日|あした}','tomorrow'],
+    ['{昨日|きのう}','yesterday'],
+    ['{今|いま}','now'],
+    ['{時間|じかん}','time'],
+    ['お{金|かね}','money'],
+    ['{好|す}き','to like'],
+    ['{大|おお}きい','big'],
+    ['{小|ちい}さい','small'],
+    ['{暑|あつ}い','hot (weather)'],
+    ['{寒|さむ}い','cold (weather)'],
+  ]},
+  {id:'num', name:'Numbers and money', jp:'数字', who:'Word', reg:'word', color:'#8A6D1D', cards:[
+    ['{一|いち}','1'],['{二|に}','2'],['{三|さん}','3'],
+    ['{四|よん}','4','Also し, but よん is more common.'],
+    ['{五|ご}','5'],['{六|ろく}','6'],
+    ['{七|なな}','7','Also しち.'],
+    ['{八|はち}','8'],['{九|きゅう}','9'],['{十|じゅう}','10'],
+    ['{百|ひゃく}','100'],['{千|せん}','1,000'],
+    ['{一万|いちまん}','10,000','Japanese counts big numbers in groups of 10,000.'],
+    ['{千円|せんえん}','1,000 yen'],
+  ]},
+];
+
+const KANA_ROWS = 'あ a,い i,う u,え e,お o,か ka,き ki,く ku,け ke,こ ko,さ sa,し shi,す su,せ se,そ so,た ta,ち chi,つ tsu,て te,と to,な na,に ni,ぬ nu,ね ne,の no,は ha,ひ hi,ふ fu,へ he,ほ ho,ま ma,み mi,む mu,め me,も mo,や ya,ゆ yu,よ yo,ら ra,り ri,る ru,れ re,ろ ro,わ wa,を o,ん n';
+const KANA_DECKS = [
+  {id:'hira', name:'Hiragana', jp:'ひらがな', who:'Letter', reg:'kana', color:'#3D6FB0', kana:true, note:'Hiragana: the main Japanese alphabet. Used for grammar and many words.'},
+  {id:'kata', name:'Katakana', jp:'カタカナ', who:'Letter', reg:'kana', color:'#B0453D', kana:true, note:'Katakana: used for foreign words like ベルギー (Belgium) or コーヒー (coffee).'},
+];
+
+/* ============================================================
+   KANA → ROMAJI
+   ============================================================ */
+const ROM = {};
+('あa いi うu えe おo かka きki くku けke こko さsa しshi すsu せse そso たta ちchi つtsu てte とto なna にni ぬnu ねne のno はha ひhi ふfu へhe ほho まma みmi むmu めme もmo やya ゆyu よyo らra りri るru れre ろro わwa をo んn がga ぎgi ぐgu げge ごgo ざza じji ずzu ぜze ぞzo だda ぢji づzu でde どdo ばba びbi ぶbu べbe ぼbo ぱpa ぴpi ぷpu ぺpe ぽpo ぁa ぃi ぅu ぇe ぉo ゃya ゅyu ょyo ゔvu')
+  .split(' ').forEach(p => { ROM[p[0]] = p.slice(1); });
+const Y_BASE = {'き':'ky','し':'sh','ち':'ch','に':'ny','ひ':'hy','み':'my','り':'ry','ぎ':'gy','じ':'j','ぢ':'j','び':'by','ぴ':'py'};
+const Y_END = {'ゃ':'a','ゅ':'u','ょ':'o'};
+for (const b in Y_BASE) for (const e in Y_END) ROM[b + e] = Y_BASE[b] + Y_END[e];
+Object.assign(ROM, {'てぃ':'ti','でぃ':'di','とぅ':'tu','どぅ':'du','ふぁ':'fa','ふぃ':'fi','ふぇ':'fe','ふぉ':'fo','うぃ':'wi','うぇ':'we','うぉ':'wo','しぇ':'she','じぇ':'je','ちぇ':'che','ゔぁ':'va','ゔぃ':'vi','ゔぇ':'ve','ゔぉ':'vo'});
+const PUNCT = {'。':'.','、':',','？':'?','！':'!','…':'...','「':'"','」':'"','・':' ','　':' ','～':'~'};
+
+function romOne(h, i) {
+  const two = h.substr(i, 2);
+  if (two.length === 2 && ROM[two]) return [ROM[two], 2];
+  if (h[i] in ROM) return [ROM[h[i]], 1];
+  return null;
+}
+function toRomaji(s) {
+  let h = '';
+  for (const ch of s) { const c = ch.charCodeAt(0); h += (c >= 0x30A1 && c <= 0x30F4) ? String.fromCharCode(c - 0x60) : ch; }
+  let out = '';
+  for (let i = 0; i < h.length;) {
+    const c = h[i];
+    if (c === 'っ') { const nx = romOne(h, i + 1); if (nx) out += nx[0].startsWith('ch') ? 't' : nx[0][0]; i++; continue; }
+    if (c === 'ー') { const v = out.slice(-1); if ('aeiou'.includes(v)) out += v; i++; continue; }
+    if (c === 'ん') { const nx = romOne(h, i + 1); out += (nx && /^[aeiouy]/.test(nx[0])) ? "n'" : 'n'; i++; continue; }
+    const r = romOne(h, i);
+    if (r) { out += r[0]; i += r[1]; continue; }
+    out += PUNCT[c] ?? c; i++;
+  }
+  return out;
+}
+
+/* ============================================================
+   PARSING THE NOTATION
+   ============================================================ */
+function parse(n) {
+  return n.trim().split(/\s+/).map(word => {
+    const segs = [];
+    for (let i = 0; i < word.length;) {
+      if (word[i] === '{') {
+        const j = word.indexOf('}', i);
+        const [t, r] = word.slice(i + 1, j).split('|');
+        segs.push({t, r}); i = j + 1;
+      } else if (word[i] === '^') {
+        segs.push({t: word[i + 1], p: true}); i += 2;
+      } else {
+        let j = i; while (j < word.length && word[j] !== '{' && word[j] !== '^') j++;
+        segs.push({t: word.slice(i, j)}); i = j;
+      }
+    }
+    return segs;
+  });
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const flat = parsed => parsed.flat();
+const kanjiText = parsed => flat(parsed).map(g => g.t).join('');
+const kanaText = parsed => flat(parsed).map(g => g.r || g.t).join('');
+const rubyHTML = parsed => flat(parsed).map(g => g.r ? `<ruby>${esc(g.t)}<rt>${esc(g.r)}</rt></ruby>` : esc(g.t)).join('');
+function romajiOf(parsed, sentence) {
+  let s = parsed.map(w => w.map(g => g.p ? (g.t === 'は' ? 'wa' : g.t === 'へ' ? 'e' : toRomaji(g.t)) : toRomaji(g.r || g.t)).join('')).join(' ');
+  s = s.replace(/\s+([.,?!])/g, '$1');
+  if (sentence) s = s.replace(/(^|[.?!]\s+)([a-z])/g, (m, a, b) => a + b.toUpperCase());
+  return s;
+}
+
+/* Build all items */
+const ITEMS = {};
+const DECK_ITEMS = {};
+const ALL_DECKS = [...DECKS, ...KANA_DECKS];
+DECKS.forEach(d => {
+  DECK_ITEMS[d.id] = d.cards.map(([n, en, note, reg]) => {
+    const parsed = parse(n);
+    const kana = kanaText(parsed);
+    const it = {
+      id: d.id + '|' + kana, deck: d, en, note: note || '', reg: reg || d.reg,
+      parsed, kana, kanji: kanjiText(parsed), ruby: rubyHTML(parsed),
+      romaji: romajiOf(parsed, /[。？！…]$/.test(n.trim())),
+      hasKanji: flat(parsed).some(g => g.r),
+    };
+    ITEMS[it.id] = it; return it;
+  });
+});
+KANA_DECKS.forEach(d => {
+  DECK_ITEMS[d.id] = KANA_ROWS.split(',').map(p => {
+    let [ch, rom] = p.split(' ');
+    if (d.id === 'kata') ch = String.fromCharCode(ch.charCodeAt(0) + 0x60);
+    const it = {id: d.id + '|' + ch, deck: d, isKana: true, en: rom, romaji: rom, kana: ch, kanji: ch, ruby: esc(ch), hasKanji: false, note: d.note, reg: 'kana'};
+    ITEMS[it.id] = it; return it;
+  });
+});
+
+/* ============================================================
+   STATE (saved in this browser)
+   ============================================================ */
+const KEY = 'hanaso.v1';
+const DEFAULT_SETTINGS = {newPerDay: 10, script: 'auto', dir: 'auto', autoplay: true, rate: 0.85,
+  decks: {basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:false, hira:true, kata:false}};
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {cards: s.cards || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
+              day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: s.streak || {last: 0, count: 0}, total: s.total || 0};
+    }
+  } catch (e) {}
+  return {cards: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0}, total: 0};
+}
+let S = load();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function today() { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
+function freshDay() { const t = today(); if (S.day.n !== t) S.day = {n: t, newSeen: 0, reviews: 0}; }
+function streakNow() { const t = today(); return (S.streak.last === t || S.streak.last === t - 1) ? S.streak.count : 0; }
+
+/* ============================================================
+   SPACED REPETITION
+   ============================================================ */
+const clampEase = e => Math.min(3.0, Math.max(1.3, e));
+function nextOf(st, g) {
+  if (g === 0) return {again: true, ivl: st.ivl >= 3 ? Math.max(1, Math.round(st.ivl * 0.3)) : 0, ease: clampEase(st.ease - 0.2), lapsed: st.ivl > 0};
+  if (st.lapsed) return {ivl: g === 3 ? Math.max(2, Math.round(st.ivl * 1.5)) : Math.max(1, st.ivl), ease: st.ease};
+  if (st.ivl === 0) {
+    if (g === 1) return {again: true, ivl: 0, ease: st.ease};
+    return {ivl: g === 2 ? 1 : 4, ease: clampEase(st.ease + (g === 3 ? 0.15 : 0))};
+  }
+  let ivl, ease = st.ease;
+  if (g === 1) { ivl = Math.max(st.ivl + 1, Math.round(st.ivl * 1.2)); ease -= 0.15; }
+  if (g === 2) { ivl = Math.max(st.ivl + 1, Math.round(st.ivl * st.ease)); }
+  if (g === 3) { ivl = Math.max(st.ivl + 2, Math.round(st.ivl * st.ease * 1.3)); ease += 0.15; }
+  return {ivl: Math.min(365, ivl), ease: clampEase(ease)};
+}
+function fmtIvl(r) {
+  if (r.again) return 'soon';
+  const d = r.ivl;
+  if (d < 14) return d + (d === 1 ? ' day' : ' days');
+  if (d < 60) return Math.round(d / 7) + ' wk';
+  return Math.round(d / 30) + ' mo';
+}
+function blankState() { return {ivl: 0, ease: 2.5, reps: 0, lapses: 0, due: today()}; }
+
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function plan(extraNew = 0) {
+  freshDay();
+  const t = today();
+  const due = [], fresh = [];
+  ALL_DECKS.filter(d => S.settings.decks[d.id]).forEach(d => {
+    const f = [];
+    DECK_ITEMS[d.id].forEach(it => { const st = S.cards[it.id]; if (st) { if (st.due <= t) due.push(it); } else f.push(it); });
+    if (f.length) fresh.push(f);
+  });
+  let left = Math.max(0, S.settings.newPerDay - S.day.newSeen) + extraNew;
+  const picked = [];
+  while (left > 0 && fresh.some(f => f.length)) {
+    for (const f of fresh) { if (left > 0 && f.length) { picked.push(f.shift()); left--; } }
+  }
+  return {due: shuffle(due), fresh: picked};
+}
+function buildQueue(extraNew = 0) {
+  const {due, fresh} = plan(extraNew);
+  const q = [];
+  let i = 0, j = 0;
+  while (i < due.length || j < fresh.length) {
+    for (let k = 0; k < 3 && i < due.length; k++) q.push(due[i++]);
+    if (j < fresh.length) q.push(fresh[j++]);
+  }
+  return q;
+}
+
+/* Writing level: 0 romaji, 1 kana, 2 kanji+furigana, 3 kanji */
+const LEVELS = ['Romaji', 'Kana', 'Kanji + furigana', 'Kanji'];
+function levelFor(it) {
+  const s = S.settings.script;
+  if (s !== 'auto') return +s;
+  const st = S.cards[it.id]; const ivl = st ? st.ivl : 0;
+  return ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0;
+}
+function dirFor(it) {
+  if (it.isKana) return 'jp';
+  const d = S.settings.dir;
+  if (d === 'jp' || d === 'en') return d;
+  if (d === 'mix') return Math.random() < .5 ? 'jp' : 'en';
+  const st = S.cards[it.id];
+  if (!st || st.ivl < 3) return 'jp';
+  return st.reps % 2 ? 'en' : 'jp';
+}
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+let jaVoice = null;
+function pickVoice() {
+  try {
+    const vs = speechSynthesis.getVoices().filter(v => /^ja/i.test(v.lang));
+    jaVoice = vs.find(v => /kyoko|otoya|google|natural|nanami/i.test(v.name)) || vs[0] || null;
+  } catch (e) { jaVoice = null; }
+}
+try { pickVoice(); speechSynthesis.onvoiceschanged = () => { pickVoice(); if (tab === 'settings') render(); }; } catch (e) {}
+function speak(it) {
+  try {
+    const u = new SpeechSynthesisUtterance(it.kanji.replace(/…/g, ''));
+    u.lang = 'ja-JP'; if (jaVoice) u.voice = jaVoice; u.rate = S.settings.rate;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+const ICON_SPEAK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const ICON_SHOW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+const ICON_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+const REG_LABEL = {polite: 'polite', casual: 'casual', word: 'word', kana: 'letter'};
+
+let tab = 'home';
+try { tab = localStorage.getItem(KEY + '.tab') || 'home'; } catch (e) {}
+let phraseQuery = '', phraseDeck = 'all';
+
+function deckCounts(d) {
+  const items = DECK_ITEMS[d.id];
+  let seen = 0, strong = 0;
+  items.forEach(it => { const st = S.cards[it.id]; if (st) { seen++; if (st.ivl >= 21) strong++; } });
+  return {total: items.length, seen, strong};
+}
+function ladderCounts() {
+  const c = [0, 0, 0, 0];
+  DECKS.forEach(d => DECK_ITEMS[d.id].forEach(it => {
+    const st = S.cards[it.id]; if (!st) return;
+    const ivl = st.ivl; c[ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0]++;
+  }));
+  return c;
+}
+
+function viewHome() {
+  const {due, fresh} = plan();
+  const lc = ladderCounts();
+  const nothing = !due.length && !fresh.length;
+  const steps = [
+    {lab: 'Romaji', when: 'new cards', sample: '<span class="sample rom">hana</span>'},
+    {lab: 'Kana', when: 'after 1 week', sample: '<span class="sample jp">はな</span>'},
+    {lab: 'Kanji + furigana', when: 'after 3 weeks', sample: '<span class="sample jp"><ruby>花<rt>はな</rt></ruby></span>'},
+    {lab: 'Kanji', when: 'after 2 months', sample: '<span class="sample jp">花</span>'},
+  ];
+  return `
+  <section class="panel today">
+    <div>
+      <div class="eyebrow">Today</div>
+      <h1 style="font-size:24px;margin-top:4px">${nothing ? 'All done for today. お疲れさま！' : 'Ready when you are'}</h1>
+    </div>
+    <div class="today-nums">
+      <div class="num"><b>${due.length}</b><span>to review</span></div>
+      <div class="num"><b>${fresh.length}</b><span>new cards</span></div>
+      <div class="num"><b>${S.day.n === today() ? S.day.reviews : 0}</b><span>done today</span></div>
+    </div>
+    ${nothing
+      ? `<button class="btn btn-soft" data-act="more" style="width:100%">Learn 5 more new cards</button>`
+      : `<button class="btn btn-primary" data-act="start">Start studying</button>`}
+  </section>
+
+  <section class="section">
+    <div><h2>How the writing grows</h2>
+    <p class="muted" style="font-size:15px;margin-top:4px">Each card starts in romaji. When you know it well, it moves to kana, then kanji. The numbers show your cards at each step.</p></div>
+    <div class="ladder">
+      ${steps.map((s, i) => `<div class="step">${s.sample}<span class="lab">${s.lab}</span><span class="when">${s.when}</span><span class="cnt">${lc[i]}</span></div>`).join('')}
+    </div>
+  </section>
+
+  <section class="section">
+    <div><h2>Decks</h2><p class="muted" style="font-size:15px;margin-top:4px">Switch on what you want to learn. New cards come from all switched-on decks in turn.</p></div>
+    <div class="decks">
+      ${ALL_DECKS.map(d => { const c = deckCounts(d); return `
+        <div class="deck" style="--c:${d.color}">
+          <span class="dot"></span>
+          <div>
+            <div class="deck-name">${esc(d.name)}<span class="jp">${d.jp}</span></div>
+            <div class="deck-meta">${c.seen} of ${c.total} started · ${esc(d.who)}${d.reg === 'polite' || d.reg === 'casual' ? ' · ' + d.reg : ''}</div>
+            <div class="bar"><i style="width:${c.strong / c.total * 100}%"></i><i style="width:${(c.seen - c.strong) / c.total * 100}%"></i></div>
+          </div>
+          <input type="checkbox" class="switch" id="deck-${d.id}" data-act="deck" data-id="${d.id}" ${S.settings.decks[d.id] ? 'checked' : ''} aria-label="Study ${esc(d.name)}">
+        </div>`; }).join('')}
+    </div>
+  </section>`;
+}
+
+function phraseRows() {
+  const q = phraseQuery.trim().toLowerCase();
+  const plain = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+  let html = '';
+  DECKS.forEach(d => {
+    if (phraseDeck !== 'all' && phraseDeck !== d.id) return;
+    const rows = DECK_ITEMS[d.id].filter(it => !q || it.en.toLowerCase().includes(q) || plain(it.romaji).includes(plain(q)) || it.kana.includes(q) || it.kanji.includes(q));
+    if (!rows.length) return;
+    html += `<h3 class="group-h" style="--c:${d.color}"><span class="dot"></span>${esc(d.name)} <span class="jp muted" style="font-size:13px">${d.jp}</span></h3>`;
+    html += rows.map(it => `
+      <div class="phrase">
+        <div class="jp">${it.ruby}</div>
+        <div class="rom">${esc(it.romaji)}</div>
+        <div class="en">${esc(it.en)}</div>
+        <div class="acts">
+          <button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button>
+          <button class="icon-btn" data-act="big" data-id="${esc(it.id)}" aria-label="Show in big letters">${ICON_SHOW}</button>
+        </div>
+      </div>`).join('');
+  });
+  return html || '<p class="muted">Nothing found. Try another word.</p>';
+}
+function viewPhrases() {
+  return `
+  <section class="section">
+    <div><h2>Phrasebook</h2><p class="muted" style="font-size:15px;margin-top:4px">Every sentence, ready to use. Tap the speaker to hear it, or the frame to show it big to someone.</p></div>
+    <input class="search" id="phraseSearch" type="search" placeholder="Search in English or romaji" value="${esc(phraseQuery)}" autocomplete="off">
+    <div class="filter">
+      <button data-act="pdeck" data-id="all" aria-pressed="${phraseDeck === 'all'}">All</button>
+      ${DECKS.map(d => `<button data-act="pdeck" data-id="${d.id}" aria-pressed="${phraseDeck === d.id}">${esc(d.name)}</button>`).join('')}
+    </div>
+    <div class="plist" id="plist">${phraseRows()}</div>
+  </section>`;
+}
+
+function viewProgress() {
+  const all = Object.keys(S.cards).filter(id => ITEMS[id]);
+  const strong = all.filter(id => S.cards[id].ivl >= 21).length;
+  const hard = all.filter(id => S.cards[id].lapses > 0).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses).slice(0, 6);
+  return `
+  <section class="section">
+    <h2>Your progress</h2>
+    <div class="stats">
+      <div class="stat"><b>${all.length}</b><span>cards started</span></div>
+      <div class="stat"><b>${strong}</b><span>known well (3+ weeks)</span></div>
+      <div class="stat"><b>${streakNow()}</b><span>day streak</span></div>
+      <div class="stat"><b>${S.total}</b><span>answers in total</span></div>
+    </div>
+  </section>
+  <section class="section">
+    <h2>By deck</h2>
+    <div class="legend"><span><i></i>known well</span><span><i class="light"></i>learning</span></div>
+    <div class="decks">
+      ${ALL_DECKS.map(d => { const c = deckCounts(d); return `
+      <div class="deck" style="--c:${d.color};grid-template-columns:auto 1fr">
+        <span class="dot"></span>
+        <div><div class="deck-name">${esc(d.name)}<span class="jp">${d.jp}</span></div>
+        <div class="deck-meta">${c.strong} known well · ${c.seen - c.strong} learning · ${c.total - c.seen} new</div>
+        <div class="bar"><i style="width:${c.strong / c.total * 100}%"></i><i style="width:${(c.seen - c.strong) / c.total * 100}%"></i></div></div>
+      </div>`; }).join('')}
+    </div>
+  </section>
+  ${hard.length ? `<section class="section"><h2>Tricky cards</h2><p class="muted" style="font-size:15px">The cards you forgot most often. Try saying them out loud a few times.</p>
+    <div class="plist">${hard.map(id => { const it = ITEMS[id]; return `<div class="phrase"><div class="jp">${it.ruby}</div><div class="rom">${esc(it.romaji)}</div><div class="en">${esc(it.en)} · forgot ${S.cards[id].lapses}×</div><div class="acts"><button class="icon-btn" data-act="speak" data-id="${esc(id)}" aria-label="Listen">${ICON_SPEAK}</button></div></div>`; }).join('')}</div></section>` : ''}
+  <section class="panel howto">
+    <h2>How to study</h2>
+    <ol>
+      <li>Study a little every day. 10 minutes is enough.</li>
+      <li>When the card shows English, say the Japanese <b>out loud</b> before you check.</li>
+      <li>Be honest with the buttons. <b>Again</b> brings the card back in a few minutes. <b>Good</b> and <b>Easy</b> push it further into the future.</li>
+      <li>Use the phrases with Aya and her family. Real conversations are the best practice.</li>
+    </ol>
+    <p class="muted" style="font-size:14px">Romaji tip: "ou" and "uu" are long vowels. <b>arigatou</b> sounds like "arigatoo".</p>
+  </section>`;
+}
+
+function seg(key, opts) {
+  return `<div class="seg" role="group">${opts.map(([v, l]) => `<button data-act="set" data-k="${key}" data-v="${v}" aria-pressed="${String(S.settings[key]) === String(v)}">${l}</button>`).join('')}</div>`;
+}
+let backupMsg = '', resetArmed = false;
+function viewSettings() {
+  return `
+  <section class="section">
+    <h2>Settings</h2>
+    <div class="panel" style="padding-block:4px">
+      <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[5, '5'], [10, '10'], [15, '15'], [20, '20']])}</div>
+      <div class="setting"><h3>Writing</h3><p class="muted" style="font-size:14px">Auto moves each card from romaji to kana to kanji as you learn it.</p>
+        ${seg('script', [['auto', 'Auto'], [0, 'Romaji'], [1, 'Kana'], [2, 'Kanji + furigana'], [3, 'Kanji']])}</div>
+      <div class="setting"><h3>Card direction</h3><p class="muted" style="font-size:14px">Auto: first you learn to understand a card. Once you know it, you also practise saying it.</p>
+        ${seg('dir', [['auto', 'Auto'], ['jp', 'Understand (JP → EN)'], ['en', 'Speak (EN → JP)'], ['mix', 'Mix']])}</div>
+      <div class="setting"><h3>Read Japanese aloud automatically</h3>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
+      <div class="setting"><h3>Voice speed</h3>${seg('rate', [[0.65, 'Slow'], [0.85, 'Normal'], [1, 'Natural']])}
+        <p class="muted" style="font-size:14px">${jaVoice ? 'Japanese voice: ' + esc(jaVoice.name) : 'No Japanese voice found yet. On iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese. On Android: Settings → Text-to-speech → install Japanese.'}</p>
+        <div><button class="mini" data-act="testvoice">${ICON_SPEAK} Test voice</button></div></div>
+    </div>
+  </section>
+  <section class="section">
+    <h2>Backup</h2>
+    <p class="muted" style="font-size:15px">Progress is saved only in this browser. Copy a backup code now and then, and keep it in a note or send it to yourself.</p>
+    <div class="btn-row"><button class="btn btn-soft" data-act="backup">Copy backup code</button></div>
+    <textarea id="restoreBox" placeholder="Paste a backup code here to restore it"></textarea>
+    <div class="btn-row"><button class="btn btn-line" data-act="restore">Restore from code</button></div>
+    ${backupMsg ? `<p class="msg ${backupMsg.startsWith('!') ? 'err' : ''}">${esc(backupMsg.replace(/^!/, ''))}</p>` : ''}
+  </section>
+  <section class="section">
+    <h2>Start over</h2>
+    <button class="btn btn-line" data-act="reset" style="color:var(--again);border-color:var(--again)">${resetArmed ? 'Tap again to erase all progress' : 'Erase all progress'}</button>
+  </section>`;
+}
+
+function render() {
+  const v = document.getElementById('view');
+  v.innerHTML = tab === 'phrases' ? viewPhrases() : tab === 'progress' ? viewProgress() : tab === 'settings' ? viewSettings() : viewHome();
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false'));
+  const s = streakNow();
+  document.getElementById('streakPill').textContent = s ? s + (s === 1 ? ' day' : ' days') + ' in a row' : 'Day 1';
+  if (tab === 'phrases') {
+    const inp = document.getElementById('phraseSearch');
+    inp.addEventListener('input', () => { phraseQuery = inp.value; document.getElementById('plist').innerHTML = phraseRows(); });
+  }
+}
+
+/* ============================================================
+   STUDY SESSION
+   ============================================================ */
+let sess = null;
+function startSession(extraNew = 0) {
+  const q = buildQueue(extraNew);
+  if (!q.length) return;
+  sess = {queue: q, pos: 0, answered: 0};
+  document.getElementById('study').hidden = false;
+  document.body.style.overflow = 'hidden';
+  showCard();
+}
+function closeSession() {
+  sess = null;
+  try { speechSynthesis.cancel(); } catch (e) {}
+  document.getElementById('study').hidden = true;
+  document.body.style.overflow = '';
+  render();
+}
+function jpBlock(it, lvl, big) {
+  const len = it.kana.length;
+  if (it.isKana) return `<div class="jp-main jp" style="font-size:96px;line-height:1.2">${esc(it.kana)}</div>`;
+  const size = big ? (len <= 5 ? 50 : len <= 10 ? 38 : len <= 18 ? 30 : 25) : (len <= 10 ? 28 : 24);
+  if (lvl === 0) return `<div class="jp-main rom" style="font-size:${Math.round(size * .8)}px">${esc(it.romaji)}</div><div class="jp-sub jp">${esc(it.kana)}</div>`;
+  if (lvl === 1) return `<div class="jp-main jp" style="font-size:${size}px">${esc(it.kana)}</div><div class="jp-sub" data-peek="rom" hidden>${esc(it.romaji)}</div>`;
+  if (lvl === 2 || !it.hasKanji) return `<div class="jp-main jp" style="font-size:${size}px">${it.ruby}</div>`;
+  return `<div class="jp-main jp hide-rt" style="font-size:${size}px" data-peek="rt">${it.ruby}</div>`;
+}
+function peekButtons(it, lvl) {
+  let b = `<button class="mini" data-act="speak" data-id="${esc(it.id)}">${ICON_SPEAK} Listen</button>`;
+  if (!it.isKana && lvl === 1) b += `<button class="mini" data-act="peek" data-k="rom">Show romaji</button>`;
+  if (!it.isKana && lvl === 3 && it.hasKanji) b += `<button class="mini" data-act="peek" data-k="rt">Show furigana</button>`;
+  return `<div class="row-btns">${b}</div>`;
+}
+function showCard() {
+  const box = document.getElementById('studyIn');
+  const it = sess.queue[sess.pos];
+  const pct = Math.round(sess.pos / sess.queue.length * 100);
+  const top = `<div class="study-top"><button class="icon-btn" data-act="close" aria-label="Stop studying">${ICON_CLOSE}</button><div class="prog"><i style="width:${pct}%"></i></div><span class="count">${sess.pos}/${sess.queue.length}</span></div>`;
+  if (!it) {
+    sess.cur = null;
+    box.innerHTML = top + `<div class="done"><div class="jp">お疲れさまでした！</div><p style="font-size:19px"><b>Otsukaresama deshita!</b><br>Great work. You answered ${sess.answered} cards.</p>
+      <div class="btn-row" style="width:100%"><button class="btn btn-soft" data-act="more">Learn 5 more</button><button class="btn btn-primary" data-act="close">Finish</button></div></div>`;
+    return;
+  }
+  const st = S.cards[it.id];
+  const lvl = levelFor(it);
+  const dir = dirFor(it);
+  sess.cur = {it, lvl, dir, revealed: false};
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : ''}</div>`;
+  let front;
+  if (dir === 'jp') {
+    front = `<div class="ask">${it.isKana ? 'How do you read this?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
+  } else {
+    front = `<div class="ask">How do you say this in Japanese? <span style="font-weight:400">(${esc(it.deck.who.toLowerCase())}${it.reg === 'polite' || it.reg === 'casual' ? ', ' + it.reg : ''})</span></div>
+      <div class="front"><div class="en-main" style="font-size:${it.en.length > 40 ? 24 : 30}px">${esc(it.en)}</div><div class="hint">Say it out loud first, then check.</div></div>`;
+  }
+  box.innerHTML = top + `<div class="card" id="card">${chips}${front}<div id="answer"></div></div>
+    <div id="actions"><button class="btn btn-primary" data-act="reveal">Show answer</button></div>`;
+  if (dir === 'jp' && S.settings.autoplay) speak(it);
+}
+function reveal() {
+  const {it, lvl, dir} = sess.cur;
+  if (sess.cur.revealed) return;
+  sess.cur.revealed = true;
+  const forms = it.isKana ? `<dl class="forms"><dt>Romaji</dt><dd><b>${esc(it.romaji)}</b></dd><dt>Hiragana</dt><dd class="jp">${esc(String.fromCharCode(it.kana.charCodeAt(0) - (it.deck.id === 'kata' ? 0x60 : 0)))}</dd><dt>Katakana</dt><dd class="jp">${esc(String.fromCharCode(it.kana.charCodeAt(0) + (it.deck.id === 'hira' ? 0x60 : 0)))}</dd></dl>`
+    : `<dl class="forms"><dt>Romaji</dt><dd><b>${esc(it.romaji)}</b></dd><dt>Kana</dt><dd class="jp">${esc(it.kana)}</dd>${it.hasKanji ? `<dt>Kanji</dt><dd class="jp">${it.ruby}</dd>` : ''}</dl>`;
+  const head = dir === 'jp'
+    ? `<div class="en-main" style="font-size:24px">${esc(it.isKana ? it.romaji : it.en)}</div>`
+    : `<div class="front" style="min-height:0;padding:0">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
+  document.getElementById('answer').innerHTML = `<div class="answer">${head}${forms}${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}</div>`;
+  const st = S.cards[it.id] || blankState();
+  const labels = ['Again', 'Hard', 'Good', 'Easy'];
+  document.getElementById('actions').innerHTML = `<div class="grades">${labels.map((l, g) => `<button class="grade" data-act="grade" data-g="${g}">${l}<small>${fmtIvl(nextOf(st, g))}</small></button>`).join('')}</div>`;
+  if (dir === 'en' && S.settings.autoplay) speak(it);
+}
+function grade(g) {
+  const {it} = sess.cur;
+  freshDay();
+  const t = today();
+  const isNew = !S.cards[it.id];
+  const st = S.cards[it.id] || blankState();
+  const r = nextOf(st, g);
+  st.ease = r.ease;
+  if (r.again) {
+    if (r.lapsed) st.lapses++;
+    st.ivl = r.ivl; st.due = t; st.lapsed = r.lapsed || st.lapsed;
+    sess.queue.splice(Math.min(sess.queue.length, sess.pos + 4), 0, it);
+  } else {
+    st.ivl = r.ivl; st.due = t + r.ivl; st.reps++; delete st.lapsed;
+  }
+  S.cards[it.id] = st;
+  if (isNew) S.day.newSeen++;
+  S.day.reviews++; S.total++;
+  if (S.streak.last !== t) { S.streak.count = S.streak.last === t - 1 ? S.streak.count + 1 : 1; S.streak.last = t; }
+  save();
+  sess.answered++;
+  sess.pos++;
+  showCard();
+}
+
+/* ============================================================
+   BIG DISPLAY (show a phrase to someone)
+   ============================================================ */
+function showBig(it) {
+  const b = document.getElementById('big');
+  b.innerHTML = `<div class="jp">${it.ruby}</div><div class="sub">${esc(it.romaji)}</div><div class="sub">${esc(it.en)}</div><div class="close-hint">Tap anywhere to close</div>`;
+  b.hidden = false;
+  speak(it);
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+document.addEventListener('click', e => {
+  const tb = e.target.closest('.tab');
+  if (tb) { tab = tb.dataset.tab; resetArmed = false; backupMsg = ''; try { localStorage.setItem(KEY + '.tab', tab); } catch (er) {} render(); window.scrollTo(0, 0); return; }
+  if (e.target.closest('#big')) { document.getElementById('big').hidden = true; return; }
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === 'start') startSession();
+  else if (act === 'more') { if (sess) { const q = buildQueue(5); if (q.length) { sess = {queue: q, pos: 0, answered: sess.answered}; showCard(); } } else startSession(5); }
+  else if (act === 'close') closeSession();
+  else if (act === 'reveal') reveal();
+  else if (act === 'grade') grade(+el.dataset.g);
+  else if (act === 'speak') speak(ITEMS[el.dataset.id]);
+  else if (act === 'big') showBig(ITEMS[el.dataset.id]);
+  else if (act === 'peek') {
+    const k = el.dataset.k;
+    document.querySelectorAll(`[data-peek="${k}"]`).forEach(n => { if (k === 'rom') n.hidden = !n.hidden; else n.classList.toggle('hide-rt'); });
+  }
+  else if (act === 'pdeck') { phraseDeck = el.dataset.id; render(); }
+  else if (act === 'set') {
+    let v = el.dataset.v; const k = el.dataset.k;
+    if (k === 'newPerDay' || k === 'rate') v = +v;
+    else if (k === 'autoplay') v = v === 'true';
+    S.settings[k] = v; save(); render();
+  }
+  else if (act === 'testvoice') speak(ITEMS['basics|こんにちは。']);
+  else if (act === 'backup') {
+    const code = JSON.stringify(S);
+    const box = document.getElementById('restoreBox');
+    const done = ok => { backupMsg = ok ? 'Backup code copied. Paste it somewhere safe.' : 'Copy did not work. The code is in the box below: select it and copy it.'; render(); if (!ok) { const b2 = document.getElementById('restoreBox'); b2.value = code; b2.select(); } };
+    try { navigator.clipboard.writeText(code).then(() => done(true), () => done(false)); } catch (er) { done(false); }
+  }
+  else if (act === 'restore') {
+    const txt = document.getElementById('restoreBox').value.trim();
+    try {
+      const s = JSON.parse(txt);
+      if (!s || typeof s.cards !== 'object') throw new Error();
+      localStorage.setItem(KEY, JSON.stringify(s));
+      S = load(); backupMsg = 'Progress restored.';
+    } catch (er) { backupMsg = '!This code could not be read. Check that you pasted the whole code.'; }
+    render();
+  }
+  else if (act === 'reset') {
+    if (!resetArmed) { resetArmed = true; render(); return; }
+    S = {cards: {}, settings: S.settings, day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0}, total: 0};
+    save(); resetArmed = false; render();
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset && el.dataset.act === 'deck') { S.settings.decks[el.dataset.id] = el.checked; save(); render(); }
+});
+document.addEventListener('keydown', e => {
+  if (!sess || !sess.cur || document.getElementById('study').hidden) return;
+  if (e.key === 'Escape') return closeSession();
+  if (!sess.cur.revealed && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); reveal(); }
+  else if (sess.cur.revealed && ['1', '2', '3', '4'].includes(e.key)) grade(+e.key - 1);
+});
+
+render();
+</script>
