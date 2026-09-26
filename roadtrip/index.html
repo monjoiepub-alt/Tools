@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roadtrip Planner</title>
+  <meta name="description" content="Plan any road trip: map, stops, day-by-day itinerary, kilometres, fuel and costs, plus an automatic presentation.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚐</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🚐 <span>Roadtrip Planner</span></div>
+    <div class="trip-picker">
+      <select id="tripSelect" aria-label="Choose a trip"></select>
+      <button id="newTrip" type="button" title="Start a new trip">＋ New</button>
+      <details class="menu" id="moreMenu">
+        <summary>⋯ More</summary>
+        <div class="menu-list">
+          <button id="dupTrip" type="button">📄 Duplicate this trip</button>
+          <button id="shareBtn" type="button">🔗 Copy share link</button>
+          <button id="exportBtn" type="button">💾 Export file (.json)</button>
+          <button id="importBtn" type="button">📂 Import file (.json)</button>
+          <button id="printBtn" type="button">🖨️ Print / save as PDF</button>
+          <button id="sampleBtn" type="button">✨ Add the example trip</button>
+          <button id="delTrip" type="button" class="danger-text">🗑️ Delete this trip</button>
+        </div>
+      </details>
+    </div>
+    <button id="presentBtn" type="button" class="primary">▶ Present</button>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <nav class="tabs" role="tablist">
+        <button class="tab" data-tab="trip" role="tab">⚙️ Trip</button>
+        <button class="tab" data-tab="stops" role="tab">📍 Stops</button>
+        <button class="tab" data-tab="itinerary" role="tab">🗓️ Plan</button>
+        <button class="tab" data-tab="costs" role="tab">💶 Costs</button>
+      </nav>
+
+      <!-- 1. Trip settings -->
+      <section class="panel" data-panel="trip">
+        <form id="tripForm" onsubmit="return false">
+          <fieldset>
+            <legend>About the trip</legend>
+            <label>Trip name<input data-t="name" autocomplete="off"></label>
+            <label>Tagline <small>(optional)</small><input data-t="subtitle" placeholder="e.g. Lakes, forests and the midnight sun" autocomplete="off"></label>
+            <div class="row2">
+              <label>Start date<input type="date" data-t="startDate"></label>
+              <label>Travellers<input type="number" min="1" step="1" data-t="travelers"></label>
+            </div>
+            <label class="check"><input type="checkbox" data-t="roundTrip"> Drive back to the first stop at the end</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Car &amp; fuel</legend>
+            <label>Vehicle <small>(optional)</small><input data-t="vehicle.name" placeholder="e.g. VW Transporter" autocomplete="off"></label>
+            <div class="row2">
+              <label>Fuel type
+                <select data-t="vehicle.fuelType">
+                  <option value="petrol">⛽ Petrol</option>
+                  <option value="diesel">⛽ Diesel</option>
+                  <option value="lpg">⛽ LPG</option>
+                  <option value="electric">🔌 Electric</option>
+                </select>
+              </label>
+              <label>Currency<input data-t="currency" maxlength="4" autocomplete="off"></label>
+            </div>
+            <div class="row2">
+              <label><span id="consLabel">Use per 100 km</span><input type="number" step="0.1" min="0" data-t="vehicle.consumption"></label>
+              <label><span id="priceLabel">Price per unit</span><input type="number" step="0.01" min="0" data-t="vehicle.fuelPrice"></label>
+            </div>
+            <p class="hint" id="consHint"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Trip-wide costs</legend>
+            <p class="hint">Things that are not tied to one stop: car rental, ferries, tolls, insurance, gear…</p>
+            <div class="cost-rows" data-owner="trip"></div>
+          </fieldset>
+        </form>
+      </section>
+
+      <!-- 2. Stops -->
+      <section class="panel" data-panel="stops">
+        <div class="add-stop">
+          <label for="placeSearch" class="visually-hidden">Search for a place</label>
+          <input id="placeSearch" type="search" placeholder="🔎 Search a place to add…" autocomplete="off">
+          <button id="pickBtn" type="button" title="Click on the map to add a stop">📍 Pick on map</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+        <p class="hint">Tip: drag the numbered pins on the map to move a stop. Use ↑ ↓ to change the order.</p>
+        <ol id="stopList" class="stop-list"></ol>
+      </section>
+
+      <!-- 3. Itinerary -->
+      <section class="panel" data-panel="itinerary">
+        <div id="itinerary"></div>
+      </section>
+
+      <!-- 4. Costs -->
+      <section class="panel" data-panel="costs">
+        <div id="costs"></div>
+      </section>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map" aria-label="Map of the trip"></div>
+      <div id="statsBar" class="stats-bar"></div>
+      <div id="pickHint" class="pick-hint" hidden>👆 Click on the map to add a stop <button type="button" id="pickCancel">Cancel</button></div>
+    </section>
+  </main>
+
+  <!-- Presentation mode -->
+  <div id="present" hidden>
+    <div id="pMap"></div>
+    <div class="p-progress"><span id="pProgress"></span></div>
+    <article id="pCard" class="p-card"></article>
+    <div class="p-controls">
+      <button type="button" id="pPrev" title="Previous (←)">⏮</button>
+      <button type="button" id="pPlay" title="Play / pause (space)">⏸</button>
+      <button type="button" id="pNext" title="Next (→)">⏭</button>
+      <span id="pCount" class="p-count"></span>
+      <button type="button" id="pClose" title="Close (Esc)">✕</button>
+    </div>
+    <div id="pDots" class="p-dots"></div>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
