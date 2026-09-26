@@ -1,0 +1,817 @@
+<title>Career Compass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F2F5F3; --surface:#FFFFFF; --ink:#15221E; --muted:#4E5D57; --line:#D6DED9;
+  --accent:#1C5D78; --accent-ink:#FFFFFF; --accent-soft:#DCEBF1; --marker:#E9B824;
+  --ok:#23794A; --ok-soft:#DDF0E3; --mid:#8A5A0E; --mid-soft:#F6EACB; --no:#A63D33; --no-soft:#F5DEDA;
+  --font-body:"Lexend", "Segoe UI", system-ui, sans-serif;
+  --font-display:"Bricolage Grotesque", "Lexend", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1715; --surface:#16211E; --ink:#E7EFEB; --muted:#A3B2AC; --line:#2A3833;
+    --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
+    --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1715; --surface:#16211E; --ink:#E7EFEB; --muted:#A3B2AC; --line:#2A3833;
+  --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
+  --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;font-weight:400}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-0.01em}
+h2{font-size:1.6rem;font-weight:800}
+h3{font-size:1.25rem;font-weight:600}
+p{margin:0;max-width:65ch}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--marker);outline-offset:2px;border-radius:6px}
+
+header.top{display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:8px;background:var(--marker);border-radius:2px;display:inline-block}
+.lead{font-size:1.1rem;color:var(--muted)}
+
+section{display:flex;flex-direction:column;gap:16px}
+.sec-head{display:flex;flex-direction:column;gap:6px}
+.hint{color:var(--muted);font-size:.95rem}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:.92rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:.95rem;display:inline-flex;align-items:center;gap:8px;text-align:left;line-height:1.3}
+.chip .dot{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-size:.8rem;font-weight:600;flex:none;border:2px solid var(--line);color:var(--muted)}
+.chip[data-s="have"]{border-color:var(--ok);background:var(--ok-soft)}
+.chip[data-s="have"] .dot{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.chip[data-s="prog"]{border-color:var(--mid);background:var(--mid-soft)}
+.chip[data-s="prog"] .dot{background:var(--mid);border-color:var(--mid);color:var(--surface)}
+.chip small{color:var(--muted);font-size:.8rem}
+.subhead{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:500;margin-top:4px}
+
+/* matrix */
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+thead th{font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0}
+tbody th{font-weight:500;white-space:nowrap}
+tr.cat th{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--accent);padding-top:16px;background:var(--surface)}
+tr:last-child td,tr:last-child th{border-bottom:0}
+.cell{width:100%;min-width:84px;border:0;border-radius:10px;padding:6px 10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start;font-weight:600}
+.cell .bar{height:6px;width:100%;border-radius:3px;background:var(--line);overflow:hidden}
+.cell .bar i{display:block;height:100%;background:currentColor}
+.cell small{font-weight:400;font-size:.72rem;opacity:.9}
+.lv-hi{background:var(--ok-soft);color:var(--ok)}
+.lv-md{background:var(--mid-soft);color:var(--mid)}
+.lv-lo{background:var(--no-soft);color:var(--no)}
+.cell.sel{outline:3px solid var(--accent);outline-offset:-3px}
+
+/* picker */
+.picker{display:flex;flex-direction:column;gap:12px}
+.pick{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-size:.95rem}
+.pick[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:18px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.card.focus{border:2px solid var(--accent)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.cc{font-family:var(--font-display);font-weight:800;font-size:.8rem;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 7px;margin-right:6px;letter-spacing:.05em}
+.reg{font-size:.78rem;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.reg.law{background:var(--no-soft);color:var(--no)}
+.reg.emp{background:var(--accent-soft);color:var(--accent)}
+.meter{display:flex;flex-direction:column;gap:6px}
+.meter .bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.meter .bar i{display:block;height:100%;border-radius:5px}
+.meter-label{font-size:.95rem;font-weight:500}
+.sum{font-size:.98rem}
+.label{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:500}
+ul.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.step{width:100%;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.step:hover{border-color:var(--accent)}
+.st{font-size:.75rem;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap;margin-top:2px;min-width:66px;text-align:center}
+.st.have{background:var(--ok-soft);color:var(--ok)}
+.st.prog,.st.part{background:var(--mid-soft);color:var(--mid)}
+.st.need{background:var(--no-soft);color:var(--no)}
+.st.opt{background:var(--accent-soft);color:var(--accent)}
+.step-t{font-weight:500;line-height:1.4}
+.step-d{display:block;font-size:.88rem;color:var(--muted);font-weight:400;margin-top:3px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.92rem;margin:0}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0}
+.links{display:flex;flex-direction:column;gap:4px;font-size:.92rem}
+.note{background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:.95rem}
+footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:18px}
+.reset{align-self:flex-start;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 12px;font-size:.88rem}
+@media (prefers-reduced-motion:no-preference){ .meter .bar i,.cell .bar i{transition:width .4s ease} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Finland · Sweden · Norway · France · Japan</div>
+    <h1>Career Compass</h1>
+    <p class="lead">Pick a job and see what you need in each country. Your own certificates are already filled in, so you can see how close you are to each path.</p>
+  </header>
+
+  <section id="toolbox">
+    <div class="sec-head">
+      <h2>1. Your toolbox</h2>
+      <p class="hint">Tap a chip to change it: off → ✓ have it → ~ in progress → off. Got a new certificate? Tap it inside any job card below and it is added here.</p>
+    </div>
+    <div class="subhead">Certificates & studies</div>
+    <div class="chips" id="certChips"></div>
+    <div class="subhead">Languages at work level</div>
+    <div class="chips" id="langChips"></div>
+    <div class="subhead" id="extraHead" hidden>Added by you</div>
+    <div class="chips" id="extraChips"></div>
+  </section>
+
+  <section id="overview">
+    <div class="sec-head">
+      <h2>2. How close are you?</h2>
+      <p class="hint">Each box shows how much of the required list you already have. Tap a box to open that job below.</p>
+    </div>
+    <div class="legend">
+      <span><span class="st have">60%+</span> close</span>
+      <span><span class="st part">30–59%</span> some steps</span>
+      <span><span class="st need">0–29%</span> new path</span>
+    </div>
+    <div class="tablebox"><table id="matrix"></table></div>
+  </section>
+
+  <section id="detail">
+    <div class="sec-head">
+      <h2>3. What you need</h2>
+      <p class="hint">Tap any line in a list to mark it as done. ✓ = you have it, ~ = partly or in progress, ✗ = still needed, + = optional extra.</p>
+    </div>
+    <div class="picker">
+      <div class="subhead">Job</div>
+      <div class="chips" id="jobPick"></div>
+      <div class="subhead">Countries</div>
+      <div class="chips" id="countryPick"></div>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <footer>
+    <p>Information checked in September 2026. Rules and course names change often, so always confirm on the official website before you pay for a course or move. "Right to work" notes assume a Japanese passport and marriage to an EU (Belgian) citizen.</p>
+    <p>Your changes are saved only in this browser.</p>
+    <button class="reset" id="reset" type="button">Reset my toolbox to the start</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- countries ---------- */
+var COUNTRIES = {
+  FI:{name:"Finland", lang:"langFI",
+      work:"As the spouse of an EU citizen, you can live and work here freely (EU free movement). You register with a residence card for family members of an EU citizen.",
+      workLink:["Migri: family of an EU citizen","https://migri.fi"]},
+  SE:{name:"Sweden", lang:"langSV",
+      work:"As the spouse of an EU citizen, you can live and work here freely (EU free movement). You register with a residence card for family members of an EU citizen.",
+      workLink:["Migrationsverket","https://www.migrationsverket.se"]},
+  NO:{name:"Norway", lang:"langNO",
+      work:"As the spouse of an EU citizen, you can live and work here freely (EEA free movement). You register with the police / UDI as a family member of an EU citizen.",
+      workLink:["UDI (Norwegian immigration)","https://www.udi.no"]},
+  FR:{name:"France", lang:"langFR",
+      work:"As the spouse of an EU citizen, you can live and work here freely (EU free movement). You register with a residence card for family members of an EU citizen.",
+      workLink:["France-Visas","https://france-visas.gouv.fr"]},
+  JP:{name:"Japan", lang:"langJA",
+      work:"You are Japanese, so no visa is needed.",
+      workLink:null}
+};
+var ORDER = ["FI","SE","NO","FR","JP"];
+
+/* ---------- jobs ---------- */
+var JOBS = [
+  {id:"ski",     name:"Ski instructor",               cat:"Outdoor & adventure"},
+  {id:"guide",   name:"Outdoor / wilderness guide",   cat:"Outdoor & adventure"},
+  {id:"paddle",  name:"Kayak & canoe guide",          cat:"Outdoor & adventure"},
+  {id:"kinder",  name:"Kindergarten teacher",         cat:"Education & kids"},
+  {id:"youth",   name:"Youth worker / camp leader",   cat:"Education & kids"},
+  {id:"tour",    name:"Tour guide",                   cat:"Tourism & hospitality"},
+  {id:"hotel",   name:"Hotel & resort staff",         cat:"Tourism & hospitality"},
+  {id:"cafe",    name:"Café worker / barista",        cat:"Café"},
+  {id:"cafeown", name:"Café owner",                   cat:"Café"},
+  {id:"life",    name:"Lifeguard",                    cat:"Health & safety"},
+  {id:"patrol",  name:"Ski patroller",                cat:"Health & safety"}
+];
+
+/* ---------- your starting toolbox ---------- */
+var CERTS = [
+  ["wfa","Wilderness First Aid (NOLS)"],
+  ["anw","Ski Instructor Anwärter Level 1 & 2"],
+  ["drvB","Driving licence B"],
+  ["hygFI","Hygiene passport (Finland)"],
+  ["jpEtiq","Japanese manner & etiquette"],
+  ["epp1","Euro Paddle Pass 1"],
+  ["humak","Humak degree: Adventure & Outdoor Education"]
+];
+var LANGS = [
+  ["langJA","Japanese"],["langEN","English"],["langFI","Finnish"],
+  ["langSV","Swedish"],["langNO","Norwegian"],["langFR","French"]
+];
+var START = {wfa:"have",anw:"have",drvB:"have",hygFI:"have",jpEtiq:"have",epp1:"have",humak:"prog",langJA:"have",langEN:"have"};
+
+/* ---------- helpers for the data ---------- */
+function R(id,t,o){ var r={id:id,t:t}; if(o){for(var k in o){r[k]=o[k];}} return r; }
+var FA_FI  = R("ea1FI","First aid course EA1 (Finnish Red Cross)",{part:["wfa"],d:"Your NOLS WFA is more advanced in the outdoors, but many Finnish employers still ask for the EA1 card. It is a 2-day course."});
+var FA     = function(d){ return R("firstaid","First aid course",{part:["wfa"],d:d||"Your NOLS WFA is likely enough. Some employers ask for a local course."}); };
+var CRIM_FI= R("crimFI","Criminal record extract for work with children",{d:"Rikostaustaote. Order it from the Legal Register Centre when you get the job offer."});
+var POL_NO = R("polNO","Police certificate (politiattest)",{d:"Needed for work with children. The employer tells you when to apply."});
+var BEL_SE = R("belSE","Criminal record extract (utdrag ur belastningsregistret)",{d:"Order it from the Swedish Police when you get the job offer."});
+var PSC1   = R("psc1","PSC1 first aid course (1 day)",{part:["wfa"],d:"France wants its own first aid card. Your WFA knowledge makes it easy."});
+var CARTE  = R("cartepro","Carte professionnelle d'éducateur sportif",{d:"Free professional card. Required to teach or lead any sport for money in France."});
+function L(id,t,o){ return R(id,t,o); }
+
+/* ---------- the big table: DATA[job][country] ---------- */
+var DATA = {
+ski:{
+ FI:{reg:"emp",time:"1–2 weeks of courses. Season: November–April.",
+  sum:"Not regulated by law. Ski schools choose who they hire. Most want a Finnish Instructor 1 or 2 course, or a foreign certificate like yours.",
+  steps:[R("skiFI","Instructor course: FSAA Instructor 1 or SHORY level 1–2",{part:["anw"],d:"Your Austrian Anwärter is often accepted. Ask the ski school before you pay for a course."}),
+         FA_FI,
+         L("langEN","English",{d:"Enough in Lapland resorts. Finnish helps with local kids' groups."}),
+         R("isia","ISIA level (higher pay, works in many countries)",{opt:true})],
+  links:[["Finnish Ski Area Association: instructor training","https://ski.fi/en/training/ski-instructor-training/"],["Suomen Hiihdonopettajat (SHORY)","https://www.hiihdonopettajat.fi"]]},
+ SE:{reg:"emp",time:"Steps 1–2: two 7-day courses with a work week between.",
+  sum:"Not regulated by law. Swedish training has 4 steps of 7 days, with at least one week of ski-school work between each step. After step 4 you can take the Swedish ski instructor exam and ISIA.",
+  steps:[R("skiSE","Skidlärarföreningen steps 1–2 (enough to start working)",{part:["anw"],d:"Big resorts like Åre sometimes accept foreign certificates. Ask first."}),
+         FA(),
+         L("langEN","English",{d:"OK in big resorts. Swedish helps with children's groups."}),
+         R("skiSE34","Steps 3–4, Swedish ski instructor exam and ISIA",{opt:true})],
+  links:[["Svenska Skidlärarföreningen","https://skidlararforeningen.se"]]},
+ NO:{reg:"emp",time:"Level 1 and Level 2 courses, about 1 week each.",
+  sum:"Not regulated by law. Ski schools in Norske Instruktører og Guider (NIG) recommend at least Level 2 from Den Norske Ski og Snøbrettskole (DNS).",
+  steps:[R("skiNO","DNS / Norwegian Ski Federation Level 1 + Level 2",{part:["anw"],d:"Some schools accept Anwärter as similar to Level 1–2. Ask the school."}),
+         FA(),
+         L("langEN","English",{d:"OK in resorts like Hemsedal and Trysil. Norwegian helps with kids."})],
+  links:[["Norske Instruktører og Guider (NIG)","https://nig.no"]]},
+ FR:{reg:"law",time:"About 3–5 years (trainee work + courses).",
+  sum:"Strictly regulated by law. Only the French Diplôme d'État (moniteur national de ski alpin) or a recognised full foreign diploma lets you teach for money. Your Anwärter is not accepted here, but it helps your skiing level.",
+  steps:[R("frTT","Pass the Test Technique (timed slalom test)"),
+         R("frCP","Preparatory course, then work as a trainee instructor (moniteur stagiaire)"),
+         R("frEuro","Eurotest (timed giant slalom) and Eurosécurité (off-piste safety)"),
+         R("frDE","Finish the training cycles and get the Diplôme d'État"),
+         PSC1, CARTE,
+         L("langFR","French")],
+  links:[["ENSA: national ski school, official info","https://www.ensa.sports.gouv.fr"]]},
+ JP:{reg:"emp",time:"SAJ: 1 season of training + exam.",
+  sum:"No national law. Japanese ski schools want SAJ or SIA certificates. International resorts like Niseko and Hakuba also hire people with foreign certificates, and your Japanese + English is a big plus there.",
+  steps:[R("skiJP","SAJ 準指導員 or SIA certificate (or an accepted foreign one)",{part:["anw"],d:"International schools in Niseko and Hakuba often accept Austrian certificates."}),
+         FA("A Red Cross or fire department first aid course (普通救命講習) is easy to add."),
+         L("langJA","Japanese"),
+         L("langEN","English (big plus with foreign guests)",{opt:true})],
+  links:[["SAJ (Ski Association of Japan)","https://www.saj.or.jp"]]}
+},
+guide:{
+ FI:{reg:"emp",time:"Your degree + short courses.",
+  sum:"No licence by law. But every activity company must follow the Consumer Safety Act: each activity needs a written safety document, checked by Tukes. Employers look for a nature-guide or outdoor-education degree and first aid.",
+  steps:[R("humak","Outdoor / adventure education degree (your Humak degree) or erä- ja luonto-opas qualification",{d:"Your Humak degree is exactly this path."}),
+         FA_FI,
+         R("drvB","Driving licence B",{d:"Useful for driving groups in a van (up to 8 passengers)."}),
+         L("langEN","English",{d:"Lapland tourism works a lot in English. Finnish for school groups."}),
+         R("wfr","Wilderness First Responder or EA2",{opt:true,part:["wfa"]})],
+  links:[["Tukes: safety of adventure services","https://tukes.fi"],["Studyinfo (Opintopolku): nature guide studies","https://opintopolku.fi"]]},
+ SE:{reg:"emp",time:"Your degree + short courses.",
+  sum:"No licence by law. Many companies follow Nature's Best (Swedish Ecotourism Society). Folk high schools offer wilderness guide programmes.",
+  steps:[R("guideEduSE","Outdoor guide education (folk high school or degree)",{part:["humak"],d:"Your Humak degree should count."}),
+         FA("Your NOLS WFA is a strong match for guiding."),
+         R("drvB","Driving licence B"),
+         L("langEN","English",{d:"Swedish is needed for school groups."})],
+  links:[["Swedish Ecotourism Society (Nature's Best)","https://www.ekoturism.org"],["Friluftsfrämjandet: leader courses","https://www.friluftsframjandet.se"]]},
+ NO:{reg:"emp",time:"Your degree + activity courses.",
+  sum:"No general licence. Special activities (glacier walking, climbing) follow Norsk Fjellsportforum (NF) standards. A degree in friluftsliv (outdoor life) is common.",
+  steps:[R("guideEduNO","Friluftsliv education (folk high school or bachelor)",{part:["humak"],d:"Your Humak degree should count."}),
+         FA("Your NOLS WFA is a strong match."),
+         R("drvB","Driving licence B"),
+         L("langEN","English",{d:"Norwegian is needed for schools."}),
+         R("nfNO","NF certificate for glacier walking or climbing",{opt:true,d:"Only for those activities."})],
+  links:[["Utdanning.no: outdoor studies","https://utdanning.no"],["Norske Instruktører og Guider (NIG)","https://nig.no"]]},
+ FR:{reg:"law",time:"About 2–4 years.",
+  sum:"Regulated by law. Leading paid hikes in the mountains needs the Diplôme d'État 'Accompagnateur en moyenne montagne' (AMM). Other outdoor sports need a BPJEPS or DE diploma in that sport.",
+  steps:[R("amm","AMM diploma (entry test, training modules, trainee period)"),
+         PSC1, CARTE,
+         L("langFR","French")],
+  links:[["Service-public.fr: sports teaching rules","https://www.service-public.fr"],["ENSA (mountain diplomas)","https://www.ensa.sports.gouv.fr"]]},
+ JP:{reg:"emp",time:"Courses + field hours.",
+  sum:"No national licence. Japan Mountain Guides Association (JMGA) certificates are the main standard. Many nature guides also work in national parks and eco-tours.",
+  steps:[R("jmga","JMGA certificate (登山ガイド or 自然ガイド)",{part:["humak"],d:"Your degree helps a lot, but JMGA has its own exam."}),
+         FA("Your NOLS WFA is well known in Japan's outdoor industry."),
+         R("drvJP","Japanese driving licence (convert your licence: 外免切替)",{part:["drvB"]}),
+         L("langJA","Japanese")],
+  links:[["Japan Mountain Guides Association","https://www.jfmga.com"]]}
+},
+paddle:{
+ FI:{reg:"emp",time:"EPP 2 course + guide course, a few weekends.",
+  sum:"No licence by law, but the Consumer Safety Act applies. Finnish Canoe Federation courses and Euro Paddle Pass levels are the normal standard.",
+  steps:[R("epp2","Euro Paddle Pass 2 (EPP 3 for sea or whitewater guiding)",{part:["epp1"]}),
+         R("paddleFI","Paddle guide / instructor course",{d:"Organised by the Finnish Canoe Federation (Suomen Melonta- ja Soutuliitto)."}),
+         FA_FI,
+         L("langEN","English")],
+  links:[["Suomen Melonta- ja Soutuliitto","https://melontajasoutu.fi"]]},
+ SE:{reg:"emp",time:"A few weekends of courses.",
+  sum:"No licence by law. Svenska Kanotförbundet's Paddelpass is part of the European Paddle Pass system, so your EPP is a good start.",
+  steps:[R("epp2","Euro Paddle Pass 2 (EPP 3 for sea or whitewater guiding)",{part:["epp1"]}),
+         R("paddleSE","Paddle leader / guide course (Svenska Kanotförbundet)"),
+         FA(),
+         L("langEN","English")],
+  links:[["Svenska Kanotförbundet","https://kanot.com"]]},
+ NO:{reg:"emp",time:"A few weekends of courses.",
+  sum:"No licence by law. Norges Padleforbund uses the Våttkort system and is a member of European Paddle Pass, so your EPP helps.",
+  steps:[R("vaatt","Våttkort + Tour Leader or Guide course (Norges Padleforbund)",{part:["epp1"]}),
+         FA(),
+         L("langEN","English",{d:"Norwegian helps for school groups."})],
+  links:[["Norges Padleforbund: Våttkort","https://padling.no/vaattkort/"]]},
+ FR:{reg:"law",time:"About 1–2 years.",
+  sum:"Regulated by law. To teach or guide paddling for money you need a BPJEPS (canoe-kayak) or a DE diploma.",
+  steps:[R("bpjepsCK","BPJEPS Activités nautiques – canoë-kayak (or DE)",{part:["epp1"],d:"Your EPP shows your level but does not replace the diploma."}),
+         PSC1, CARTE,
+         L("langFR","French")],
+  links:[["Fédération Française de Canoë-Kayak","https://www.ffck.org"]]},
+ JP:{reg:"emp",time:"Short courses.",
+  sum:"No national licence. Companies look for canoe association instructor certificates or rafting guide certificates.",
+  steps:[R("canoeJP","Canoe instructor certificate (e.g., 日本レクリエーショナルカヌー協会) or rafting guide certificate",{part:["epp1"]}),
+         FA(),
+         L("langJA","Japanese")],
+  links:[]}
+},
+kinder:{
+ FI:{reg:"law",time:"3 years (180 ECTS).",
+  sum:"Regulated by law. A kindergarten teacher (varhaiskasvatuksen opettaja) needs a university Bachelor of Education in early childhood education. Another option: a Bachelor of Social Services (sosionomi) with 60 ECTS early-childhood studies can work as 'varhaiskasvatuksen sosionomi'.",
+  steps:[R("eduFIk","Bachelor of Education in early childhood education (university)"),
+         CRIM_FI,
+         L("langFI","Finnish (good level)",{d:"Or Swedish in Swedish-language daycares."}),
+         R("ea1FI","First aid course EA1",{opt:true,part:["wfa"]})],
+  links:[["Studyinfo (Opintopolku)","https://opintopolku.fi"],["Finnish National Agency for Education (recognition)","https://www.oph.fi"]]},
+ SE:{reg:"law",time:"3.5 years (210 hp).",
+  sum:"Regulated by law. A förskollärare needs a preschool teacher degree and a teacher certificate (legitimation) from Skolverket. With a foreign degree, you must show Swedish at C1 level.",
+  steps:[R("eduSEk","Förskollärarexamen (preschool teacher degree)"),
+         R("legitSE","Teacher certificate (legitimation) from Skolverket"),
+         BEL_SE,
+         L("langSV","Swedish (C1 level)")],
+  links:[["Skolverket: certification","https://www.skolverket.se"],["UHR: foreign degree recognition","https://www.uhr.se"]]},
+ NO:{reg:"law",time:"3 years.",
+  sum:"Regulated by law. A barnehagelærer needs a 3-year bachelor in kindergarten teacher education. Foreign degrees are checked by HK-dir.",
+  steps:[R("eduNOk","Bachelor in kindergarten teacher education (barnehagelærer)"),
+         POL_NO,
+         L("langNO","Norwegian (usually B2 or higher)")],
+  links:[["HK-dir: recognition","https://hkdir.no"],["Utdanning.no","https://utdanning.no"]]},
+ FR:{reg:"law",time:"Bachelor (3 years) + 2 years paid training.",
+  sum:"Regulated by law. École maternelle (age 3–6) teachers are 'professeurs des écoles'. Since 2026 you take the CRPE exam after a bachelor's degree, then do 2 years of paid master's training. Permanent teacher status needs EU/EEA nationality; others can work only as contract teachers. Other kids' jobs: éducateur de jeunes enfants (EJE, 3-year diploma) in crèches.",
+  steps:[R("licFR","Bachelor's degree (licence, bac+3)"),
+         R("crpe","Pass the CRPE exam"),
+         R("meef","2-year paid master's training (MEEF)"),
+         R("euNat","EU/EEA nationality (for permanent civil-servant status)",{d:"Your own nationality counts here, not your husband's. Without it you can still work as a contract teacher (contractuel)."}),
+         L("langFR","French (very high level)")],
+  links:[["Devenir enseignant (official)","https://www.devenirenseignant.gouv.fr"]]},
+ JP:{reg:"law",time:"2 years (junior college) or 4 years (university).",
+  sum:"Regulated by law. Kindergarten (幼稚園) needs a kindergarten teacher licence. Daycare (保育園) needs 保育士. Many places (認定こども園) want both, so most people study both at the same time.",
+  steps:[R("yochien","幼稚園教諭免許状 (2nd class: junior college, 1st class: university)"),
+         R("hoikushi","保育士 qualification (training school or national exam)",{d:"You can also pass the national 保育士試験 without a school."}),
+         L("langJA","Japanese"),
+         R("firstaid","First aid course",{opt:true,part:["wfa"]})],
+  links:[["MEXT: teacher licences","https://www.mext.go.jp"],["保育士試験 (national exam)","https://www.hoyokyo.or.jp"]]}
+},
+youth:{
+ FI:{reg:"emp",time:"Your degree.",
+  sum:"This is Humak's speciality! The Community Educator degree (yhteisöpedagogi AMK) is a standard qualification for youth work in Finland.",
+  steps:[R("humak","Community Educator degree (your Humak degree)"),
+         CRIM_FI,
+         L("langFI","Finnish",{d:"Needed for most city youth work. Some international projects work in English."}),
+         FA_FI],
+  links:[["Humak","https://www.humak.fi"]]},
+ SE:{reg:"emp",time:"2 years (folk high school).",
+  sum:"Fritidsledare (youth / leisure leader) usually study a 2-year programme at a folk high school.",
+  steps:[R("fritids","Fritidsledare programme (or similar degree)",{part:["humak"]}),
+         BEL_SE,
+         L("langSV","Swedish"),
+         FA()],
+  links:[]},
+ NO:{reg:"emp",time:"Depends on the job.",
+  sum:"Youth work jobs ask for a relevant education, for example barne- og ungdomsarbeider (vocational) or a bachelor in social education. Camps train their own leaders.",
+  steps:[R("youthNO","Relevant education (child & youth work or social education)",{part:["humak"]}),
+         POL_NO,
+         L("langNO","Norwegian"),
+         FA()],
+  links:[["Utdanning.no","https://utdanning.no"]]},
+ FR:{reg:"law",time:"BAFA: about 1–2 years part-time (28 days total).",
+  sum:"For holiday camps and leisure centres you need BAFA (from age 17). BAFA has 3 parts: 8 days theory, 14 days practice, 6 days advanced. For a full career: BPJEPS Animation.",
+  steps:[R("bafa","BAFA (Brevet d'aptitude aux fonctions d'animateur)"),
+         L("langFR","French"),
+         R("psc1","PSC1 first aid",{opt:true,part:["wfa"]}),
+         R("bpjepsAn","BPJEPS Animation (for a professional career)",{opt:true,part:["humak"]})],
+  links:[["BAFA official site","https://www.jeunes.gouv.fr"]]},
+ JP:{reg:"emp",time:"Short courses.",
+  sum:"Camps and youth nature centres look for camp and nature-activity leader certificates, for example from the Japan Camping Association.",
+  steps:[R("campJP","キャンプインストラクター (Japan Camping Association) or similar",{part:["humak"]}),
+         FA(),
+         L("langJA","Japanese")],
+  links:[["日本キャンプ協会","https://www.camping.or.jp"]]}
+},
+tour:{
+ FI:{reg:"emp",time:"No extra course needed to start.",
+  sum:"No licence. Lapland tourism hires many seasonal guides, and Japanese-speaking guides are wanted.",
+  steps:[R("tourEdu","Tourism or outdoor education",{part:["humak"],d:"Your Humak degree counts."}),
+         FA_FI,
+         L("langEN","English"),
+         L("langJA","Japanese (big plus with Japanese groups)",{opt:true}),
+         R("drvB","Driving licence B",{opt:true})],
+  links:[["Studyinfo (Opintopolku): tourism studies","https://opintopolku.fi"]]},
+ SE:{reg:"emp",time:"No extra course needed to start.",
+  sum:"No licence. In cities like Stockholm you can become an 'authorised guide' (auktoriserad guide), but it is optional.",
+  steps:[L("langEN","English"),
+         FA(),
+         L("langJA","Japanese (big plus with Japanese groups)",{opt:true}),
+         R("authSE","Authorised city guide course",{opt:true})],
+  links:[]},
+ NO:{reg:"emp",time:"No extra course needed to start.",
+  sum:"No licence. Fjord and nature tours hire many seasonal guides.",
+  steps:[L("langEN","English"),
+         FA(),
+         L("langJA","Japanese (big plus with Japanese groups)",{opt:true}),
+         R("drvB","Driving licence B",{opt:true})],
+  links:[]},
+ FR:{reg:"law",time:"Licence pro or master (1–2 years).",
+  sum:"Partly regulated. Guiding inside museums and historic monuments needs the 'guide-conférencier' professional card. City walks and excursions do not need it.",
+  steps:[R("guideConf","Guide-conférencier card (licence pro or master)",{d:"Only needed for museums and monuments."}),
+         L("langFR","French"),
+         L("langEN","English"),
+         L("langJA","Japanese (big plus with Japanese groups)",{opt:true})],
+  links:[["Service-public.fr","https://www.service-public.fr"]]},
+ JP:{reg:"emp",time:"Exam once a year.",
+  sum:"Since 2018 anyone can guide for money, but only national licensed guide interpreters (全国通訳案内士) may use that title. Tour conductors need 旅程管理主任者.",
+  steps:[L("langJA","Japanese"),
+         L("langEN","English"),
+         R("ryotei","旅程管理主任者 (for tour conductors)"),
+         R("jpEtiq","Japanese manner & etiquette",{opt:true}),
+         R("tsuyaku","全国通訳案内士 exam",{opt:true})],
+  links:[["Japan Tourism Agency","https://www.mlit.go.jp/kankocho/"]]}
+},
+hotel:{
+ FI:{reg:"emp",time:"Start right away.",
+  sum:"No licence. You need the hygiene passport if you handle food, and the alcohol passport to serve alcohol (age 18+).",
+  steps:[R("hygFI","Hygiene passport (hygieniapassi)",{d:"Needed if you handle unpackaged food."}),
+         L("langEN","English"),
+         R("alcFI","Alcohol passport (anniskelupassi)",{opt:true,d:"For bar and restaurant work."}),
+         R("jpEtiq","Japanese manner & etiquette",{opt:true})],
+  links:[["Finnish Food Authority: hygiene passport","https://www.ruokavirasto.fi"],["Valvira: alcohol passport","https://www.valvira.fi"]]},
+ SE:{reg:"emp",time:"Start right away.",
+  sum:"No licence. The employer trains you in food hygiene. Big mountain resorts (Åre, Sälen) hire many seasonal workers.",
+  steps:[L("langEN","English"),
+         R("hygSE","Food hygiene training (given by employer)",{part:["hygFI"]}),
+         L("langSV","Swedish",{opt:true}),
+         R("jpEtiq","Japanese manner & etiquette",{opt:true})],
+  links:[["Livsmedelsverket","https://www.livsmedelsverket.se"]]},
+ NO:{reg:"emp",time:"Start right away.",
+  sum:"No licence. The employer trains you in food hygiene (Mattilsynet rules).",
+  steps:[L("langEN","English"),
+         R("hygNO","Food hygiene training (given by employer)",{part:["hygFI"]}),
+         L("langNO","Norwegian",{opt:true}),
+         R("jpEtiq","Japanese manner & etiquette",{opt:true})],
+  links:[["Mattilsynet","https://www.mattilsynet.no"]]},
+ FR:{reg:"emp",time:"Start right away.",
+  sum:"No licence. A hotel school diploma (BTS MHR) helps for higher jobs.",
+  steps:[L("langFR","French"),
+         L("langEN","English"),
+         R("btsMHR","BTS Management en hôtellerie-restauration",{opt:true}),
+         R("jpEtiq","Japanese manner & etiquette",{opt:true})],
+  links:[]},
+ JP:{reg:"emp",time:"Start right away.",
+  sum:"No licence. Your etiquette certificate and English are real strengths, especially in hotels with foreign guests.",
+  steps:[L("langJA","Japanese"),
+         R("jpEtiq","Japanese manner & etiquette"),
+         L("langEN","English",{opt:true}),
+         R("hotelKentei","ホテルビジネス実務検定",{opt:true})],
+  links:[]}
+},
+cafe:{
+ FI:{reg:"emp",time:"Start right away.",
+  sum:"Finland is the only country here with a personal hygiene card for staff, and you already have it!",
+  steps:[R("hygFI","Hygiene passport (hygieniapassi)"),
+         L("langFI","Finnish",{part:["langEN"],d:"English is often OK in Helsinki and tourist areas."}),
+         R("alcFI","Alcohol passport (if the café serves alcohol)",{opt:true}),
+         R("barista","Barista course",{opt:true})],
+  links:[["Finnish Food Authority","https://www.ruokavirasto.fi"]]},
+ SE:{reg:"emp",time:"Start right away.",
+  sum:"No personal certificate is required. The employer must train you in food hygiene.",
+  steps:[L("langSV","Swedish",{part:["langEN"],d:"English is sometimes OK in Stockholm."}),
+         R("hygSE","Food hygiene training (given by employer)",{part:["hygFI"]}),
+         R("barista","Barista course",{opt:true})],
+  links:[["Livsmedelsverket","https://www.livsmedelsverket.se"]]},
+ NO:{reg:"emp",time:"Start right away.",
+  sum:"No personal certificate is required. The employer must train you in food hygiene.",
+  steps:[L("langNO","Norwegian",{part:["langEN"],d:"English is sometimes OK in Oslo and tourist areas."}),
+         R("hygNO","Food hygiene training (given by employer)",{part:["hygFI"]}),
+         R("barista","Barista course",{opt:true})],
+  links:[["Mattilsynet","https://www.mattilsynet.no"]]},
+ FR:{reg:"emp",time:"Start right away.",
+  sum:"Staff need no certificate. The business must have at least one person with a 14-hour food hygiene training.",
+  steps:[L("langFR","French"),
+         R("hygFR","14-hour food hygiene training (HACCP)",{opt:true,part:["hygFI"]}),
+         R("barista","Barista course",{opt:true})],
+  links:[]},
+ JP:{reg:"emp",time:"Start right away.",
+  sum:"Staff need no certificate. The shop must have one 食品衛生責任者 (food hygiene manager).",
+  steps:[L("langJA","Japanese"),
+         R("jpEtiq","Japanese manner & etiquette",{opt:true}),
+         R("barista","Barista course (e.g., JBA)",{opt:true})],
+  links:[]}
+},
+cafeown:{
+ FI:{reg:"law",time:"A few weeks of paperwork.",
+  sum:"You register a company and tell the city about your food premises.",
+  steps:[R("ytunnus","Register your business (Y-tunnus)"),
+         R("foodFI","Food premises notification to your municipality + own-check plan"),
+         R("hygFI","Hygiene passport"),
+         R("alcLicFI","Alcohol licence from the regional agency",{opt:true})],
+  links:[["Suomi.fi: starting a business","https://www.suomi.fi"],["Finnish Food Authority","https://www.ruokavirasto.fi"]]},
+ SE:{reg:"law",time:"A few weeks of paperwork.",
+  sum:"You register a company and your food business with the municipality. Serving alcohol needs a permit and a knowledge test.",
+  steps:[R("regSE","Register your business (Verksamt.se)"),
+         R("foodSE","Register food premises with the municipality"),
+         R("alcSE","Serveringstillstånd + knowledge test (for alcohol)",{opt:true})],
+  links:[["Verksamt.se","https://www.verksamt.se"],["Livsmedelsverket","https://www.livsmedelsverket.se"]]},
+ NO:{reg:"law",time:"A few weeks of paperwork.",
+  sum:"You register a company, register the food business with Mattilsynet, and the manager must pass the 'etablererprøven' test.",
+  steps:[R("regNO","Register your business (Altinn / Brønnøysund)"),
+         R("foodNO","Register food business with Mattilsynet"),
+         R("etabl","Etablererprøven (test for serving businesses)"),
+         R("kunnskap","Kunnskapsprøven (for alcohol)",{opt:true})],
+  links:[["Altinn: start a business","https://www.altinn.no"],["Mattilsynet","https://www.mattilsynet.no"]]},
+ FR:{reg:"law",time:"A few weeks to months.",
+  sum:"You register a company, and someone in the business must do a 14-hour food hygiene training. Serving alcohol needs a 'permis d'exploitation' and a licence.",
+  steps:[R("regFR","Register your business (guichet unique)"),
+         R("hygFR","14-hour food hygiene training (HACCP)",{part:["hygFI"]}),
+         L("langFR","French"),
+         R("permisExp","Permis d'exploitation + alcohol licence",{opt:true})],
+  links:[["Service-public.fr: entreprendre","https://www.service-public.fr"]]},
+ JP:{reg:"law",time:"A few weeks.",
+  sum:"You need a food hygiene manager (1-day course) and a restaurant business permit from the local health centre (保健所).",
+  steps:[R("shokuei","食品衛生責任者 (1-day course)",{part:["hygFI"]}),
+         R("eigyo","飲食店営業許可 from 保健所"),
+         R("kaigyo","開業届 to the tax office"),
+         L("langJA","Japanese"),
+         R("bouka","防火管理者 (if 30+ people)",{opt:true})],
+  links:[["MHLW: food hygiene","https://www.mhlw.go.jp"]]}
+},
+life:{
+ FI:{reg:"emp",time:"A few days of courses.",
+  sum:"Swimming pools need a lifeguard qualification from the Finnish Swimming Teaching and Lifesaving Federation plus first aid.",
+  steps:[R("suh","Lifeguard qualification (Suomen Uimaopetus- ja Hengenpelastusliitto)"),
+         FA_FI,
+         L("langFI","Finnish",{part:["langEN"]})],
+  links:[["Suomen Uimaopetus- ja Hengenpelastusliitto","https://www.suh.fi"]]},
+ SE:{reg:"emp",time:"A few days of courses.",
+  sum:"Pools and beaches want certificates from the Swedish Lifesaving Society, for example pool guard (simhallsbadvakt) or beach lifeguard.",
+  steps:[R("slsSE","Lifeguard certificate (Svenska Livräddningssällskapet)"),
+         FA(),
+         L("langSV","Swedish",{part:["langEN"]})],
+  links:[["Svenska Livräddningssällskapet","https://www.svenskalivraddningssallskapet.se"]]},
+ NO:{reg:"emp",time:"A few days + yearly test.",
+  sum:"Pool staff must pass a lifesaving test (livredningsprøve) every year.",
+  steps:[R("livNO","Livredningsprøve (yearly lifesaving test)"),
+         FA(),
+         L("langNO","Norwegian",{part:["langEN"]})],
+  links:[["Norges Livredningsselskap","https://www.livredning.no"]]},
+ FR:{reg:"law",time:"A few weeks.",
+  sum:"Regulated by law. You need the BNSSA (national lifeguard certificate) and PSE1 first aid. BNSSA must be renewed every 5 years and PSE1 every year. To teach swimming: BPJEPS AAN.",
+  steps:[R("bnssa","BNSSA (national aquatic rescue certificate)"),
+         R("pse1","PSE1 team first aid",{part:["wfa"]}),
+         L("langFR","French"),
+         R("bpjepsAAN","BPJEPS AAN (swimming teacher)",{opt:true})],
+  links:[["Service-public.fr","https://www.service-public.fr"]]},
+ JP:{reg:"emp",time:"A few days of courses.",
+  sum:"Pools and beaches usually want the Red Cross water safety certificate or the Japan Lifesaving Association certificate.",
+  steps:[R("jrcWater","日本赤十字社 水上安全法救助員"),
+         R("jrcFA","日本赤十字社 救急法",{part:["wfa"]}),
+         L("langJA","Japanese"),
+         R("jla","JLA ベーシック・サーフ・ライフセーバー (beaches)",{opt:true})],
+  links:[["Japanese Red Cross","https://www.jrc.or.jp"],["Japan Lifesaving Association","https://ls.jla-lifesaving.or.jp/academy/"]]}
+},
+patrol:{
+ FI:{reg:"emp",time:"A few days of courses.",
+  sum:"Resorts hire ski patrol (rinnepartio). There is no national diploma, but SHORY runs a Ski Patrol course, and EA2 first aid is often required.",
+  steps:[R("patrolFI","Ski Patrol course (SHORY) or resort training",{part:["anw"]}),
+         R("ea2FI","First aid EA2",{part:["wfa"]}),
+         L("langEN","English",{d:"Finnish helps a lot."})],
+  links:[["Suomen Hiihdonopettajat: Ski Patrol course","https://www.hiihdonopettajat.fi"]]},
+ SE:{reg:"emp",time:"A few weeks of courses.",
+  sum:"Ski patrollers (pistörer) are trained through SLAO, the Swedish ski resorts' organisation.",
+  steps:[R("pistor","SLAO pistör course",{part:["anw"]}),
+         FA("Advanced first aid is part of the pistör training."),
+         L("langSV","Swedish",{part:["langEN"]})],
+  links:[["SLAO","https://www.slao.se"]]},
+ NO:{reg:"emp",time:"Resort training.",
+  sum:"Resorts train their own patrol. They need strong skiers with advanced first aid. Avalanche courses are needed for off-piste areas.",
+  steps:[R("skiLevelNO","Strong skiing level",{part:["anw"]}),
+         R("advFA","Advanced first aid",{part:["wfa"]}),
+         L("langNO","Norwegian",{part:["langEN"]}),
+         R("avalanche","Avalanche course",{opt:true})],
+  links:[]},
+ FR:{reg:"law",time:"About 1–2 years.",
+  sum:"Regulated by law. You need the Brevet national de pisteur-secouriste, which needs PSE1 and PSE2 first aid and a ski test first.",
+  steps:[R("pse1","PSE1 team first aid",{part:["wfa"]}),
+         R("pse2","PSE2 team first aid",{part:["wfa"]}),
+         R("skiTestFR","Ski test for pisteur training",{part:["anw"]}),
+         R("pisteur","Brevet national de pisteur-secouriste (1st degree)"),
+         L("langFR","French")],
+  links:[["ENSA","https://www.ensa.sports.gouv.fr"]]},
+ JP:{reg:"emp",time:"Courses over 1–2 seasons.",
+  sum:"Resorts hire patrol. SAJ patrol certificates and the Red Cross snow safety certificate are the common ones.",
+  steps:[R("sajPatrol","SAJ 公認パトロール",{part:["anw"]}),
+         R("jrcSnow","日本赤十字社 雪上安全法救助員",{part:["wfa"]}),
+         L("langJA","Japanese")],
+  links:[["SAJ","https://www.saj.or.jp"],["Japanese Red Cross","https://www.jrc.or.jp"]]}
+}
+};
+
+/* ---------- state ---------- */
+var KEY = "career-compass-v1";
+var state = load();
+function load(){
+  var s = null;
+  try { s = JSON.parse(localStorage.getItem(KEY)); } catch(e) {}
+  if(!s || typeof s !== "object") s = {};
+  if(!s.certs) s.certs = JSON.parse(JSON.stringify(START));
+  if(!s.job) s.job = "ski";
+  if(!s.countries) s.countries = ORDER.slice();
+  if(!s.focus) s.focus = null;
+  return s;
+}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
+
+/* labels for any id, so user-added items show a nice name */
+var LABELS = {};
+CERTS.concat(LANGS).forEach(function(c){ LABELS[c[0]] = c[1]; });
+Object.keys(DATA).forEach(function(j){ ORDER.forEach(function(c){
+  DATA[j][c].steps.forEach(function(s){ if(!LABELS[s.id]) LABELS[s.id] = s.t; });
+});});
+
+function cycle(id){
+  var cur = state.certs[id];
+  if(!cur) state.certs[id] = "have";
+  else if(cur === "have") state.certs[id] = "prog";
+  else delete state.certs[id];
+  save(); renderAll();
+}
+
+function status(step){
+  var s = state.certs[step.id];
+  if(s === "have") return "have";
+  if(s === "prog") return "prog";
+  if(step.part && step.part.some(function(p){ return state.certs[p]; })) return "part";
+  return step.opt ? "opt" : "need";
+}
+function score(job, c){
+  var steps = DATA[job][c].steps.filter(function(s){ return !s.opt; });
+  var got = 0;
+  steps.forEach(function(s){ var st = status(s); if(st === "have") got += 1; else if(st === "prog" || st === "part") got += 0.5; });
+  return {got:got, total:steps.length, pct: steps.length ? got/steps.length : 0};
+}
+function level(p){ return p >= 0.6 ? "hi" : (p >= 0.3 ? "md" : "lo"); }
+function fmt(n){ return (Math.round(n*2)/2).toString().replace(".5","½"); }
+
+function el(tag, attrs, kids){
+  var e = document.createElement(tag);
+  if(attrs){ for(var k in attrs){
+    if(k === "class") e.className = attrs[k];
+    else if(k === "text") e.textContent = attrs[k];
+    else if(k.slice(0,2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }}
+  (kids || []).forEach(function(c){ if(c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+  return e;
+}
+
+/* ---------- toolbox ---------- */
+function chip(id, label){
+  var s = state.certs[id] || "off";
+  var mark = s === "have" ? "✓" : (s === "prog" ? "~" : "");
+  var sub = s === "prog" ? el("small",{text:"in progress"}) : null;
+  return el("button",{class:"chip",type:"button","data-s":s,"aria-label":label+": "+(s==="off"?"not yet":s==="have"?"have it":"in progress"),onclick:function(){ cycle(id); }},
+    [el("span",{class:"dot",text:mark}), el("span",null,[label, sub ? " " : "", sub])]);
+}
+function renderToolbox(){
+  var cc = document.getElementById("certChips"); cc.textContent = "";
+  CERTS.forEach(function(c){ cc.appendChild(chip(c[0], c[1])); });
+  var lc = document.getElementById("langChips"); lc.textContent = "";
+  LANGS.forEach(function(c){ lc.appendChild(chip(c[0], c[1])); });
+  var known = {}; CERTS.concat(LANGS).forEach(function(c){ known[c[0]] = 1; });
+  var ex = document.getElementById("extraChips"); ex.textContent = "";
+  var extras = Object.keys(state.certs).filter(function(id){ return !known[id]; });
+  extras.forEach(function(id){ ex.appendChild(chip(id, LABELS[id] || id)); });
+  document.getElementById("extraHead").hidden = extras.length === 0;
+}
+
+/* ---------- matrix ---------- */
+function renderMatrix(){
+  var t = document.getElementById("matrix"); t.textContent = "";
+  var head = el("tr",null,[el("th",{text:"Job"})]);
+  ORDER.forEach(function(c){ head.appendChild(el("th",{text:COUNTRIES[c].name})); });
+  t.appendChild(el("thead",null,[head]));
+  var tb = el("tbody"); var lastCat = null;
+  JOBS.forEach(function(j){
+    if(j.cat !== lastCat){ lastCat = j.cat; tb.appendChild(el("tr",{class:"cat"},[el("th",{colspan:"6",text:j.cat})])); }
+    var tr = el("tr",null,[el("th",{scope:"row",text:j.name})]);
+    ORDER.forEach(function(c){
+      var sc = score(j.id, c); var pct = Math.round(sc.pct*100);
+      var bar = el("span",{class:"bar"},[el("i",{style:"width:"+pct+"%"})]);
+      var law = DATA[j.id][c].reg === "law";
+      var sel = (state.job === j.id && state.focus === c) ? " sel" : "";
+      var b = el("button",{type:"button",class:"cell lv-"+level(sc.pct)+sel,
+        "aria-label":j.name+" in "+COUNTRIES[c].name+": "+pct+"% ready"+(law?", regulated by law":""),
+        onclick:function(){ openJob(j.id, c); }},
+        [el("span",{text:pct+"%"}), bar, law ? el("small",{text:"by law"}) : null]);
+      tr.appendChild(el("td",null,[b]));
+    });
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+}
+function openJob(job, c){
+  state.job = job; state.focus = c;
+  if(state.countries.indexOf(c) < 0) state.countries.push(c);
+  save(); renderAll();
+  var card = document.getElementById("card-"+c);
+  (card || document.getElementById("detail")).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+}
+
+/* ---------- detail ---------- */
+function renderPickers(){
+  var jp = document.getElementById("jobPick"); jp.textContent = "";
+  JOBS.forEach(function(j){
+    jp.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(state.job===j.id),text:j.name,
+      onclick:function(){ state.job = j.id; state.focus = null; save(); renderAll(); }}));
+  });
+  var cp = document.getElementById("countryPick"); cp.textContent = "";
+  ORDER.forEach(function(c){
+    var on = state.countries.indexOf(c) >= 0;
+    cp.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(on),text:COUNTRIES[c].name,
+      onclick:function(){
+        if(on){ state.countries = state.countries.filter(function(x){ return x !== c; }); }
+        else { state.countries.push(c); }
+        save(); renderAll();
+      }}));
+  });
+}
+var ST_TEXT = {have:"✓ have", prog:"~ doing", part:"~ partly", need:"✗ need", opt:"+ extra"};
+function renderCards(){
+  var box = document.getElementById("cards"); box.textContent = "";
+  var list = ORDER.filter(function(c){ return state.countries.indexOf(c) >= 0; });
+  if(!list.length){ box.appendChild(el("p",{class:"note",text:"Pick at least one country above to see the details."})); return; }
+  list.forEach(function(c){
+    var d = DATA[state.job][c], co = COUNTRIES[c], sc = score(state.job, c);
+    var lv = level(sc.pct);
+    var color = lv === "hi" ? "var(--ok)" : (lv === "md" ? "var(--mid)" : "var(--no)");
+    var steps = el("ul",{class:"steps"});
+    d.steps.forEach(function(s){
+      var st = status(s);
+      steps.appendChild(el("li",null,[el("button",{type:"button",class:"step",
+        "aria-label":s.t+": "+ST_TEXT[st]+". Tap to change.",
+        onclick:function(){ cycle(s.id); }},
+        [el("span",{class:"st "+st,text:ST_TEXT[st]}),
+         el("span",{class:"step-t"},[s.t, s.d ? el("span",{class:"step-d",text:s.d}) : null])])]));
+    });
+    var links = el("div",{class:"links"});
+    d.links.forEach(function(l){ links.appendChild(el("a",{href:l[1],target:"_blank",rel:"noopener",text:l[0]+" ↗"})); });
+    var work = el("dd",null,[co.work, co.workLink ? " " : "", co.workLink ? el("a",{href:co.workLink[1],target:"_blank",rel:"noopener",text:co.workLink[0]+" ↗"}) : null]);
+    var card = el("article",{class:"card"+(state.focus===c?" focus":""),id:"card-"+c},[
+      el("div",{class:"card-top"},[
+        el("h3",null,[el("span",{class:"cc",text:c}), co.name]),
+        el("span",{class:"reg "+d.reg,text:d.reg==="law"?"Required by law":"Employers decide"})]),
+      el("div",{class:"meter"},[
+        el("div",{class:"meter-label",text:"You have "+fmt(sc.got)+" of "+sc.total+" required steps"}),
+        el("div",{class:"bar"},[el("i",{style:"width:"+Math.round(sc.pct*100)+"%;background:"+color})])]),
+      el("p",{class:"sum",text:d.sum}),
+      el("div",{class:"label",text:"Checklist"}),
+      steps,
+      el("dl",{class:"facts"},[el("dt",{text:"Time"}),el("dd",{text:d.time}),el("dt",{text:"Right to work"}),work]),
+      d.links.length ? el("div",{class:"label",text:"Official info"}) : null,
+      d.links.length ? links : null
+    ]);
+    box.appendChild(card);
+  });
+}
+
+function renderAll(){ renderToolbox(); renderMatrix(); renderPickers(); renderCards(); }
+
+document.getElementById("reset").addEventListener("click", function(){
+  state.certs = JSON.parse(JSON.stringify(START)); save(); renderAll();
+});
+
+renderAll();
+})();
+</script>
