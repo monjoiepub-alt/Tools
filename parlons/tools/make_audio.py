@@ -2,7 +2,7 @@
 # Makes a recorded French audio clip for every text, with SVOX Pico (offline), and bundles
 # them per deck as audio/<deck>.json = {"french text": "<base64 mp3>"}.
 # Each clip is checked: not missing, not silent, and not suspiciously short or long.
-import sys, json, os, subprocess, base64, collections, tempfile, wave, array, math
+import sys, json, os, re, subprocess, base64, collections, tempfile, wave, array, math
 
 SRC = sys.argv[1] if len(sys.argv) > 1 else 'items.json'
 OUT = sys.argv[2] if len(sys.argv) > 2 else 'audio'
@@ -13,9 +13,13 @@ os.makedirs(OUT, exist_ok=True)
 bundles, done, problems = collections.defaultdict(dict), {}, []
 tmp = tempfile.mkdtemp()
 
+# Names the voice would read wrongly get a French-style spelling (the key stays the card text).
+SAY_AS = {'Matteo': 'Mattéo', 'Aya': 'Aïa'}
+
 def clip(text):
     wav = os.path.join(tmp, 'x.wav')
-    subprocess.run(['pico2wave', '-l', 'fr-FR', '-w', wav, f'<speed level="{SPEED}">{text}</speed>'], check=True, capture_output=True)
+    said = re.sub(r'\w+', lambda m: SAY_AS.get(m.group(0), m.group(0)), text)
+    subprocess.run(['pico2wave', '-l', 'fr-FR', '-w', wav, f'<speed level="{SPEED}">{said}</speed>'], check=True, capture_output=True)
     with wave.open(wav) as w:
         sr, frames = w.getframerate(), w.readframes(w.getnframes())
     pcm = array.array('h', frames)

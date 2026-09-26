@@ -17,7 +17,8 @@ LIQUID = set('ʁl')
 
 # eSpeak reads a few words as English. It gets a French-style spelling instead (the card text stays the same).
 AS_FRENCH = {'dos': 'dau', 'hypothermie': 'ipotermie', 'week-end': 'ouikènde', 'mamy': 'mami', 'papy': 'papi',
-             'speculoos': 'spékuloss', 'pull': 'pule', 'parking': 'parkinng', 'wallonie': 'walonie'}
+             'speculoos': 'spékuloss', 'pull': 'pule', 'parking': 'parkinng', 'wallonie': 'walonie',
+             'matteo': 'mattéo', 'aya': 'aïa'}
 
 def espeak(text):
     text = re.sub(r"[\w-]+", lambda m: AS_FRENCH.get(m.group(0).lower(), m.group(0)), text)
