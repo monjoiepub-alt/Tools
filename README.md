@@ -22,9 +22,13 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 A flashcard app for learning Japanese on a phone, made for talking with
 Aya's family, with strangers, and with Aya.
 
-- **Decks:** First steps, With Aya's family, At the table, About me,
-  With Aya (casual), Out and about, Family words, Everyday words,
-  Numbers, Hiragana and Katakana.
+- **Decks:** First steps, With Aya's family (casual), At the table (casual),
+  About me, With Aya (casual), Out and about, Family words, Everyday words,
+  Numbers and money, Driving and road signs, Food and menus (with Aomori
+  specialities), Ski rental shop, Mountain hut on Fuji, Shikoku henro,
+  Aomori dialect, Hiragana and Katakana.
+- **Signs and menus** start in kanji with furigana, because that is how
+  you see them in real life.
 - **Writing grows with each card:** romaji → kana (after 1 week) →
   kanji with furigana (after 3 weeks) → kanji only (after 2 months).
 - **Spaced repetition:** Again / Hard / Good / Easy, like Anki.
@@ -36,5 +40,6 @@ Progress is saved in the browser (localStorage). Use Settings → Backup to
 copy a backup code.
 
 To add sentences, edit the `DECKS` list inside the `<script>`. Write
-`{漢字|かな}` for kanji with its reading, put spaces between words (for the
+`{漢字|かな}` for kanji with its reading, add `'read'` as the 4th field for
+signs and menu words (kanji first), put spaces between words (for the
 romaji), and write `^は` for the particle は (read "wa").

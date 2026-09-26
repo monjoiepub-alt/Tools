@@ -388,6 +388,190 @@ const DECKS = [
     ['{百|ひゃく}','100'],['{千|せん}','1,000'],
     ['{一万|いちまん}','10,000','Japanese counts big numbers in groups of 10,000.'],
     ['{千円|せんえん}','1,000 yen'],
+    ['{五百円|ごひゃくえん}','500 yen'],
+    ['{三百|さんびゃく}','300','Sound change: ひゃく becomes びゃく after さん.'],
+    ['{六百|ろっぴゃく}','600','Sound change: ろく + ひゃく = ろっぴゃく.'],
+    ['{八百|はっぴゃく}','800','Sound change: はち + ひゃく = はっぴゃく.'],
+    ['{三千|さんぜん}','3,000','Sound change: せん becomes ぜん after さん.'],
+    ['{八千|はっせん}','8,000'],
+    ['{一|ひと}つ','one (thing)','Use ひとつ, ふたつ, みっつ… when you count things, for example when you order: これを二つください.'],
+    ['{二|ふた}つ','two (things)'],
+    ['{三|みっ}つ','three (things)'],
+    ['{四|よっ}つ','four (things)'],
+    ['{五|いつ}つ','five (things)'],
+    ['{一人|ひとり}','one person'],
+    ['{二人|ふたり}','two people'],
+    ['{三人|さんにん}','three people','From three on, it is number + にん.'],
+  ]},
+  {id:'signs', name:'Driving and road signs', jp:'道路標識', who:'On the road', reg:'polite', color:'#D18A0F', cards:[
+    ['{止|と}まれ','STOP','In Japan the stop sign is a red triangle pointing down, with this word on it.','read'],
+    ['{一時停止|いちじていし}','Stop here first (then go)','','read'],
+    ['{徐行|じょこう}','Slow down','Drive slow enough to stop at once.','read'],
+    ['{左側通行|ひだりがわつうこう}','Keep left','Japan drives on the left, like the UK.','read'],
+    ['{一方通行|いっぽうつうこう}','One way','','read'],
+    ['{進入禁止|しんにゅうきんし}','No entry','','read'],
+    ['{通行止|つうこうど}め','Road closed','','read'],
+    ['{駐車禁止|ちゅうしゃきんし}','No parking','','read'],
+    ['{右折禁止|うせつきんし}','No right turn','','read'],
+    ['{追越|おいこ}し{禁止|きんし}','No overtaking','','read'],
+    ['{最高速度|さいこうそくど}','Speed limit','','read'],
+    ['{踏切|ふみきり}','Railway crossing','Always stop before a railway crossing in Japan, even if no train is coming. It is the law.','read'],
+    ['{信号|しんごう}','Traffic light','','read'],
+    ['{交差点|こうさてん}','Intersection','','read'],
+    ['{歩行者|ほこうしゃ}','Pedestrians','','read'],
+    ['{通学路|つうがくろ}','School route (watch for children)','','read'],
+    ['{工事中|こうじちゅう}','Road works','','read'],
+    ['{凍結注意|とうけつちゅうい}','Warning: icy road','Very common in Aomori and Hokkaido in winter.','read'],
+    ['{落石注意|らくせきちゅうい}','Warning: falling rocks','','read'],
+    ['{動物注意|どうぶつちゅうい}','Warning: animals','','read'],
+    ['チェーン{規制|きせい}','Snow chains required','You may only continue with snow chains (or sometimes winter tyres). Check the board.','read'],
+    ['{冬用|ふゆよう}タイヤ','Winter tyres','','read'],
+    ['{渋滞|じゅうたい}','Traffic jam','','read'],
+    ['{高速道路|こうそくどうろ}','Expressway (toll road)','','read'],
+    ['{料金所|りょうきんじょ}','Toll gate','','read'],
+    ['{出口|でぐち}','Exit','','read'],
+    ['{入口|いりぐち}','Entrance','','read'],
+    ['{駐車場|ちゅうしゃじょう}','Car park','','read'],
+    ['{満車|まんしゃ}','Full (car park)','','read'],
+    ['{空車|くうしゃ}','Spaces free (car park)','','read'],
+    ['{道|みち}の{駅|えき}','Roadside station','Rest stops with toilets, food and local products. Great for breaks on long drives.','read'],
+    ['レギュラー {満|まん}タン で お{願|ねが}い します。','Regular petrol, full tank, please.','At a gas station with staff. Many stations are セルフ (self-service).'],
+    ['ガソリンスタンド ^は どこ です か？','Where is a gas station?'],
+    ['ここ に {停|と}めて も いい です か？','Can I park here?'],
+    ['{事故|じこ} が ありました。','There has been an accident.','Police: 110. Ambulance: 119.'],
+    ['{免許証|めんきょしょう} を {見|み}せて ください。','Please show your driving licence.','You may hear this from the police.'],
+  ]},
+  {id:'menu', name:'Food and menus', jp:'メニュー', who:'At a restaurant', reg:'polite', color:'#B8483C', cards:[
+    ['{定食|ていしょく}','Set meal (with rice, soup and sides)','','read'],
+    ['{本日|ほんじつ} の おすすめ','Today\'s special','','read'],
+    ['{大盛|おおも}り','Large portion','','read'],
+    ['{並盛|なみも}り','Regular portion','Often just written 並.','read'],
+    ['{税込|ぜいこみ}','Tax included','Prices can be written 税込 (with tax) or 税抜 (without tax).','read'],
+    ['{食券|しょっけん}','Meal ticket','In many ramen and noodle shops you buy a ticket from a machine at the door, then give it to the staff.','read'],
+    ['お{冷|ひや}','Cold water (free)','Water and tea are usually free in restaurants.','read'],
+    ['{生|なま}ビール','Draft beer','','read'],
+    ['{飲|の}み{放題|ほうだい}','All you can drink','','read'],
+    ['{食|た}べ{放題|ほうだい}','All you can eat','','read'],
+    ['{刺身|さしみ}','Sashimi (raw fish)','','read'],
+    ['{焼|や}き{魚|ざかな}','Grilled fish','','read'],
+    ['{海鮮丼|かいせんどん}','Seafood rice bowl','','read'],
+    ['ホタテ','Scallop','Aomori is famous for scallops from Mutsu Bay.','read'],
+    ['マグロ','Tuna','Tuna from Ōma, at the tip of Aomori, is one of the most famous (and expensive) in Japan.','read'],
+    ['りんご','Apple','Aomori grows more apples than any other part of Japan.','read'],
+    ['せんべい{汁|じる}','Senbei soup','A Hachinohe (Aomori) soup with special rice crackers cooked in it.','read'],
+    ['のっけ{丼|どん}','Nokke-don (choose-your-own rice bowl)','At Furukawa fish market in Aomori city you buy tickets and pick your own toppings.','read'],
+    ['{味噌|みそ}カレー{牛乳|ぎゅうにゅう}ラーメン','Miso curry milk ramen','An Aomori city speciality. It sounds strange, but it is good!','read'],
+    ['ご{注文|ちゅうもん} ^は お{決|き}まり です か？','Are you ready to order?','You will hear this.'],
+    ['{店内|てんない} で お{召|め}し{上|あ}がり です か？','Will you eat here?','You will hear this. Answer はい, or 持ち帰りで (mochikaeri de) for take-away.'],
+    ['これ を {一|ひと}つ ください。','One of this, please.'],
+    ['これ と これ を ください。','This and this, please.'],
+    ['{大盛|おおも}り に できます か？','Can I have a large portion?'],
+    ['{食券|しょっけん} ^は どこ で {買|か}います か？','Where do I buy the meal ticket?'],
+    ['アレルギー が あります。','I have an allergy.'],
+    ['{肉|にく} ^は {食|た}べられません。','I can\'t eat meat.'],
+    ['お{持|も}ち{帰|かえ}り できます か？','Can I take it away?'],
+  ]},
+  {id:'ski', name:'Ski rental shop', jp:'スキーレンタル', who:'To a customer', reg:'polite', color:'#2F86C9', cards:[
+    ['いらっしゃいませ！','Welcome! (to customers)','Every shop says this. Customers don\'t answer, they just nod or smile.'],
+    ['{英語|えいご} で {大丈夫|だいじょうぶ} です か？','Is English okay for you?','In Niseko most guests speak English. Use this to check.'],
+    ['{何名|なんめい}{様|さま} です か？','How many people?'],
+    ['スキー です か、 スノーボード です か？','Skis or snowboard?'],
+    ['{初|はじ}めて です か？','Is it your first time?'],
+    ['{身長|しんちょう} ^は {何|なん} センチ です か？','How tall are you? (in cm)'],
+    ['{体重|たいじゅう} ^は {何|なん} キロ です か？','How much do you weigh? (in kg)'],
+    ['{靴|くつ} の サイズ ^は {何|なん} センチ です か？','What is your shoe size? (in cm)','Japanese shoe sizes are in centimetres. EU 43 is about 27.5 cm.'],
+    ['ブーツ を {履|は}いて みて ください。','Please try the boots on.'],
+    ['きつく ない です か？','Are they too tight?'],
+    ['{大|おお}きい サイズ を {持|も}って きます ね。','I\'ll bring a bigger size.'],
+    ['レギュラー です か、 グーフィー です か？','Regular or goofy?','Regular = left foot in front. Goofy = right foot in front.'],
+    ['ヘルメット も {借|か}ります か？','Would you like a helmet too?'],
+    ['{何日間|なんにちかん} {借|か}ります か？','How many days will you rent?'],
+    ['こちら に お{名前|なまえ} を {書|か}いて ください。','Please write your name here.'],
+    ['{少々|しょうしょう} お{待|ま}ち ください。','One moment, please.','Very polite shop Japanese.'],
+    ['{返却|へんきゃく} ^は {午後|ごご} {五時|ごじ} まで です。','Please return it by 5 pm.'],
+    ['リフト{券|けん} ^は あちら です。','Lift tickets are over there.'],
+    ['{楽|たの}しんで ください！','Have fun!'],
+    ['ありがとう ございました！','Thank you very much! (after they buy or rent)','Past tense: the shop way to thank a customer at the end.'],
+    ['{板|いた}','Skis / snowboard (casual word)','Literally "board". Skiers and snowboarders both say this.','word'],
+    ['ストック','Ski poles','Japanese says ストック (from German), not "poles".','word'],
+    ['ブーツ','Boots','','word'],
+    ['ビンディング','Bindings','','word'],
+    ['ゴーグル','Goggles','','word'],
+    ['{手袋|てぶくろ}','Gloves','Also グローブ.','word'],
+    ['ウェア','Ski clothes','','word'],
+    ['ゲレンデ','Ski slope / ski area','From German "Gelände".','word'],
+    ['リフト','Lift','','word'],
+    ['パウダー','Powder snow','Niseko is world famous for it.','word'],
+    ['{初心者|しょしんしゃ}','Beginner','','word'],
+    ['{中級者|ちゅうきゅうしゃ}','Intermediate','','word'],
+    ['{上級者|じょうきゅうしゃ}','Advanced','','word'],
+    ['{返却|へんきゃく}','Return (of rental gear)','','word'],
+  ]},
+  {id:'fuji', name:'Mountain hut on Fuji', jp:'富士山の山小屋', who:'To a hut guest', reg:'polite', color:'#4E7A6B', cards:[
+    ['{富士山|ふじさん}','Mount Fuji','','word'],
+    ['{山小屋|やまごや}','Mountain hut','','word'],
+    ['{登山|とざん}','Climbing (a mountain)','','word'],
+    ['{下山|げざん}','Going down (a mountain)','','word'],
+    ['{登山道|とざんどう}','Hiking trail','','word'],
+    ['{頂上|ちょうじょう}','Summit','','word'],
+    ['{五合目|ごごうめ}','5th station','Fuji trails are divided into 10 stations. Most people start climbing at the 5th.','word'],
+    ['{御来光|ごらいこう}','Sunrise seen from the summit','The reason many climbers walk through the night.','word'],
+    ['{高山病|こうざんびょう}','Altitude sickness','','word'],
+    ['{天気|てんき}','Weather','','word'],
+    ['{雨|あめ}','Rain','','word'],
+    ['{風|かぜ}','Wind','','word'],
+    ['{雷|かみなり}','Thunder / lightning','','word'],
+    ['{霧|きり}','Fog','','word'],
+    ['{予約|よやく}','Reservation','','word'],
+    ['{消灯|しょうとう}','Lights out','','word'],
+    ['{寝袋|ねぶくろ}','Sleeping bag','','word'],
+    ['ヘッドライト','Headlamp','','word'],
+    ['ご{予約|よやく} の お{名前|なまえ} ^は？','What name is the reservation under?'],
+    ['{消灯|しょうとう} ^は {八時|はちじ} です。','Lights out is at 8 o\'clock.'],
+    ['{御来光|ごらいこう} ^は {四時半|よじはん} ごろ です。','Sunrise is around 4:30.'],
+    ['{頂上|ちょうじょう} まで あと {二時間|にじかん} ぐらい です。','It\'s about two more hours to the summit.'],
+    ['{頭|あたま} が {痛|いた}い です か？','Do you have a headache?','A headache is often the first sign of altitude sickness.'],
+    ['ゆっくり {登|のぼ}って ください。','Please climb slowly.'],
+    ['{水|みず} を たくさん {飲|の}んで ください。','Please drink lots of water.'],
+    ['{今日|きょう} ^は {風|かぜ} が {強|つよ}い です。','The wind is strong today.'],
+    ['{足元|あしもと} に {気|き} を つけて ください。','Watch your step.'],
+    ['トイレ ^は {有料|ゆうりょう} です。','The toilet costs money.','On Mt Fuji, toilets usually cost a few hundred yen.'],
+  ]},
+  {id:'henro', name:'Shikoku henro', jp:'四国遍路', who:'On the pilgrimage', reg:'polite', color:'#8C7A5B', cards:[
+    ['お{遍路|へんろ}さん','Pilgrim','People will call you this. It is friendly and respectful.','word'],
+    ['{札所|ふだしょ}','Pilgrimage temple (one of the 88)','','word'],
+    ['{本堂|ほんどう}','Main hall','At each temple you pray at the main hall and at the Daishi hall.','word'],
+    ['{大師堂|だいしどう}','Daishi hall (for Kōbō Daishi)','','word'],
+    ['{弘法大師|こうぼうだいし}','Kōbō Daishi','The monk who, the story says, walked the 88 temples first.','word'],
+    ['{同行二人|どうぎょうににん}','"Two travelling together"','Written on your hat and robe: you never walk alone, Kōbō Daishi walks with you.','word'],
+    ['{納経所|のうきょうじょ}','Temple stamp office','','word'],
+    ['{納経帳|のうきょうちょう}','Pilgrim stamp book','At each temple, a monk writes calligraphy and stamps it for a small fee.','word'],
+    ['{白衣|はくえ}','White pilgrim robe','','word'],
+    ['{菅笠|すげがさ}','Pilgrim hat','','word'],
+    ['{金剛杖|こんごうづえ}','Pilgrim staff','It stands for Kōbō Daishi. Pilgrims don\'t tap it on bridges, because he is said to have slept under one.','word'],
+    ['{納札|おさめふだ}','Name slip','You leave one at each temple, and give one when someone gives you osettai.','word'],
+    ['お{接待|せったい}','Gift to pilgrims','Locals give pilgrims food, drinks or even a place to sleep. Always accept it with thanks.','word'],
+    ['{般若心経|はんにゃしんぎょう}','Heart Sutra','The sutra pilgrims recite at each temple.','word'],
+    ['{宿坊|しゅくぼう}','Temple lodging','','word'],
+    ['{歩|ある}き{遍路|へんろ}','Walking pilgrim','','word'],
+    ['{結願|けちがん}','Finishing all 88 temples','','word'],
+    ['{納経|のうきょう} お{願|ねが}い します。','May I have the temple stamp, please?','Say this at the stamp office with your book open.'],
+    ['お{接待|せったい} です。 どうぞ。','This is osettai. Please take it.','You will hear this.'],
+    ['ありがとう ございます。 {納札|おさめふだ} を どうぞ。','Thank you. Here is my name slip.'],
+    ['{歩|ある}き{遍路|へんろ} です。','I\'m walking the pilgrimage.'],
+    ['{次|つぎ} の お{寺|てら} ^は どちら です か？','Which way is the next temple?'],
+    ['{今夜|こんや}、 {泊|と}まれます か？','Can I stay here tonight?'],
+    ['お{参|まい}り して きます。','I\'m going to go and pray.'],
+    ['がんばって ください！','Good luck! / Keep going!','You will hear this a lot on the road.'],
+    ['お{気|き} を つけて。','Take care.','You will hear this too. Answer: ありがとうございます！'],
+  ]},
+  {id:'aomori', name:'Aomori dialect', jp:'津軽弁', who:'In Aomori', reg:'casual', color:'#6E8F2A', cards:[
+    ['どさ？','Where are you going?','Tsugaru dialect (west Aomori). どさ？ゆさ。 is famous as the shortest conversation in Japan. East Aomori (Nanbu) speaks differently.'],
+    ['ゆさ。','To the bath (onsen).','The answer to どさ？'],
+    ['めやぐ。','Thanks. / Sorry to trouble you.','Tsugaru dialect. Older people may say this to you.'],
+    ['んめ。','Delicious!','Tsugaru way to say おいしい (or うまい).'],
+    ['わ','I, me','Tsugaru dialect. Older people can be hard to understand, even for Japanese people from Tokyo!','word'],
+    ['な','you','Tsugaru dialect.','word'],
   ]},
 ];
 
@@ -458,7 +642,14 @@ const kanjiText = parsed => flat(parsed).map(g => g.t).join('');
 const kanaText = parsed => flat(parsed).map(g => g.r || g.t).join('');
 const rubyHTML = parsed => flat(parsed).map(g => g.r ? `<ruby>${esc(g.t)}<rt>${esc(g.r)}</rt></ruby>` : esc(g.t)).join('');
 function romajiOf(parsed, sentence) {
-  let s = parsed.map(w => w.map(g => g.p ? (g.t === 'は' ? 'wa' : g.t === 'へ' ? 'e' : toRomaji(g.t)) : toRomaji(g.r || g.t)).join('')).join(' ');
+  let s = parsed.map(w => {
+    let out = '', run = '';
+    w.forEach(g => {
+      if (g.p) { out += toRomaji(run) + (g.t === 'は' ? 'wa' : g.t === 'へ' ? 'e' : toRomaji(g.t)); run = ''; }
+      else run += g.r || g.t;
+    });
+    return out + toRomaji(run);
+  }).join(' ');
   s = s.replace(/\s+([.,?!])/g, '$1');
   if (sentence) s = s.replace(/(^|[.?!]\s+)([a-z])/g, (m, a, b) => a + b.toUpperCase());
   return s;
@@ -495,7 +686,7 @@ KANA_DECKS.forEach(d => {
    ============================================================ */
 const KEY = 'hanaso.v1';
 const DEFAULT_SETTINGS = {newPerDay: 10, script: 'auto', dir: 'auto', autoplay: true, rate: 0.85,
-  decks: {basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:false, hira:true, kata:false}};
+  decks: {basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false}};
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
@@ -573,10 +764,11 @@ function levelFor(it) {
   const s = S.settings.script;
   if (s !== 'auto') return +s;
   const st = S.cards[it.id]; const ivl = st ? st.ivl : 0;
+  if (it.reg === 'read') return ivl >= 21 ? 3 : 2;
   return ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0;
 }
 function dirFor(it) {
-  if (it.isKana) return 'jp';
+  if (it.isKana || it.reg === 'read') return 'jp';
   const d = S.settings.dir;
   if (d === 'jp' || d === 'en') return d;
   if (d === 'mix') return Math.random() < .5 ? 'jp' : 'en';
@@ -853,7 +1045,7 @@ function showCard() {
   const lvl = levelFor(it);
   const dir = dirFor(it);
   sess.cur = {it, lvl, dir, revealed: false};
-  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : ''}</div>`;
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}</div>`;
   let front;
   if (dir === 'jp') {
     front = `<div class="ask">${it.isKana ? 'How do you read this?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
