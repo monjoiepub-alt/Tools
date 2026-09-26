@@ -31,6 +31,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit}
@@ -129,10 +130,11 @@ rt{font-family:var(--font-jp);font-size:.48em;color:var(--muted);font-weight:600
 .forms dd{margin:0;font-size:18px}
 .forms dd.jp{font-size:21px}
 .note{font-size:15px;background:var(--surface-2);border-radius:12px;padding:10px 12px;border-left:3px solid var(--shu)}
-.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .grade{border:0;border-radius:14px;padding:10px 4px;min-height:62px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700;background:var(--surface);border:1.5px solid var(--g);color:var(--g)}
 .grade small{font-size:12.5px;font-weight:400;color:var(--muted)}
-.grade[data-g="0"]{--g:var(--again)} .grade[data-g="1"]{--g:var(--hard)} .grade[data-g="2"]{--g:var(--good)} .grade[data-g="3"]{--g:var(--easy)}
+.grade[data-g="0"]{--g:var(--again)} .grade[data-g="1"]{--g:var(--hard)} .grade[data-g="2"]{--g:var(--good)}
+.chip.star{cursor:pointer;color:var(--hard);letter-spacing:.05em;margin-left:auto;font-size:14px;padding:4px 10px;background:var(--surface)}
 .done{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
 .done .jp{font-size:30px}
 
@@ -176,7 +178,7 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 .big .close-hint{font-size:14px;color:var(--muted);position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
-@media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}.grades{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
 
 <div class="app">
@@ -216,7 +218,7 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
    Each card: [japanese, english, note?, register?]
    ============================================================ */
 const DECKS = [
-  {id:'basics', name:'First steps', jp:'はじめの一歩', who:'Anyone, politely', reg:'polite', color:'#2B4C8C', cards:[
+  {id:'basics', group:'talk', prio:3, name:'First steps', jp:'はじめの一歩', who:'Anyone, politely', reg:'polite', color:'#2B4C8C', cards:[
     ['おはよう ございます。','Good morning.','With Aya and your family, just おはよう (ohayou).'],
     ['こんにち^は。','Hello. / Good afternoon.','The は at the end is read "wa", like the particle.'],
     ['こんばん^は。','Good evening.'],
@@ -239,7 +241,7 @@ const DECKS = [
     ['さようなら。','Goodbye.','Sounds quite final. With family and friends, じゃあね or またね is more natural.'],
     ['じゃあ、 また。','See you.','Casual. Fine with family members you know well.','casual'],
   ]},
-  {id:'family', name:'With Aya\'s family', jp:'家族と', who:'To Aya\'s family', reg:'casual', color:'#C8641E', cards:[
+  {id:'family', group:'talk', prio:3, name:'With Aya\'s family', jp:'家族と', who:'To Aya\'s family', reg:'casual', color:'#C8641E', cards:[
     ['よろしく ね。','Nice to meet you. / Let\'s get along.','The casual version of よろしくお願いします.'],
     ['ただいま。','I\'m home.','Said when you come back home. Everyone says this, in every family.'],
     ['お{帰|かえ}り！','Welcome home!','The answer to ただいま.'],
@@ -263,7 +265,7 @@ const DECKS = [
     ['{眠|ねむ}い。','I\'m sleepy.'],
     ['おやすみ！','Good night!'],
   ]},
-  {id:'table', name:'At the table', jp:'食卓で', who:'At a family meal', reg:'casual', color:'#5E8A2E', cards:[
+  {id:'table', group:'talk', prio:3, name:'At the table', jp:'食卓で', who:'At a family meal', reg:'casual', color:'#5E8A2E', cards:[
     ['いただきます。','Let\'s eat. (said before eating)','Say it with your hands together before every meal. Casual families say it too.'],
     ['ごちそうさま！','Thanks for the meal! (after eating)','The cook will be very happy to hear this.'],
     ['おいしい！','So good!'],
@@ -282,7 +284,7 @@ const DECKS = [
     ['お{水|みず} もらえる？','Can I have some water?'],
     ['お{茶|ちゃ} {飲|の}む？','Want some tea?','You will hear this. Answer: うん、ありがとう！ (un, arigatou!)'],
   ]},
-  {id:'me', name:'About me', jp:'自己紹介', who:'To new people', reg:'polite', color:'#7A4FA0', cards:[
+  {id:'me', group:'talk', prio:2, name:'About me', jp:'自己紹介', who:'To new people', reg:'polite', color:'#7A4FA0', cards:[
     ['ベルギー から {来|き}ました。','I\'m from Belgium.'],
     ['ベルギー{人|じん} です。','I\'m Belgian.'],
     ['フィンランド に {住|す}んで います。','I live in Finland.'],
@@ -294,7 +296,7 @@ const DECKS = [
     ['ベルギー ^は チョコレート と ビール が {有名|ゆうめい} です。','Belgium is famous for chocolate and beer.'],
     ['フィンランド ^は とても {寒|さむ}い です。','Finland is very cold.'],
   ]},
-  {id:'aya', name:'With Aya', jp:'あやと', who:'To Aya', reg:'casual', color:'#C04A74', cards:[
+  {id:'aya', group:'talk', prio:3, name:'With Aya', jp:'あやと', who:'To Aya', reg:'casual', color:'#C04A74', cards:[
     ['おはよう。','Good morning.'],
     ['おやすみ。','Good night.'],
     ['{大好|だいす}き。','I love you. / I really like you.','Used much more often than 愛してる.'],
@@ -320,7 +322,7 @@ const DECKS = [
     ['{可愛|かわい}い ね。','You\'re cute.'],
     ['もう {寝|ね}よう。','Let\'s go to sleep.'],
   ]},
-  {id:'out', name:'Out and about', jp:'外で', who:'To a stranger', reg:'polite', color:'#1F7A80', cards:[
+  {id:'out', group:'talk', prio:3, name:'Out and about', jp:'外で', who:'To a stranger', reg:'polite', color:'#1F7A80', cards:[
     ['すみません、 ちょっと いい です か？','Excuse me, do you have a moment?'],
     ['{英語|えいご} を {話|はな}せます か？','Do you speak English?'],
     ['{日本語|にほんご} ^は まだ {下手|へた} です。','My Japanese is still bad.','Humble. People will probably answer 上手ですね！ (jouzu desu ne) = "You\'re good!"'],
@@ -342,7 +344,7 @@ const DECKS = [
     ['{助|たす}けて ください！','Help!'],
     ['{救急車|きゅうきゅうしゃ} を {呼|よ}んで ください！','Please call an ambulance!','The emergency number in Japan is 119 (ambulance and fire).'],
   ]},
-  {id:'kin', name:'Family words', jp:'家族のことば', who:'Word', reg:'word', color:'#A0522D', cards:[
+  {id:'kin', group:'core', prio:2, name:'Family words', jp:'家族のことば', who:'Word', reg:'word', color:'#A0522D', cards:[
     ['{家族|かぞく}','family'],
     ['{妻|つま}','my wife','When you talk to other people about your wife.'],
     ['お{義父|とう}さん','father-in-law','Written 義父 (in-law), spoken おとうさん. You can call him this directly.'],
@@ -358,7 +360,7 @@ const DECKS = [
     ['{親戚|しんせき}','relatives'],
     ['{友達|ともだち}','friend'],
   ]},
-  {id:'words', name:'Everyday words', jp:'毎日のことば', who:'Word', reg:'word', color:'#56627A', cards:[
+  {id:'words', group:'core', prio:3, name:'Everyday words', jp:'毎日のことば', who:'Word', reg:'word', color:'#56627A', cards:[
     ['{水|みず}','water'],
     ['ご{飯|はん}','rice / a meal'],
     ['パン','bread'],
@@ -379,7 +381,7 @@ const DECKS = [
     ['{暑|あつ}い','hot (weather)'],
     ['{寒|さむ}い','cold (weather)'],
   ]},
-  {id:'num', name:'Numbers and money', jp:'数字', who:'Word', reg:'word', color:'#8A6D1D', cards:[
+  {id:'num', group:'core', prio:3, name:'Numbers and money', jp:'数字', who:'Word', reg:'word', color:'#8A6D1D', cards:[
     ['{一|いち}','1'],['{二|に}','2'],['{三|さん}','3'],
     ['{四|よん}','4','Also し, but よん is more common.'],
     ['{五|ご}','5'],['{六|ろく}','6'],
@@ -403,7 +405,206 @@ const DECKS = [
     ['{二人|ふたり}','two people'],
     ['{三人|さんにん}','three people','From three on, it is number + にん.'],
   ]},
-  {id:'signs', name:'Driving and road signs', jp:'道路標識', who:'On the road', reg:'polite', color:'#D18A0F', cards:[
+  /* ---------- CORE VOCABULARY (numbers inside a list set the priority: 3 = ★★★, 2 = ★★, 1 = ★) ---------- */
+  {id:'v-time', group:'core', name:'Time and calendar', jp:'時間とカレンダー', who:'Word', reg:'word', prio:2, color:'#5B6FB5', cards:[
+    3,
+    ['{朝|あさ}','morning'],['{昼|ひる}','noon / daytime'],['{夕方|ゆうがた}','early evening'],['{夜|よる}','night'],
+    ['{毎日|まいにち}','every day'],['{午前|ごぜん}','a.m. / morning'],['{午後|ごご}','p.m. / afternoon'],
+    ['{今週|こんしゅう}','this week'],['{来週|らいしゅう}','next week'],['{先週|せんしゅう}','last week'],['{週末|しゅうまつ}','weekend'],
+    ['{今年|ことし}','this year'],['{何時|なんじ}','what time'],['{半|はん}','half past','{三時半|さんじはん} = 3:30.'],
+    ['{月曜日|げつようび}','Monday'],['{火曜日|かようび}','Tuesday'],['{水曜日|すいようび}','Wednesday'],['{木曜日|もくようび}','Thursday'],
+    ['{金曜日|きんようび}','Friday'],['{土曜日|どようび}','Saturday'],['{日曜日|にちようび}','Sunday'],['{何曜日|なんようび}','what day of the week'],
+    ['{休|やす}み','day off / holiday / break'],
+    2,
+    ['{今朝|けさ}','this morning'],['{今晩|こんばん}','this evening / tonight'],['{明後日|あさって}','the day after tomorrow'],['{一昨日|おととい}','the day before yesterday'],
+    ['{今月|こんげつ}','this month'],['{来月|らいげつ}','next month'],['{先月|せんげつ}','last month'],['{来年|らいねん}','next year'],['{去年|きょねん}','last year'],
+    ['{毎朝|まいあさ}','every morning'],['{毎晩|まいばん}','every evening'],['{誕生日|たんじょうび}','birthday'],['お{正月|しょうがつ}','New Year','The biggest family holiday in Japan.'],
+    ['{分|ふん}','minute','Sometimes ぷん: {一分|いっぷん}, {三分|さんぷん}, {十分|じゅっぷん}.'],
+    ['{一月|いちがつ}','January'],['{二月|にがつ}','February'],['{三月|さんがつ}','March'],['{四月|しがつ}','April','Not よんがつ!'],
+    ['{五月|ごがつ}','May'],['{六月|ろくがつ}','June'],['{七月|しちがつ}','July','Not なながつ!'],['{八月|はちがつ}','August'],
+    ['{九月|くがつ}','September','Not きゅうがつ!'],['{十月|じゅうがつ}','October'],['{十一月|じゅういちがつ}','November'],['{十二月|じゅうにがつ}','December'],
+    1,
+    ['{週|しゅう}','week'],['{年|とし}','year / age'],['{最近|さいきん}','recently'],['{昔|むかし}','long ago'],['{将来|しょうらい}','the future'],
+    ['{夏休|なつやす}み','summer holiday'],['{冬休|ふゆやす}み','winter holiday'],
+  ]},
+  {id:'v-people', group:'core', name:'People, body and health', jp:'人と体', who:'Word', reg:'word', prio:2, color:'#C2567A', cards:[
+    3,
+    ['{人|ひと}','person'],['{私|わたし}','I, me'],['あなた','you','Japanese people rarely say あなた. Use the person\'s name instead.'],
+    ['{男|おとこ} の {人|ひと}','man'],['{女|おんな} の {人|ひと}','woman'],['{皆|みな}さん','everyone (polite)'],['{名前|なまえ}','name'],
+    ['{頭|あたま}','head'],['{目|め}','eye'],['{耳|みみ}','ear'],['{口|くち}','mouth'],['{鼻|はな}','nose'],['{歯|は}','tooth'],
+    ['{手|て}','hand'],['{足|あし}','foot / leg'],['{体|からだ}','body'],['お{腹|なか}','stomach / belly'],
+    ['{病気|びょうき}','illness'],['{薬|くすり}','medicine'],['{医者|いしゃ}','doctor'],['{病院|びょういん}','hospital'],
+    ['{痛|いた}い','it hurts / painful'],['{熱|ねつ}','fever'],['{風邪|かぜ}','a cold (illness)','Same sound as {風|かぜ} (wind).'],
+    2,
+    ['{彼|かれ}','he / boyfriend'],['{彼女|かのじょ}','she / girlfriend'],['{夫|おっと}','my husband','What Aya says about you to other people.'],
+    ['{顔|かお}','face'],['{髪|かみ}','hair'],['{首|くび}','neck'],['{肩|かた}','shoulder'],['{背中|せなか}','back'],['{腰|こし}','lower back'],
+    ['{膝|ひざ}','knee'],['{指|ゆび}','finger'],['{声|こえ}','voice'],['{咳|せき}','cough'],['{怪我|けが}','injury'],['{薬局|やっきょく}','pharmacy'],
+    ['{大人|おとな}','adult'],['{赤|あか}ちゃん','baby'],['{男|おとこ} の {子|こ}','boy'],['{女|おんな} の {子|こ}','girl'],
+    ['{先生|せんせい}','teacher / doctor','Also used to address doctors.'],['{外国人|がいこくじん}','foreigner'],['お{客|きゃく}さん','customer / guest'],
+    1,
+    ['{心|こころ}','heart / mind'],['{喉|のど}','throat'],['{胸|むね}','chest'],['{血|ち}','blood'],['{骨|ほね}','bone'],
+    ['{歯医者|はいしゃ}','dentist'],['{保険証|ほけんしょう}','health insurance card','Bring it to every doctor visit.'],
+  ]},
+  {id:'v-food', group:'core', name:'Food and drink', jp:'食べ物と飲み物', who:'Word', reg:'word', prio:2, color:'#C77B2A', cards:[
+    3,
+    ['{食|た}べ{物|もの}','food'],['{飲|の}み{物|もの}','drink'],['{肉|にく}','meat'],['{魚|さかな}','fish'],['{野菜|やさい}','vegetables'],
+    ['{果物|くだもの}','fruit'],['{卵|たまご}','egg'],['{牛乳|ぎゅうにゅう}','milk'],['お{茶|ちゃ}','tea (green tea)'],['お{酒|さけ}','alcohol / sake'],
+    ['ビール','beer'],['{朝|あさ}ご{飯|はん}','breakfast'],['{昼|ひる}ご{飯|はん}','lunch'],['{晩|ばん}ご{飯|はん}','dinner'],
+    ['お{箸|はし}','chopsticks'],['{甘|あま}い','sweet'],
+    2,
+    ['{米|こめ}','rice (uncooked)'],['{砂糖|さとう}','sugar'],['{塩|しお}','salt'],['{醤油|しょうゆ}','soy sauce'],['{味噌|みそ}','miso'],
+    ['{豚肉|ぶたにく}','pork'],['{牛肉|ぎゅうにく}','beef'],['{鶏肉|とりにく}','chicken'],['{豆腐|とうふ}','tofu'],['{納豆|なっとう}','natto (fermented soybeans)'],
+    ['お{弁当|べんとう}','lunch box'],['おにぎり','rice ball'],['{寿司|すし}','sushi'],['ラーメン','ramen'],['うどん','udon noodles'],['そば','soba noodles'],
+    ['カレー','curry'],['{天|てん}ぷら','tempura'],['{焼|や}き{鳥|とり}','grilled chicken skewers'],['お{菓子|かし}','sweets / snacks'],['ケーキ','cake'],
+    ['ジュース','juice'],['お{湯|ゆ}','hot water'],['{氷|こおり}','ice'],['スプーン','spoon'],['フォーク','fork'],['お{皿|さら}','plate'],['コップ','glass / cup'],
+    ['しょっぱい','salty'],['{酸|す}っぱい','sour'],['{苦|にが}い','bitter'],['{冷|つめ}たい','cold (to the touch)'],['{熱|あつ}い','hot (to the touch)','Hot weather is {暑|あつ}い: same sound, different kanji.'],
+    1,
+    ['{油|あぶら}','oil'],['こしょう','pepper'],['バター','butter'],['チーズ','cheese'],['{玉|たま}ねぎ','onion'],['{人参|にんじん}','carrot'],
+    ['じゃがいも','potato'],['キャベツ','cabbage'],['{大根|だいこん}','daikon radish'],['{海苔|のり}','seaweed (nori)'],['{梅干|うめぼ}し','pickled plum'],
+    ['{漬物|つけもの}','pickles'],['{鍋|なべ}','hot pot / pan'],['{餅|もち}','rice cake'],['{抹茶|まっちゃ}','matcha'],
+  ]},
+  {id:'v-home', group:'core', name:'Home and daily life', jp:'家と生活', who:'Word', reg:'word', prio:2, color:'#8A6BB5', cards:[
+    3,
+    ['{部屋|へや}','room'],['{台所|だいどころ}','kitchen'],['お{風呂|ふろ}','bath'],['{窓|まど}','window'],['ドア','door'],['{鍵|かぎ}','key / lock'],
+    ['{電気|でんき}','light / electricity'],['{携帯|けいたい}','mobile phone'],['スマホ','smartphone'],['{車|くるま}','car'],['{服|ふく}','clothes'],
+    ['{靴|くつ}','shoes'],['{布団|ふとん}','futon'],['タオル','towel'],['ゴミ','rubbish','Rubbish is sorted very strictly in Japan. Check your town\'s calendar.'],
+    ['{洗濯|せんたく}','laundry'],['{掃除|そうじ}','cleaning'],['{料理|りょうり}','cooking / a dish'],['{買|か}い{物|もの}','shopping'],
+    ['{仕事|しごと}','work / job'],['{荷物|にもつ}','luggage / package'],['{電話|でんわ}','phone / phone call'],
+    2,
+    ['{玄関|げんかん}','entrance hall','Take off your shoes here.'],['{冷蔵庫|れいぞうこ}','fridge'],['{電子|でんし}レンジ','microwave'],['エアコン','air conditioner'],
+    ['ストーブ','heater','In Aomori most homes have a kerosene heater in winter.'],['{灯油|とうゆ}','kerosene'],['{傘|かさ}','umbrella'],['{鞄|かばん}','bag'],
+    ['{財布|さいふ}','wallet'],['{眼鏡|めがね}','glasses'],['{時計|とけい}','clock / watch'],['{写真|しゃしん}','photo'],['{手紙|てがみ}','letter'],
+    ['{本|ほん}','book'],['{紙|かみ}','paper'],['ペン','pen'],['{帽子|ぼうし}','hat'],['コート','coat'],['{上着|うわぎ}','jacket'],['{靴下|くつした}','socks'],
+    ['スリッパ','slippers','There are special slippers for the toilet. Don\'t wear them out of the toilet!'],
+    ['{歯|は}ブラシ','toothbrush'],['シャンプー','shampoo'],['{石鹸|せっけん}','soap'],['{充電器|じゅうでんき}','charger'],['テレビ','TV'],
+    ['{机|つくえ}','desk'],['{椅子|いす}','chair'],['ベッド','bed'],['{家賃|やちん}','rent'],
+    1,
+    ['{箱|はこ}','box'],['{棚|たな}','shelf'],['{壁|かべ}','wall'],['{床|ゆか}','floor'],['{屋根|やね}','roof'],['{庭|にわ}','garden'],
+    ['{階段|かいだん}','stairs'],['{電池|でんち}','battery'],['はさみ','scissors'],['{新聞|しんぶん}','newspaper'],['{下着|したぎ}','underwear'],
+  ]},
+  {id:'v-places', group:'core', name:'Places and directions', jp:'場所と道', who:'Word', reg:'word', prio:2, color:'#2E8C8C', cards:[
+    3,
+    ['{店|みせ}','shop'],['コンビニ','convenience store'],['スーパー','supermarket'],['{銀行|ぎんこう}','bank'],['{郵便局|ゆうびんきょく}','post office'],
+    ['{学校|がっこう}','school'],['{会社|かいしゃ}','company / office'],['{空港|くうこう}','airport'],['{電車|でんしゃ}','train'],['バス','bus'],
+    ['タクシー','taxi'],['{飛行機|ひこうき}','plane'],['{新幹線|しんかんせん}','bullet train'],['{切符|きっぷ}','ticket'],['{道|みち}','road / way'],
+    ['{右|みぎ}','right'],['{左|ひだり}','left'],['まっすぐ','straight ahead'],['{前|まえ}','in front / before'],['{後|うし}ろ','behind'],
+    ['{上|うえ}','above / on'],['{下|した}','below / under'],['{中|なか}','inside'],['{外|そと}','outside'],['{近|ちか}く','nearby'],['{隣|となり}','next to'],
+    ['ここ','here'],['そこ','there (near you)'],['あそこ','over there'],['どこ','where'],
+    2,
+    ['ホテル','hotel'],['{旅館|りょかん}','Japanese inn'],['{温泉|おんせん}','hot spring'],['お{寺|てら}','temple'],['{神社|じんじゃ}','shrine'],
+    ['{公園|こうえん}','park'],['{図書館|としょかん}','library'],['{町|まち}','town'],['{市役所|しやくしょ}','city hall','Where you register your address when you move.'],
+    ['{交番|こうばん}','police box'],['{警察|けいさつ}','police'],['{港|みなと}','port / harbour'],['{橋|はし}','bridge'],['{地図|ちず}','map'],
+    ['{船|ふね}','ship / ferry','Ferries go from Aomori to Hokkaido.'],['{自転車|じてんしゃ}','bicycle'],['{改札|かいさつ}','ticket gate'],['{乗|の}り{場|ば}','boarding area / stop'],
+    ['{番線|ばんせん}','platform (number)','{三番線|さんばんせん} = platform 3.'],
+    ['{東|ひがし}','east'],['{西|にし}','west'],['{南|みなみ}','south'],['{北|きた}','north'],
+    ['{旅行|りょこう}','trip / travel'],['{観光|かんこう}','sightseeing'],['パスポート','passport'],
+    ['{在留|ざいりゅう}カード','residence card','Foreign residents must carry it at all times.'],
+    1,
+    ['{映画館|えいがかん}','cinema'],['{美術館|びじゅつかん}','art museum'],['{博物館|はくぶつかん}','museum'],['{大学|だいがく}','university'],
+    ['{工場|こうじょう}','factory'],['{角|かど}','corner'],['{向|む}かい','across the street / opposite'],
+  ]},
+  {id:'v-nature', group:'core', name:'Nature, weather and animals', jp:'自然と天気', who:'Word', reg:'word', prio:2, color:'#3F8F4E', cards:[
+    3,
+    ['{雪|ゆき}','snow'],['{晴|は}れ','sunny'],['{曇|くも}り','cloudy'],['{暖|あたた}かい','warm'],['{涼|すず}しい','cool (pleasant)'],
+    ['{春|はる}','spring'],['{夏|なつ}','summer'],['{秋|あき}','autumn'],['{冬|ふゆ}','winter'],['{山|やま}','mountain'],['{海|うみ}','sea'],
+    ['{川|かわ}','river'],['{空|そら}','sky'],['{地震|じしん}','earthquake','Important: learn what to do in an earthquake where you live.'],
+    2,
+    ['{木|き}','tree'],['{花|はな}','flower'],['{森|もり}','forest'],['{湖|みずうみ}','lake'],['{島|しま}','island'],['{石|いし}','stone'],['{火|ひ}','fire'],
+    ['{太陽|たいよう}','sun'],['{月|つき}','moon / month'],['{星|ほし}','star'],['{桜|さくら}','cherry blossom'],['{紅葉|こうよう}','autumn leaves'],
+    ['{台風|たいふう}','typhoon'],['{吹雪|ふぶき}','snowstorm','Common in Aomori. Drive very carefully.'],
+    ['{犬|いぬ}','dog'],['{猫|ねこ}','cat'],['{鳥|とり}','bird'],['{熊|くま}','bear','Bears live in the mountains of Aomori and Hokkaido. Hikers carry bells.'],
+    ['{動物|どうぶつ}','animal'],['{猿|さる}','monkey'],['{鹿|しか}','deer'],
+    1,
+    ['{景色|けしき}','scenery / view'],['{虫|むし}','insect'],['{草|くさ}','grass'],['{雲|くも}','cloud'],['{波|なみ}','wave'],['{砂|すな}','sand'],
+  ]},
+  {id:'v-verbs', group:'core', name:'Verbs', jp:'動詞', who:'Word', reg:'word', prio:2, color:'#B5475A', cards:[
+    3,
+    ['{行|い}く','to go','Polite: 行きます.'],['{来|く}る','to come','Polite: 来ます (kimasu).'],['{帰|かえ}る','to go home / return'],
+    ['{食|た}べる','to eat'],['{飲|の}む','to drink'],['{見|み}る','to see / watch'],['{聞|き}く','to listen / to ask'],['{話|はな}す','to speak'],
+    ['{言|い}う','to say'],['{読|よ}む','to read'],['{書|か}く','to write'],['{買|か}う','to buy'],['する','to do','Polite: します.'],
+    ['{分|わ}かる','to understand'],['ある','to be / have (things)','For things and plants.'],['いる','to be (people, animals)','For people and animals.'],
+    ['{寝|ね}る','to sleep / go to bed'],['{起|お}きる','to get up'],['{待|ま}つ','to wait'],['{会|あ}う','to meet'],['{休|やす}む','to rest / take a day off'],
+    ['{働|はたら}く','to work'],['{作|つく}る','to make'],['{使|つか}う','to use'],['{知|し}る','to know','"I know" = 知っています. "I don\'t know" = 知りません.'],
+    ['{思|おも}う','to think'],['{手伝|てつだ}う','to help'],['{開|あ}ける','to open'],['{閉|し}める','to close'],['{入|はい}る','to enter'],
+    ['{出|で}る','to leave / go out'],['{乗|の}る','to get on / ride'],['{降|お}りる','to get off'],['{運転|うんてん} する','to drive'],
+    ['{止|と}まる','to stop'],['{歩|ある}く','to walk'],['{座|すわ}る','to sit'],['{立|た}つ','to stand'],['{持|も}つ','to hold / carry'],
+    ['{払|はら}う','to pay'],['{探|さが}す','to look for'],['{教|おし}える','to teach / tell'],['{忘|わす}れる','to forget'],
+    ['{始|はじ}まる','to begin'],['{終|お}わる','to end'],['{住|す}む','to live (somewhere)'],['{着|き}る','to wear (clothes)'],
+    ['{脱|ぬ}ぐ','to take off (shoes, clothes)'],['{欲|ほ}しい','to want (a thing)'],['{着|つ}く','to arrive'],
+    2,
+    ['{遊|あそ}ぶ','to play / hang out'],['{泳|およ}ぐ','to swim'],['{歌|うた}う','to sing'],['{洗|あら}う','to wash'],['{送|おく}る','to send'],
+    ['{借|か}りる','to borrow / rent'],['{貸|か}す','to lend'],['{返|かえ}す','to give back'],['{呼|よ}ぶ','to call'],['{頼|たの}む','to ask for / order'],
+    ['{決|き}める','to decide'],['{選|えら}ぶ','to choose'],['{変|か}える','to change'],['{始|はじ}める','to start (something)'],['{続|つづ}ける','to continue'],
+    ['{見|み}せる','to show'],['{覚|おぼ}える','to remember / learn by heart'],['{連絡|れんらく} する','to contact'],['{予約|よやく} する','to book'],
+    ['{練習|れんしゅう} する','to practise'],['{勉強|べんきょう} する','to study'],['{困|こま}る','to be in trouble'],['{疲|つか}れる','to get tired'],
+    ['{笑|わら}う','to laugh'],['{泣|な}く','to cry'],['{怒|おこ}る','to get angry'],['{撮|と}る','to take (a photo)'],['{登|のぼ}る','to climb'],
+    ['{滑|すべ}る','to slide / to ski','スキーで滑る = to ski down.'],['{転|ころ}ぶ','to fall over'],['{落|お}ちる','to fall / drop'],
+    ['{曲|ま}がる','to turn','右に曲がる = turn right.'],['{渡|わた}る','to cross'],['{出|で}かける','to go out'],['{急|いそ}ぐ','to hurry'],
+    ['{置|お}く','to put / place'],['{取|と}る','to take'],['{入|い}れる','to put in'],['{出|だ}す','to take out / send'],
+    ['もらう','to receive'],['あげる','to give'],['くれる','to give (to me)'],['{違|ちが}う','to be different / wrong'],
+    1,
+    ['{生|う}まれる','to be born'],['{結婚|けっこん} する','to marry'],['{引|ひ}っ{越|こ}す','to move house'],['{並|なら}ぶ','to line up'],
+    ['{触|さわ}る','to touch'],['{祈|いの}る','to pray'],['{間違|まちが}える','to make a mistake'],['{直|なお}す','to fix'],['{壊|こわ}れる','to break'],
+    ['{無|な}くす','to lose (a thing)'],['{拾|ひろ}う','to pick up'],['{捨|す}てる','to throw away'],['{調|しら}べる','to look up / check'],
+  ]},
+  {id:'v-adj', group:'core', name:'Describing words', jp:'形容詞', who:'Word', reg:'word', prio:2, color:'#D0703C', cards:[
+    3,
+    ['いい','good'],['{悪|わる}い','bad'],['{新|あたら}しい','new'],['{古|ふる}い','old (things)'],['{高|たか}い','expensive / tall'],['{安|やす}い','cheap'],
+    ['{多|おお}い','many / a lot'],['{少|すく}ない','few / little'],['{早|はや}い','early'],['{速|はや}い','fast'],['{遅|おそ}い','late / slow'],
+    ['{近|ちか}い','near'],['{遠|とお}い','far'],['{長|なが}い','long'],['{短|みじか}い','short'],['{楽|たの}しい','fun'],['{難|むずか}しい','difficult'],
+    ['{簡単|かんたん}','easy'],['{忙|いそが}しい','busy'],['{暇|ひま}','free (not busy)'],['{元気|げんき}','well / full of energy'],
+    ['{危|あぶ}ない','dangerous / watch out!'],['{嬉|うれ}しい','happy / glad'],['{悲|かな}しい','sad'],['{綺麗|きれい}','pretty / clean'],
+    ['{静|しず}か','quiet'],['うるさい','noisy / annoying'],['{上手|じょうず}','good at'],['{下手|へた}','bad at'],['{嫌|きら}い','to dislike'],['すごい','amazing'],
+    2,
+    ['{重|おも}い','heavy'],['{軽|かる}い','light (weight)'],['{広|ひろ}い','wide / spacious'],['{狭|せま}い','narrow / small (room)'],
+    ['{明|あか}るい','bright'],['{暗|くら}い','dark'],['{強|つよ}い','strong'],['{弱|よわ}い','weak'],['{若|わか}い','young'],
+    ['{優|やさ}しい','kind / gentle'],['{面白|おもしろ}い','interesting / funny'],['つまらない','boring'],['{怖|こわ}い','scary'],['{眠|ねむ}い','sleepy'],
+    ['{汚|きたな}い','dirty'],['{便利|べんり}','convenient'],['{有名|ゆうめい}','famous'],['{大切|たいせつ}','important / precious'],
+    ['{大変|たいへん}','hard / tough'],['{親切|しんせつ}','kind'],['{同|おな}じ','the same'],['{素敵|すてき}','lovely'],
+    1,
+    ['{太|ふと}い','thick / fat'],['{細|ほそ}い','thin'],['{丸|まる}い','round'],['{深|ふか}い','deep'],['{浅|あさ}い','shallow'],
+    ['{柔|やわ}らかい','soft'],['{硬|かた}い','hard (not soft)'],['{懐|なつ}かしい','nostalgic'],['{恥|は}ずかしい','embarrassing / shy'],
+    ['もったいない','what a waste'],['{特別|とくべつ}','special'],
+  ]},
+  {id:'v-colour', group:'core', name:'Colours', jp:'色', who:'Word', reg:'word', prio:2, color:'#9A5FB0', cards:[
+    ['{色|いろ}','colour'],['{赤|あか}','red'],['{青|あお}','blue','The green traffic light is called 青 (blue) in Japanese!'],
+    ['{白|しろ}','white'],['{黒|くろ}','black'],['{黄色|きいろ}','yellow'],['{緑|みどり}','green'],['{茶色|ちゃいろ}','brown'],
+    1,
+    ['ピンク','pink'],['{紫|むらさき}','purple'],['オレンジ','orange'],['{灰色|はいいろ}','grey','Also グレー.'],['{金色|きんいろ}','gold'],['{銀色|ぎんいろ}','silver'],
+  ]},
+  {id:'v-small', group:'core', name:'Question words and little words', jp:'小さいことば', who:'Word', reg:'word', prio:3, color:'#4A6FA5', cards:[
+    ['{何|なに}','what','Also なん before です, の, と: 何ですか (nan desu ka).'],['{誰|だれ}','who'],['いつ','when'],['どう','how'],['どれ','which (one)'],
+    ['どうして','why'],['いくら','how much (price)'],['いくつ','how many'],['これ','this'],['それ','that'],['あれ','that (over there)'],
+    ['{全部|ぜんぶ}','all / everything'],['{少|すこ}し','a little'],['ちょっと','a bit / a moment'],['たくさん','a lot'],['とても','very'],
+    ['もっと','more'],['まだ','still / not yet'],['もう','already / anymore'],['また','again'],['{一緒|いっしょ} に','together'],
+    ['{本当|ほんとう} に','really'],['でも','but'],['だから','so / that\'s why'],['うん','yeah (casual yes)'],['ううん','nope (casual no)'],
+    ['{多分|たぶん}','maybe / probably'],['{全然|ぜんぜん}','not at all'],['いつも','always'],['{時々|ときどき}','sometimes'],['{後|あと} で','later'],
+    ['すぐ','right away'],['ゆっくり','slowly'],['{早|はや}く','quickly / early'],
+    2,
+    ['なんで','why (casual)'],['どんな','what kind of'],['どちら','which / where (polite)'],['{何|なに}か','something'],['{誰|だれ}か','someone'],
+    ['どこか','somewhere'],['{皆|みんな}','everyone (casual)'],['{自分|じぶん}','myself / yourself'],['{一番|いちばん}','the most / number one'],
+    ['よく','often / well'],['あまり','not much','Used with a negative: あまり好きじゃない = I don\'t like it much.'],['{特|とく} に','especially'],
+    ['きっと','surely'],['やっぱり','as I thought / after all'],['ちょうど','exactly / just'],['{実|じつ}^は','actually…'],['じゃあ','well then'],
+    ['それから','and then / after that'],['そして','and (then)'],['ぐらい','about (amount)'],['だけ','only'],['{先|さき} に','first / ahead'],
+  ]},
+  {id:'v-work', group:'core', name:'Work and money', jp:'仕事とお金', who:'Word', reg:'word', prio:2, color:'#6B7A3A', cards:[
+    3,
+    ['{円|えん}','yen'],['お{釣|つ}り','change (money back)'],['{現金|げんきん}','cash'],['{値段|ねだん}','price'],['{無料|むりょう}','free (no charge)'],
+    ['{割引|わりびき}','discount'],['{予定|よてい}','plan / schedule'],['{休憩|きゅうけい}','break (at work)'],['レシート','receipt'],['サイズ','size'],
+    2,
+    ['{同僚|どうりょう}','colleague'],['{上司|じょうし}','boss'],['{店長|てんちょう}','shop manager'],['{給料|きゅうりょう}','salary'],['シフト','work shift'],
+    ['{制服|せいふく}','uniform'],['{会議|かいぎ}','meeting'],['メール','email / message'],['{準備|じゅんび}','preparation'],['{在庫|ざいこ}','stock'],
+    ['レジ','cash register'],['{領収書|りょうしゅうしょ}','receipt (official)'],['セール','sale'],['{安全|あんぜん}','safe / safety'],
+    ['{危険|きけん}','danger'],['{注意|ちゅうい}','caution'],['{確認|かくにん}','check / confirmation'],
+    ['お{先|さき} に {失礼|しつれい} します。','Sorry for leaving before you. (leaving work)','Say this when you leave work before your colleagues.','polite'],
+    ['お{疲|つか}れさま です。','Hi / Good work. (greeting at work)','The everyday greeting between colleagues.','polite'],
+    ['{確認|かくにん} します。','I\'ll check.','','polite'],
+    ['{今日|きょう} ^は {何時|なんじ} まで です か？','Until what time today?','','polite'],
+    ['もう {一度|いちど} {教|おし}えて ください。','Please show me once more.','','polite'],
+    1,
+    ['{税金|ぜいきん}','tax'],['{試着|しちゃく}','trying on (clothes)'],['{出勤|しゅっきん}','going to work'],['{退勤|たいきん}','leaving work'],
+  ]},
+  {id:'signs', group:'trip', prio:3, name:'Driving and road signs', jp:'道路標識', who:'On the road', reg:'polite', color:'#D18A0F', cards:[
     ['{止|と}まれ','STOP','In Japan the stop sign is a red triangle pointing down, with this word on it.','read'],
     ['{一時停止|いちじていし}','Stop here first (then go)','','read'],
     ['{徐行|じょこう}','Slow down','Drive slow enough to stop at once.','read'],
@@ -441,7 +642,7 @@ const DECKS = [
     ['{事故|じこ} が ありました。','There has been an accident.','Police: 110. Ambulance: 119.'],
     ['{免許証|めんきょしょう} を {見|み}せて ください。','Please show your driving licence.','You may hear this from the police.'],
   ]},
-  {id:'menu', name:'Food and menus', jp:'メニュー', who:'At a restaurant', reg:'polite', color:'#B8483C', cards:[
+  {id:'menu', group:'trip', prio:2, name:'Food and menus', jp:'メニュー', who:'At a restaurant', reg:'polite', color:'#B8483C', cards:[
     ['{定食|ていしょく}','Set meal (with rice, soup and sides)','','read'],
     ['{本日|ほんじつ} の おすすめ','Today\'s special','','read'],
     ['{大盛|おおも}り','Large portion','','read'],
@@ -471,7 +672,7 @@ const DECKS = [
     ['{肉|にく} ^は {食|た}べられません。','I can\'t eat meat.'],
     ['お{持|も}ち{帰|かえ}り できます か？','Can I take it away?'],
   ]},
-  {id:'ski', name:'Ski rental shop', jp:'スキーレンタル', who:'To a customer', reg:'polite', color:'#2F86C9', cards:[
+  {id:'ski', group:'trip', prio:2, name:'Ski rental shop', jp:'スキーレンタル', who:'To a customer', reg:'polite', color:'#2F86C9', cards:[
     ['いらっしゃいませ！','Welcome! (to customers)','Every shop says this. Customers don\'t answer, they just nod or smile.'],
     ['{英語|えいご} で {大丈夫|だいじょうぶ} です か？','Is English okay for you?','In Niseko most guests speak English. Use this to check.'],
     ['{何名|なんめい}{様|さま} です か？','How many people?'],
@@ -507,7 +708,7 @@ const DECKS = [
     ['{上級者|じょうきゅうしゃ}','Advanced','','word'],
     ['{返却|へんきゃく}','Return (of rental gear)','','word'],
   ]},
-  {id:'fuji', name:'Mountain hut on Fuji', jp:'富士山の山小屋', who:'To a hut guest', reg:'polite', color:'#4E7A6B', cards:[
+  {id:'fuji', group:'trip', prio:1, name:'Mountain hut on Fuji', jp:'富士山の山小屋', who:'To a hut guest', reg:'polite', color:'#4E7A6B', cards:[
     ['{富士山|ふじさん}','Mount Fuji','','word'],
     ['{山小屋|やまごや}','Mountain hut','','word'],
     ['{登山|とざん}','Climbing (a mountain)','','word'],
@@ -537,7 +738,7 @@ const DECKS = [
     ['{足元|あしもと} に {気|き} を つけて ください。','Watch your step.'],
     ['トイレ ^は {有料|ゆうりょう} です。','The toilet costs money.','On Mt Fuji, toilets usually cost a few hundred yen.'],
   ]},
-  {id:'henro', name:'Shikoku henro', jp:'四国遍路', who:'On the pilgrimage', reg:'polite', color:'#8C7A5B', cards:[
+  {id:'henro', group:'trip', prio:1, name:'Shikoku henro', jp:'四国遍路', who:'On the pilgrimage', reg:'polite', color:'#8C7A5B', cards:[
     ['お{遍路|へんろ}さん','Pilgrim','People will call you this. It is friendly and respectful.','word'],
     ['{札所|ふだしょ}','Pilgrimage temple (one of the 88)','','word'],
     ['{本堂|ほんどう}','Main hall','At each temple you pray at the main hall and at the Daishi hall.','word'],
@@ -565,7 +766,7 @@ const DECKS = [
     ['がんばって ください！','Good luck! / Keep going!','You will hear this a lot on the road.'],
     ['お{気|き} を つけて。','Take care.','You will hear this too. Answer: ありがとうございます！'],
   ]},
-  {id:'aomori', name:'Aomori dialect', jp:'津軽弁', who:'In Aomori', reg:'casual', color:'#6E8F2A', cards:[
+  {id:'aomori', group:'trip', prio:1, name:'Aomori dialect', jp:'津軽弁', who:'In Aomori', reg:'casual', color:'#6E8F2A', cards:[
     ['どさ？','Where are you going?','Tsugaru dialect (west Aomori). どさ？ゆさ。 is famous as the shortest conversation in Japan. East Aomori (Nanbu) speaks differently.'],
     ['ゆさ。','To the bath (onsen).','The answer to どさ？'],
     ['めやぐ。','Thanks. / Sorry to trouble you.','Tsugaru dialect. Older people may say this to you.'],
@@ -577,8 +778,8 @@ const DECKS = [
 
 const KANA_ROWS = 'あ a,い i,う u,え e,お o,か ka,き ki,く ku,け ke,こ ko,さ sa,し shi,す su,せ se,そ so,た ta,ち chi,つ tsu,て te,と to,な na,に ni,ぬ nu,ね ne,の no,は ha,ひ hi,ふ fu,へ he,ほ ho,ま ma,み mi,む mu,め me,も mo,や ya,ゆ yu,よ yo,ら ra,り ri,る ru,れ re,ろ ro,わ wa,を o,ん n';
 const KANA_DECKS = [
-  {id:'hira', name:'Hiragana', jp:'ひらがな', who:'Letter', reg:'kana', color:'#3D6FB0', kana:true, note:'Hiragana: the main Japanese alphabet. Used for grammar and many words.'},
-  {id:'kata', name:'Katakana', jp:'カタカナ', who:'Letter', reg:'kana', color:'#B0453D', kana:true, note:'Katakana: used for foreign words like ベルギー (Belgium) or コーヒー (coffee).'},
+  {id:'hira', group:'letters', prio:2, name:'Hiragana', jp:'ひらがな', who:'Letter', reg:'kana', color:'#3D6FB0', kana:true, note:'Hiragana: the main Japanese alphabet. Used for grammar and many words.'},
+  {id:'kata', group:'letters', prio:1, name:'Katakana', jp:'カタカナ', who:'Letter', reg:'kana', color:'#B0453D', kana:true, note:'Katakana: used for foreign words like ベルギー (Belgium) or コーヒー (coffee).'},
 ];
 
 /* ============================================================
@@ -660,14 +861,16 @@ const ITEMS = {};
 const DECK_ITEMS = {};
 const ALL_DECKS = [...DECKS, ...KANA_DECKS];
 DECKS.forEach(d => {
-  DECK_ITEMS[d.id] = d.cards.map(([n, en, note, reg]) => {
+  let prio = d.prio;
+  DECK_ITEMS[d.id] = d.cards.filter(c => { if (typeof c === 'number') { prio = c; return false; } c.prio = prio; return true; }).map(c => {
+    const [n, en, note, reg] = c;
     const parsed = parse(n);
     const kana = kanaText(parsed);
     const it = {
       id: d.id + '|' + kana, deck: d, en, note: note || '', reg: reg || d.reg,
       parsed, kana, kanji: kanjiText(parsed), ruby: rubyHTML(parsed),
       romaji: romajiOf(parsed, /[。？！…]$/.test(n.trim())),
-      hasKanji: flat(parsed).some(g => g.r),
+      hasKanji: flat(parsed).some(g => g.r), prio: c.prio,
     };
     ITEMS[it.id] = it; return it;
   });
@@ -676,7 +879,7 @@ KANA_DECKS.forEach(d => {
   DECK_ITEMS[d.id] = KANA_ROWS.split(',').map(p => {
     let [ch, rom] = p.split(' ');
     if (d.id === 'kata') ch = String.fromCharCode(ch.charCodeAt(0) + 0x60);
-    const it = {id: d.id + '|' + ch, deck: d, isKana: true, en: rom, romaji: rom, kana: ch, kanji: ch, ruby: esc(ch), hasKanji: false, note: d.note, reg: 'kana'};
+    const it = {id: d.id + '|' + ch, deck: d, isKana: true, en: rom, romaji: rom, kana: ch, kanji: ch, ruby: esc(ch), hasKanji: false, note: d.note, reg: 'kana', prio: d.prio};
     ITEMS[it.id] = it; return it;
   });
 });
@@ -685,18 +888,21 @@ KANA_DECKS.forEach(d => {
    STATE (saved in this browser)
    ============================================================ */
 const KEY = 'hanaso.v1';
-const DEFAULT_SETTINGS = {newPerDay: 10, script: 'auto', dir: 'auto', autoplay: true, rate: 0.85,
-  decks: {basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false}};
+const CORE_ON = ['v-time','v-people','v-food','v-home','v-places','v-nature','v-verbs','v-adj','v-colour','v-small','v-work'];
+const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay: true, rate: 0.85,
+  decks: {basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
+    ...Object.fromEntries(CORE_ON.map(id => [id, true]))}};
+function blankSave() { return {cards: {}, prio: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0}, total: 0}; }
+function fromSaved(s) {
+  const cards = {};
+  // Older saves had one card per phrase; they become the "understand" (JP → EN) card.
+  for (const k in (s.cards || {})) cards[k.includes('>') ? k : k + '>jp'] = s.cards[k];
+  return {cards, prio: s.prio || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
+          day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: s.streak || {last: 0, count: 0}, total: s.total || 0};
+}
 function load() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) {
-      const s = JSON.parse(raw);
-      return {cards: s.cards || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
-              day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: s.streak || {last: 0, count: 0}, total: s.total || 0};
-    }
-  } catch (e) {}
-  return {cards: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0}, total: 0};
+  try { const raw = localStorage.getItem(KEY); if (raw) return fromSaved(JSON.parse(raw)); } catch (e) {}
+  return blankSave();
 }
 let S = load();
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
@@ -708,21 +914,27 @@ function streakNow() { const t = today(); return (S.streak.last === t || S.strea
    SPACED REPETITION
    ============================================================ */
 const clampEase = e => Math.min(3.0, Math.max(1.3, e));
-function nextOf(st, g) {
+/* Priority: ★★★ cards come back sooner, ★ cards later. */
+const PRIO_MULT = {3: 0.8, 2: 1, 1: 1.3};
+const PRIO_TEXT = {3: '★★★', 2: '★★☆', 1: '★☆☆'};
+const prioOf = it => S.prio[it.id] || it.prio || 2;
+const GRADES = ['See again', 'Not sure', 'I know it'];
+function nextOf(st, g, it) {
+  const m = PRIO_MULT[prioOf(it)];
   if (g === 0) return {again: true, ivl: st.ivl >= 3 ? Math.max(1, Math.round(st.ivl * 0.3)) : 0, ease: clampEase(st.ease - 0.2), lapsed: st.ivl > 0};
-  if (st.lapsed) return {ivl: g === 3 ? Math.max(2, Math.round(st.ivl * 1.5)) : Math.max(1, st.ivl), ease: st.ease};
+  if (st.lapsed) return {ivl: Math.max(1, st.ivl), ease: st.ease};
   if (st.ivl === 0) {
     if (g === 1) return {again: true, ivl: 0, ease: st.ease};
-    return {ivl: g === 2 ? 1 : 4, ease: clampEase(st.ease + (g === 3 ? 0.15 : 0))};
+    // "I know it" the very first time = you knew it already.
+    return {ivl: st.tried ? 1 : Math.max(1, Math.round(3 * m)), ease: st.ease};
   }
   let ivl, ease = st.ease;
-  if (g === 1) { ivl = Math.max(st.ivl + 1, Math.round(st.ivl * 1.2)); ease -= 0.15; }
-  if (g === 2) { ivl = Math.max(st.ivl + 1, Math.round(st.ivl * st.ease)); }
-  if (g === 3) { ivl = Math.max(st.ivl + 2, Math.round(st.ivl * st.ease * 1.3)); ease += 0.15; }
+  if (g === 1) { ivl = Math.max(st.ivl + 1, Math.round(st.ivl * 1.2 * m)); ease -= 0.15; }
+  else { ivl = Math.max(st.ivl + 1, Math.round(st.ivl * st.ease * m)); }
   return {ivl: Math.min(365, ivl), ease: clampEase(ease)};
 }
-function fmtIvl(r) {
-  if (r.again) return 'soon';
+function fmtIvl(r, g) {
+  if (r.again) return g === 0 ? 'in a few cards' : 'a bit later';
   const d = r.ivl;
   if (d < 14) return d + (d === 1 ? ' day' : ' days');
   if (d < 60) return Math.round(d / 7) + ' wk';
@@ -730,22 +942,45 @@ function fmtIvl(r) {
 }
 function blankState() { return {ivl: 0, ease: 2.5, reps: 0, lapses: 0, due: today()}; }
 
+/* Each phrase has two cards: 'jp' = understand (JP → EN), 'en' = speak (EN → JP). */
+const keyOf = (it, dir) => it.id + '>' + dir;
+function dirsOf(it) {
+  if (it.isKana) return ['jp'];
+  const d = S.settings.dirs;
+  return d === 'jp' ? ['jp'] : d === 'en' ? ['en'] : ['jp', 'en'];
+}
+const itemOfKey = k => ITEMS[k.slice(0, k.lastIndexOf('>'))];
+
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function plan(extraNew = 0) {
   freshDay();
   const t = today();
-  const due = [], fresh = [];
-  ALL_DECKS.filter(d => S.settings.decks[d.id]).forEach(d => {
-    const f = [];
-    DECK_ITEMS[d.id].forEach(it => { const st = S.cards[it.id]; if (st) { if (st.due <= t) due.push(it); } else f.push(it); });
-    if (f.length) fresh.push(f);
+  const due = [], cands = [];
+  ALL_DECKS.filter(d => S.settings.decks[d.id]).forEach((d, di) => {
+    const rank = {};
+    DECK_ITEMS[d.id].forEach(it => {
+      const dirs = dirsOf(it);
+      dirs.forEach(dir => {
+        const k = keyOf(it, dir), st = S.cards[k];
+        if (st) { if (st.due <= t) due.push({it, dir, k}); return; }
+        // The speaking card unlocks once you have passed the understanding card.
+        if (dir === 'en' && dirs.includes('jp')) { const js = S.cards[keyOf(it, 'jp')]; if (!js || js.reps < 1) return; }
+        const p = prioOf(it);
+        rank[p] = (rank[p] || 0) + 1;
+        cands.push({it, dir, k, p, di, r: rank[p]});
+      });
+    });
   });
+  // Reviews: most important first, random inside each priority.
+  shuffle(due).sort((a, b) => prioOf(b.it) - prioOf(a.it));
+  const used = new Set(), dueOut = [];
+  for (const c of due) if (!used.has(c.it.id)) { used.add(c.it.id); dueOut.push(c); }
+  // New cards: highest priority first, taking turns between decks.
+  cands.sort((a, b) => b.p - a.p || a.r - b.r || a.di - b.di);
   let left = Math.max(0, S.settings.newPerDay - S.day.newSeen) + extraNew;
-  const picked = [];
-  while (left > 0 && fresh.some(f => f.length)) {
-    for (const f of fresh) { if (left > 0 && f.length) { picked.push(f.shift()); left--; } }
-  }
-  return {due: shuffle(due), fresh: picked};
+  const fresh = [];
+  for (const c of cands) { if (left <= 0) break; if (used.has(c.it.id)) continue; used.add(c.it.id); fresh.push(c); left--; }
+  return {due: dueOut, fresh};
 }
 function buildQueue(extraNew = 0) {
   const {due, fresh} = plan(extraNew);
@@ -758,23 +993,14 @@ function buildQueue(extraNew = 0) {
   return q;
 }
 
-/* Writing level: 0 romaji, 1 kana, 2 kanji+furigana, 3 kanji */
+/* Writing level: 0 romaji, 1 kana, 2 kanji+furigana, 3 kanji (follows the understand card) */
 const LEVELS = ['Romaji', 'Kana', 'Kanji + furigana', 'Kanji'];
 function levelFor(it) {
   const s = S.settings.script;
   if (s !== 'auto') return +s;
-  const st = S.cards[it.id]; const ivl = st ? st.ivl : 0;
+  const st = S.cards[keyOf(it, 'jp')] || S.cards[keyOf(it, 'en')]; const ivl = st ? st.ivl : 0;
   if (it.reg === 'read') return ivl >= 21 ? 3 : 2;
   return ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0;
-}
-function dirFor(it) {
-  if (it.isKana || it.reg === 'read') return 'jp';
-  const d = S.settings.dir;
-  if (d === 'jp' || d === 'en') return d;
-  if (d === 'mix') return Math.random() < .5 ? 'jp' : 'en';
-  const st = S.cards[it.id];
-  if (!st || st.ivl < 3) return 'jp';
-  return st.reps % 2 ? 'en' : 'jp';
 }
 
 /* ============================================================
@@ -809,20 +1035,40 @@ try { tab = localStorage.getItem(KEY + '.tab') || 'home'; } catch (e) {}
 let phraseQuery = '', phraseDeck = 'all';
 
 function deckCounts(d) {
-  const items = DECK_ITEMS[d.id];
-  let seen = 0, strong = 0;
-  items.forEach(it => { const st = S.cards[it.id]; if (st) { seen++; if (st.ivl >= 21) strong++; } });
-  return {total: items.length, seen, strong};
+  let total = 0, seen = 0, strong = 0;
+  DECK_ITEMS[d.id].forEach(it => dirsOf(it).forEach(dir => {
+    total++; const st = S.cards[keyOf(it, dir)];
+    if (st) { seen++; if (st.ivl >= 21) strong++; }
+  }));
+  return {total: total || 1, seen, strong, items: DECK_ITEMS[d.id].length};
 }
 function ladderCounts() {
   const c = [0, 0, 0, 0];
   DECKS.forEach(d => DECK_ITEMS[d.id].forEach(it => {
-    const st = S.cards[it.id]; if (!st) return;
+    const st = S.cards[keyOf(it, 'jp')] || S.cards[keyOf(it, 'en')]; if (!st) return;
     const ivl = st.ivl; c[ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0]++;
   }));
   return c;
 }
-
+const GROUPS = [
+  ['talk', 'Everyday conversation', 'Sentences for Aya, her family and strangers.'],
+  ['core', 'Core vocabulary', 'The ~800 most useful words, in topics.'],
+  ['trip', 'Your trip', 'Driving, Aomori, Niseko, Fuji and the henro.'],
+  ['letters', 'Letters', 'Hiragana and katakana.'],
+];
+function deckRow(d) {
+  const c = deckCounts(d);
+  return `
+        <div class="deck" style="--c:${d.color}">
+          <span class="dot"></span>
+          <div>
+            <div class="deck-name">${esc(d.name)}<span class="jp">${d.jp}</span></div>
+            <div class="deck-meta">${c.items} ${d.kana ? 'letters' : 'items'} · ${c.seen} of ${c.total} cards started${d.reg === 'polite' || d.reg === 'casual' ? ' · ' + d.reg : ''}</div>
+            <div class="bar"><i style="width:${c.strong / c.total * 100}%"></i><i style="width:${(c.seen - c.strong) / c.total * 100}%"></i></div>
+          </div>
+          <input type="checkbox" class="switch" id="deck-${d.id}" data-act="deck" data-id="${d.id}" ${S.settings.decks[d.id] ? 'checked' : ''} aria-label="Study ${esc(d.name)}">
+        </div>`;
+}
 function viewHome() {
   const {due, fresh} = plan();
   const lc = ladderCounts();
@@ -858,19 +1104,12 @@ function viewHome() {
   </section>
 
   <section class="section">
-    <div><h2>Decks</h2><p class="muted" style="font-size:15px;margin-top:4px">Switch on what you want to learn. New cards come from all switched-on decks in turn.</p></div>
-    <div class="decks">
-      ${ALL_DECKS.map(d => { const c = deckCounts(d); return `
-        <div class="deck" style="--c:${d.color}">
-          <span class="dot"></span>
-          <div>
-            <div class="deck-name">${esc(d.name)}<span class="jp">${d.jp}</span></div>
-            <div class="deck-meta">${c.seen} of ${c.total} started · ${esc(d.who)}${d.reg === 'polite' || d.reg === 'casual' ? ' · ' + d.reg : ''}</div>
-            <div class="bar"><i style="width:${c.strong / c.total * 100}%"></i><i style="width:${(c.seen - c.strong) / c.total * 100}%"></i></div>
-          </div>
-          <input type="checkbox" class="switch" id="deck-${d.id}" data-act="deck" data-id="${d.id}" ${S.settings.decks[d.id] ? 'checked' : ''} aria-label="Study ${esc(d.name)}">
-        </div>`; }).join('')}
-    </div>
+    <div><h2>Decks</h2><p class="muted" style="font-size:15px;margin-top:4px">Switch on what you want to learn. New cards come in order of importance: all ★★★ cards first, then ★★, then ★.</p></div>
+    ${GROUPS.map(([g, title, sub]) => `
+      <div class="section" style="gap:8px">
+        <div><h3 style="font-size:16px">${title}</h3><p class="muted" style="font-size:14px">${sub}</p></div>
+        <div class="decks">${ALL_DECKS.filter(d => d.group === g).map(deckRow).join('')}</div>
+      </div>`).join('')}
   </section>`;
 }
 
@@ -910,9 +1149,9 @@ function viewPhrases() {
 }
 
 function viewProgress() {
-  const all = Object.keys(S.cards).filter(id => ITEMS[id]);
-  const strong = all.filter(id => S.cards[id].ivl >= 21).length;
-  const hard = all.filter(id => S.cards[id].lapses > 0).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses).slice(0, 6);
+  const all = Object.keys(S.cards).filter(k => itemOfKey(k));
+  const strong = all.filter(k => S.cards[k].ivl >= 21).length;
+  const hard = all.filter(k => S.cards[k].lapses > 0).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses).slice(0, 6);
   return `
   <section class="section">
     <h2>Your progress</h2>
@@ -937,13 +1176,15 @@ function viewProgress() {
     </div>
   </section>
   ${hard.length ? `<section class="section"><h2>Tricky cards</h2><p class="muted" style="font-size:15px">The cards you forgot most often. Try saying them out loud a few times.</p>
-    <div class="plist">${hard.map(id => { const it = ITEMS[id]; return `<div class="phrase"><div class="jp">${it.ruby}</div><div class="rom">${esc(it.romaji)}</div><div class="en">${esc(it.en)} · forgot ${S.cards[id].lapses}×</div><div class="acts"><button class="icon-btn" data-act="speak" data-id="${esc(id)}" aria-label="Listen">${ICON_SPEAK}</button></div></div>`; }).join('')}</div></section>` : ''}
+    <div class="plist">${hard.map(k => { const it = itemOfKey(k); return `<div class="phrase"><div class="jp">${it.ruby}</div><div class="rom">${esc(it.romaji)}</div><div class="en">${esc(it.en)} · ${k.endsWith('>en') ? 'speaking' : 'understanding'} · forgot ${S.cards[k].lapses}×</div><div class="acts"><button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button></div></div>`; }).join('')}</div></section>` : ''}
   <section class="panel howto">
     <h2>How to study</h2>
     <ol>
       <li>Study a little every day. 10 minutes is enough.</li>
       <li>When the card shows English, say the Japanese <b>out loud</b> before you check.</li>
-      <li>Be honest with the buttons. <b>Again</b> brings the card back in a few minutes. <b>Good</b> and <b>Easy</b> push it further into the future.</li>
+      <li>Be honest with the buttons. <b>See again</b> brings the card back in a few cards. <b>Not sure</b> brings it back soon. <b>I know it</b> pushes it further into the future.</li>
+      <li>Every phrase has two cards: first you learn to <b>understand</b> it (Japanese → English). Once you pass that, a <b>speaking</b> card (English → Japanese) unlocks.</li>
+      <li>Stars show how important a card is. ★★★ cards come first and come back more often. Tap the stars on a card to change them.</li>
       <li>Use the phrases with Aya and her family. Real conversations are the best practice.</li>
     </ol>
     <p class="muted" style="font-size:14px">Romaji tip: "ou" and "uu" are long vowels. <b>arigatou</b> sounds like "arigatoo".</p>
@@ -959,11 +1200,11 @@ function viewSettings() {
   <section class="section">
     <h2>Settings</h2>
     <div class="panel" style="padding-block:4px">
-      <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[5, '5'], [10, '10'], [15, '15'], [20, '20']])}</div>
+      <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[10, '10'], [15, '15'], [20, '20'], [30, '30']])}</div>
       <div class="setting"><h3>Writing</h3><p class="muted" style="font-size:14px">Auto moves each card from romaji to kana to kanji as you learn it.</p>
         ${seg('script', [['auto', 'Auto'], [0, 'Romaji'], [1, 'Kana'], [2, 'Kanji + furigana'], [3, 'Kanji']])}</div>
-      <div class="setting"><h3>Card direction</h3><p class="muted" style="font-size:14px">Auto: first you learn to understand a card. Once you know it, you also practise saying it.</p>
-        ${seg('dir', [['auto', 'Auto'], ['jp', 'Understand (JP → EN)'], ['en', 'Speak (EN → JP)'], ['mix', 'Mix']])}</div>
+      <div class="setting"><h3>Card directions</h3><p class="muted" style="font-size:14px">Both ways: each phrase has an understand card (JP → EN) and a speaking card (EN → JP). The speaking card unlocks after the first one.</p>
+        ${seg('dirs', [['both', 'Both ways'], ['jp', 'Only JP → EN'], ['en', 'Only EN → JP']])}</div>
       <div class="setting"><h3>Read Japanese aloud automatically</h3>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
       <div class="setting"><h3>Voice speed</h3>${seg('rate', [[0.65, 'Slow'], [0.85, 'Normal'], [1, 'Natural']])}
         <p class="muted" style="font-size:14px">${jaVoice ? 'Japanese voice: ' + esc(jaVoice.name) : 'No Japanese voice found yet. On iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese. On Android: Settings → Text-to-speech → install Japanese.'}</p>
@@ -1032,30 +1273,36 @@ function peekButtons(it, lvl) {
 }
 function showCard() {
   const box = document.getElementById('studyIn');
-  const it = sess.queue[sess.pos];
+  const entry = sess.queue[sess.pos];
   const pct = Math.round(sess.pos / sess.queue.length * 100);
   const top = `<div class="study-top"><button class="icon-btn" data-act="close" aria-label="Stop studying">${ICON_CLOSE}</button><div class="prog"><i style="width:${pct}%"></i></div><span class="count">${sess.pos}/${sess.queue.length}</span></div>`;
-  if (!it) {
+  if (!entry) {
     sess.cur = null;
     box.innerHTML = top + `<div class="done"><div class="jp">お疲れさまでした！</div><p style="font-size:19px"><b>Otsukaresama deshita!</b><br>Great work. You answered ${sess.answered} cards.</p>
       <div class="btn-row" style="width:100%"><button class="btn btn-soft" data-act="more">Learn 5 more</button><button class="btn btn-primary" data-act="close">Finish</button></div></div>`;
     return;
   }
-  const st = S.cards[it.id];
+  const {it, dir, k} = entry;
+  const st = S.cards[k];
   const lvl = levelFor(it);
-  const dir = dirFor(it);
-  sess.cur = {it, lvl, dir, revealed: false};
-  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}</div>`;
+  sess.cur = {it, lvl, dir, k, revealed: false};
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${dir === 'jp' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
   let front;
   if (dir === 'jp') {
     front = `<div class="ask">${it.isKana ? 'How do you read this?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
   } else {
-    front = `<div class="ask">How do you say this in Japanese? <span style="font-weight:400">(${esc(it.deck.who.toLowerCase())}${it.reg === 'polite' || it.reg === 'casual' ? ', ' + it.reg : ''})</span></div>
+    const ctx = it.reg === 'polite' || it.reg === 'casual' ? `${it.deck.who.toLowerCase()}, ${it.reg}` : it.deck.who.toLowerCase();
+    front = `<div class="ask">How do you say this in Japanese? <span style="font-weight:400">(${esc(ctx)})</span></div>
       <div class="front"><div class="en-main" style="font-size:${it.en.length > 40 ? 24 : 30}px">${esc(it.en)}</div><div class="hint">Say it out loud first, then check.</div></div>`;
   }
   box.innerHTML = top + `<div class="card" id="card">${chips}${front}<div id="answer"></div></div>
     <div id="actions"><button class="btn btn-primary" data-act="reveal">Show answer</button></div>`;
   if (dir === 'jp' && S.settings.autoplay) speak(it);
+}
+function renderGrades() {
+  const {it, k} = sess.cur;
+  const st = S.cards[k] || blankState();
+  document.getElementById('actions').innerHTML = `<div class="grades">${GRADES.map((l, g) => `<button class="grade" data-act="grade" data-g="${g}">${l}<small>${fmtIvl(nextOf(st, g, it), g)}</small></button>`).join('')}</div>`;
 }
 function reveal() {
   const {it, lvl, dir} = sess.cur;
@@ -1067,27 +1314,33 @@ function reveal() {
     ? `<div class="en-main" style="font-size:24px">${esc(it.isKana ? it.romaji : it.en)}</div>`
     : `<div class="front" style="min-height:0;padding:0">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
   document.getElementById('answer').innerHTML = `<div class="answer">${head}${forms}${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}</div>`;
-  const st = S.cards[it.id] || blankState();
-  const labels = ['Again', 'Hard', 'Good', 'Easy'];
-  document.getElementById('actions').innerHTML = `<div class="grades">${labels.map((l, g) => `<button class="grade" data-act="grade" data-g="${g}">${l}<small>${fmtIvl(nextOf(st, g))}</small></button>`).join('')}</div>`;
+  renderGrades();
   if (dir === 'en' && S.settings.autoplay) speak(it);
 }
+function cyclePrio() {
+  const it = sess.cur.it;
+  const p = prioOf(it) === 1 ? 3 : prioOf(it) - 1;
+  if (p === it.prio) delete S.prio[it.id]; else S.prio[it.id] = p;
+  save();
+  document.getElementById('starBtn').textContent = PRIO_TEXT[p];
+  if (sess.cur.revealed) renderGrades();
+}
 function grade(g) {
-  const {it} = sess.cur;
+  const {it, k} = sess.cur;
   freshDay();
   const t = today();
-  const isNew = !S.cards[it.id];
-  const st = S.cards[it.id] || blankState();
-  const r = nextOf(st, g);
+  const isNew = !S.cards[k];
+  const st = S.cards[k] || blankState();
+  const r = nextOf(st, g, it);
   st.ease = r.ease;
   if (r.again) {
     if (r.lapsed) st.lapses++;
-    st.ivl = r.ivl; st.due = t; st.lapsed = r.lapsed || st.lapsed;
-    sess.queue.splice(Math.min(sess.queue.length, sess.pos + 4), 0, it);
+    st.ivl = r.ivl; st.due = t; st.lapsed = r.lapsed || st.lapsed; st.tried = true;
+    sess.queue.splice(Math.min(sess.queue.length, sess.pos + (g === 0 ? 4 : 7)), 0, sess.queue[sess.pos]);
   } else {
-    st.ivl = r.ivl; st.due = t + r.ivl; st.reps++; delete st.lapsed;
+    st.ivl = r.ivl; st.due = t + r.ivl; st.reps++; delete st.lapsed; delete st.tried;
   }
-  S.cards[it.id] = st;
+  S.cards[k] = st;
   if (isNew) S.day.newSeen++;
   S.day.reviews++; S.total++;
   if (S.streak.last !== t) { S.streak.count = S.streak.last === t - 1 ? S.streak.count + 1 : 1; S.streak.last = t; }
@@ -1122,6 +1375,7 @@ document.addEventListener('click', e => {
   else if (act === 'close') closeSession();
   else if (act === 'reveal') reveal();
   else if (act === 'grade') grade(+el.dataset.g);
+  else if (act === 'prio') cyclePrio();
   else if (act === 'speak') speak(ITEMS[el.dataset.id]);
   else if (act === 'big') showBig(ITEMS[el.dataset.id]);
   else if (act === 'peek') {
@@ -1147,14 +1401,13 @@ document.addEventListener('click', e => {
     try {
       const s = JSON.parse(txt);
       if (!s || typeof s.cards !== 'object') throw new Error();
-      localStorage.setItem(KEY, JSON.stringify(s));
-      S = load(); backupMsg = 'Progress restored.';
+      S = fromSaved(s); save(); backupMsg = 'Progress restored.';
     } catch (er) { backupMsg = '!This code could not be read. Check that you pasted the whole code.'; }
     render();
   }
   else if (act === 'reset') {
     if (!resetArmed) { resetArmed = true; render(); return; }
-    S = {cards: {}, settings: S.settings, day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0}, total: 0};
+    const keep = S.settings; S = blankSave(); S.settings = keep;
     save(); resetArmed = false; render();
   }
 });
@@ -1166,7 +1419,7 @@ document.addEventListener('keydown', e => {
   if (!sess || !sess.cur || document.getElementById('study').hidden) return;
   if (e.key === 'Escape') return closeSession();
   if (!sess.cur.revealed && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); reveal(); }
-  else if (sess.cur.revealed && ['1', '2', '3', '4'].includes(e.key)) grade(+e.key - 1);
+  else if (sess.cur.revealed && ['1', '2', '3'].includes(e.key)) grade(+e.key - 1);
 });
 
 render();
