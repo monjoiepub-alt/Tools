@@ -229,6 +229,10 @@ var JOBS = [
   {id:"mountain",name:"Mountain guide (IFMGA)",       cat:"Outdoor & adventure"},
   {id:"parkbuild",name:"Adventure park builder",      cat:"Treetop adventure park"},
   {id:"parkmgr", name:"Adventure park manager",       cat:"Treetop adventure park"},
+  {id:"arborist",name:"Arborist / tree surgeon",      cat:"Trees, ropes & rescue"},
+  {id:"rope",    name:"Rope access technician",       cat:"Trees, ropes & rescue"},
+  {id:"rescue",  name:"Mountain rescue",              cat:"Trees, ropes & rescue"},
+  {id:"heli",    name:"Helicopter pilot (remote areas)", cat:"Aviation"},
   {id:"kinder",  name:"Kindergarten teacher",         cat:"Education & kids"},
   {id:"youth",   name:"Youth worker / camp leader",   cat:"Education & kids"},
   {id:"tour",    name:"Tour guide",                   cat:"Tourism & hospitality"},
@@ -250,15 +254,18 @@ var CERTS = [
   ["epp2","Euro Paddle Pass 2"],
   ["humak","Humak degree: Adventure & Outdoor Education"],
   ["bizDeg","International business degree"],
-  ["euNat","EU/EEA nationality"]
+  ["access","Rope access worker (cordiste)"],
+  ["arb","Tree surgeon / arborist (élagueur)"],
+  ["euNat","EU/EEA nationality"],
+  ["jpNat","Japanese nationality"]
 ];
 var LANGS = [
   ["langJA","Japanese"],["langEN","English"],["langFI","Finnish"],
   ["langSV","Swedish"],["langNO","Norwegian"],["langFR","French"],
   ["langNL","Dutch"],["langDE","German"]
 ];
-var START_ME = {wfa:"have",anw:"have",drvB:"have",hygFI:"have",jpEtiq:"have",epp1:"have",humak:"prog",langJA:"have",langEN:"have"};
-var START_PARTNER = {wfa:"have",epp2:"have",bizDeg:"have",euNat:"have"};
+var START_ME = {wfa:"have",anw:"have",drvB:"have",hygFI:"have",jpEtiq:"have",epp1:"have",humak:"prog",langJA:"have",langEN:"have",jpNat:"have"};
+var START_PARTNER = {wfa:"have",epp2:"have",bizDeg:"have",euNat:"have",access:"have",arb:"have"};
 /* a higher certificate also counts as the lower one */
 var IMPLIES = {epp2:["epp1"]};
 
@@ -283,6 +290,21 @@ var ACCESS = R("access","Work at height / rope access training (e.g., IRATA Leve
 var ARB    = R("arb","Tree-care (arborist) training: tree health and tree climbing");
 var BUILD  = R("build","Carpentry or construction experience");
 var STAFF  = R("staff","Park operator + rescue trainer course (e.g., ERCA levels)",{part:["wfa"]});
+var SST    = R("sst","SST workplace first aid",{part:["wfa"]});
+var ROPE_JP= R("ropeJP","ロープ高所作業特別教育 (required by law)",{part:["access","arb"]});
+var HOURS  = R("hours","Build flying hours (remote and mountain jobs often want 500–1000+)");
+function HELI_EU(auth, url){
+  return {reg:"law",time:"About 1–2 years full-time to CPL(H), then years of building hours.",
+    sum:"Helicopter licences are the same EASA licences in all EU/EEA countries. You go from PPL(H) to CPL(H): at least 155 flight hours, 13 theory exams, a skill test and a Class 1 medical. It costs about €60,000–90,000. Remote work (mountains, Lapland, sling loads) usually needs a lot of experience and HESLO training.",
+    steps:[R("med1","EASA Class 1 medical"),
+           R("pplh","PPL(H) private helicopter licence"),
+           R("cplh","CPL(H) commercial licence (155+ hours, 13 theory exams)"),
+           L("langEN","English (ICAO level 4 or higher)"),
+           HOURS,
+           R("heslo","HESLO sling-load training",{opt:true}),
+           R("mtnFly","Mountain and snow flying training",{opt:true})],
+    links:[[auth+" (aviation authority)", url],["EASA","https://www.easa.europa.eu"]]};
+}
 var BIZ    = R("bizDeg","Business or management education",{part:["humak"]});
 
 /* ---------- the big table: DATA[job][country] ---------- */
@@ -832,6 +854,115 @@ parkmgr:{
   sum:"No special national rules. Many parks are franchises that train their own staff with European methods. A manager runs staff training, safety and the business side.",
   steps:[STAFF, BIZ, FA(), L("langJA","Japanese")],
   links:[]}
+},
+arborist:{
+ FI:{reg:"emp",time:"About 1 year of training.",
+  sum:"No licence by law. Employers want arborist training (Finnish vocational arborist qualification or European Tree Worker), plus chainsaw and work safety cards.",
+  steps:[R("arb","Arborist training (vocational qualification or ETW)"),
+         R("sawFI","Chainsaw safety course"),
+         R("ttk","Occupational safety card (työturvallisuuskortti)"),
+         FA_FI, L("langFI","Finnish",{part:["langEN"]})],
+  links:[["Studyinfo (Opintopolku)","https://opintopolku.fi"]]},
+ SE:{reg:"emp",time:"Courses + exam.",
+  sum:"No licence by law. The most common certificate for climbing arborists in Sweden is ETW (European Tree Worker). A chainsaw licence is expected.",
+  steps:[R("etw","European Tree Worker (ETW)",{part:["arb"]}),
+         R("sawSE","Chainsaw licence (motorsågskörkort)"),
+         FA(), L("langSV","Swedish",{part:["langEN"]})],
+  links:[["Svenska Trädföreningen: ETW","https://www.tradforeningen.org/en/events-2/etw/"]]},
+ NO:{reg:"emp",time:"Trade certificate or courses.",
+  sum:"Norway has an arborist trade certificate (fagbrev i arboristfaget). ETW is also used. A chainsaw course is expected.",
+  steps:[R("fagArb","Arborist trade certificate (fagbrev) or ETW",{part:["arb"]}),
+         R("sawNO","Chainsaw course"),
+         FA(), L("langNO","Norwegian",{part:["langEN"]})],
+  links:[["Utdanning.no","https://utdanning.no"]]},
+ FR:{reg:"emp",time:"1 year (work-study).",
+  sum:"The CS Arboriste élagueur (1 year, work-study) is the normal diploma for tree climbing, pruning and felling. It includes rescuing an injured person from a tree.",
+  steps:[R("csArb","CS Arboriste élagueur",{part:["arb"]}),
+         SST, L("langFR","French")],
+  links:[["France Compétences: CS Arboriste élagueur","https://www.francecompetences.fr/recherche/rncp/39898/"]]},
+ JP:{reg:"law",time:"A few days of required courses.",
+  sum:"By law, anyone doing rope work in trees must finish the ロープ高所作業（樹上作業）特別教育, and chainsaw felling needs the 伐木等の業務 特別教育.",
+  steps:[ROPE_JP,
+         R("battoku","伐木等の業務 特別教育 (chainsaw, required)"),
+         R("arbJP","Arborist training (e.g., Japan-ATI)",{part:["arb"]}),
+         L("langJA","Japanese")],
+  links:[["Japan-ATI: rope work in trees course","https://japan-ati.com/courses/seminar-rope/"]]}
+},
+rope:{
+ FI:{reg:"emp",time:"Level 1: about 1 week.",
+  sum:"Rope access work (buildings, industry, wind turbines) uses the international IRATA or SPRAT levels 1–3. Finnish sites also ask for the work safety card.",
+  steps:[R("access","Rope access certificate (IRATA or SPRAT, level 1–3)"),
+         R("ttk","Occupational safety card (työturvallisuuskortti)"),
+         FA_FI, L("langEN","English")],
+  links:[]},
+ SE:{reg:"emp",time:"Level 1: about 1 week.",
+  sum:"Rope access work uses the international IRATA or SPRAT levels 1–3.",
+  steps:[R("access","Rope access certificate (IRATA or SPRAT, level 1–3)"), FA(), L("langEN","English")],
+  links:[]},
+ NO:{reg:"emp",time:"Level 1: about 1 week.",
+  sum:"Rope access is big in Norway, also offshore on oil platforms. Offshore work needs an extra safety course and an offshore health certificate.",
+  steps:[R("access","Rope access certificate (IRATA or SPRAT, level 1–3)"), FA(), L("langEN","English"),
+         R("offshoreNO","Offshore safety course + offshore health certificate",{opt:true})],
+  links:[]},
+ FR:{reg:"emp",time:"A few weeks.",
+  sum:"In France a rope access worker is a 'cordiste'. Employers ask for the CQP Cordiste or IRATA.",
+  steps:[R("cqpCordiste","CQP Cordiste (or IRATA)",{part:["access"]}), SST, L("langFR","French")],
+  links:[]},
+ JP:{reg:"law",time:"A few days of required courses.",
+  sum:"By law, anyone working on a rope at 2 m or higher must finish the ロープ高所作業特別教育. IRATA is used on big industrial sites.",
+  steps:[ROPE_JP, R("access","Rope access certificate (IRATA)",{opt:true}), FA(), L("langJA","Japanese")],
+  links:[["Rope work special training (example provider)","https://www.rougi.or.jp/course/whole/tokubetu_rope"]]}
+},
+rescue:{
+ FI:{reg:"emp",time:"Volunteer training; firefighter degree about 1.5 years.",
+  sum:"Finland has no Alpine-style mountain rescue. In Lapland, the police, the Border Guard (with helicopters) and the rescue services do search and rescue, helped by volunteers (Vapepa, volunteer fire brigades). A paid path is the firefighter (pelastaja) degree. The Border Guard needs Finnish nationality.",
+  steps:[R("vapepa","Join a volunteer rescue group (Vapepa or volunteer fire brigade)"),
+         R("winterSkills","Winter and snowmobile skills"),
+         FA_FI, L("langFI","Finnish"),
+         R("pelastaja","Firefighter degree (pelastaja), Emergency Services Academy",{opt:true})],
+  links:[["Vapepa Lapland","https://vapepa.fi/maakuntatoimikunnat/vapepa-lappi/"]]},
+ SE:{reg:"emp",time:"Basic course + yearly exercises.",
+  sum:"Mountain rescue (fjällräddning) is run by the police with trained local volunteers, who are paid per mission. You must be 18+, live in the area, know the terrain well and be used to snowmobiles. The police give basic training and summer and winter exercises. Approval lasts 5 years.",
+  steps:[R("liveSE","Live in the mountain area and know it well"),
+         R("winterSkills","Winter and snowmobile skills"),
+         R("fjallraddare","Accepted by the local group + police basic training"),
+         FA(), L("langSV","Swedish")],
+  links:[["Polisen: become a fjällräddare","https://polisen.se/lagar-och-regler/polisens-forordnanden/arbeta-som-fjallraddare/att-bli-fjallraddare/"]]},
+ NO:{reg:"emp",time:"Volunteer training over 1–2 years.",
+  sum:"Mountain rescue in Norway is mostly volunteers: the Norwegian Red Cross Hjelpekorps (alpine rescue groups, member of IKAR) and Norsk Folkehjelp. There are special groups for rope, avalanche and water rescue. They give you the training.",
+  steps:[R("hjelpekorps","Join Røde Kors Hjelpekorps, then an alpine rescue group"),
+         R("ropeRescue","Rope rescue skills",{part:["access","arb"]}),
+         AVA, FA(), L("langNO","Norwegian")],
+  links:[["Red Cross Hjelpekorps: volunteer","https://www.rodekors.no/hjelpekorps/frivillig-hjelpekorps/"]]},
+ FR:{reg:"law",time:"Many years.",
+  sum:"Professional mountain rescue is done by the PGHM (gendarmerie) and CRS Montagne (police). Both need French nationality, and you must first become a gendarme or police officer. Firefighters (sapeurs-pompiers, with GMSP mountain and GRIMP rope-rescue teams) also do rescues.",
+  steps:[R("frNat","French nationality (for PGHM / CRS Montagne)"),
+         R("gendarme","Become a gendarme, then pass PGHM selection"),
+         R("pse1","PSE1 team first aid",{part:["wfa"]}),
+         L("langFR","French"),
+         R("grimp","Other route: firefighter + GRIMP rope-rescue team",{opt:true,part:["access"]})],
+  links:[["Gendarmerie: gendarme alpiniste","https://www.gendarmerie.interieur.gouv.fr/recrutement/nos-metiers/gendarme-alpiniste"]]},
+ JP:{reg:"law",time:"Many years.",
+  sum:"Mountain rescue is done by police mountain rescue teams (山岳警備隊, e.g., in Toyama) and fire departments. Both need Japanese nationality. Local volunteer groups (遭難対策協議会) and ski patrols also help.",
+  steps:[R("jpNat","Japanese nationality (for police / fire department)"),
+         R("policeJP","Become a police officer or firefighter, then join the mountain team"),
+         FA(), L("langJA","Japanese")],
+  links:[]}
+},
+heli:{
+ FI:HELI_EU("Traficom","https://www.traficom.fi"),
+ SE:HELI_EU("Transportstyrelsen","https://www.transportstyrelsen.se"),
+ NO:HELI_EU("Luftfartstilsynet","https://luftfartstilsynet.no"),
+ FR:HELI_EU("DGAC","https://www.ecologie.gouv.fr/dgac"),
+ JP:{reg:"law",time:"About 1–2 years.",
+  sum:"Japanese licences: first 自家用 (private), then 事業用操縦士 (回転翼). You also need the 第1種航空身体検査 (every year) and 航空無線通信士. Flight training alone costs about 6–8 million yen.",
+  steps:[R("med1JP","第1種航空身体検査"),
+         R("pplJP","自家用操縦士 (回転翼)"),
+         R("cplJP","事業用操縦士 (回転翼)"),
+         R("radioJP","航空無線通信士"),
+         L("langJA","Japanese"),
+         HOURS],
+  links:[["MLIT (Japan Civil Aviation Bureau)","https://www.mlit.go.jp"]]}
 }
 };
 
@@ -850,6 +981,13 @@ function load(){
       me:{name:"Aya", certs: (old && old.certs) ? old.certs : copy(START_ME)},
       partner:{name:"Partner", certs: copy(START_PARTNER)}
     };
+  }
+  if(!s.added3){
+    var pc = s.people.partner.certs, mc = s.people.me.certs;
+    if(!pc.access) pc.access = "have";
+    if(!pc.arb) pc.arb = "have";
+    if(!mc.jpNat) mc.jpNat = "have";
+    s.added3 = true;
   }
   if(!s.view) s.view = "both";
   if(!s.job) s.job = (old && old.job) || "ski";
