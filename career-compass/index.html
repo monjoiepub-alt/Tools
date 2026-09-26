@@ -25,6 +25,7 @@
   --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;font-weight:400}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
 h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
@@ -93,6 +94,18 @@ tr:last-child td,tr:last-child th{border-bottom:0}
 .fit{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .fit:hover{border-color:var(--accent)}
 .muted{color:var(--muted)}
+.switchbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:6px}
+.switchbar .pick{display:inline-flex;align-items:center;gap:6px}
+.allswitch{display:inline-flex;align-items:center;gap:8px;font-size:.95rem;color:var(--muted);cursor:pointer}
+.allswitch input{width:20px;height:20px;accent-color:var(--accent)}
+.tool{display:flex;flex-direction:column;gap:40px}
+#chooser{gap:18px}
+.choose{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.choice{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:24px}
+.choice:hover{border-color:var(--accent)}
+.avatar.big{width:56px;height:56px;font-size:1.5rem}
+.choice-name{font-family:var(--font-display);font-weight:800;font-size:1.8rem;line-height:1.1}
+.choice-sub{color:var(--muted)}
 .controls{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-end}
 .control{display:flex;flex-direction:column;gap:8px}
 .slider{flex:1 1 280px;max-width:460px}
@@ -152,13 +165,24 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
   <header class="top">
     <div class="eyebrow">Finland · Sweden · Norway · France · Japan</div>
     <h1>Career Compass</h1>
-    <p class="lead">Pick a job and see what you need in each country. Your certificates and your partner's are already filled in, so you can see who is closer to each path and how to divide the work.</p>
+    <p class="lead">Pick a person, then a job, and see what is needed in each country, what it costs and when it pays back.</p>
+    <div class="switchbar" id="switchBar" hidden>
+      <div class="chips" id="viewPick" role="group" aria-label="Whose compass"></div>
+      <label class="allswitch"><input type="checkbox" id="allJobs"> Show all jobs</label>
+    </div>
   </header>
+
+  <section id="chooser" hidden>
+    <h2>Who is looking?</h2>
+    <div class="choose" id="chooseBtns"></div>
+  </section>
+
+  <div id="tool" class="tool">
 
   <section id="toolbox">
     <div class="sec-head">
-      <h2>1. Your toolboxes</h2>
-      <p class="hint">Tap a chip to change it: off → ✓ have it → ~ in progress → off. You can change the names too. Got a new certificate? Tap it inside any job card below and it is added here.</p>
+      <h2 id="toolboxTitle">1. Toolbox</h2>
+      <p class="hint">Tap a chip to change it: off → ✓ have it → ~ in progress → off. You can change the name too. Got a new certificate? Tap it inside any job card below and it is added here.</p>
     </div>
     <div class="people" id="people"></div>
   </section>
@@ -169,7 +193,6 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
       <p class="hint" id="metricHint"></p>
     </div>
     <div class="controls">
-      <div class="control"><div class="subhead">Show for</div><div class="chips" id="viewPick" role="group" aria-label="Show scores for"></div></div>
       <div class="control"><div class="subhead">Show</div><div class="chips" id="metricPick" role="group" aria-label="What the table shows"></div></div>
       <div class="control slider">
         <label class="subhead" for="save">Part of take-home pay that goes to paying back training: <output id="saveOut">30%</output></label>
@@ -184,7 +207,7 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
   <section id="detail">
     <div class="sec-head">
       <h2>3. What you need</h2>
-      <p class="hint">Tap a status pill to mark a step as done. ✓ = have it, ~ = partly or in progress, ✗ = still needed, + = optional extra. In "Both of us" view each line has one pill per person.</p>
+      <p class="hint">Tap a status pill to mark a step as done. ✓ = have it, ~ = partly or in progress, ✗ = still needed, + = optional extra.</p>
     </div>
     <div class="picker">
       <div class="subhead">Job</div>
@@ -201,6 +224,7 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
     <p>Your changes are saved only in this browser.</p>
     <button class="reset" id="reset" type="button">Reset both toolboxes to the start</button>
   </footer>
+  </div>
 </div>
 
 <script>
@@ -234,28 +258,28 @@ var ORDER = ["FI","SE","NO","FR","JP"];
 
 /* ---------- jobs ---------- */
 var JOBS = [
-  {id:"ski",     name:"Ski instructor",               cat:"Outdoor & adventure"},
-  {id:"guide",   name:"Outdoor / wilderness guide",   cat:"Outdoor & adventure"},
-  {id:"paddle",  name:"Kayak & canoe guide",          cat:"Outdoor & adventure"},
-  {id:"canyon",  name:"Canyon guide",                 cat:"Outdoor & adventure"},
-  {id:"ferrata", name:"Via ferrata guide",            cat:"Outdoor & adventure"},
-  {id:"winter",  name:"Winter & hiking guide",        cat:"Outdoor & adventure"},
-  {id:"mountain",name:"Mountain guide (IFMGA)",       cat:"Outdoor & adventure"},
-  {id:"parkbuild",name:"Adventure park builder",      cat:"Treetop adventure park"},
-  {id:"parkmgr", name:"Adventure park manager",       cat:"Treetop adventure park"},
-  {id:"parkown", name:"Adventure park owner (own business)", cat:"Treetop adventure park"},
-  {id:"arborist",name:"Arborist / tree surgeon",      cat:"Trees, ropes & rescue"},
-  {id:"rope",    name:"Rope access technician",       cat:"Trees, ropes & rescue"},
-  {id:"rescue",  name:"Mountain rescue",              cat:"Trees, ropes & rescue"},
-  {id:"heli",    name:"Helicopter pilot (remote areas)", cat:"Aviation"},
-  {id:"kinder",  name:"Kindergarten teacher",         cat:"Education & kids"},
-  {id:"youth",   name:"Youth worker / camp leader",   cat:"Education & kids"},
-  {id:"tour",    name:"Tour guide",                   cat:"Tourism & hospitality"},
-  {id:"hotel",   name:"Hotel & resort staff",         cat:"Tourism & hospitality"},
-  {id:"cafe",    name:"Café worker / barista",        cat:"Café"},
-  {id:"cafeown", name:"Café owner",                   cat:"Café"},
-  {id:"life",    name:"Lifeguard",                    cat:"Health & safety"},
-  {id:"patrol",  name:"Ski patroller",                cat:"Health & safety"}
+  {id:"ski",     name:"Ski instructor",               who:"me", cat:"Outdoor & adventure"},
+  {id:"guide",   name:"Outdoor / wilderness guide",   who:"me", cat:"Outdoor & adventure"},
+  {id:"paddle",  name:"Kayak & canoe guide",          who:"me", cat:"Outdoor & adventure"},
+  {id:"canyon",  name:"Canyon guide",                 who:"partner", cat:"Outdoor & adventure"},
+  {id:"ferrata", name:"Via ferrata guide",            who:"partner", cat:"Outdoor & adventure"},
+  {id:"winter",  name:"Winter & hiking guide",        who:"partner", cat:"Outdoor & adventure"},
+  {id:"mountain",name:"Mountain guide (IFMGA)",       who:"partner", cat:"Outdoor & adventure"},
+  {id:"parkbuild",name:"Adventure park builder",      who:"partner", cat:"Treetop adventure park"},
+  {id:"parkmgr", name:"Adventure park manager",       who:"partner", cat:"Treetop adventure park"},
+  {id:"parkown", name:"Adventure park owner (own business)", who:"partner", cat:"Treetop adventure park"},
+  {id:"arborist",name:"Arborist / tree surgeon",      who:"partner", cat:"Trees, ropes & rescue"},
+  {id:"rope",    name:"Rope access technician",       who:"partner", cat:"Trees, ropes & rescue"},
+  {id:"rescue",  name:"Mountain rescue",              who:"partner", cat:"Trees, ropes & rescue"},
+  {id:"heli",    name:"Helicopter pilot (remote areas)", who:"partner", cat:"Aviation"},
+  {id:"kinder",  name:"Kindergarten teacher",         who:"me", cat:"Education & kids"},
+  {id:"youth",   name:"Youth worker / camp leader",   who:"me", cat:"Education & kids"},
+  {id:"tour",    name:"Tour guide",                   who:"me", cat:"Tourism & hospitality"},
+  {id:"hotel",   name:"Hotel & resort staff",         who:"me", cat:"Tourism & hospitality"},
+  {id:"cafe",    name:"Café worker / barista",        who:"me", cat:"Café"},
+  {id:"cafeown", name:"Café owner",                   who:"me", cat:"Café"},
+  {id:"life",    name:"Lifeguard",                    who:"me", cat:"Health & safety"},
+  {id:"patrol",  name:"Ski patroller",                who:"me", cat:"Health & safety"}
 ];
 
 /* ---------- your starting toolbox ---------- */
@@ -1040,14 +1064,15 @@ function load(){
   }
   if(!s.save) s.save = 30;
   if(!s.metric) s.metric = "ready";
-  if(!s.view) s.view = "both";
+  s.view = null; /* always start on "Who is looking?" */
   if(!s.job) s.job = (old && old.job) || "ski";
   if(!s.countries) s.countries = ORDER.slice();
   if(!s.focus) s.focus = null;
   return s;
 }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
-function viewPeople(){ return state.view === "both" ? PEOPLE : [state.view]; }
+function viewPeople(){ return [state.view]; }
+function visibleJobs(){ return JOBS.filter(function(j){ return state.allJobs || j.who === state.view; }); }
 function pname(p){ return state.people[p].name || (p === "me" ? "Me" : "Max"); }
 function initial(p){ return pname(p).trim().charAt(0).toUpperCase() || "?"; }
 
@@ -1224,7 +1249,7 @@ function chip(p, id, label){
 function renderToolbox(){
   var box = document.getElementById("people"); box.textContent = "";
   var known = {}; CERTS.concat(LANGS).forEach(function(c){ known[c[0]] = 1; });
-  PEOPLE.forEach(function(p){
+  viewPeople().forEach(function(p){
     var certChips = el("div",{class:"chips"}), langChips = el("div",{class:"chips"}), extraChips = el("div",{class:"chips"});
     CERTS.forEach(function(c){ certChips.appendChild(chip(p, c[0], c[1])); });
     LANGS.forEach(function(c){ langChips.appendChild(chip(p, c[0], c[1])); });
@@ -1246,13 +1271,37 @@ function renderToolbox(){
 }
 
 /* ---------- view switch ---------- */
+var FOCUS = {me:"Outdoor guiding, kids, tourism, café and safety jobs", partner:"Adventure parks, ropes and trees, mountains, rescue and flying"};
 function renderViewPick(){
-  var vp = document.getElementById("viewPick"); vp.textContent = "";
-  [["me",pname("me")],["partner",pname("partner")],["both","Both of us"]].forEach(function(v){
-    vp.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(state.view===v[0]),text:v[1],
-      onclick:function(){ state.view = v[0]; save(); renderAll(); }}));
+  var chosen = !!state.view;
+  document.getElementById("chooser").hidden = chosen;
+  document.getElementById("tool").hidden = !chosen;
+  document.getElementById("switchBar").hidden = !chosen;
+  var cb = document.getElementById("chooseBtns"); cb.textContent = "";
+  PEOPLE.forEach(function(p){
+    cb.appendChild(el("button",{type:"button",class:"choice",onclick:function(){ pick(p); }},[
+      el("span",{class:"avatar big av-"+p,text:initial(p)}),
+      el("span",{class:"choice-name",text:pname(p)}),
+      el("span",{class:"choice-sub",text:FOCUS[p]})]));
   });
+  var vp = document.getElementById("viewPick"); vp.textContent = "";
+  PEOPLE.forEach(function(p){
+    vp.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(state.view===p),
+      onclick:function(){ pick(p); }},[el("span",{class:"avatar sm av-"+p,text:initial(p)}), pname(p)]));
+  });
+  document.getElementById("allJobs").checked = !!state.allJobs;
+  if(chosen) document.getElementById("toolboxTitle").textContent = "1. " + pname(state.view) + "'s toolbox";
 }
+function pick(p){
+  state.view = p;
+  if(!visibleJobs().some(function(j){ return j.id === state.job; })){ state.job = visibleJobs()[0].id; state.focus = null; }
+  save(); renderAll();
+}
+document.getElementById("allJobs").addEventListener("change", function(e){
+  state.allJobs = e.target.checked;
+  if(!visibleJobs().some(function(j){ return j.id === state.job; })){ state.job = visibleJobs()[0].id; state.focus = null; }
+  save(); renderAll();
+});
 
 /* ---------- who fits best ---------- */
 function renderFits(){
@@ -1260,7 +1309,7 @@ function renderFits(){
   var cs = state.countries.length ? state.countries : ORDER;
   viewPeople().forEach(function(p){
     var all = [];
-    JOBS.forEach(function(j){ cs.forEach(function(c){ all.push({j:j, c:c, v:metricVal(j.id, c, p)}); }); });
+    visibleJobs().forEach(function(j){ cs.forEach(function(c){ all.push({j:j, c:c, v:metricVal(j.id, c, p)}); }); });
     all.sort(function(a,b){ return a.v.sort - b.v.sort; });
     var ol = el("ol",{class:"fitlist"});
     all.slice(0,5).forEach(function(x){
@@ -1323,7 +1372,7 @@ function renderMatrix(){
   ORDER.forEach(function(c){ head.appendChild(el("th",{text:COUNTRIES[c].name})); });
   t.appendChild(el("thead",null,[head]));
   var tb = el("tbody"); var lastCat = null;
-  JOBS.forEach(function(j){
+  visibleJobs().forEach(function(j){
     if(j.cat !== lastCat){ lastCat = j.cat; tb.appendChild(el("tr",{class:"cat"},[el("th",{colspan:"6",text:j.cat})])); }
     var tr = el("tr",null,[el("th",{scope:"row",text:j.name})]);
     ORDER.forEach(function(c){
@@ -1359,7 +1408,7 @@ function openJob(job, c){
 /* ---------- detail ---------- */
 function renderPickers(){
   var jp = document.getElementById("jobPick"); jp.textContent = "";
-  JOBS.forEach(function(j){
+  visibleJobs().forEach(function(j){
     jp.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(state.job===j.id),text:j.name,
       onclick:function(){ state.job = j.id; state.focus = null; save(); renderAll(); }}));
   });
@@ -1447,7 +1496,7 @@ function renderCards(){
   });
 }
 
-function renderAll(){ renderToolbox(); renderViewPick(); renderMetricPick(); renderLegend(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
+function renderAll(){ renderViewPick(); if(!state.view) return; renderToolbox(); renderMetricPick(); renderLegend(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
 
 document.getElementById("save").addEventListener("input", function(e){
   state.save = +e.target.value; save();
