@@ -1,0 +1,2714 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roadtrip Planner</title>
+  <meta name="description" content="Plan any road trip: beautiful maps, day-by-day plan, weather, local fuel prices, budget, and an automatic presentation.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <style>
+/* ============ Theme tokens ============ */
+:root {
+  --bg: #f3efe7;
+  --panel: #fffdf9;
+  --panel-2: #f7f3ec;
+  --panel-3: #efe9df;
+  --ink: #1d2521;
+  --muted: #5e6660;
+  --line: #e4ddd1;
+  --line-strong: #c9c0b1;
+  --accent: #d9542a;
+  --accent-2: #b8431d;
+  --accent-ink: #ffffff;
+  --accent-soft: #fbe6dc;
+  --forest: #1f5f4a;
+  --start: #1f8a5b;
+  --end: #2b2f36;
+  --danger: #c0392b;
+  --bar: #2a78d6;
+  --shadow-sm: 0 1px 2px rgba(40, 30, 20, .06), 0 2px 8px rgba(40, 30, 20, .05);
+  --shadow: 0 10px 30px rgba(40, 30, 20, .12);
+  --radius: 14px;
+  --font: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1311;
+    --panel: #171c19;
+    --panel-2: #1e2420;
+    --panel-3: #262d28;
+    --ink: #ebe7df;
+    --muted: #a3aba4;
+    --line: #2d3530;
+    --line-strong: #46504a;
+    --accent: #ff7b4f;
+    --accent-2: #ff946e;
+    --accent-ink: #1b0f0a;
+    --accent-soft: #3a2419;
+    --forest: #5fc09a;
+    --start: #3fbf85;
+    --end: #d7dbe0;
+    --danger: #ff6b5b;
+    --bar: #3987e5;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+    --shadow: 0 10px 30px rgba(0, 0, 0, .45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+/* ============ Base ============ */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.6 var(--font);
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; }
+a { color: var(--accent-2); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button {
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 7px 13px;
+  transition: border-color .15s, background .15s, transform .1s;
+}
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: .4; cursor: default; }
+button.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink); border-color: transparent; font-weight: 700;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+button.small { padding: 4px 11px; font-size: 14px; }
+button.ghost { background: transparent; border-style: dashed; }
+button.icon { padding: 3px 9px; min-width: 34px; }
+button.danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, var(--line)); }
+.danger-text { color: var(--danger); }
+input, select, textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 8px 11px;
+}
+input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+textarea { resize: vertical; line-height: 1.5; }
+label { display: block; font-weight: 700; font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+label > input, label > select, label > textarea { margin-top: 5px; color: var(--ink); font-weight: 400; font-size: 16px; }
+label small { font-weight: 400; }
+label.check { display: flex; gap: 10px; align-items: center; color: var(--ink); font-weight: 400; font-size: 15px; }
+label.check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hint { color: var(--muted); font-size: 14px; margin: 4px 0 12px; line-height: 1.5; }
+.muted { color: var(--muted); font-size: 14px; }
+.empty { color: var(--muted); text-align: center; padding: 36px 12px; list-style: none; line-height: 1.8; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.r { text-align: right; }
+
+/* ============ Top bar ============ */
+.topbar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  position: relative; z-index: 1100;
+}
+.brand { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo {
+  display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; font-size: 21px;
+  background: linear-gradient(135deg, #ffd7a8, #ff9a6b);
+}
+.brand-name { font-family: var(--display); font-size: 20px; font-weight: 600; }
+.brand-name b { color: var(--accent); font-weight: 800; }
+.trip-picker { display: flex; gap: 8px; align-items: center; flex: 1; min-width: 0; }
+.trip-picker select { max-width: 340px; font-weight: 700; }
+.menu { position: relative; }
+.menu summary {
+  list-style: none; cursor: pointer; white-space: nowrap;
+  border: 1px solid var(--line); border-radius: 10px; padding: 7px 13px; background: var(--panel);
+}
+.menu summary::-webkit-details-marker { display: none; }
+.menu-list {
+  position: absolute; right: 0; top: calc(100% + 6px);
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 6px; min-width: 250px;
+  display: flex; flex-direction: column;
+}
+.menu-list button { border: 0; text-align: left; padding: 9px 11px; background: transparent; }
+.menu-list button:hover { background: var(--accent-soft); }
+
+/* ============ Layout ============ */
+.layout { flex: 1; display: grid; grid-template-columns: minmax(360px, 470px) 1fr; min-height: 0; }
+.sidebar { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); padding: 8px 10px 0; gap: 4px; border-bottom: 1px solid var(--line); }
+.tab {
+  border: 0; border-radius: 10px 10px 0 0; background: transparent; padding: 8px 4px 10px;
+  font-weight: 700; color: var(--muted); border-bottom: 3px solid transparent;
+  display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 14px;
+}
+.tab span { font-size: 19px; }
+.tab:hover { background: var(--panel-2); }
+.tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.panel { display: none; padding: 18px; overflow-y: auto; flex: 1; }
+.panel.active { display: block; animation: fadeUp .3s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } }
+fieldset { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px 6px; margin: 0 0 16px; background: var(--panel); }
+legend { font-weight: 700; padding: 0 6px; font-family: var(--display); font-size: 17px; }
+
+.map-wrap { position: relative; min-height: 0; }
+#map { position: absolute; inset: 0; background: #dfe6e2; }
+.tiles-hillshade { mix-blend-mode: multiply; opacity: .45; }
+[data-style="dark"] .tiles-hillshade { display: none; }
+
+/* Map controls */
+.style-switch {
+  display: flex; gap: 2px; padding: 4px; border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(8px);
+  box-shadow: var(--shadow); border: 1px solid var(--line);
+}
+.style-switch button { border: 0; background: transparent; padding: 5px 9px; border-radius: 10px; display: flex; gap: 5px; align-items: center; font-size: 14px; }
+.style-switch button em { font-style: normal; display: none; font-weight: 700; }
+.style-switch button:hover em, .style-switch button.on em { display: inline; }
+.style-switch button.on { background: var(--accent-soft); }
+.fit-btn {
+  width: 34px; height: 34px; padding: 0; font-size: 18px; border-radius: 8px !important;
+  border: 2px solid rgba(0,0,0,.2) !important; background: #fff; color: #222;
+}
+.leaflet-bar a { color: #222; }
+
+.stats-bar {
+  position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; bottom: 20px;
+  z-index: 800; display: flex; gap: 2px; align-items: stretch;
+  background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(10px);
+  border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 6px 8px;
+  max-width: calc(100% - 32px); flex-wrap: wrap; justify-content: center;
+}
+.stats-bar .stat { padding: 2px 12px; display: flex; flex-direction: column; align-items: center; line-height: 1.25; border-right: 1px solid var(--line); }
+.stats-bar .stat:last-child { border-right: 0; }
+.stats-bar .stat small { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.stats-bar .stat b { font-size: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stats-bar .busy { color: var(--muted); font-style: italic; justify-content: center; font-size: 14px; }
+.pick-hint {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 800;
+  background: var(--accent); color: var(--accent-ink); padding: 8px 10px 8px 16px; border-radius: 999px;
+  font-weight: 700; box-shadow: var(--shadow); display: flex; gap: 10px; align-items: center;
+}
+.pick-hint[hidden] { display: none; }
+.pick-hint button { background: rgba(255,255,255,.92); color: #222; border: 0; border-radius: 999px; }
+.picking #map { cursor: crosshair; }
+
+/* Map pins */
+.pin-wrap { display: grid; place-items: center; }
+.pin {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: 2.5px solid #fff;
+  box-shadow: 0 3px 10px rgba(0,0,0,.35); font-weight: 800; font-size: 13px; font-family: var(--font);
+  transition: transform .25s, opacity .25s;
+}
+.pin.start { background: var(--start); }
+.pin.end { background: #2b2f36; }
+.pin.photo { width: 50px; height: 50px; position: relative; background: #fff; border-width: 3px; }
+.pin.photo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.pin.photo b {
+  position: absolute; right: -6px; bottom: -6px; min-width: 22px; height: 22px; padding: 0 5px;
+  display: grid; place-items: center; border-radius: 999px; font-size: 11.5px;
+  background: var(--accent); color: #fff; border: 2px solid #fff;
+}
+.pin.photo.start b { background: var(--start); }
+.pin.photo.end b { background: #2b2f36; }
+.pin.dim { opacity: .45; transform: scale(.85); }
+.pin.current { transform: scale(1.3); box-shadow: 0 0 0 7px rgba(255,255,255,.45), 0 6px 18px rgba(0,0,0,.4); }
+.leaflet-marker-icon:hover .pin { transform: scale(1.12); }
+
+/* Popups */
+.pop-wrap .leaflet-popup-content-wrapper { padding: 0; overflow: hidden; border-radius: 14px; }
+.pop-wrap .leaflet-popup-content { margin: 0; width: 260px !important; font-family: var(--font); }
+.pop img { width: 100%; height: 130px; object-fit: cover; display: block; }
+.pop-body { padding: 10px 14px 12px; }
+.pop-body small { color: #666; }
+.pop-body h4 { margin: 2px 0 4px; font-family: var(--display); font-size: 18px; }
+.pop-body p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.45; color: #333; }
+
+/* ============ Stops ============ */
+.add-stop { display: flex; gap: 8px; }
+.add-stop button { white-space: nowrap; }
+.search-results { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
+.search-results .result { text-align: left; display: flex; flex-direction: column; background: var(--panel-2); }
+.search-results .result small { color: var(--muted); font-size: 12.5px; line-height: 1.35; }
+.stops-bar { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin: 4px 0 8px; }
+.stops-bar .hint { margin: 0; }
+.stops-bar button { white-space: nowrap; }
+.stop-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.stop-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s; }
+.stop-card.open { border-color: var(--accent); box-shadow: var(--shadow); }
+.stop-card.flash { animation: flash 1.2s ease; }
+@keyframes flash { 30% { background: var(--accent-soft); } }
+.stop-head { display: flex; align-items: center; gap: 12px; padding: 10px; }
+.thumb { position: relative; flex: none; width: 52px; height: 52px; border-radius: 12px; background: var(--panel-3); display: grid; place-items: center; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+.thumb .num {
+  position: absolute; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 800; font-size: 13px;
+  background: var(--accent); color: #fff;
+}
+.thumb.has-img .num { right: -6px; bottom: -6px; width: 22px; height: 22px; font-size: 11.5px; border: 2px solid var(--panel); }
+.stop-card:first-child .thumb .num { background: var(--start); }
+.stop-title { flex: 1; min-width: 0; }
+.stop-name { border: 0; background: transparent; padding: 1px 4px; font-weight: 700; font-size: 17px; }
+.stop-name:hover { background: var(--panel-2); }
+.stop-meta { font-size: 13px; color: var(--muted); padding: 0 4px; }
+.stop-tools { display: flex; gap: 4px; }
+.stop-body { padding: 14px 14px 14px; border-top: 1px dashed var(--line); }
+.photo-preview { margin: 0 0 10px; }
+.photo-preview img { width: 100%; max-height: 190px; object-fit: cover; border-radius: 12px; display: block; }
+.photo-preview figcaption { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.wiki-btn { margin: 0 0 12px; }
+.stop-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+.coords { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.cost-block { margin-top: 4px; }
+.cost-title { font-weight: 700; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+.cost-rows { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; margin-bottom: 10px; }
+.cost-row { display: grid; grid-template-columns: 36% 1fr 84px auto; gap: 6px; width: 100%; }
+.cost-row input, .cost-row select { padding: 6px 8px; font-size: 14.5px; }
+
+/* ============ Settings ============ */
+.segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+.segmented label { margin: 0; }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented span {
+  display: block; text-align: center; padding: 9px 8px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--panel-2); color: var(--ink); font-weight: 700; cursor: pointer; font-size: 14px; line-height: 1.3;
+}
+.segmented input:checked + span { background: var(--accent-soft); border-color: var(--accent); }
+.segmented input:focus-visible + span { outline: 2px solid var(--accent); }
+.price-table { width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 4px; }
+.price-table th { font-size: 12.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; text-align: left; padding: 4px; }
+.price-table td { padding: 4px; border-top: 1px solid var(--line); }
+.price-table input { width: 96px; padding: 5px 8px; text-align: right; }
+
+/* ============ Plan ============ */
+.plan-head { margin-bottom: 18px; }
+.plan-head h2 { margin: 0; font-size: 28px; line-height: 1.15; }
+.plan-head .sub { margin: 4px 0 10px; color: var(--muted); font-size: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; font-size: 14px; font-weight: 700; }
+.gmaps { display: inline-block; margin-top: 10px; font-size: 14px; font-weight: 700; }
+
+.day {
+  position: relative; margin: 0 0 16px 14px; padding: 12px 14px 12px 20px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.day::before { content: ""; position: absolute; left: -14px; top: 0; bottom: -16px; width: 3px; background: var(--line); }
+.day:last-of-type::before { bottom: 0; }
+.day::after {
+  content: ""; position: absolute; left: -20px; top: 16px; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--day); border: 3px solid var(--panel); box-shadow: 0 0 0 1px var(--line-strong);
+}
+.day-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.day-badge { background: var(--ink); color: var(--bg); border-radius: 999px; padding: 1px 11px; font-weight: 700; font-size: 13.5px; }
+.day-date { color: var(--muted); font-size: 14px; font-weight: 700; flex: 1; }
+.wx-chip { font-size: 15px; font-weight: 700; white-space: nowrap; }
+.wx-chip small { color: var(--muted); font-weight: 400; }
+.wx-chip.loading { color: var(--muted); }
+.day-title { margin: 6px 0 2px; font-size: 20px; line-height: 1.25; }
+.day-sum { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+.drive { border-left: 4px solid var(--day); background: var(--panel-2); border-radius: 0 10px 10px 0; padding: 7px 12px; margin: 8px 0; }
+.drive-line { font-size: 15px; }
+.drive-facts { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; color: var(--muted); }
+.drive-facts a { font-weight: 700; }
+.visit { display: flex; gap: 12px; margin: 10px 0 4px; }
+.visit-img { width: 92px; height: 92px; flex: none; object-fit: cover; border-radius: 12px; }
+.visit-body { min-width: 0; }
+.visit h4 { margin: 0; font-size: 17px; display: flex; gap: 8px; align-items: center; font-family: var(--display); }
+.visit h4 .num { width: 22px; height: 22px; font-size: 12px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; font-family: var(--font); flex: none; }
+.visit p { margin: 4px 0; font-size: 15px; }
+.acts-title { font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--muted); margin-top: 6px; }
+.acts { margin: 2px 0; padding-left: 0; list-style: none; }
+.acts li { padding-left: 22px; position: relative; font-size: 15px; }
+.acts li::before { content: "✔"; position: absolute; left: 2px; color: var(--forest); font-weight: 700; }
+.rest { background: var(--panel-2); border-radius: 10px; padding: 8px 12px; margin: 8px 0; }
+.day-foot { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; font-size: 14.5px; }
+
+/* ============ Budget ============ */
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+.kpi { background: var(--panel-2); border-radius: var(--radius); padding: 10px 14px; }
+.kpi .k-label { font-size: 13px; color: var(--muted); font-weight: 700; }
+.kpi .k-value { font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi .k-value small { font-size: 12.5px; color: var(--muted); font-weight: 400; }
+.kpi.big { grid-column: span 2; background: linear-gradient(135deg, var(--accent-soft), var(--panel-2)); }
+.kpi.big .k-value { font-size: 32px; font-family: var(--display); }
+h3.section { font-size: 18px; margin: 22px 0 10px; }
+.price-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.price-chip { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 5px 11px; font-size: 14.5px; }
+.price-chip small { color: var(--muted); }
+.bars { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.bar-row { display: grid; grid-template-columns: 150px 1fr 84px; gap: 10px; align-items: center; font-size: 15px; padding: 4px 6px; border-radius: 8px; }
+.bar-row:hover, .bar-row:focus { background: var(--panel-2); outline: none; }
+.bar-track { height: 10px; }
+.bar-fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 3px; }
+.bar-row .amt { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.tip {
+  position: fixed; z-index: 5000; pointer-events: none; background: var(--ink); color: var(--bg);
+  padding: 6px 10px; border-radius: 8px; font-size: 14px; box-shadow: var(--shadow); max-width: 280px;
+}
+.tip[hidden] { display: none; }
+table.cost-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.cost-table th, .cost-table td { padding: 7px 4px; border-bottom: 1px solid var(--line); text-align: left; }
+.cost-table thead th { font-size: 12.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.cost-table tfoot th { border-bottom: 0; }
+.cost-table .r { text-align: right; font-variant-numeric: tabular-nums; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; box-shadow: 0 0 0 1px var(--line-strong); }
+
+/* ============ Toast ============ */
+#toast {
+  position: fixed; bottom: 26px; left: 50%; transform: translate(-50%, 20px);
+  background: var(--ink); color: var(--bg); padding: 11px 20px; border-radius: 999px;
+  opacity: 0; pointer-events: none; transition: .25s; z-index: 4000; font-weight: 700;
+  box-shadow: var(--shadow); max-width: calc(100% - 32px); text-align: center;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ============ Mobile ============ */
+@media (max-width: 860px) {
+  .topbar { flex-wrap: wrap; padding: 8px 12px; gap: 8px; }
+  .brand { flex: 1; }
+  .brand-name { font-size: 18px; }
+  .present-btn { padding: 7px 12px; }
+  .trip-picker { order: 3; flex-basis: 100%; }
+  .trip-picker select { max-width: none; flex: 1; min-width: 0; }
+  #newTrip { padding: 7px 10px; }
+  .layout { grid-template-columns: 1fr; grid-template-rows: 46vh auto; }
+  .map-wrap { grid-row: 1; min-height: 46vh; }
+  .sidebar { grid-row: 2; border-right: 0; }
+  .panel { overflow: visible; padding: 14px; }
+  .stats-bar { bottom: 8px; left: 8px; right: 8px; width: auto; max-width: none; border-radius: 14px; padding: 4px; }
+  .stats-bar .stat { padding: 1px 7px; }
+  .stats-bar .stat b { font-size: 14px; }
+  .stats-bar .stat small { font-size: 10.5px; }
+  .style-switch button { padding: 5px 6px; }
+  .style-switch button em { display: none !important; }
+  .pick-hint { width: max-content; max-width: calc(100% - 80px); }
+  .cost-row { grid-template-columns: 1fr 1fr; }
+  .bar-row { grid-template-columns: 116px 1fr 74px; font-size: 14px; }
+  .visit-img { width: 72px; height: 72px; }
+  .stops-bar { flex-direction: column; align-items: stretch; }
+}
+
+/* ============ Print: plan + budget ============ */
+@media print {
+  body { display: block; background: #fff; color: #000; }
+  .topbar, .tabs, .map-wrap, [data-panel="trip"], [data-panel="stops"], #present, #toast, .tip { display: none !important; }
+  .layout { display: block; }
+  .sidebar { border: 0; }
+  .panel[data-panel="plan"], .panel[data-panel="costs"] { display: block !important; overflow: visible; animation: none; }
+  .panel[data-panel="costs"] { break-before: page; }
+  .day, .kpi, .visit { break-inside: avoid; }
+  .drive-facts a, .gmaps { display: none; }
+}
+
+</style>
+  <style>
+/* ============ Presentation ============ */
+#present { position: fixed; inset: 0; z-index: 3000; background: #0b0f0d; color: var(--ink); overflow: hidden; }
+#present[hidden] { display: none; }
+#pMap { position: absolute; inset: 0; background: #0b0f0d; }
+body.presenting { overflow: hidden; }
+
+/* Darken the map behind cover / finale so the big text reads well */
+.p-shade {
+  position: absolute; inset: 0; z-index: 500; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(8, 12, 10, .35), rgba(8, 12, 10, .75));
+  opacity: 0; transition: opacity 1.2s ease;
+}
+body[data-slide="cover"] .p-shade, body[data-slide="finale"] .p-shade { opacity: 1; }
+body[data-slide="day"] .p-shade, body[data-slide="overview"] .p-shade, body[data-slide="budget"] .p-shade {
+  opacity: 1; background: linear-gradient(90deg, rgba(8, 12, 10, .35) 0%, rgba(8, 12, 10, 0) 45%);
+}
+
+.p-progress { position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 1200; background: rgba(255,255,255,.15); }
+.p-progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb36b, var(--accent)); }
+
+.p-stage { position: absolute; inset: 0; z-index: 1000; pointer-events: none; }
+.p-stage > * { pointer-events: auto; }
+
+/* ----- Card (day / overview / budget) ----- */
+.p-card {
+  position: absolute; left: 32px; top: 32px; max-height: calc(100% - 130px);
+  width: min(480px, 42vw); overflow-y: auto; overflow-x: hidden;
+  background: color-mix(in srgb, var(--panel) 95%, transparent);
+  backdrop-filter: blur(12px);
+  border-radius: 22px; box-shadow: 0 24px 70px rgba(0,0,0,.45);
+  padding: 26px 28px 22px;
+  opacity: 0; transform: translateY(18px) scale(.98);
+  scrollbar-width: thin;
+}
+.p-stage.in .p-card { animation: cardIn .8s cubic-bezier(.2,.8,.2,1) forwards; }
+@keyframes cardIn { to { opacity: 1; transform: none; } }
+.p-card h2 { font-size: clamp(26px, 2.6vw, 36px); line-height: 1.12; margin: 6px 0 12px; }
+.p-eyebrow {
+  text-transform: uppercase; letter-spacing: .1em; font-size: 13px; font-weight: 700; color: var(--accent);
+  display: flex; align-items: center; gap: 8px;
+}
+.p-daydot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent); flex: none; }
+.p-hero { margin: -26px -28px 18px; height: 230px; overflow: hidden; border-radius: 22px 22px 0 0; position: relative; }
+.p-hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 40%; background: linear-gradient(transparent, color-mix(in srgb, var(--panel) 60%, transparent)); }
+.p-hero img { width: 100%; height: 100%; object-fit: cover; display: block; animation: kenburns 14s ease-out forwards; }
+@keyframes kenburns { from { transform: scale(1.02); } to { transform: scale(1.14) translate(-2%, -1.5%); } }
+.p-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.p-pills span { background: var(--panel-2); border-radius: 14px; padding: 8px 12px; display: flex; flex-direction: column; border-top: 3px solid var(--c); }
+.p-pills small { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.p-pills b { font-size: 19px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.p-via { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 14px; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
+.p-via span + span::before { content: "→ "; font-weight: 400; }
+.p-wx {
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; margin-bottom: 12px;
+  background: linear-gradient(135deg, color-mix(in srgb, #5aa9ff 18%, var(--panel-2)), var(--panel-2));
+}
+.p-wx-icon { font-size: 40px; line-height: 1; }
+.p-wx-main { display: flex; flex-direction: column; line-height: 1.25; }
+.p-wx-main b { font-size: 24px; }
+.p-wx-main b small { color: var(--muted); font-size: 17px; font-weight: 400; }
+.p-wx-main span { font-size: 14px; color: var(--muted); }
+.p-wx-side { margin-left: auto; text-align: right; display: flex; flex-direction: column; font-size: 13.5px; line-height: 1.35; }
+.p-wx-side em { color: var(--muted); font-style: normal; font-size: 12px; }
+.p-lead { font-size: 17px; line-height: 1.65; margin: 8px 0 10px; }
+.p-acts { padding: 0; list-style: none; margin: 6px 0 12px; }
+.p-acts li {
+  padding: 7px 0 7px 32px; position: relative; font-size: 16px; border-bottom: 1px solid var(--line);
+  opacity: 0; transform: translateX(-8px); animation: itemIn .5s ease forwards;
+}
+.p-acts li:last-child { border-bottom: 0; }
+.p-acts li::before {
+  content: "✔"; position: absolute; left: 2px; top: 8px; width: 21px; height: 21px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; background: var(--forest);
+}
+@keyframes itemIn { to { opacity: 1; transform: none; } }
+.p-foot { border-top: 1px dashed var(--line); padding-top: 10px; font-size: 15.5px; }
+.p-big { font-family: var(--display); font-size: clamp(44px, 5vw, 64px); font-weight: 800; line-height: 1; margin: 10px 0 6px; }
+.p-note { color: var(--muted); font-size: 14px; }
+
+/* Overview list */
+.p-days { list-style: none; padding: 0; margin: 0; }
+.p-days li {
+  display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center;
+  padding: 7px 0; border-bottom: 1px solid var(--line);
+  opacity: 0; animation: itemIn .45s ease forwards; animation-delay: calc(.4s + var(--k) * .12s);
+}
+.p-day-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 13px; background: var(--c); color: #fff; }
+.p-day-t { font-weight: 700; font-size: 15.5px; line-height: 1.3; }
+.p-day-km { color: var(--muted); font-size: 14px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ----- Centered slides (cover / finale) ----- */
+.p-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 40px 24px 120px; color: #fff; pointer-events: none;
+}
+.p-center .p-eyebrow { color: #ffc49b; justify-content: center; opacity: 0; animation: itemIn .8s .2s ease forwards; }
+.p-title {
+  font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7vw, 96px); line-height: 1.02;
+  margin: 10px 0 12px; max-width: 16ch; text-shadow: 0 4px 30px rgba(0,0,0,.5);
+  opacity: 0; animation: titleIn 1.1s .35s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes titleIn { from { opacity: 0; transform: translateY(24px); letter-spacing: .04em; } to { opacity: 1; transform: none; } }
+.p-sub { font-size: clamp(17px, 2vw, 24px); margin: 0 0 18px; color: rgba(255,255,255,.88); opacity: 0; animation: itemIn .8s .8s ease forwards; }
+.p-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.p-chips span { border-radius: 999px; padding: 5px 14px; font-weight: 700; font-size: 15px; background: var(--accent-soft); }
+.p-chips.light span { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); color: #fff; backdrop-filter: blur(6px); }
+.p-center .p-chips { opacity: 0; animation: itemIn .8s 1.1s ease forwards; }
+.p-strip { display: flex; gap: 14px; margin-top: 34px; justify-content: center; flex-wrap: wrap; }
+.p-strip img {
+  width: clamp(90px, 11vw, 150px); aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px;
+  border: 4px solid #fff; box-shadow: 0 14px 40px rgba(0,0,0,.5);
+  opacity: 0; transform: translateY(30px) rotate(calc((var(--k) - 2.5) * 2.5deg));
+  animation: photoIn .8s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(1.3s + var(--k) * .15s);
+}
+@keyframes photoIn { to { opacity: 1; transform: translateY(0) rotate(calc((var(--k) - 2.5) * 2.5deg)); } }
+.p-mosaic { display: flex; justify-content: center; margin-bottom: 20px; }
+.p-mosaic img {
+  width: clamp(70px, 9vw, 120px); aspect-ratio: 1; object-fit: cover; border-radius: 50%;
+  border: 4px solid #fff; margin: 0 -10px; box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  opacity: 0; transform: scale(.6); animation: popIn .6s cubic-bezier(.3,1.5,.5,1) forwards; animation-delay: calc(.2s + var(--k) * .1s);
+}
+@keyframes popIn { to { opacity: 1; transform: none; } }
+
+/* Map extras */
+.car { font-size: 26px; width: 40px; height: 40px; display: grid; place-items: center; background: #fff; border-radius: 50%; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+.day-label { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; font-weight: 800; font-size: 12.5px; border: 2.5px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.4); font-family: var(--font); }
+
+/* ----- Controls ----- */
+.p-controls {
+  position: absolute; z-index: 1200; bottom: 22px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 4px; align-items: center;
+  background: rgba(12, 16, 14, .82); backdrop-filter: blur(10px); border-radius: 999px; padding: 6px 10px; color: #fff;
+  transition: opacity .5s, transform .5s;
+}
+.p-controls button { background: transparent; border: 0; color: #fff; font-size: 18px; padding: 6px 12px; border-radius: 999px; }
+.p-controls button:hover { background: rgba(255,255,255,.15); }
+.p-controls select { width: auto; background: rgba(255,255,255,.1); border: 0; color: #fff; font-size: 14px; padding: 5px 8px; border-radius: 999px; }
+.p-controls select option { color: #111; }
+.p-count { font-variant-numeric: tabular-nums; font-size: 14px; opacity: .8; padding: 0 6px; white-space: nowrap; }
+.p-dots { position: absolute; z-index: 1200; bottom: 78px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; transition: opacity .5s; }
+.p-dots button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 0; background: rgba(255,255,255,.45); }
+.p-dots button.on { background: var(--accent); transform: scale(1.35); }
+#present.idle { cursor: none; }
+#present.idle .p-controls { opacity: 0; transform: translate(-50%, 16px); }
+#present.idle .p-dots { opacity: 0; }
+
+@media (max-width: 860px) {
+  .p-card { left: 10px; right: 10px; top: auto; bottom: 78px; width: auto; max-height: 60vh; padding: 18px 18px 16px; border-radius: 18px; }
+  .p-hero { margin: -18px -18px 12px; height: 140px; border-radius: 18px 18px 0 0; }
+  .p-pills b { font-size: 16px; }
+  .p-wx-icon { font-size: 30px; }
+  .p-wx-side { display: none; }
+  .p-dots { display: none; }
+  .p-controls { bottom: 12px; padding: 4px 6px; }
+  .p-controls button { padding: 6px 8px; }
+  .p-controls select { max-width: 90px; }
+  .p-center { padding-bottom: 90px; }
+  body[data-slide="day"] .p-shade, body[data-slide="overview"] .p-shade, body[data-slide="budget"] .p-shade { background: linear-gradient(0deg, rgba(8,12,10,.4), transparent 50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .p-hero img, .p-strip img, .p-mosaic img, .p-acts li, .p-days li, .p-title, .p-sub, .p-center .p-chips, .p-center .p-eyebrow { animation-duration: .01s !important; animation-delay: 0s !important; }
+}
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">🚐</span><span class="brand-name">Roadtrip<b>Planner</b></span></div>
+    <div class="trip-picker">
+      <select id="tripSelect" aria-label="Choose a trip"></select>
+      <button id="newTrip" type="button" title="Start a new trip">＋ New trip</button>
+      <details class="menu" id="moreMenu">
+        <summary>⋯ More</summary>
+        <div class="menu-list">
+          <button id="dupTrip" type="button">📄 Duplicate this trip</button>
+          <button id="shareBtn" type="button">🔗 Copy share link</button>
+          <button id="exportBtn" type="button">💾 Export file (.json)</button>
+          <button id="importBtn" type="button">📂 Import file (.json)</button>
+          <button id="printBtn" type="button">🖨️ Print / save as PDF</button>
+          <button id="sampleBtn" type="button">✨ Add the example trip</button>
+          <button id="delTrip" type="button" class="danger-text">🗑️ Delete this trip</button>
+        </div>
+      </details>
+    </div>
+    <button id="presentBtn" type="button" class="primary present-btn">▶ Present the trip</button>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <nav class="tabs" role="tablist">
+        <button class="tab" data-tab="plan" role="tab"><span>🗓️</span>Plan</button>
+        <button class="tab" data-tab="stops" role="tab"><span>📍</span>Stops</button>
+        <button class="tab" data-tab="costs" role="tab"><span>💶</span>Budget</button>
+        <button class="tab" data-tab="trip" role="tab"><span>⚙️</span>Settings</button>
+      </nav>
+
+      <!-- Day-by-day plan -->
+      <section class="panel" data-panel="plan">
+        <div id="itinerary"></div>
+      </section>
+
+      <!-- Stops -->
+      <section class="panel" data-panel="stops">
+        <div class="add-stop">
+          <label for="placeSearch" class="visually-hidden">Search for a place</label>
+          <input id="placeSearch" type="search" placeholder="🔎 Search a town, park, lake…" autocomplete="off">
+          <button id="pickBtn" type="button" title="Click on the map to add a stop">📍 Pick on map</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+        <div class="stops-bar">
+          <p class="hint">Drag the pins on the map to move a stop · ↑ ↓ to reorder.</p>
+          <button id="enrichAll" type="button" class="small">✨ Fill missing photos</button>
+        </div>
+        <ol id="stopList" class="stop-list"></ol>
+      </section>
+
+      <!-- Budget -->
+      <section class="panel" data-panel="costs">
+        <div id="costs"></div>
+      </section>
+
+      <!-- Settings -->
+      <section class="panel" data-panel="trip">
+        <form id="tripForm" onsubmit="return false">
+          <fieldset>
+            <legend>🧭 About the trip</legend>
+            <label>Trip name<input data-t="name" autocomplete="off"></label>
+            <label>Tagline <small>(optional)</small><input data-t="subtitle" placeholder="e.g. Lakes, forests and the midnight sun" autocomplete="off"></label>
+            <div class="row2">
+              <label>Start date<input type="date" data-t="startDate"></label>
+              <label>Travellers<input type="number" min="1" step="1" data-t="travelers"></label>
+            </div>
+            <label class="check"><input type="checkbox" data-t="roundTrip"> Drive back to the first stop at the end</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>🚗 Car</legend>
+            <label>Vehicle <small>(optional)</small><input data-t="vehicle.name" placeholder="e.g. VW Transporter" autocomplete="off"></label>
+            <div class="row2">
+              <label>Fuel type
+                <select data-t="vehicle.fuelType">
+                  <option value="petrol">⛽ Petrol</option>
+                  <option value="diesel">⛽ Diesel</option>
+                  <option value="lpg">⛽ LPG</option>
+                  <option value="electric">🔌 Electric</option>
+                </select>
+              </label>
+              <label><span id="consLabel">Use per 100 km</span><input type="number" step="0.1" min="0" data-t="vehicle.consumption"></label>
+            </div>
+            <p class="hint" id="consHint"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>⛽ Fuel prices</legend>
+            <div class="segmented">
+              <label><input type="radio" name="fuelPricing" value="auto" data-t="fuelPricing"><span>🌍 Local price in each country</span></label>
+              <label><input type="radio" name="fuelPricing" value="manual" data-t="fuelPricing"><span>✏️ One price for everything</span></label>
+            </div>
+            <div id="countryPrices"></div>
+            <label><span id="manualPriceLabel">Price</span><input type="number" step="0.01" min="0" data-t="vehicle.fuelPrice"></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>💱 Money</legend>
+            <label>Currency for the budget<select id="currencySelect" data-t="currency"></select></label>
+            <p class="hint">Trip-wide costs: things that are not tied to one stop, like car rental, ferries, tolls, insurance or gear.</p>
+            <div class="cost-rows" data-owner="trip"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>🎬 Presentation</legend>
+            <label>Map style for the presentation<select id="showStyleSelect" data-t="showStyle"></select></label>
+            <p class="hint">Change the map style of the planner with the buttons at the top right of the map.</p>
+          </fieldset>
+        </form>
+      </section>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map" aria-label="Map of the trip"></div>
+      <div id="statsBar" class="stats-bar"></div>
+      <div id="pickHint" class="pick-hint" hidden>👆 Click on the map to add a stop <button type="button" id="pickCancel">Cancel</button></div>
+    </section>
+  </main>
+
+  <!-- Presentation -->
+  <div id="present" hidden>
+    <div id="pMap"></div>
+    <div class="p-shade"></div>
+    <div class="p-progress"><span id="pProgress"></span></div>
+    <div id="pStage" class="p-stage"></div>
+    <div class="p-controls">
+      <button type="button" id="pPrev" title="Previous (←)">⏮</button>
+      <button type="button" id="pPlay" title="Pause (space)">⏸</button>
+      <button type="button" id="pNext" title="Next (→)">⏭</button>
+      <span id="pCount" class="p-count"></span>
+      <select id="pStyle" aria-label="Map style"></select>
+      <button type="button" id="pClose" title="Close (Esc)">✕</button>
+    </div>
+    <div id="pDots" class="p-dots"></div>
+  </div>
+
+  <div id="tip" class="tip" role="tooltip" hidden></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+/* Static data: fuel prices, currencies, map styles, colours, example trip. */
+window.RT = window.RT || {};
+(RT => {
+  'use strict';
+
+  RT.CATS = {
+    stay: { icon: '🛏️', label: 'Accommodation' },
+    food: { icon: '🍽️', label: 'Food' },
+    activity: { icon: '🎟️', label: 'Activities' },
+    transport: { icon: '⛴️', label: 'Transport & tolls' },
+    other: { icon: '📦', label: 'Other' },
+  };
+
+  RT.FUEL_TYPES = {
+    petrol: { label: 'Petrol', icon: '⛽', unit: 'L', col: 0, hint: 'Typical: small car 5–6 L, family car 6–8 L, van / camper 9–12 L per 100 km.' },
+    diesel: { label: 'Diesel', icon: '⛽', unit: 'L', col: 1, hint: 'Typical: small car 4–5 L, family car 5–7 L, van / camper 8–11 L per 100 km.' },
+    lpg: { label: 'LPG', icon: '⛽', unit: 'L', col: 2, hint: 'LPG cars usually burn about 20% more litres than on petrol.' },
+    electric: { label: 'Electric', icon: '🔌', unit: 'kWh', col: 3, hint: 'Typical: 15–22 kWh per 100 km (up to 30% more in cold weather). Prices are for public chargers.' },
+  };
+
+  // Approximate national average pump prices, in EUR per litre (per kWh for public EV charging).
+  // [name, petrol, diesel, lpg, electricity]. null = no reliable figure → falls back to your own price.
+  // These are ballpark 2025–26 averages to make the budget realistic. Prices change weekly:
+  // every country can be overridden in the Trip tab.
+  RT.PRICES_UPDATED = '2026';
+  RT.COUNTRY_FUEL = {
+    al: ['Albania', 1.75, 1.70, 0.75, 0.40],
+    ad: ['Andorra', 1.40, 1.30, null, 0.35],
+    at: ['Austria', 1.60, 1.60, 1.00, 0.55],
+    ba: ['Bosnia & Herzegovina', 1.45, 1.45, 0.70, 0.35],
+    be: ['Belgium', 1.70, 1.75, 0.70, 0.55],
+    bg: ['Bulgaria', 1.30, 1.30, 0.60, 0.40],
+    by: ['Belarus', 0.75, 0.80, 0.35, 0.20],
+    ch: ['Switzerland', 1.85, 1.90, 1.20, 0.60],
+    cy: ['Cyprus', 1.45, 1.50, null, 0.50],
+    cz: ['Czechia', 1.50, 1.45, 0.70, 0.45],
+    de: ['Germany', 1.75, 1.65, 0.95, 0.55],
+    dk: ['Denmark', 1.90, 1.70, null, 0.50],
+    ee: ['Estonia', 1.65, 1.55, 0.80, 0.40],
+    es: ['Spain', 1.55, 1.48, 0.95, 0.45],
+    fi: ['Finland', 1.85, 1.75, null, 0.40],
+    fr: ['France', 1.80, 1.70, 1.00, 0.50],
+    gb: ['United Kingdom', 1.65, 1.72, 0.95, 0.75],
+    gr: ['Greece', 1.85, 1.60, 1.00, 0.55],
+    hr: ['Croatia', 1.50, 1.45, 0.80, 0.45],
+    hu: ['Hungary', 1.55, 1.55, 0.80, 0.45],
+    ie: ['Ireland', 1.80, 1.75, 1.00, 0.60],
+    is: ['Iceland', 2.10, 2.00, null, 0.35],
+    it: ['Italy', 1.80, 1.70, 0.75, 0.60],
+    li: ['Liechtenstein', 1.80, 1.85, null, 0.55],
+    lt: ['Lithuania', 1.50, 1.45, 0.75, 0.40],
+    lu: ['Luxembourg', 1.55, 1.45, 0.85, 0.45],
+    lv: ['Latvia', 1.60, 1.55, 0.80, 0.40],
+    md: ['Moldova', 1.25, 1.15, 0.65, 0.30],
+    me: ['Montenegro', 1.55, 1.45, 0.90, 0.35],
+    mk: ['North Macedonia', 1.40, 1.30, 0.65, 0.35],
+    mt: ['Malta', 1.34, 1.21, null, 0.45],
+    nl: ['Netherlands', 2.00, 1.75, 0.95, 0.55],
+    no: ['Norway', 2.00, 1.90, null, 0.45],
+    pl: ['Poland', 1.45, 1.45, 0.70, 0.50],
+    pt: ['Portugal', 1.75, 1.65, 0.95, 0.45],
+    ro: ['Romania', 1.45, 1.50, 0.70, 0.45],
+    rs: ['Serbia', 1.55, 1.60, 0.80, 0.35],
+    se: ['Sweden', 1.70, 1.75, null, 0.50],
+    si: ['Slovenia', 1.50, 1.50, 0.80, 0.45],
+    sk: ['Slovakia', 1.60, 1.50, 0.75, 0.45],
+    tr: ['Türkiye', 1.30, 1.30, 0.70, 0.30],
+    ua: ['Ukraine', 1.25, 1.20, 0.65, 0.20],
+    ma: ['Morocco', 1.30, 1.15, null, 0.30],
+    tn: ['Tunisia', 0.75, 0.65, null, null],
+    eg: ['Egypt', 0.40, 0.35, null, null],
+    ae: ['United Arab Emirates', 0.70, 0.75, null, 0.20],
+    il: ['Israel', 1.90, 1.80, null, 0.50],
+    us: ['United States', 0.90, 0.95, 0.80, 0.40],
+    ca: ['Canada', 1.10, 1.20, 0.70, 0.35],
+    mx: ['Mexico', 1.25, 1.30, 0.55, 0.35],
+    br: ['Brazil', 1.05, 1.00, null, 0.40],
+    ar: ['Argentina', 1.10, 1.05, null, null],
+    cl: ['Chile', 1.30, 1.00, null, 0.40],
+    au: ['Australia', 1.20, 1.25, 0.60, 0.40],
+    nz: ['New Zealand', 1.50, 1.20, null, 0.40],
+    jp: ['Japan', 1.10, 0.95, 0.65, 0.35],
+    kr: ['South Korea', 1.10, 1.00, 0.65, 0.25],
+    tw: ['Taiwan', 0.90, 0.80, 0.40, 0.25],
+    cn: ['China', 1.00, 0.90, null, 0.20],
+    th: ['Thailand', 1.00, 0.85, 0.55, 0.20],
+    vn: ['Vietnam', 0.80, 0.75, null, null],
+    my: ['Malaysia', 0.50, 0.55, null, 0.25],
+    id: ['Indonesia', 0.60, 0.65, null, null],
+    ph: ['Philippines', 1.00, 0.90, null, null],
+    in: ['India', 1.15, 1.00, 0.65, 0.20],
+    za: ['South Africa', 1.10, 1.05, null, 0.35],
+    na: ['Namibia', 1.00, 1.00, null, null],
+    ke: ['Kenya', 1.35, 1.25, null, null],
+  };
+
+  RT.flag = code => code && code.length === 2
+    ? String.fromCodePoint(...code.toUpperCase().split('').map(c => 0x1F1E6 + c.charCodeAt(0) - 65))
+    : '🏳️';
+
+  // Currencies offered in the Trip tab. Rates come live from the ECB (Frankfurter API);
+  // these static rates (1 EUR = x) are only a fallback when offline.
+  RT.CURRENCIES = {
+    EUR: 1, USD: 1.10, GBP: 0.85, JPY: 165, TWD: 35, CHF: 0.94, SEK: 11.2, NOK: 11.7, DKK: 7.46,
+    PLN: 4.25, CZK: 25, HUF: 395, RON: 5.0, BGN: 1.96, ISK: 150, TRY: 42, CAD: 1.52, AUD: 1.68,
+    NZD: 1.85, KRW: 1520, CNY: 7.9, THB: 38, INR: 95, ZAR: 20, MXN: 21, BRL: 6.2,
+  };
+
+  // Map styles. All free and key-less.
+  const OSM = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+  const CARTO = `${OSM} &copy; <a href="https://carto.com/attributions">CARTO</a>`;
+  const ESRI = 'Tiles &copy; <a href="https://www.esri.com/">Esri</a>';
+  RT.MAP_STYLES = {
+    relief: {
+      label: 'Relief', icon: '⛰️',
+      layers: [
+        { url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', attr: CARTO, subdomains: 'abcd', maxZoom: 19 },
+        { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', attr: `${ESRI} (hillshade)`, maxNativeZoom: 16, maxZoom: 19, className: 'tiles-hillshade' },
+      ],
+    },
+    voyager: {
+      label: 'Classic', icon: '🗺️',
+      layers: [{ url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', attr: CARTO, subdomains: 'abcd', maxZoom: 19 }],
+    },
+    satellite: {
+      label: 'Satellite', icon: '🛰️',
+      layers: [
+        { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr: `${ESRI}, Maxar, Earthstar Geographics`, maxNativeZoom: 18, maxZoom: 19 },
+        { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', attr: '', maxNativeZoom: 18, maxZoom: 19 },
+      ],
+    },
+    outdoor: {
+      label: 'Outdoor', icon: '🥾',
+      layers: [{ url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', attr: `${OSM}, SRTM | &copy; <a href="https://opentopomap.org">OpenTopoMap</a>`, subdomains: 'abc', maxNativeZoom: 17, maxZoom: 19 }],
+    },
+    light: {
+      label: 'Light', icon: '🤍',
+      layers: [{ url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: CARTO, subdomains: 'abcd', maxZoom: 19 }],
+    },
+    dark: {
+      label: 'Night', icon: '🌙',
+      layers: [{ url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: CARTO, subdomains: 'abcd', maxZoom: 19 }],
+    },
+  };
+
+  // Day colours: validated 8-hue categorical palette, always assigned in this fixed order.
+  // More than 8 driving days → the route falls back to one colour (days stay labelled).
+  RT.DAY_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'];
+
+  // WMO weather codes (Open-Meteo)
+  RT.WEATHER = {
+    0: ['☀️', 'Clear sky'], 1: ['🌤️', 'Mostly clear'], 2: ['⛅', 'Partly cloudy'], 3: ['☁️', 'Cloudy'],
+    45: ['🌫️', 'Fog'], 48: ['🌫️', 'Freezing fog'],
+    51: ['🌦️', 'Light drizzle'], 53: ['🌦️', 'Drizzle'], 55: ['🌧️', 'Heavy drizzle'],
+    56: ['🌧️', 'Freezing drizzle'], 57: ['🌧️', 'Freezing drizzle'],
+    61: ['🌦️', 'Light rain'], 63: ['🌧️', 'Rain'], 65: ['🌧️', 'Heavy rain'],
+    66: ['🌧️', 'Freezing rain'], 67: ['🌧️', 'Freezing rain'],
+    71: ['🌨️', 'Light snow'], 73: ['🌨️', 'Snow'], 75: ['❄️', 'Heavy snow'], 77: ['🌨️', 'Snow grains'],
+    80: ['🌦️', 'Rain showers'], 81: ['🌧️', 'Rain showers'], 82: ['⛈️', 'Violent showers'],
+    85: ['🌨️', 'Snow showers'], 86: ['❄️', 'Heavy snow showers'],
+    95: ['⛈️', 'Thunderstorm'], 96: ['⛈️', 'Thunderstorm & hail'], 99: ['⛈️', 'Thunderstorm & hail'],
+  };
+
+  RT.SAMPLE = {
+    name: 'Finland: South to Lapland',
+    subtitle: 'Old towns, lakes, forests and the Arctic Circle',
+    startDate: '2027-06-14',
+    travelers: 3,
+    currency: 'EUR',
+    fuelPricing: 'auto',
+    vehicle: { name: 'Rental car', fuelType: 'petrol', consumption: 6.5, fuelPrice: 1.85 },
+    extraCosts: [
+      { category: 'transport', label: 'Car rental (9 days)', amount: 480 },
+      { category: 'transport', label: 'One-way drop-off fee', amount: 150 },
+    ],
+    stops: [
+      {
+        name: 'Helsinki', lat: 60.1699, lng: 24.9384, nights: 1, country: 'fi', wikiTitle: 'Helsinki',
+        description: 'We start in the capital: pick up the car, stock up on snacks and enjoy the harbour before hitting the road.',
+        activities: ['Market Square and the Old Market Hall', 'Ferry to the Suomenlinna sea fortress', 'Evening sauna and sea dip at Löyly'],
+        costs: [{ category: 'stay', label: 'Hostel', amount: 95 }, { category: 'activity', label: 'Suomenlinna ferry', amount: 18 }, { category: 'food', label: 'Dinner', amount: 60 }],
+      },
+      {
+        name: 'Porvoo', lat: 60.3932, lng: 25.6650, nights: 0, country: 'fi', wikiTitle: 'Porvoo',
+        description: 'A short hop east to one of Finland’s oldest towns, with wooden houses and red riverside storehouses.',
+        activities: ['Walk the cobbled Old Town', 'Photo of the red shore houses from the bridge', 'Coffee and a Runeberg cake'],
+        costs: [{ category: 'food', label: 'Lunch & coffee', amount: 45 }],
+      },
+      {
+        name: 'Savonlinna', lat: 61.8687, lng: 28.8867, nights: 1, country: 'fi', wikiTitle: 'Olavinlinna',
+        description: 'Into the Lakeland! A medieval castle sits on a rocky island in the middle of Lake Saimaa.',
+        activities: ['Guided tour of Olavinlinna Castle', 'Evening lake cruise on Saimaa', 'Try a local lörtsy pastry at the market'],
+        costs: [{ category: 'stay', label: 'Guesthouse', amount: 110 }, { category: 'activity', label: 'Castle + cruise', amount: 75 }],
+      },
+      {
+        name: 'Koli National Park', lat: 63.0966, lng: 29.8067, nights: 2, country: 'fi', wikiTitle: 'Koli National Park',
+        description: 'The classic Finnish national landscape: forested hills rising above Lake Pielinen. Our outdoor base for two nights.',
+        activities: ['Sunrise hike up Ukko-Koli', 'Canoe trip on Lake Pielinen', 'Campfire and sausages at a lean-to (laavu)', 'Smoke sauna at the cottage'],
+        costs: [{ category: 'stay', label: 'Cottage (2 nights)', amount: 220 }, { category: 'activity', label: 'Canoe rental', amount: 60 }, { category: 'food', label: 'Groceries', amount: 70 }],
+      },
+      {
+        name: 'Oulu', lat: 65.0121, lng: 25.4651, nights: 1, country: 'fi', wikiTitle: 'Oulu',
+        description: 'Crossing the country to the Gulf of Bothnia. A relaxed student city with great cycling paths.',
+        activities: ['Market square and the Toripolliisi statue', 'Rent city bikes to Nallikari beach', 'Sunset at the seaside'],
+        costs: [{ category: 'stay', label: 'Hotel', amount: 105 }, { category: 'food', label: 'Dinner', amount: 55 }],
+      },
+      {
+        name: 'Rovaniemi', lat: 66.5039, lng: 25.7294, nights: 2, country: 'fi', wikiTitle: 'Rovaniemi',
+        description: 'Finish line on the Arctic Circle! In June the sun never sets here, perfect for late-night hikes.',
+        activities: ['Cross the Arctic Circle line', 'Arktikum museum about Arctic life', 'Midnight-sun hike on Ounasvaara', 'Reindeer farm visit'],
+        costs: [{ category: 'stay', label: 'Log cabin (2 nights)', amount: 240 }, { category: 'activity', label: 'Arktikum + reindeer farm', amount: 95 }],
+      },
+    ],
+  };
+})(window.RT);
+
+</script>
+  <script>
+/* Online services (all free, no API keys) with local caching.
+ * - Routing: OSRM (project-osrm.org, fallback routing.openstreetmap.de)
+ * - Places: Nominatim (OpenStreetMap)
+ * - Photos & descriptions: Wikipedia REST API
+ * - Weather: Open-Meteo (forecast + historical archive)
+ * - Exchange rates: Frankfurter (European Central Bank) */
+window.RT = window.RT || {};
+(RT => {
+  'use strict';
+
+  const readJSON = (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } };
+  const writeJSON = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* full or blocked */ } };
+  RT.readJSON = readJSON;
+  RT.writeJSON = writeJSON;
+
+  /** A small persistent key→value cache with a size cap. */
+  function makeCache(key, max) {
+    const data = readJSON(key, {});
+    let timer;
+    return {
+      get: k => data[k],
+      set(k, v) {
+        data[k] = v;
+        const keys = Object.keys(data);
+        if (keys.length > max) keys.slice(0, keys.length - max).forEach(x => delete data[x]);
+        clearTimeout(timer);
+        timer = setTimeout(() => writeJSON(key, data), 400);
+      },
+    };
+  }
+  const routeCache = makeCache('roadtrip.routes.v2', 400);
+  const wikiCache = makeCache('roadtrip.wiki.v1', 300);
+  const weatherCache = makeCache('roadtrip.weather.v1', 500);
+
+  async function fetchJSON(url, { timeout = 12000, signal } = {}) {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), timeout);
+    signal?.addEventListener('abort', () => ctl.abort());
+    try {
+      const r = await fetch(url, { signal: ctl.signal });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return await r.json();
+    } finally {
+      clearTimeout(t);
+    }
+  }
+  RT.fetchJSON = fetchJSON;
+
+  const lang = () => (navigator.language || 'en').slice(0, 2);
+
+  // ---------- Geometry ----------
+  RT.haversine = (a, b) => {
+    const R = 6371, rad = x => x * Math.PI / 180;
+    const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  };
+
+  // ---------- Routing ----------
+  const ROUTERS = [
+    'https://router.project-osrm.org/route/v1/driving/',
+    'https://routing.openstreetmap.de/routed-car/route/v1/driving/',
+  ];
+  const legKey = (a, b) => [a.lat, a.lng, b.lat, b.lng].map(n => (+n).toFixed(4)).join(',');
+
+  RT.straightLeg = (a, b) => {
+    const km = RT.haversine(a, b) * 1.3;
+    return { km, min: km / 70 * 60, coords: [[a.lat, a.lng], [b.lat, b.lng]], approx: true };
+  };
+  RT.cachedLeg = (a, b) => routeCache.get(legKey(a, b));
+
+  RT.fetchLeg = async (a, b) => {
+    const key = legKey(a, b);
+    const hit = routeCache.get(key);
+    if (hit) return hit;
+    for (const base of ROUTERS) {
+      try {
+        const j = await fetchJSON(`${base}${a.lng},${a.lat};${b.lng},${b.lat}?overview=simplified&geometries=geojson`, { timeout: 15000 });
+        if (j.code !== 'Ok' || !j.routes?.length) continue;
+        const r = j.routes[0];
+        const leg = {
+          km: r.distance / 1000,
+          min: r.duration / 60,
+          coords: r.geometry.coordinates.map(([lng, lat]) => [+lat.toFixed(5), +lng.toFixed(5)]),
+          approx: false,
+        };
+        routeCache.set(key, leg);
+        return leg;
+      } catch { /* try the next router */ }
+    }
+    return RT.straightLeg(a, b); // not cached → retried next time
+  };
+
+  // ---------- Places (Nominatim: max 1 request per second) ----------
+  let lastNominatim = 0;
+  async function nominatim(path) {
+    const wait = Math.max(0, lastNominatim + 1100 - Date.now());
+    lastNominatim = Date.now() + wait;
+    if (wait) await new Promise(r => setTimeout(r, wait));
+    return fetchJSON(`https://nominatim.openstreetmap.org/${path}&accept-language=${lang()}`);
+  }
+
+  RT.searchPlaces = async q => {
+    const res = await nominatim(`search?format=jsonv2&limit=6&addressdetails=1&extratags=1&q=${encodeURIComponent(q)}`);
+    return res.map(p => ({
+      name: p.name || p.display_name.split(',')[0],
+      detail: p.display_name,
+      lat: +(+p.lat).toFixed(5),
+      lng: +(+p.lon).toFixed(5),
+      country: p.address?.country_code || '',
+      wikiTitle: wikiTag(p.extratags?.wikipedia),
+    }));
+  };
+
+  RT.reversePlace = async (lat, lng) => {
+    const j = await nominatim(`reverse?format=jsonv2&zoom=12&addressdetails=1&extratags=1&lat=${lat}&lon=${lng}`);
+    const a = j.address || {};
+    return {
+      name: a.city || a.town || a.village || a.hamlet || a.municipality || j.name || a.county || a.state || '',
+      country: a.country_code || '',
+      wikiTitle: wikiTag(j.extratags?.wikipedia),
+    };
+  };
+
+  // OSM "wikipedia" tags look like "fi:Porvoo". Only keep English ones (others get looked up by name).
+  function wikiTag(tag) {
+    const m = /^en:(.+)$/.exec(tag || '');
+    return m ? m[1] : '';
+  }
+
+  // ---------- Wikipedia: photo + short description ----------
+  const WIKI = 'https://en.wikipedia.org';
+  async function wikiSummary(title) {
+    const j = await fetchJSON(`${WIKI}/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, '_'))}`);
+    if (j.type === 'disambiguation' || !j.extract) return null;
+    return j;
+  }
+  function bigImage(s) {
+    const o = s.originalimage, t = s.thumbnail;
+    if (!o && !t) return '';
+    if (o && o.width <= 1600) return o.source;
+    if (t && /\/\d+px-/.test(t.source)) return t.source.replace(/\/\d+px-/, '/1280px-');
+    return (o || t).source;
+  }
+  function shortText(text, max = 320) {
+    const sentences = text.replace(/\s*\([^)]*\)/g, '').match(/[^.!?]+[.!?]+/g) || [text];
+    let out = '';
+    for (const s of sentences) {
+      if ((out + s).length > max && out) break;
+      out += s;
+    }
+    return out.trim();
+  }
+
+  /** Finds a Wikipedia article for a place: photo, 1–3 sentence description, link. */
+  RT.wikiInfo = async ({ name, lat, lng, wikiTitle }) => {
+    const key = `${wikiTitle || name}|${(+lat).toFixed(2)},${(+lng).toFixed(2)}`;
+    const hit = wikiCache.get(key);
+    if (hit !== undefined) return hit;
+    const near = s => !s.coordinates || RT.haversine({ lat, lng }, { lat: s.coordinates.lat, lng: s.coordinates.lon }) < 60;
+    let found = null, offline = false;
+    const noteErr = e => { if (!String(e?.message).startsWith('HTTP')) offline = true; };
+    const tries = [wikiTitle, name, name.split(',')[0]].filter(Boolean);
+    for (const t of [...new Set(tries)]) {
+      try { const s = await wikiSummary(t); if (s && near(s)) { found = s; break; } } catch (e) { noteErr(e); }
+    }
+    if (!found) {
+      try {
+        const g = await fetchJSON(`${WIKI}/w/api.php?action=query&list=geosearch&gscoord=${lat}%7C${lng}&gsradius=10000&gslimit=15&format=json&origin=*`);
+        const pages = g.query?.geosearch || [];
+        const first = name.toLowerCase().split(/[\s,]/)[0];
+        const pick = pages.find(p => p.title.toLowerCase().includes(first)) || pages[0];
+        if (pick) found = await wikiSummary(pick.title);
+      } catch (e) { noteErr(e); }
+    }
+    if (!found && offline) throw new Error('offline'); // don't cache: retry later
+    const info = found ? {
+      title: found.title,
+      description: shortText(found.extract),
+      image: bigImage(found),
+      url: found.content_urls?.desktop?.page || `${WIKI}/wiki/${encodeURIComponent(found.title)}`,
+    } : null;
+    wikiCache.set(key, info);
+    return info;
+  };
+
+  // ---------- Weather ----------
+  const iso = d => d.toISOString().slice(0, 10);
+  /** Weather for one place and date. Uses the forecast when the date is within 15 days,
+   *  the real archive when it is in the past, and the same day last year as a "typical" guide otherwise. */
+  RT.weatherFor = async (lat, lng, dateISO) => {
+    const today = new Date(iso(new Date()) + 'T00:00:00Z');
+    const date = new Date(dateISO + 'T00:00:00Z');
+    if (isNaN(date)) return null;
+    const diff = Math.round((date - today) / 86400000);
+    let kind = 'forecast', query = new Date(date);
+    if (diff < -5) kind = 'past';
+    else if (diff < 0 || diff > 15) {
+      kind = 'typical';
+      while ((query - today) / 86400000 > -6) query.setUTCFullYear(query.getUTCFullYear() - 1);
+    }
+    const q = iso(query);
+    const key = `${(+lat).toFixed(2)},${(+lng).toFixed(2)},${q},${kind}`;
+    const hit = weatherCache.get(key);
+    if (hit && (kind !== 'forecast' || Date.now() - hit.at < 3 * 3600e3)) return hit;
+    const daily = 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,sunrise,sunset,daylight_duration';
+    const host = kind === 'forecast' ? 'https://api.open-meteo.com/v1/forecast' : 'https://archive-api.open-meteo.com/v1/archive';
+    const j = await fetchJSON(`${host}?latitude=${lat}&longitude=${lng}&daily=${daily}&timezone=auto&start_date=${q}&end_date=${q}`);
+    const d = j.daily;
+    if (!d?.time?.length) return null;
+    const w = {
+      at: Date.now(), kind, basedOn: q,
+      code: d.weather_code[0], tmax: d.temperature_2m_max[0], tmin: d.temperature_2m_min[0],
+      rain: d.precipitation_sum[0], sunrise: d.sunrise[0], sunset: d.sunset[0], daylight: d.daylight_duration[0],
+    };
+    weatherCache.set(key, w);
+    return w;
+  };
+
+  // ---------- Exchange rates ----------
+  RT.rates = { ...RT.CURRENCIES };
+  RT.ratesLive = false;
+  RT.loadRates = async () => {
+    const cached = readJSON('roadtrip.rates.v1', null);
+    if (cached && Date.now() - cached.at < 12 * 3600e3) {
+      Object.assign(RT.rates, cached.rates);
+      RT.ratesLive = true;
+      return;
+    }
+    for (const url of ['https://api.frankfurter.dev/v1/latest?base=EUR', 'https://api.frankfurter.app/latest?from=EUR']) {
+      try {
+        const j = await fetchJSON(url, { timeout: 8000 });
+        if (!j.rates) continue;
+        const rates = { ...j.rates, EUR: 1 };
+        Object.assign(RT.rates, rates);
+        RT.ratesLive = true;
+        writeJSON('roadtrip.rates.v1', { at: Date.now(), rates });
+        return;
+      } catch { /* try next */ }
+    }
+  };
+})(window.RT);
+
+</script>
+  <script>
+/* Trip data model and all calculations (days, distances, fuel, budget). */
+window.RT = window.RT || {};
+(RT => {
+  'use strict';
+
+  const num = (v, d = 0) => { const n = parseFloat(String(v ?? '').replace(',', '.')); return Number.isFinite(n) ? n : d; };
+  const sum = (arr, f) => arr.reduce((a, x) => a + (f(x) || 0), 0);
+  RT.num = num;
+  RT.sum = sum;
+  RT.uid = () => Math.random().toString(36).slice(2, 10);
+
+  const LEGACY_SYMBOLS = { '€': 'EUR', '$': 'USD', '£': 'GBP', '¥': 'JPY', 'kr': 'SEK', 'NT$': 'TWD' };
+
+  const normCosts = c => (Array.isArray(c) ? c : []).map(x => ({
+    category: RT.CATS[x?.category] ? x.category : 'other',
+    label: String(x?.label ?? ''),
+    amount: Math.max(0, num(x?.amount, 0)),
+  }));
+
+  RT.normalizeStop = s => ({
+    id: s.id || RT.uid(),
+    name: String(s.name || 'Stop'),
+    lat: +s.lat,
+    lng: +s.lng,
+    nights: Math.max(0, Math.round(num(s.nights, 0))),
+    country: String(s.country || '').toLowerCase(),
+    description: String(s.description || ''),
+    activities: Array.isArray(s.activities) ? s.activities.map(String) : String(s.activities || '').split('\n'),
+    image: String(s.image || ''),
+    wikiTitle: String(s.wikiTitle || ''),
+    wikiUrl: String(s.wikiUrl || ''),
+    enriched: !!s.enriched,
+    costs: normCosts(s.costs),
+  });
+
+  RT.normalizeTrip = (t = {}) => {
+    const v = t.vehicle || {};
+    let currency = LEGACY_SYMBOLS[t.currency] || String(t.currency || 'EUR').toUpperCase();
+    if (!RT.CURRENCIES[currency]) currency = 'EUR';
+    const overrides = {};
+    Object.entries(t.priceOverrides || {}).forEach(([k, x]) => { if (num(x, -1) >= 0) overrides[k] = num(x); });
+    return {
+      id: t.id || RT.uid(),
+      name: String(t.name || 'New road trip'),
+      subtitle: String(t.subtitle || ''),
+      startDate: /^\d{4}-\d{2}-\d{2}$/.test(t.startDate || '') ? t.startDate : new Date().toISOString().slice(0, 10),
+      travelers: Math.max(1, Math.round(num(t.travelers, 1))),
+      currency,
+      roundTrip: !!t.roundTrip,
+      fuelPricing: t.fuelPricing === 'manual' ? 'manual' : 'auto',
+      priceOverrides: overrides,
+      mapStyle: RT.MAP_STYLES[t.mapStyle] ? t.mapStyle : 'relief',
+      showStyle: RT.MAP_STYLES[t.showStyle] ? t.showStyle : 'satellite',
+      vehicle: {
+        name: String(v.name || ''),
+        fuelType: RT.FUEL_TYPES[v.fuelType] ? v.fuelType : 'petrol',
+        consumption: Math.max(0, num(v.consumption, 6.5)),
+        fuelPrice: Math.max(0, num(v.fuelPrice, 1.85)),
+      },
+      extraCosts: normCosts(t.extraCosts),
+      stops: (Array.isArray(t.stops) ? t.stops : [])
+        .filter(s => s && Number.isFinite(+s.lat) && Number.isFinite(+s.lng))
+        .map(RT.normalizeStop),
+    };
+  };
+
+  RT.sampleTrip = () => RT.normalizeTrip(JSON.parse(JSON.stringify(RT.SAMPLE)));
+  RT.blankTrip = (from) => RT.normalizeTrip({
+    name: 'New road trip', travelers: 2,
+    currency: from?.currency, vehicle: from?.vehicle, mapStyle: from?.mapStyle, showStyle: from?.showStyle,
+  });
+
+  // ---------- Money ----------
+  RT.convert = (eur, currency) => eur * (RT.rates[currency] ?? 1);
+  RT.money = (n, currency, exact) => {
+    const small = exact || Math.abs(n) < 100;
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency', currency,
+        minimumFractionDigits: small && n % 1 ? 2 : 0,
+        maximumFractionDigits: small ? 2 : 0,
+      }).format(n);
+    } catch {
+      return `${Math.round(n)} ${currency}`;
+    }
+  };
+
+  // ---------- Fuel prices ----------
+  /** Fuel price (trip currency per L or kWh) for one country, with where it came from. */
+  RT.countryPrice = (t, country) => {
+    const type = RT.FUEL_TYPES[t.vehicle.fuelType];
+    if (t.fuelPricing === 'manual') return { price: t.vehicle.fuelPrice, source: 'manual' };
+    if (country && t.priceOverrides[country] != null) return { price: t.priceOverrides[country], source: 'yours' };
+    const row = RT.COUNTRY_FUEL[country];
+    const eur = row?.[type.col + 1];
+    if (eur != null) return { price: RT.convert(eur, t.currency), source: 'average' };
+    return { price: t.vehicle.fuelPrice, source: 'fallback' };
+  };
+
+  /** Countries visited by the trip, in order of first appearance. */
+  RT.tripCountries = t => [...new Set(t.stops.map(s => s.country).filter(Boolean))];
+
+  /** Price used for a drive between two stops: if it crosses a border, the average of both countries. */
+  RT.legPrice = (t, a, b) => {
+    const pa = RT.countryPrice(t, a.country).price;
+    const pb = RT.countryPrice(t, b.country).price;
+    return (pa + pb) / 2;
+  };
+
+  // ---------- Days ----------
+  /** Builds the full plan: one entry per day, with drives, visits and where you sleep. */
+  RT.buildPlan = (t, legs, returnLeg) => {
+    const s = t.stops;
+    const arrivals = [];
+    let d = 1;
+    s.forEach(st => { arrivals.push(d); d += st.nights; });
+    const last = s[s.length - 1];
+    let total = last ? arrivals[arrivals.length - 1] + last.nights : 0;
+    if (last && returnLeg && total < 1) total = 1;
+    total = Math.max(total, s.length ? 1 : 0);
+
+    const days = Array.from({ length: total }, (_, k) => ({ day: k + 1, drives: [], visits: [], stay: null, sleep: null, departure: false }));
+    s.forEach((st, i) => {
+      const a = arrivals[i];
+      const day = days[a - 1];
+      if (i > 0 && legs[i]) day.drives.push({ leg: legs[i], from: s[i - 1], to: st, i });
+      day.visits.push(i);
+      for (let k = 0; k < st.nights; k++) days[a - 1 + k].sleep = i;
+      for (let k = 1; k < st.nights; k++) days[a - 1 + k].stay = i;
+    });
+    if (returnLeg && last) days[total - 1].drives.push({ leg: returnLeg, from: last, to: s[0], i: 'return' });
+    if (last && last.nights > 0 && !returnLeg) days[total - 1].departure = true;
+
+    // Colour per driving day, in fixed order (max 8 hues, then one shared colour)
+    let drivingDay = 0;
+    const drivingDays = days.filter(x => x.drives.length).length;
+    days.forEach(x => {
+      x.color = null;
+      if (x.drives.length) {
+        x.color = drivingDays <= RT.DAY_COLORS.length ? RT.DAY_COLORS[drivingDay] : RT.DAY_COLORS[0];
+        drivingDay++;
+      }
+      // The place that represents the day (photo, weather)
+      const lastVisit = x.visits[x.visits.length - 1];
+      x.main = x.stay ?? lastVisit ?? x.sleep ?? (x.departure ? s.length - 1 : null);
+      x.where = x.sleep ?? lastVisit ?? x.main;
+      x.km = sum(x.drives, v => v.leg.km);
+      x.min = sum(x.drives, v => v.leg.min);
+    });
+    return { arrivals, days };
+  };
+
+  RT.dayDate = (t, day, opts = { weekday: 'short', day: 'numeric', month: 'short' }) => {
+    if (!t.startDate) return '';
+    const d = new Date(t.startDate + 'T12:00:00');
+    if (isNaN(d)) return '';
+    d.setDate(d.getDate() + day - 1);
+    return d.toLocaleDateString(undefined, opts);
+  };
+  RT.dayISO = (t, day) => {
+    const d = new Date(t.startDate + 'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate() + day - 1);
+    return d.toISOString().slice(0, 10);
+  };
+
+  RT.dayTitle = (t, x) => {
+    const s = t.stops;
+    if (x.drives.length) {
+      const names = [x.drives[0].from.name, ...x.drives.map(v => v.to.name)];
+      return names.length > 3 ? `${names[0]} → ${names[names.length - 1]}` : names.join(' → ');
+    }
+    if (x.departure) return `Last morning in ${s[s.length - 1].name}`;
+    if (x.stay != null) return `A full day in ${s[x.stay].name}`;
+    if (x.visits.length) return `Starting in ${s[x.visits[0]].name}`;
+    return 'Free day';
+  };
+
+  // ---------- Totals ----------
+  RT.stopCost = s => sum(s.costs, c => c.amount);
+  RT.driveCost = (t, v) => v.leg.km * t.vehicle.consumption / 100 * RT.legPrice(t, v.from, v.to);
+
+  RT.computeStats = (t, legs, returnLeg) => {
+    const plan = RT.buildPlan(t, legs, returnLeg);
+    const drives = plan.days.flatMap(d => d.drives);
+    const km = sum(drives, v => v.leg.km);
+    const min = sum(drives, v => v.leg.min);
+    const fuelUnits = km * t.vehicle.consumption / 100;
+    const fuelCost = sum(drives, v => RT.driveCost(t, v));
+    const byCat = Object.fromEntries(Object.keys(RT.CATS).map(k => [k, 0]));
+    [...t.extraCosts, ...t.stops.flatMap(x => x.costs)].forEach(c => { byCat[c.category] += c.amount; });
+    const other = sum(Object.values(byCat), x => x);
+    const total = fuelCost + other;
+    return {
+      ...plan, drives, km, min, fuelUnits, fuelCost, byCat, other, total,
+      perPerson: total / Math.max(1, t.travelers),
+      nights: sum(t.stops, x => x.nights),
+      approx: drives.some(v => v.leg.approx),
+      avgPrice: fuelUnits ? fuelCost / fuelUnits : 0,
+    };
+  };
+
+  // ---------- Formatting ----------
+  RT.fmtKm = km => `${Math.round(km).toLocaleString()} km`;
+  RT.fmtDur = min => {
+    const m = Math.round(min);
+    const h = Math.floor(m / 60);
+    return h ? `${h} h ${String(m % 60).padStart(2, '0')}` : `${m} min`;
+  };
+  RT.plural = (n, w, ws) => `${n} ${n === 1 ? w : (ws || w + 's')}`;
+  RT.esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  RT.safeImg = u => /^(https?:\/\/|data:image\/)/i.test(String(u || '').trim()) ? String(u).trim() : '';
+  RT.timeOf = isoStr => (isoStr ? isoStr.slice(11, 16) : '');
+})(window.RT);
+
+</script>
+  <script>
+/* Roadtrip Planner: the editor (map, stops, plan, costs, trip settings). */
+(RT => {
+  'use strict';
+  const { esc, num, sum, plural, fmtKm, fmtDur } = RT;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const STORE_KEY = 'roadtrip.trips.v1';
+  const ACTIVE_KEY = 'roadtrip.active.v1';
+  const TAB_KEY = 'roadtrip.tab.v1';
+
+  // ---------- State ----------
+  let trips = RT.readJSON(STORE_KEY, null);
+  if (!Array.isArray(trips) || !trips.length) trips = [RT.sampleTrip()];
+  trips = trips.map(RT.normalizeTrip);
+  let activeId = RT.readJSON(ACTIVE_KEY, trips[0].id);
+  if (!trips.some(t => t.id === activeId)) activeId = trips[0].id;
+  const trip = () => trips.find(t => t.id === activeId);
+
+  let legs = [];          // legs[i] = the drive arriving at stop i
+  let returnLeg = null;   // last stop → first stop (round trips)
+  let routeGen = 0;
+  let routing = false;
+  const openStops = new Set();
+  const weather = {};     // "lat,lng|date" → weather | 'loading' | null
+
+  const stats = () => RT.computeStats(trip(), legs, returnLeg);
+  const money = (n, exact) => RT.money(n, trip().currency, exact);
+  const fuel = () => RT.FUEL_TYPES[trip().vehicle.fuelType];
+
+  let saveTimer;
+  const save = () => { clearTimeout(saveTimer); saveTimer = setTimeout(flushSave, 300); };
+  function flushSave() {
+    clearTimeout(saveTimer);
+    RT.writeJSON(STORE_KEY, trips);
+    RT.writeJSON(ACTIVE_KEY, activeId);
+  }
+  window.addEventListener('beforeunload', flushSave);
+
+  // ---------- Toast ----------
+  let toastTimer;
+  function toast(msg) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  // ---------- Weather helpers (shared with the presentation) ----------
+  const wxKey = (s, iso) => `${s.lat.toFixed(2)},${s.lng.toFixed(2)}|${iso}`;
+  function dayWeather(d) {
+    const t = trip();
+    const s = t.stops[d.where];
+    return s ? weather[wxKey(s, RT.dayISO(t, d.day))] : null;
+  }
+  RT.wxBits = w => {
+    if (!w || w === 'loading') return null;
+    const [icon, label] = RT.WEATHER[w.code] || ['🌡️', 'Weather'];
+    let sun;
+    if (w.daylight >= 86000) sun = '☀️ Midnight sun: 24 h of daylight';
+    else if (w.daylight <= 600) sun = '🌑 Polar night';
+    else sun = `🌅 ${RT.timeOf(w.sunrise)} · 🌇 ${RT.timeOf(w.sunset)}`;
+    const note = w.kind === 'forecast' ? 'Forecast'
+      : w.kind === 'past' ? 'Measured weather'
+        : `Typical weather (same day in ${w.basedOn.slice(0, 4)})`;
+    return { icon, label, hi: Math.round(w.tmax), lo: Math.round(w.tmin), rain: w.rain, sun, note, kind: w.kind };
+  };
+  function wxChip(d) {
+    const w = dayWeather(d);
+    if (w === 'loading') return '<span class="wx-chip loading">…</span>';
+    const b = RT.wxBits(w);
+    if (!b) return '';
+    return `<span class="wx-chip" title="${esc(`${b.label} · ${b.note}`)}">${b.icon} ${b.hi}° <small>/ ${b.lo}°</small>${b.kind === 'typical' ? '<sup>*</sup>' : ''}</span>`;
+  }
+
+  let wxTimer;
+  const scheduleWeather = () => { clearTimeout(wxTimer); wxTimer = setTimeout(loadWeather, 1000); };
+  async function loadWeather() {
+    const t = trip();
+    const st = stats();
+    if (st.days.length > 60) return;
+    const jobs = [];
+    st.days.forEach(d => {
+      const s = t.stops[d.where];
+      if (!s) return;
+      const iso = RT.dayISO(t, d.day);
+      const k = wxKey(s, iso);
+      if (k in weather) return;
+      weather[k] = 'loading';
+      jobs.push(() => RT.weatherFor(s.lat, s.lng, iso).then(w => { weather[k] = w; }).catch(() => { delete weather[k]; }));
+    });
+    if (!jobs.length) return;
+    renderDerived();
+    let i = 0;
+    const worker = async () => { while (i < jobs.length) { await jobs[i++](); renderDerived(); } };
+    await Promise.all([worker(), worker(), worker()]);
+  }
+
+  // ---------- Map ----------
+  function tileLayers(key) {
+    return RT.MAP_STYLES[key].layers.map(l => L.tileLayer(l.url, {
+      attribution: l.attr, subdomains: l.subdomains || 'abc', maxZoom: l.maxZoom || 19,
+      maxNativeZoom: l.maxNativeZoom, className: l.className || '',
+    }));
+  }
+  RT.setBase = (m, key) => {
+    (m._rtBase || []).forEach(l => m.removeLayer(l));
+    m._rtBase = tileLayers(key);
+    m._rtBase.forEach(l => l.addTo(m));
+    m.getContainer().dataset.style = key;
+  };
+
+  RT.pinIcon = (stop, n, cls = '') => {
+    const img = RT.safeImg(stop.image);
+    const inner = img
+      ? `<div class="pin photo ${cls}"><img src="${esc(img)}" alt="" loading="lazy" onerror="this.parentNode.classList.remove('photo');this.remove()"><b>${n}</b></div>`
+      : `<div class="pin ${cls}"><b>${n}</b></div>`;
+    return L.divIcon({ className: 'pin-wrap', html: inner, iconSize: [52, 52], iconAnchor: [26, 26], popupAnchor: [0, -24] });
+  };
+
+  const map = L.map('map', { zoomControl: false, worldCopyJump: true }).setView([62, 25], 5);
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+  const routeLayer = L.layerGroup().addTo(map);
+  const markerLayer = L.layerGroup().addTo(map);
+
+  const StyleSwitch = L.Control.extend({
+    options: { position: 'topright' },
+    onAdd() {
+      const div = L.DomUtil.create('div', 'style-switch');
+      div.innerHTML = Object.entries(RT.MAP_STYLES).map(([k, v]) =>
+        `<button type="button" data-style="${k}" title="${v.label} map"><span>${v.icon}</span><em>${v.label}</em></button>`).join('');
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.disableScrollPropagation(div);
+      div.addEventListener('click', e => {
+        const b = e.target.closest('[data-style]');
+        if (!b) return;
+        trip().mapStyle = b.dataset.style;
+        applyMapStyle();
+        save();
+      });
+      return div;
+    },
+  });
+  new StyleSwitch().addTo(map);
+
+  const FitButton = L.Control.extend({
+    options: { position: 'topleft' },
+    onAdd() {
+      const b = L.DomUtil.create('button', 'fit-btn');
+      b.type = 'button';
+      b.title = 'Show the whole route';
+      b.textContent = '⤢';
+      L.DomEvent.disableClickPropagation(b);
+      b.addEventListener('click', () => fitMap());
+      return b;
+    },
+  });
+  new FitButton().addTo(map);
+
+  function applyMapStyle() {
+    const key = trip().mapStyle;
+    RT.setBase(map, key);
+    $$('.style-switch [data-style]').forEach(b => b.classList.toggle('on', b.dataset.style === key));
+  }
+
+  function renderMarkers() {
+    markerLayer.clearLayers();
+    const t = trip(), st = stats();
+    t.stops.forEach((stop, i) => {
+      const cls = i === 0 ? 'start' : i === t.stops.length - 1 ? 'end' : '';
+      const m = L.marker([stop.lat, stop.lng], { draggable: true, icon: RT.pinIcon(stop, i + 1, cls), title: stop.name, riseOnHover: true });
+      const img = RT.safeImg(stop.image);
+      const day = st.arrivals[i];
+      m.bindPopup(`
+        <div class="pop">
+          ${img ? `<img src="${esc(img)}" alt="" onerror="this.remove()">` : ''}
+          <div class="pop-body">
+            <small>${RT.flag(stop.country)} Day ${day} · ${esc(RT.dayDate(t, day))}${stop.nights ? ` · ${plural(stop.nights, 'night')}` : ''}</small>
+            <h4>${i + 1}. ${esc(stop.name)}</h4>
+            ${stop.description ? `<p>${esc(stop.description.length > 160 ? stop.description.slice(0, 157) + '…' : stop.description)}</p>` : ''}
+            <button type="button" class="small" data-edit="${stop.id}">✎ Edit this stop</button>
+          </div>
+        </div>`, { maxWidth: 280, minWidth: 240, className: 'pop-wrap' });
+      m.on('dragend', e => {
+        const p = e.target.getLatLng();
+        stop.lat = +p.lat.toFixed(5);
+        stop.lng = +p.lng.toFixed(5);
+        stop.country = '';
+        queueEnrich(stop);
+        save();
+        renderStops();
+        computeRoutes();
+      });
+      markerLayer.addLayer(m);
+    });
+  }
+  map.getContainer().addEventListener('click', e => {
+    const b = e.target.closest('[data-edit]');
+    if (b) { map.closePopup(); focusStop(b.dataset.edit); }
+  });
+
+  function renderRoute() {
+    routeLayer.clearLayers();
+    const st = stats();
+    st.days.forEach(d => d.drives.forEach(v => {
+      const color = d.color || '#6b7280';
+      L.polyline(v.leg.coords, { color: '#ffffff', weight: 9, opacity: .9, interactive: false, lineCap: 'round', lineJoin: 'round' }).addTo(routeLayer);
+      L.polyline(v.leg.coords, { color, weight: 5, opacity: 1, dashArray: v.leg.approx ? '8 10' : null, lineCap: 'round', lineJoin: 'round' })
+        .bindTooltip(`<b>Day ${d.day}</b> · ${esc(v.from.name)} → ${esc(v.to.name)}<br>${v.leg.approx ? '~' : ''}${fmtKm(v.leg.km)} · ${fmtDur(v.leg.min)}`, { sticky: true })
+        .addTo(routeLayer);
+    }));
+  }
+
+  function fitMap(m = map, opts = {}) {
+    const s = trip().stops;
+    if (!s.length) return;
+    if (s.length === 1) { m.setView([s[0].lat, s[0].lng], 9); return; }
+    const pts = [...s.map(x => [x.lat, x.lng]), ...legs.filter(Boolean).flatMap(l => l.coords)];
+    m.fitBounds(L.latLngBounds(pts), { paddingTopLeft: [60, 70], paddingBottomRight: [60, m === map ? 130 : 60], ...opts });
+  }
+  RT.fitBoundsOf = () => {
+    const s = trip().stops;
+    return L.latLngBounds([...s.map(x => [x.lat, x.lng]), ...legs.filter(Boolean).flatMap(l => l.coords), ...(returnLeg ? returnLeg.coords : [])]);
+  };
+
+  // ---------- Routing ----------
+  async function computeRoutes() {
+    const gen = ++routeGen;
+    const t = trip();
+    const s = t.stops;
+    legs = new Array(s.length).fill(null);
+    returnLeg = null;
+    const pairs = [];
+    for (let i = 1; i < s.length; i++) pairs.push([i, s[i - 1], s[i]]);
+    if (t.roundTrip && s.length > 1) pairs.push(['return', s[s.length - 1], s[0]]);
+    const assign = (k, l) => { if (k === 'return') returnLeg = l; else legs[k] = l; };
+    const todo = [];
+    for (const [k, a, b] of pairs) {
+      const hit = RT.cachedLeg(a, b);
+      if (hit) assign(k, hit);
+      else { assign(k, RT.straightLeg(a, b)); todo.push([k, a, b]); }
+    }
+    routing = todo.length > 0;
+    renderDerived();
+    for (const [k, a, b] of todo) {
+      const leg = await RT.fetchLeg(a, b);
+      if (gen !== routeGen) return;
+      assign(k, leg);
+      renderDerived();
+    }
+    routing = false;
+    renderDerived();
+    scheduleWeather();
+  }
+
+  // ---------- Wikipedia enrichment & country detection ----------
+  let enrichChain = Promise.resolve();
+  const queueEnrich = (stop, opts) => (enrichChain = enrichChain.then(() => enrichStop(stop, opts)).catch(() => {}));
+
+  async function enrichStop(stop, { force = false } = {}) {
+    let changedSomething = false;
+    if (!stop.country) {
+      try {
+        const r = await RT.reversePlace(stop.lat, stop.lng);
+        if (r.country) { stop.country = r.country; changedSomething = true; }
+        if (!stop.wikiTitle && r.wikiTitle) stop.wikiTitle = r.wikiTitle;
+      } catch { /* offline: try again next time */ }
+    }
+    if (force || !stop.enriched) {
+      try {
+        const info = await RT.wikiInfo(stop);
+        stop.enriched = true;
+        if (info) {
+          if (info.image && (force || !stop.image)) stop.image = info.image;
+          if (!stop.description.trim()) stop.description = info.description;
+          else if (force && info.description && info.description !== stop.description
+            && confirm(`Replace the description of “${stop.name}” with the one from Wikipedia?\n\n${info.description}`)) stop.description = info.description;
+          stop.wikiUrl = info.url;
+          changedSomething = true;
+          if (force) toast(`✨ Updated “${stop.name}” from Wikipedia`);
+        } else if (force) toast(`No Wikipedia article found near “${stop.name}” 😕`);
+      } catch {
+        if (force) toast('Could not reach Wikipedia. Check your connection.');
+      }
+    }
+    if (!changedSomething) return;
+    save();
+    if (!trip().stops.includes(stop)) return;
+    renderMarkers();
+    if (!$('#stopList').contains(document.activeElement)) renderStops();
+    renderDerived();
+  }
+
+  // ---------- Pick on map ----------
+  let picking = false;
+  function setPicking(on) {
+    picking = on;
+    document.body.classList.toggle('picking', on);
+    $('#pickHint').hidden = !on;
+  }
+  $('#pickBtn').addEventListener('click', () => setPicking(!picking));
+  $('#pickCancel').addEventListener('click', () => setPicking(false));
+  map.on('click', async e => {
+    if (!picking) return;
+    setPicking(false);
+    const lat = +e.latlng.lat.toFixed(5), lng = +e.latlng.lng.toFixed(5);
+    let place = { name: '', country: '', wikiTitle: '' };
+    try { place = await RT.reversePlace(lat, lng); } catch { /* keep defaults */ }
+    addStop({ ...place, name: place.name || `Stop ${trip().stops.length + 1}`, lat, lng });
+  });
+
+  // ---------- Place search ----------
+  let searchTimer, searchId = 0, results = [];
+  $('#placeSearch').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    const q = e.target.value.trim();
+    if (q.length < 3) { $('#searchResults').innerHTML = ''; return; }
+    searchTimer = setTimeout(() => searchPlaces(q), 450);
+  });
+  $('#placeSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { clearTimeout(searchTimer); const q = e.target.value.trim(); if (q) searchPlaces(q); }
+    if (e.key === 'Escape') { e.target.value = ''; $('#searchResults').innerHTML = ''; }
+  });
+  async function searchPlaces(q) {
+    const id = ++searchId;
+    const box = $('#searchResults');
+    box.innerHTML = '<div class="muted">Searching…</div>';
+    try {
+      const r = await RT.searchPlaces(q);
+      if (id !== searchId) return;
+      results = r;
+      box.innerHTML = r.length
+        ? r.map((p, i) => `<button type="button" class="result" data-result="${i}"><strong>${RT.flag(p.country)} ${esc(p.name)}</strong><small>${esc(p.detail)}</small></button>`).join('')
+        : '<div class="muted">No places found. Try another spelling, or use “Pick on map”.</div>';
+    } catch {
+      if (id === searchId) box.innerHTML = '<div class="muted">Search failed. Check your internet connection, or use “Pick on map”.</div>';
+    }
+  }
+  $('#searchResults').addEventListener('click', e => {
+    const b = e.target.closest('[data-result]');
+    if (!b) return;
+    const p = results[+b.dataset.result];
+    addStop({ name: p.name, lat: p.lat, lng: p.lng, country: p.country, wikiTitle: p.wikiTitle });
+    $('#placeSearch').value = '';
+    $('#searchResults').innerHTML = '';
+  });
+
+  function addStop(data) {
+    const t = trip();
+    const stop = RT.normalizeStop({ nights: 1, ...data });
+    t.stops.push(stop);
+    openStops.add(stop.id);
+    stopsChanged();
+    map.flyTo([stop.lat, stop.lng], Math.max(map.getZoom(), 7), { duration: .8 });
+    requestAnimationFrame(() => focusStop(stop.id));
+    toast(`Added “${stop.name}”: looking for a photo…`);
+    queueEnrich(stop);
+  }
+
+  function focusStop(id) {
+    setTab('stops');
+    openStops.add(id);
+    renderStops();
+    const li = $(`.stop-card[data-id="${id}"]`);
+    if (li) {
+      li.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      li.classList.add('flash');
+      setTimeout(() => li.classList.remove('flash'), 1300);
+    }
+  }
+
+  // ---------- Tabs ----------
+  function setTab(name) {
+    $$('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    $$('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === name));
+    RT.writeJSON(TAB_KEY, name);
+  }
+  $$('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+  // ---------- Cost rows ----------
+  function costRowsHtml(costs, owner) {
+    return costs.map((c, i) => `
+      <div class="cost-row" data-i="${i}">
+        <select data-cf="category" aria-label="Category">${Object.entries(RT.CATS).map(([k, v]) => `<option value="${k}"${k === c.category ? ' selected' : ''}>${v.icon} ${v.label}</option>`).join('')}</select>
+        <input data-cf="label" value="${esc(c.label)}" placeholder="What for?" aria-label="Description">
+        <input type="number" min="0" step="any" data-cf="amount" value="${c.amount || ''}" placeholder="0" aria-label="Amount">
+        <button type="button" class="icon" data-act="del-cost" title="Remove">✕</button>
+      </div>`).join('') + `<button type="button" class="small ghost" data-act="add-cost">＋ Add ${owner === 'trip' ? 'a trip' : 'a'} cost</button>`;
+  }
+  const ownerCosts = owner => owner === 'trip' ? trip().extraCosts : trip().stops.find(s => s.id === owner)?.costs;
+
+  // ---------- Trip form ----------
+  const getPath = (o, p) => p.split('.').reduce((a, k) => a?.[k], o);
+  const setPath = (o, p, v) => { const ks = p.split('.'); const last = ks.pop(); ks.reduce((a, k) => a[k], o)[last] = v; };
+
+  $('#currencySelect').innerHTML = Object.keys(RT.CURRENCIES).map(c => `<option value="${c}">${c}</option>`).join('');
+  $('#showStyleSelect').innerHTML = Object.entries(RT.MAP_STYLES).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('');
+
+  function renderTripForm() {
+    const t = trip();
+    $$('#tripForm [data-t]').forEach(el => {
+      const v = getPath(t, el.dataset.t);
+      if (el.type === 'checkbox') el.checked = !!v;
+      else if (el.type === 'radio') el.checked = el.value === v;
+      else el.value = v ?? '';
+    });
+    $('#tripForm .cost-rows[data-owner="trip"]').innerHTML = costRowsHtml(t.extraCosts, 'trip');
+    renderFuelPricing();
+  }
+
+  function renderFuelPricing() {
+    const t = trip(), f = fuel();
+    const auto = t.fuelPricing === 'auto';
+    $('#consLabel').textContent = `Use (${f.unit} per 100 km)`;
+    $('#consHint').textContent = f.hint;
+    $('#manualPriceLabel').textContent = auto
+      ? `Price for countries without data (${t.currency} per ${f.unit})`
+      : `Price (${t.currency} per ${f.unit})`;
+    const box = $('#countryPrices');
+    if (!auto) { box.innerHTML = ''; return; }
+    const countries = RT.tripCountries(t);
+    if (!countries.length) {
+      box.innerHTML = '<p class="hint">Add stops and the countries appear here with their local prices.</p>';
+      return;
+    }
+    box.innerHTML = `
+      <table class="price-table">
+        <thead><tr><th>Country</th><th class="r">Average</th><th class="r">Your price</th></tr></thead>
+        <tbody>${countries.map(c => {
+          const row = RT.COUNTRY_FUEL[c];
+          const eur = row?.[f.col + 1];
+          const avg = eur != null ? RT.convert(eur, t.currency) : null;
+          const own = t.priceOverrides[c];
+          return `<tr>
+            <td>${RT.flag(c)} ${esc(row?.[0] || c.toUpperCase())}</td>
+            <td class="r">${avg != null ? RT.money(avg, t.currency, true) : '<span class="muted">no data</span>'}</td>
+            <td class="r"><input type="number" min="0" step="0.01" data-override="${c}" value="${own ?? ''}" placeholder="${avg != null ? avg.toFixed(2) : t.vehicle.fuelPrice}" aria-label="Your price in ${esc(row?.[0] || c)}"></td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+      <p class="hint">📊 National averages (${RT.PRICES_UPDATED} estimates)${t.currency !== 'EUR' ? `, converted with ${RT.ratesLive ? 'today’s' : 'approximate'} exchange rates` : ''}. Prices change often: type the real pump price in “Your price” if you know it. Drives that cross a border use the average of both countries.</p>`;
+  }
+
+  $('#tripForm').addEventListener('input', e => {
+    const el = e.target;
+    const t = trip();
+    if (el.dataset.override) {
+      const c = el.dataset.override;
+      if (el.value.trim() === '') delete t.priceOverrides[c];
+      else t.priceOverrides[c] = Math.max(0, num(el.value, 0));
+      changed();
+      return;
+    }
+    const p = el.dataset.t;
+    if (!p) return;
+    if (el.type === 'radio' && !el.checked) return;
+    let v = el.type === 'checkbox' ? el.checked : el.value;
+    if (p === 'travelers') v = Math.max(1, Math.round(num(v, 1)));
+    if (p === 'vehicle.consumption' || p === 'vehicle.fuelPrice') v = Math.max(0, num(v, 0));
+    if (p === 'currency' && v !== t.currency) convertAmounts(t, t.currency, v);
+    setPath(t, p, v);
+    if (p === 'name') renderTripSelect();
+    if (p === 'roundTrip') computeRoutes();
+    if (p === 'startDate') scheduleWeather();
+    if (['vehicle.fuelType', 'currency', 'fuelPricing'].includes(p)) renderFuelPricing();
+    changed();
+  });
+
+  /** Changing the currency converts every amount, so 100 € becomes ¥16,500 instead of ¥100. */
+  function convertAmounts(t, from, to) {
+    const f = (RT.rates[to] ?? 1) / (RT.rates[from] ?? 1);
+    const conv = x => Math.round(x * f * 100) / 100;
+    [...t.extraCosts, ...t.stops.flatMap(s => s.costs)].forEach(c => { c.amount = conv(c.amount); });
+    Object.keys(t.priceOverrides).forEach(k => { t.priceOverrides[k] = conv(t.priceOverrides[k]); });
+    t.vehicle.fuelPrice = conv(t.vehicle.fuelPrice);
+    $$('#tripForm [data-t="vehicle.fuelPrice"]').forEach(el => { el.value = t.vehicle.fuelPrice; });
+    $('#tripForm .cost-rows[data-owner="trip"]').innerHTML = costRowsHtml(t.extraCosts, 'trip');
+    renderStops();
+    toast(`💱 Converted all amounts from ${from} to ${to}`);
+  }
+
+  // ---------- Stops list ----------
+  function stopCardHtml(s, i, n) {
+    const open = openStops.has(s.id);
+    const img = RT.safeImg(s.image);
+    return `
+      <li class="stop-card${open ? ' open' : ''}" data-id="${s.id}">
+        <div class="stop-head">
+          <div class="thumb${img ? ' has-img' : ''}">${img ? `<img src="${esc(img)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<span class="num">${i + 1}</span></div>
+          <div class="stop-title">
+            <input class="stop-name" data-f="name" value="${esc(s.name)}" aria-label="Stop name">
+            <div class="stop-meta"></div>
+          </div>
+          <div class="stop-tools">
+            <button type="button" class="icon" data-act="up" title="Move up" ${i === 0 ? 'disabled' : ''}>↑</button>
+            <button type="button" class="icon" data-act="down" title="Move down" ${i === n - 1 ? 'disabled' : ''}>↓</button>
+            <button type="button" class="icon" data-act="toggle" title="${open ? 'Close' : 'Edit details'}" aria-expanded="${open}">${open ? '▴' : '✎'}</button>
+          </div>
+        </div>
+        <div class="stop-body"${open ? '' : ' hidden'}>
+          <div class="row2">
+            <label>Nights here<input type="number" min="0" step="1" data-f="nights" value="${s.nights}"></label>
+            <label>Photo link<input type="url" data-f="image" value="${esc(s.image)}" placeholder="https://…"></label>
+          </div>
+          ${img ? `<figure class="photo-preview"><img src="${esc(img)}" alt="" onerror="this.parentNode.remove()">${s.wikiUrl ? `<figcaption>Photo &amp; text: <a href="${esc(s.wikiUrl)}" target="_blank" rel="noopener">Wikipedia</a></figcaption>` : ''}</figure>` : ''}
+          <button type="button" class="small wiki-btn" data-act="wiki">✨ Get photo &amp; description from Wikipedia</button>
+          <label>Description<textarea rows="3" data-f="description" placeholder="What is this place about? Why do we go?">${esc(s.description)}</textarea></label>
+          <label>Things to do <small>(one per line)</small><textarea rows="4" data-f="activities" placeholder="Hike to the viewpoint&#10;Swim in the lake">${esc(s.activities.join('\n'))}</textarea></label>
+          <div class="cost-block">
+            <div class="cost-title">💶 Costs at this stop</div>
+            <div class="cost-rows" data-owner="${s.id}">${costRowsHtml(s.costs, s.id)}</div>
+          </div>
+          <div class="stop-foot">
+            <span class="coords">${RT.flag(s.country)} ${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}</span>
+            <button type="button" class="danger small" data-act="del">🗑️ Delete stop</button>
+          </div>
+        </div>
+      </li>`;
+  }
+
+  function renderStops() {
+    const s = trip().stops;
+    $('#stopList').innerHTML = s.length
+      ? s.map((x, i) => stopCardHtml(x, i, s.length)).join('')
+      : '<li class="empty">🧭 No stops yet.<br>Search for a place above, or press “📍 Pick on map”.</li>';
+    updateStopMetas();
+  }
+
+  function updateStopMetas() {
+    const t = trip(), st = stats();
+    $$('#stopList .stop-card').forEach((li, i) => {
+      const s = t.stops[i];
+      if (!s) return;
+      const parts = [`${RT.flag(s.country)} Day ${st.arrivals[i]}`];
+      const dd = RT.dayDate(t, st.arrivals[i]);
+      if (dd) parts.push(dd);
+      if (legs[i]) parts.push(`🚗 ${legs[i].approx ? '~' : ''}${fmtKm(legs[i].km)}`);
+      parts.push(s.nights ? `🛏️ ${plural(s.nights, 'night')}` : '☕ visit');
+      $('.stop-meta', li).textContent = parts.join(' · ');
+    });
+  }
+
+  $('#stopList').addEventListener('input', e => {
+    const el = e.target;
+    const f = el.dataset.f;
+    if (!f) return;
+    const s = trip().stops.find(x => x.id === el.closest('.stop-card')?.dataset.id);
+    if (!s) return;
+    if (f === 'nights') s.nights = Math.max(0, Math.round(num(el.value, 0)));
+    else if (f === 'activities') s.activities = el.value.split('\n');
+    else s[f] = el.value;
+    if (f === 'name' || f === 'image') renderMarkers();
+    if (f === 'image' && !el.value) s.enriched = true; // don't re-add a photo the user removed
+    if (f === 'nights') scheduleWeather();
+    changed();
+  });
+
+  document.addEventListener('input', e => {
+    const el = e.target;
+    const f = el.dataset.cf;
+    if (!f) return;
+    const costs = ownerCosts(el.closest('.cost-rows').dataset.owner);
+    const c = costs?.[+el.closest('.cost-row').dataset.i];
+    if (!c) return;
+    c[f] = f === 'amount' ? Math.max(0, num(el.value, 0)) : el.value;
+    changed();
+  });
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) return;
+    const act = b.dataset.act;
+    const t = trip();
+    const li = b.closest('.stop-card');
+    const s = li && t.stops.find(x => x.id === li.dataset.id);
+    const idx = s ? t.stops.indexOf(s) : -1;
+    switch (act) {
+      case 'up':
+      case 'down': {
+        const j = idx + (act === 'up' ? -1 : 1);
+        if (j < 0 || j >= t.stops.length) return;
+        [t.stops[idx], t.stops[j]] = [t.stops[j], t.stops[idx]];
+        stopsChanged();
+        break;
+      }
+      case 'toggle':
+        if (openStops.has(s.id)) openStops.delete(s.id); else openStops.add(s.id);
+        renderStops();
+        break;
+      case 'del':
+        if (confirm(`Delete the stop “${s.name}”?`)) {
+          t.stops.splice(idx, 1);
+          openStops.delete(s.id);
+          stopsChanged();
+        }
+        break;
+      case 'wiki':
+        b.disabled = true;
+        b.textContent = '✨ Searching Wikipedia…';
+        queueEnrich(s, { force: true }).then(() => { b.disabled = false; });
+        break;
+      case 'add-cost':
+      case 'del-cost': {
+        const box = b.closest('.cost-rows');
+        const costs = ownerCosts(box.dataset.owner);
+        if (act === 'add-cost') costs.push({ category: box.dataset.owner === 'trip' ? 'transport' : 'stay', label: '', amount: 0 });
+        else costs.splice(+b.closest('.cost-row').dataset.i, 1);
+        box.innerHTML = costRowsHtml(costs, box.dataset.owner);
+        if (act === 'add-cost') $$('input[data-cf="label"]', box).at(-1)?.focus();
+        changed();
+        break;
+      }
+    }
+  });
+
+  $('#enrichAll').addEventListener('click', () => {
+    const missing = trip().stops.filter(s => !RT.safeImg(s.image) || !s.description.trim());
+    if (!missing.length) { toast('All stops already have a photo and a description 👍'); return; }
+    toast(`✨ Looking up ${plural(missing.length, 'stop')} on Wikipedia…`);
+    missing.forEach(s => { s.enriched = false; queueEnrich(s); });
+  });
+
+  // ---------- Plan (day by day) ----------
+  const gmapsLeg = (a, b) => `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}&travelmode=driving`;
+  function gmapsTrip(stops) {
+    if (stops.length < 2) return '';
+    const [o, ...rest] = stops;
+    const d = rest.pop();
+    const w = rest.slice(0, 9).map(x => `${x.lat},${x.lng}`).join('|');
+    return `https://www.google.com/maps/dir/?api=1&origin=${o.lat},${o.lng}&destination=${d.lat},${d.lng}${w ? `&waypoints=${encodeURIComponent(w)}` : ''}&travelmode=driving`;
+  }
+  RT.dateRange = (t, days) => {
+    if (!days) return '';
+    const o = { day: 'numeric', month: 'short', year: 'numeric' };
+    return days > 1 ? `${RT.dayDate(t, 1, o)} – ${RT.dayDate(t, days, o)}` : RT.dayDate(t, 1, o);
+  };
+
+  function driveHtml(t, v) {
+    return `
+      <div class="drive">
+        <div class="drive-line"><b>🚗 ${esc(v.from.name)} → ${esc(v.to.name)}</b></div>
+        <div class="drive-facts">
+          <span>${v.leg.approx ? '~' : ''}${fmtKm(v.leg.km)}</span><span>⏱️ ${fmtDur(v.leg.min)}</span>
+          <span>${fuel().icon} ${money(RT.driveCost(t, v))}</span>
+          <a href="${gmapsLeg(v.from, v.to)}" target="_blank" rel="noopener">Directions ↗</a>
+        </div>
+      </div>`;
+  }
+
+  function visitHtml(s, i, rest) {
+    const img = RT.safeImg(s.image);
+    const acts = s.activities.map(a => a.trim()).filter(Boolean);
+    return `
+      <div class="visit">
+        ${img ? `<img class="visit-img" src="${esc(img)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+        <div class="visit-body">
+          <h4><span class="num">${i + 1}</span>${esc(s.name)} ${RT.flag(s.country)}</h4>
+          ${!rest && s.description ? `<p>${esc(s.description)}</p>` : ''}
+          ${acts.length ? `<div class="acts-title">${rest ? 'Ideas for today' : 'Things to do'}</div><ul class="acts">${acts.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}
+        </div>
+      </div>`;
+  }
+
+  function renderPlan() {
+    const t = trip(), st = stats(), el = $('#itinerary');
+    if (!t.stops.length) { el.innerHTML = '<p class="empty">🗓️ Add some stops and your day-by-day plan appears here.</p>'; return; }
+    const route = [...t.stops, ...(returnLeg ? [t.stops[0]] : [])];
+    const anyTypical = st.days.some(d => dayWeather(d)?.kind === 'typical');
+    let html = `
+      <div class="plan-head">
+        <h2>${esc(t.name)}</h2>
+        ${t.subtitle ? `<p class="sub">${esc(t.subtitle)}</p>` : ''}
+        <div class="chips">
+          <span>📅 ${esc(RT.dateRange(t, st.days.length))}</span>
+          <span>🗓️ ${plural(st.days.length, 'day')}</span>
+          <span>🚗 ${st.approx ? '~' : ''}${fmtKm(st.km)}</span>
+          <span>💶 ${money(st.total)}</span>
+        </div>
+        ${route.length > 1 ? `<a class="gmaps" href="${gmapsTrip(route)}" target="_blank" rel="noopener">Open the whole route in Google Maps ↗</a>` : ''}
+      </div>`;
+    st.days.forEach(d => {
+      const s = t.stops;
+      const dayCost = sum(d.drives, v => RT.driveCost(t, v)) + sum(d.visits, i => RT.stopCost(s[i]));
+      let body = d.drives.map(v => driveHtml(t, v)).join('');
+      body += d.visits.map(i => visitHtml(s[i], i, false)).join('');
+      if (d.stay != null && !d.visits.length) body += `<p class="rest">🏕️ No driving today: a whole day to enjoy ${esc(s[d.stay].name)}.</p>` + visitHtml(s[d.stay], d.stay, true);
+      if (d.departure) body += `<p class="rest">🧳 Pack up, last breakfast in ${esc(s[s.length - 1].name)}, and head home.</p>`;
+      html += `
+        <article class="day" style="--day:${d.color || 'var(--line-strong)'}">
+          <header class="day-top">
+            <span class="day-badge">Day ${d.day}</span>
+            <span class="day-date">${esc(RT.dayDate(t, d.day, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>
+            ${wxChip(d)}
+          </header>
+          <h3 class="day-title">${esc(RT.dayTitle(t, d))}</h3>
+          ${d.km ? `<div class="day-sum">${fmtKm(d.km)} · ${fmtDur(d.min)} driving</div>` : ''}
+          ${body}
+          <footer class="day-foot">
+            ${d.sleep != null ? `<span>🛏️ Tonight: <b>${esc(s[d.sleep].name)}</b></span>` : '<span>🏁 End of the trip</span>'}
+            ${dayCost ? `<span>💶 ${money(dayCost)}</span>` : ''}
+          </footer>
+        </article>`;
+    });
+    if (anyTypical) html += '<p class="hint">* Typical weather = what it was on the same day last year. Real forecasts appear 2 weeks before each day.</p>';
+    el.innerHTML = html;
+  }
+
+  // ---------- Costs ----------
+  function barsHtml(st) {
+    const t = trip(), f = fuel();
+    const rows = [
+      { icon: f.icon, label: f.unit === 'kWh' ? 'Charging' : 'Fuel', amount: st.fuelCost },
+      ...Object.entries(RT.CATS).map(([k, v]) => ({ icon: v.icon, label: v.label, amount: st.byCat[k] })),
+    ].filter(r => r.amount > 0).sort((a, b) => b.amount - a.amount);
+    const max = Math.max(1, ...rows.map(r => r.amount));
+    return `<div class="bars" role="list">${rows.map(r => {
+      const pct = st.total ? Math.round(r.amount / st.total * 100) : 0;
+      return `<div class="bar-row" role="listitem" tabindex="0" data-tip="${esc(`${r.label}: ${RT.money(r.amount, t.currency)} (${pct}% of the budget)`)}">
+        <span class="bar-label">${r.icon} ${esc(r.label)}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${(r.amount / max * 100).toFixed(1)}%"></div></div>
+        <span class="amt">${RT.money(r.amount, t.currency)}</span></div>`;
+    }).join('')}</div>`;
+  }
+  RT.barsHtml = barsHtml;
+
+  function renderCosts() {
+    const t = trip(), st = stats(), f = fuel(), el = $('#costs');
+    const kpi = (label, value, cls = '') => `<div class="kpi ${cls}"><div class="k-label">${label}</div><div class="k-value">${value}</div></div>`;
+    const countries = RT.tripCountries(t);
+    el.innerHTML = `
+      <div class="kpis">
+        ${kpi(`Total budget for ${plural(t.travelers, 'traveller')}`, money(st.total), 'big')}
+        ${kpi('Per person', money(st.perPerson))}
+        ${kpi('Per day', st.days.length ? money(st.total / st.days.length) : '—')}
+        ${kpi('Distance', `${st.approx ? '~' : ''}${fmtKm(st.km)}`)}
+        ${kpi('Driving time', fmtDur(st.min))}
+        ${kpi(`${f.unit === 'kWh' ? 'Energy' : 'Fuel'} needed`, `${st.fuelUnits.toFixed(0)} ${f.unit}`)}
+        ${kpi(`${f.unit === 'kWh' ? 'Charging' : 'Fuel'} cost`, `${money(st.fuelCost)}<small> · avg ${money(st.avgPrice, true)}/${f.unit}</small>`)}
+      </div>
+      ${t.fuelPricing === 'auto' && countries.length ? `
+      <h3 class="section">${f.icon} ${f.label} prices along the way</h3>
+      <div class="price-chips">${countries.map(c => {
+        const p = RT.countryPrice(t, c);
+        const tag = { yours: 'your price', average: 'average', fallback: 'your default' }[p.source];
+        return `<span class="price-chip">${RT.flag(c)} <b>${money(p.price, true)}</b>/${f.unit} <small>${tag}</small></span>`;
+      }).join('')}</div>` : ''}
+      <h3 class="section">Where the money goes</h3>
+      ${st.total > 0 ? barsHtml(st) : '<p class="muted">No costs yet. Add costs in the Trip tab and on each stop.</p>'}
+      ${st.days.length ? `
+      <h3 class="section">Day by day</h3>
+      <table class="cost-table">
+        <thead><tr><th>Day</th><th class="r">km</th><th class="r">${f.icon}</th><th class="r">Other</th></tr></thead>
+        <tbody>${st.days.map(d => {
+          const fc = sum(d.drives, v => RT.driveCost(t, v));
+          const oc = sum(d.visits, i => RT.stopCost(t.stops[i]));
+          return `<tr><td><span class="dot" style="background:${d.color || 'transparent'}"></span>Day ${d.day} <small class="muted">${esc(RT.dayDate(t, d.day))}</small></td>
+            <td class="r">${d.km ? Math.round(d.km) : '–'}</td><td class="r">${fc ? money(fc) : '–'}</td><td class="r">${oc ? money(oc) : '–'}</td></tr>`;
+        }).join('')}</tbody>
+        <tfoot><tr><th>Total</th><th class="r">${Math.round(st.km)}</th><th class="r">${money(st.fuelCost)}</th><th class="r">${money(st.other - sum(t.extraCosts, c => c.amount))}</th></tr></tfoot>
+      </table>
+      ${t.extraCosts.length ? `<p class="hint">+ ${money(sum(t.extraCosts, c => c.amount))} trip-wide costs (${t.extraCosts.map(c => esc(c.label || RT.CATS[c.category].label)).join(', ')}).</p>` : ''}` : ''}
+      ${st.approx ? '<p class="hint">~ = estimated distance (road route not loaded yet). It updates by itself.</p>' : ''}`;
+  }
+
+  // Bar tooltips
+  const tip = $('#tip');
+  document.addEventListener('pointerover', e => {
+    const r = e.target.closest('[data-tip]');
+    if (!r) { tip.hidden = true; return; }
+    tip.textContent = r.dataset.tip;
+    tip.hidden = false;
+  });
+  document.addEventListener('pointermove', e => {
+    if (tip.hidden) return;
+    tip.style.left = `${Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 8)}px`;
+    tip.style.top = `${e.clientY + 16}px`;
+  });
+
+  // ---------- Stats bar ----------
+  function renderStatsBar() {
+    const t = trip(), st = stats();
+    const bar = $('#statsBar');
+    if (!t.stops.length) { bar.innerHTML = '<span class="stat">Add your first stop to start planning ✨</span>'; return; }
+    bar.innerHTML = `
+      <span class="stat"><small>Distance</small><b>${st.approx ? '~' : ''}${fmtKm(st.km)}</b></span>
+      <span class="stat"><small>Driving</small><b>${fmtDur(st.min)}</b></span>
+      <span class="stat"><small>Days</small><b>${st.days.length}</b></span>
+      <span class="stat"><small>${fuel().label}</small><b>${money(st.fuelCost)}</b></span>
+      <span class="stat"><small>Total</small><b>${money(st.total)}</b></span>
+      <span class="stat"><small>Each</small><b>${money(st.perPerson)}</b></span>
+      ${routing ? '<span class="stat busy">🛣️ calculating roads…</span>' : ''}`;
+  }
+
+  // ---------- Render orchestration ----------
+  let frame = 0;
+  function renderDerived() {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      renderStatsBar();
+      updateStopMetas();
+      renderPlan();
+      renderCosts();
+      renderRoute();
+      if (!$('#tripForm').contains(document.activeElement)) renderFuelPricing();
+    });
+  }
+  function changed() { save(); renderDerived(); }
+  function stopsChanged() { save(); renderStops(); renderMarkers(); computeRoutes(); renderFuelPricing(); }
+
+  function renderTripSelect() {
+    $('#tripSelect').innerHTML = trips.map(t => `<option value="${t.id}"${t.id === activeId ? ' selected' : ''}>${esc(t.name)}</option>`).join('');
+  }
+
+  function loadTrip(id) {
+    activeId = id;
+    openStops.clear();
+    renderTripSelect();
+    renderTripForm();
+    renderStops();
+    applyMapStyle();
+    renderMarkers();
+    computeRoutes().then(() => fitMap());
+    fitMap();
+    flushSave();
+    trip().stops.forEach(s => { if (!s.enriched || !s.country) queueEnrich(s); });
+  }
+
+  // ---------- Trip management ----------
+  function addTrip(t, msg) {
+    trips.push(t);
+    loadTrip(t.id);
+    if (msg) toast(msg);
+  }
+  $('#tripSelect').addEventListener('change', e => loadTrip(e.target.value));
+  $('#newTrip').addEventListener('click', () => {
+    addTrip(RT.blankTrip(trip()), 'New trip created: give it a name!');
+    setTab('trip');
+    $('#tripForm [data-t="name"]').select();
+  });
+  const closeMenu = () => $('#moreMenu').removeAttribute('open');
+  document.addEventListener('click', e => { if (!e.target.closest('#moreMenu')) closeMenu(); });
+
+  $('#dupTrip').addEventListener('click', () => {
+    closeMenu();
+    const copy = JSON.parse(JSON.stringify(trip()));
+    copy.id = RT.uid();
+    copy.name += ' (copy)';
+    copy.stops.forEach(s => { s.id = RT.uid(); });
+    addTrip(RT.normalizeTrip(copy), 'Trip duplicated');
+  });
+  $('#sampleBtn').addEventListener('click', () => { closeMenu(); addTrip(RT.sampleTrip(), 'Example trip added'); setTab('plan'); });
+  $('#delTrip').addEventListener('click', () => {
+    closeMenu();
+    if (!confirm(`Delete the trip “${trip().name}”? This cannot be undone.\n(Tip: export it first if you want a backup.)`)) return;
+    const cur = trip();
+    trips = trips.filter(t => t !== cur);
+    if (!trips.length) trips.push(RT.blankTrip(cur));
+    loadTrip(trips[0].id);
+    toast('Trip deleted');
+  });
+
+  const slug = s => s.toLowerCase().normalize('NFKD').replace(/[^\w]+/g, '-').replace(/^-|-$/g, '') || 'roadtrip';
+  $('#exportBtn').addEventListener('click', () => {
+    closeMenu();
+    const t = trip();
+    const blob = new Blob([JSON.stringify({ app: 'roadtrip-planner', version: 2, trip: t }, null, 2)], { type: 'application/json' });
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `${slug(t.name)}.json` });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+  $('#importBtn').addEventListener('click', () => { closeMenu(); $('#importFile').click(); });
+  $('#importFile').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      const list = Array.isArray(data) ? data : data.trips || [data.trip || data];
+      list.forEach(t => trips.push(RT.normalizeTrip({ ...t, id: RT.uid() })));
+      loadTrip(trips[trips.length - 1].id);
+      toast(`Imported ${plural(list.length, 'trip')}`);
+    } catch {
+      toast('Could not read that file 😕');
+    }
+  });
+
+  function encodeTrip(t) {
+    const bytes = new TextEncoder().encode(JSON.stringify({ ...t, id: undefined }));
+    let bin = '';
+    bytes.forEach(b => { bin += String.fromCharCode(b); });
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function decodeTrip(s) {
+    const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+    return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+  }
+  $('#shareBtn').addEventListener('click', async () => {
+    closeMenu();
+    const url = `${location.origin}${location.pathname}#trip=${encodeTrip(trip())}`;
+    try { await navigator.clipboard.writeText(url); toast('Share link copied! 🔗'); } catch { prompt('Copy this link:', url); }
+  });
+  $('#printBtn').addEventListener('click', () => { closeMenu(); window.print(); });
+
+  // ---------- API for the presentation ----------
+  RT.app = {
+    trip, stats, dayWeather, fitMap, toast,
+    legs: () => legs,
+    returnLeg: () => returnLeg,
+    setShowStyle(k) { trip().showStyle = k; save(); },
+  };
+
+  // ---------- Start ----------
+  (function init() {
+    const m = location.hash.match(/^#trip=([\w-]+)/);
+    if (m) {
+      try {
+        const t = RT.normalizeTrip({ ...decodeTrip(m[1]), id: RT.uid() });
+        trips.push(t);
+        activeId = t.id;
+        setTimeout(() => toast(`Opened shared trip “${t.name}”`), 300);
+      } catch {
+        setTimeout(() => toast('That share link looks broken 😕'), 300);
+      }
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    let tab = RT.readJSON(TAB_KEY, 'plan');
+    if (!$(`.tab[data-tab="${tab}"]`)) tab = 'plan';
+    setTab(tab);
+    loadTrip(activeId);
+    RT.loadRates().then(() => { renderFuelPricing(); renderDerived(); });
+  })();
+})(window.RT);
+
+</script>
+  <script>
+/* Roadtrip Planner: the automatic day-by-day presentation. */
+(RT => {
+  'use strict';
+  const { esc, sum, plural, fmtKm, fmtDur } = RT;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const P = { i: 0, slides: [], timer: null, playing: true, map: null, raf: 0, token: 0, idleTimer: 0 };
+  const DUR = { cover: 8000, overview: 11000, day: 14000, rest: 11000, budget: 12000, finale: 9000 };
+  const ease = p => (p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2);
+
+  const app = () => RT.app;
+  const trip = () => app().trip();
+  const money = (n, exact) => RT.money(n, trip().currency, exact);
+
+  // ---------- Slides ----------
+  function buildSlides(st) {
+    return [
+      { type: 'cover' },
+      { type: 'overview' },
+      ...st.days.map(d => ({ type: 'day', d })),
+      { type: 'budget' },
+      { type: 'finale' },
+    ];
+  }
+  const slideMs = sl => sl.type === 'day' ? (sl.d.drives.length ? DUR.day : DUR.rest) : DUR[sl.type];
+
+  function photos(t, max = 6) {
+    return t.stops.map(s => RT.safeImg(s.image)).filter(Boolean).slice(0, max);
+  }
+
+  function coverHtml(t, st) {
+    const pics = photos(t);
+    return `
+      <section class="p-center">
+        <div class="p-eyebrow">🚐 A road trip${t.vehicle.name ? ` · ${esc(t.vehicle.name)}` : ''}</div>
+        <h1 class="p-title">${esc(t.name)}</h1>
+        ${t.subtitle ? `<p class="p-sub">${esc(t.subtitle)}</p>` : ''}
+        <div class="p-chips light">
+          <span>📅 ${esc(RT.dateRange(t, st.days.length))}</span>
+          <span>🗓️ ${plural(st.days.length, 'day')}</span>
+          <span>📍 ${plural(t.stops.length, 'stop')}</span>
+          <span>🚗 ${fmtKm(st.km)}</span>
+          <span>👥 ${plural(t.travelers, 'traveller')}</span>
+        </div>
+        ${pics.length ? `<div class="p-strip">${pics.map((p, k) => `<img src="${esc(p)}" alt="" style="--k:${k}" onerror="this.remove()">`).join('')}</div>` : ''}
+      </section>`;
+  }
+
+  function overviewHtml(t, st) {
+    return `
+      <article class="p-card">
+        <div class="p-eyebrow">The route</div>
+        <h2>${plural(st.days.length, 'day')}, ${fmtKm(st.km)}</h2>
+        <ol class="p-days">${st.days.map((d, k) => `
+          <li style="--c:${d.color || 'var(--line-strong)'};--k:${k}">
+            <span class="p-day-n">${d.day}</span>
+            <span class="p-day-t">${esc(RT.dayTitle(t, d))}</span>
+            <span class="p-day-km">${d.km ? fmtKm(d.km) : '🏕️'}</span>
+          </li>`).join('')}</ol>
+      </article>`;
+  }
+
+  function weatherBox(d) {
+    const b = RT.wxBits(app().dayWeather(d));
+    if (!b) return '';
+    return `
+      <div class="p-wx">
+        <span class="p-wx-icon">${b.icon}</span>
+        <div class="p-wx-main"><b>${b.hi}° <small>/ ${b.lo}°</small></b><span>${esc(b.label)}${b.rain > 0.2 ? ` · ${b.rain.toFixed(1)} mm` : ''}</span></div>
+        <div class="p-wx-side"><span>${esc(b.sun)}</span><em>${esc(b.note)}</em></div>
+      </div>`;
+  }
+
+  function dayHtml(t, st, d) {
+    const s = t.stops;
+    const main = s[d.main];
+    const img = main && RT.safeImg(main.image);
+    const f = RT.FUEL_TYPES[t.vehicle.fuelType];
+    const fuelCost = sum(d.drives, v => RT.driveCost(t, v));
+    const shown = d.stay != null && !d.visits.length ? [d.stay] : d.visits.filter(i => i > 0 || !d.drives.length);
+    const featured = shown.length ? s[shown[shown.length - 1]] : main;
+    const acts = featured ? featured.activities.map(a => a.trim()).filter(Boolean) : [];
+    let lead = '';
+    if (d.departure) lead = `Pack up, one last breakfast in ${esc(main.name)}, and time to head home.`;
+    else if (d.stay != null && !d.visits.length) lead = `No driving today: a whole day to enjoy ${esc(s[d.stay].name)}.`;
+    else if (featured?.description) lead = esc(featured.description);
+    const stops = d.visits.length > 1 ? `<div class="p-via">${d.visits.map(i => `<span>${i + 1}. ${esc(s[i].name)}</span>`).join('')}</div>` : '';
+    return `
+      <article class="p-card" style="--c:${d.color || 'var(--accent)'}">
+        ${img ? `<div class="p-hero"><img src="${esc(img)}" alt="" style="animation-duration:${slideMs({ type: 'day', d }) + 2000}ms" onerror="this.parentNode.remove()"></div>` : ''}
+        <div class="p-eyebrow"><span class="p-daydot"></span>Day ${d.day} of ${st.days.length} · ${esc(RT.dayDate(t, d.day, { weekday: 'long', day: 'numeric', month: 'long' }))}</div>
+        <h2>${esc(RT.dayTitle(t, d))}</h2>
+        ${d.drives.length ? `
+          <div class="p-pills">
+            <span><small>Drive</small><b>${fmtKm(d.km)}</b></span>
+            <span><small>Time</small><b>${fmtDur(d.min)}</b></span>
+            <span><small>${f.unit === 'kWh' ? 'Charging' : 'Fuel'}</small><b>${money(fuelCost)}</b></span>
+          </div>` : ''}
+        ${stops}
+        ${weatherBox(d)}
+        ${lead ? `<p class="p-lead">${lead}</p>` : ''}
+        ${acts.length && !d.departure ? `<ul class="p-acts">${acts.map((a, k) => `<li style="animation-delay:${0.8 + k * 0.45}s">${esc(a)}</li>`).join('')}</ul>` : ''}
+        <div class="p-foot">${d.sleep != null ? `🛏️ Tonight: <b>${esc(s[d.sleep].name)}</b>` : '🏁 End of the trip'}</div>
+      </article>`;
+  }
+
+  function budgetHtml(t, st) {
+    return `
+      <article class="p-card">
+        <div class="p-eyebrow">The budget</div>
+        <div class="p-big">${money(st.total)}</div>
+        <p class="p-lead">for ${plural(t.travelers, 'traveller')}: <b>${money(st.perPerson)}</b> each, about <b>${money(st.total / Math.max(1, st.days.length))}</b> per day.</p>
+        ${st.total > 0 ? RT.barsHtml(st) : ''}
+        <p class="p-note">${RT.FUEL_TYPES[t.vehicle.fuelType].icon} ${Math.round(st.fuelUnits)} ${RT.FUEL_TYPES[t.vehicle.fuelType].unit} at about ${money(st.avgPrice, true)} per ${RT.FUEL_TYPES[t.vehicle.fuelType].unit}${t.fuelPricing === 'auto' ? ' (local prices per country)' : ''}.</p>
+      </article>`;
+  }
+
+  function finaleHtml(t, st) {
+    const pics = photos(t, 8);
+    return `
+      <section class="p-center">
+        ${pics.length ? `<div class="p-mosaic">${pics.map((p, k) => `<img src="${esc(p)}" alt="" style="--k:${k}" onerror="this.remove()">`).join('')}</div>` : ''}
+        <h1 class="p-title">See you on the road!</h1>
+        <div class="p-chips light">
+          <span>🚗 ${fmtKm(st.km)}</span>
+          <span>⏱️ ${fmtDur(st.min)} of driving</span>
+          <span>📍 ${plural(t.stops.length, 'place')}</span>
+          <span>🌙 ${plural(st.nights, 'night')}</span>
+        </div>
+      </section>`;
+  }
+
+  // ---------- Map ----------
+  function carIcon() {
+    return L.divIcon({ className: 'car-wrap', html: '<div class="car">🚐</div>', iconSize: [40, 40], iconAnchor: [20, 20] });
+  }
+
+  function cardPadding() {
+    const card = $('#pStage .p-card');
+    if (!card) return { paddingTopLeft: [80, 80], paddingBottomRight: [80, 140] };
+    const r = card.getBoundingClientRect();
+    return window.innerWidth > 860
+      ? { paddingTopLeft: [r.right + 50, 70], paddingBottomRight: [70, 120] }
+      : { paddingTopLeft: [30, 40], paddingBottomRight: [30, window.innerHeight - r.top + 20] };
+  }
+
+  function drawDrive(layer, v, color, weight = 5) {
+    L.polyline(v.leg.coords, { color: '#fff', weight: weight + 4, opacity: .9, interactive: false, lineCap: 'round' }).addTo(layer);
+    L.polyline(v.leg.coords, { color, weight, opacity: 1, interactive: false, lineCap: 'round', dashArray: v.leg.approx ? '8 10' : null }).addTo(layer);
+  }
+
+  function animateDrives(drives, color, ms, token) {
+    const coords = drives.flatMap(v => v.leg.coords);
+    if (coords.length < 2) return;
+    const dist = [0];
+    for (let k = 1; k < coords.length; k++) dist.push(dist[k - 1] + P.map.distance(coords[k - 1], coords[k]));
+    const total = dist[dist.length - 1] || 1;
+    const casing = L.polyline([], { color: '#fff', weight: 11, opacity: .95, interactive: false, lineCap: 'round' }).addTo(P.anim);
+    const line = L.polyline([], { color, weight: 7, interactive: false, lineCap: 'round' }).addTo(P.anim);
+    const car = L.marker(coords[0], { icon: carIcon(), interactive: false, zIndexOffset: 1000 }).addTo(P.anim);
+    const t0 = performance.now();
+    const step = now => {
+      if (token !== P.token) return;
+      const p = Math.min(1, (now - t0) / ms);
+      const target = ease(p) * total;
+      let k = 1;
+      while (k < dist.length - 1 && dist[k] < target) k++;
+      const a = coords[k - 1], b = coords[k];
+      const seg = dist[k] - dist[k - 1] || 1;
+      const f = Math.min(1, Math.max(0, (target - dist[k - 1]) / seg));
+      const head = [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+      const pts = [...coords.slice(0, k), head];
+      line.setLatLngs(pts);
+      casing.setLatLngs(pts);
+      car.setLatLng(head);
+      if (p < 1) P.raf = requestAnimationFrame(step);
+    };
+    P.raf = requestAnimationFrame(step);
+  }
+
+  function drawSlideMap(sl, st) {
+    const t = trip(), s = t.stops;
+    const token = P.token;
+    cancelAnimationFrame(P.raf);
+    P.done.clearLayers();
+    P.anim.clearLayers();
+    P.marks.clearLayers();
+    document.body.dataset.slide = sl.type;
+
+    const current = sl.type === 'day' ? sl.d.day : null;
+    const showAll = ['overview', 'budget', 'finale'].includes(sl.type);
+    st.days.forEach(d => {
+      if (showAll || (current && d.day < current)) d.drives.forEach(v => drawDrive(P.done, v, d.color || '#e0562b', showAll ? 5 : 4));
+    });
+    if (sl.type === 'overview') {
+      st.days.forEach(d => {
+        if (!d.drives.length) return;
+        const c = d.drives[0].leg.coords;
+        const mid = c[Math.floor(c.length / 2)];
+        L.marker(mid, { interactive: false, icon: L.divIcon({ className: 'day-label-wrap', html: `<span class="day-label" style="background:${d.color}">${d.day}</span>`, iconSize: [26, 26], iconAnchor: [13, 13] }) }).addTo(P.done);
+      });
+    }
+
+    // Stop pins: visited ones bright, future ones faded
+    const lastVisited = current ? Math.max(-1, ...st.days.filter(d => d.day <= current).flatMap(d => d.visits)) : s.length - 1;
+    s.forEach((x, i) => {
+      const cls = [
+        i === 0 ? 'start' : i === s.length - 1 ? 'end' : '',
+        current && i > lastVisited ? 'dim' : '',
+        current && i === sl.d.main ? 'current' : '',
+      ].join(' ');
+      L.marker([x.lat, x.lng], { icon: RT.pinIcon(x, i + 1, cls), interactive: false }).addTo(P.marks);
+    });
+
+    const pad = cardPadding();
+    if (sl.type === 'day') {
+      const d = sl.d;
+      const pts = d.drives.flatMap(v => v.leg.coords);
+      if (pts.length > 1) {
+        P.map.flyToBounds(L.latLngBounds(pts), { ...pad, maxZoom: 11, duration: 1.8 });
+        const start = () => { if (token === P.token) animateDrives(d.drives, d.color || '#e0562b', Math.min(6000, slideMs(sl) * 0.45), token); };
+        let started = false;
+        const go = () => { if (!started) { started = true; start(); } };
+        P.map.once('moveend', go);
+        setTimeout(go, 2300);
+      } else if (s[d.main]) {
+        P.map.flyTo([s[d.main].lat, s[d.main].lng], 11, { duration: 2 });
+        setTimeout(() => {
+          if (token !== P.token) return;
+          const pt = P.map.project([s[d.main].lat, s[d.main].lng]);
+          if (window.innerWidth > 860) P.map.panTo(P.map.unproject(pt.subtract([(pad.paddingTopLeft[0] - 70) / 2, 0])), { duration: 1 });
+        }, 2100);
+      }
+    } else {
+      const b = RT.fitBoundsOf();
+      if (b.isValid()) {
+        const centred = sl.type === 'cover' || sl.type === 'finale';
+        P.map.flyToBounds(b, centred ? { padding: [60, 60], duration: 2 } : { ...pad, duration: 2 });
+      }
+    }
+  }
+
+  // ---------- Playback ----------
+  function render(sl, st) {
+    const t = trip();
+    const html = { cover: coverHtml, overview: overviewHtml, budget: budgetHtml, finale: finaleHtml }[sl.type];
+    return html ? html(t, st) : dayHtml(t, st, sl.d);
+  }
+
+  function showSlide(n) {
+    P.i = Math.max(0, Math.min(n, P.slides.length - 1));
+    P.token++;
+    const st = app().stats();
+    // Rebuild the slide from fresh data (weather may have arrived meanwhile)
+    const base = P.slides[P.i];
+    const sl = base.type === 'day' ? { type: 'day', d: st.days[base.d.day - 1] || base.d } : base;
+    const stage = $('#pStage');
+    stage.className = `p-stage p-${sl.type}`;
+    stage.innerHTML = render(sl, st);
+    void stage.offsetWidth;
+    stage.classList.add('in');
+    $('#pCount').textContent = `${P.i + 1} / ${P.slides.length}`;
+    $$('#pDots button').forEach((b, k) => b.classList.toggle('on', k === P.i));
+    drawSlideMap(sl, st);
+    restartTimer();
+  }
+
+  function restartTimer() {
+    clearTimeout(P.timer);
+    const bar = $('#pProgress');
+    bar.style.transition = 'none';
+    bar.style.width = '0';
+    $('#pPlay').textContent = P.playing ? '⏸' : '▶';
+    $('#pPlay').title = P.playing ? 'Pause (space)' : 'Play (space)';
+    if (!P.playing) return;
+    const ms = slideMs(P.slides[P.i]);
+    void bar.offsetWidth;
+    bar.style.transition = `width ${ms}ms linear`;
+    bar.style.width = '100%';
+    P.timer = setTimeout(() => {
+      if (P.i < P.slides.length - 1) showSlide(P.i + 1);
+      else { P.playing = false; restartTimer(); }
+    }, ms);
+  }
+
+  function open() {
+    const t = trip();
+    if (!t.stops.length) { app().toast('Add some stops first 🙂'); return; }
+    const st = app().stats();
+    P.slides = buildSlides(st);
+    P.playing = true;
+    $('#present').hidden = false;
+    document.body.classList.add('presenting');
+    if (!P.map) {
+      P.map = L.map('pMap', { zoomControl: false, attributionControl: true, zoomSnap: 0.1, keyboard: false });
+      P.ghost = L.layerGroup().addTo(P.map);
+      P.done = L.layerGroup().addTo(P.map);
+      P.anim = L.layerGroup().addTo(P.map);
+      P.marks = L.layerGroup().addTo(P.map);
+      $('#pStyle').innerHTML = Object.entries(RT.MAP_STYLES).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('');
+    }
+    $('#pStyle').value = t.showStyle;
+    RT.setBase(P.map, t.showStyle);
+    P.ghost.clearLayers();
+    st.drives.forEach(v => L.polyline(v.leg.coords, { color: '#ffffff', weight: 3, opacity: .75, dashArray: '2 9', interactive: false, lineCap: 'round' }).addTo(P.ghost));
+    $('#pDots').innerHTML = P.slides.map((sl, k) => `<button type="button" data-slide="${k}" title="${sl.type === 'day' ? `Day ${sl.d.day}` : sl.type}" aria-label="Slide ${k + 1}"></button>`).join('');
+    document.documentElement.requestFullscreen?.().catch(() => {});
+    wakeControls();
+    setTimeout(() => {
+      P.map.invalidateSize();
+      const b = RT.fitBoundsOf();
+      if (b.isValid()) P.map.fitBounds(b, { padding: [60, 60], animate: false });
+      showSlide(0);
+    }, 80);
+  }
+
+  function close() {
+    clearTimeout(P.timer);
+    cancelAnimationFrame(P.raf);
+    P.token++;
+    $('#present').hidden = true;
+    document.body.classList.remove('presenting');
+    delete document.body.dataset.slide;
+    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+  }
+
+  // Hide the controls when the mouse is still (cinema mode)
+  function wakeControls() {
+    $('#present').classList.remove('idle');
+    clearTimeout(P.idleTimer);
+    P.idleTimer = setTimeout(() => $('#present').classList.add('idle'), 3000);
+  }
+
+  $('#presentBtn').addEventListener('click', open);
+  $('#pClose').addEventListener('click', close);
+  $('#pPrev').addEventListener('click', () => showSlide(P.i - 1));
+  $('#pNext').addEventListener('click', () => showSlide(P.i + 1));
+  $('#pPlay').addEventListener('click', () => {
+    P.playing = !P.playing;
+    if (P.playing && P.i === P.slides.length - 1) showSlide(0); else restartTimer();
+  });
+  $('#pStyle').addEventListener('change', e => {
+    RT.setBase(P.map, e.target.value);
+    app().setShowStyle(e.target.value);
+  });
+  $('#pDots').addEventListener('click', e => { const b = e.target.closest('[data-slide]'); if (b) showSlide(+b.dataset.slide); });
+  $('#present').addEventListener('pointermove', wakeControls);
+  document.addEventListener('keydown', e => {
+    if ($('#present').hidden || e.target.matches('select')) return;
+    wakeControls();
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') showSlide(P.i + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') showSlide(P.i - 1);
+    else if (e.key === ' ') { e.preventDefault(); $('#pPlay').click(); }
+    else if (e.key === 'Escape') close();
+    else if (e.key === 'Home') showSlide(0);
+    else if (e.key === 'End') showSlide(P.slides.length - 1);
+  });
+  window.addEventListener('resize', () => { if (P.map && !$('#present').hidden) P.map.invalidateSize(); });
+})(window.RT);
+
+</script>
+</body>
+</html>
