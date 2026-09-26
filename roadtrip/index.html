@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Roadtrip Planner</title>
-  <meta name="description" content="Plan any road trip: map, stops, day-by-day itinerary, kilometres, fuel and costs, plus an automatic presentation.">
+  <meta name="description" content="Plan any road trip: beautiful maps, day-by-day plan, weather, local fuel prices, budget, and an automatic presentation.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/present.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">🚐 <span>Roadtrip Planner</span></div>
+    <div class="brand"><span class="logo">🚐</span><span class="brand-name">Roadtrip<b>Planner</b></span></div>
     <div class="trip-picker">
       <select id="tripSelect" aria-label="Choose a trip"></select>
-      <button id="newTrip" type="button" title="Start a new trip">＋ New</button>
+      <button id="newTrip" type="button" title="Start a new trip">＋ New trip</button>
       <details class="menu" id="moreMenu">
         <summary>⋯ More</summary>
         <div class="menu-list">
@@ -28,24 +32,49 @@
         </div>
       </details>
     </div>
-    <button id="presentBtn" type="button" class="primary">▶ Present</button>
+    <button id="presentBtn" type="button" class="primary present-btn">▶ Present the trip</button>
     <input type="file" id="importFile" accept=".json,application/json" hidden>
   </header>
 
   <main class="layout">
     <aside class="sidebar">
       <nav class="tabs" role="tablist">
-        <button class="tab" data-tab="trip" role="tab">⚙️ Trip</button>
-        <button class="tab" data-tab="stops" role="tab">📍 Stops</button>
-        <button class="tab" data-tab="itinerary" role="tab">🗓️ Plan</button>
-        <button class="tab" data-tab="costs" role="tab">💶 Costs</button>
+        <button class="tab" data-tab="plan" role="tab"><span>🗓️</span>Plan</button>
+        <button class="tab" data-tab="stops" role="tab"><span>📍</span>Stops</button>
+        <button class="tab" data-tab="costs" role="tab"><span>💶</span>Budget</button>
+        <button class="tab" data-tab="trip" role="tab"><span>⚙️</span>Settings</button>
       </nav>
 
-      <!-- 1. Trip settings -->
+      <!-- Day-by-day plan -->
+      <section class="panel" data-panel="plan">
+        <div id="itinerary"></div>
+      </section>
+
+      <!-- Stops -->
+      <section class="panel" data-panel="stops">
+        <div class="add-stop">
+          <label for="placeSearch" class="visually-hidden">Search for a place</label>
+          <input id="placeSearch" type="search" placeholder="🔎 Search a town, park, lake…" autocomplete="off">
+          <button id="pickBtn" type="button" title="Click on the map to add a stop">📍 Pick on map</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+        <div class="stops-bar">
+          <p class="hint">Drag the pins on the map to move a stop · ↑ ↓ to reorder.</p>
+          <button id="enrichAll" type="button" class="small">✨ Fill missing photos</button>
+        </div>
+        <ol id="stopList" class="stop-list"></ol>
+      </section>
+
+      <!-- Budget -->
+      <section class="panel" data-panel="costs">
+        <div id="costs"></div>
+      </section>
+
+      <!-- Settings -->
       <section class="panel" data-panel="trip">
         <form id="tripForm" onsubmit="return false">
           <fieldset>
-            <legend>About the trip</legend>
+            <legend>🧭 About the trip</legend>
             <label>Trip name<input data-t="name" autocomplete="off"></label>
             <label>Tagline <small>(optional)</small><input data-t="subtitle" placeholder="e.g. Lakes, forests and the midnight sun" autocomplete="off"></label>
             <div class="row2">
@@ -56,7 +85,7 @@
           </fieldset>
 
           <fieldset>
-            <legend>Car &amp; fuel</legend>
+            <legend>🚗 Car</legend>
             <label>Vehicle <small>(optional)</small><input data-t="vehicle.name" placeholder="e.g. VW Transporter" autocomplete="off"></label>
             <div class="row2">
               <label>Fuel type
@@ -67,43 +96,34 @@
                   <option value="electric">🔌 Electric</option>
                 </select>
               </label>
-              <label>Currency<input data-t="currency" maxlength="4" autocomplete="off"></label>
-            </div>
-            <div class="row2">
               <label><span id="consLabel">Use per 100 km</span><input type="number" step="0.1" min="0" data-t="vehicle.consumption"></label>
-              <label><span id="priceLabel">Price per unit</span><input type="number" step="0.01" min="0" data-t="vehicle.fuelPrice"></label>
             </div>
             <p class="hint" id="consHint"></p>
           </fieldset>
 
           <fieldset>
-            <legend>Trip-wide costs</legend>
-            <p class="hint">Things that are not tied to one stop: car rental, ferries, tolls, insurance, gear…</p>
+            <legend>⛽ Fuel prices</legend>
+            <div class="segmented">
+              <label><input type="radio" name="fuelPricing" value="auto" data-t="fuelPricing"><span>🌍 Local price in each country</span></label>
+              <label><input type="radio" name="fuelPricing" value="manual" data-t="fuelPricing"><span>✏️ One price for everything</span></label>
+            </div>
+            <div id="countryPrices"></div>
+            <label><span id="manualPriceLabel">Price</span><input type="number" step="0.01" min="0" data-t="vehicle.fuelPrice"></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>💱 Money</legend>
+            <label>Currency for the budget<select id="currencySelect" data-t="currency"></select></label>
+            <p class="hint">Trip-wide costs: things that are not tied to one stop, like car rental, ferries, tolls, insurance or gear.</p>
             <div class="cost-rows" data-owner="trip"></div>
           </fieldset>
+
+          <fieldset>
+            <legend>🎬 Presentation</legend>
+            <label>Map style for the presentation<select id="showStyleSelect" data-t="showStyle"></select></label>
+            <p class="hint">Change the map style of the planner with the buttons at the top right of the map.</p>
+          </fieldset>
         </form>
-      </section>
-
-      <!-- 2. Stops -->
-      <section class="panel" data-panel="stops">
-        <div class="add-stop">
-          <label for="placeSearch" class="visually-hidden">Search for a place</label>
-          <input id="placeSearch" type="search" placeholder="🔎 Search a place to add…" autocomplete="off">
-          <button id="pickBtn" type="button" title="Click on the map to add a stop">📍 Pick on map</button>
-        </div>
-        <div id="searchResults" class="search-results"></div>
-        <p class="hint">Tip: drag the numbered pins on the map to move a stop. Use ↑ ↓ to change the order.</p>
-        <ol id="stopList" class="stop-list"></ol>
-      </section>
-
-      <!-- 3. Itinerary -->
-      <section class="panel" data-panel="itinerary">
-        <div id="itinerary"></div>
-      </section>
-
-      <!-- 4. Costs -->
-      <section class="panel" data-panel="costs">
-        <div id="costs"></div>
       </section>
     </aside>
 
@@ -114,24 +134,31 @@
     </section>
   </main>
 
-  <!-- Presentation mode -->
+  <!-- Presentation -->
   <div id="present" hidden>
     <div id="pMap"></div>
+    <div class="p-shade"></div>
     <div class="p-progress"><span id="pProgress"></span></div>
-    <article id="pCard" class="p-card"></article>
+    <div id="pStage" class="p-stage"></div>
     <div class="p-controls">
       <button type="button" id="pPrev" title="Previous (←)">⏮</button>
-      <button type="button" id="pPlay" title="Play / pause (space)">⏸</button>
+      <button type="button" id="pPlay" title="Pause (space)">⏸</button>
       <button type="button" id="pNext" title="Next (→)">⏭</button>
       <span id="pCount" class="p-count"></span>
+      <select id="pStyle" aria-label="Map style"></select>
       <button type="button" id="pClose" title="Close (Esc)">✕</button>
     </div>
     <div id="pDots" class="p-dots"></div>
   </div>
 
+  <div id="tip" class="tip" role="tooltip" hidden></div>
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <script src="app.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/model.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/present.js"></script>
 </body>
 </html>
