@@ -4,10 +4,12 @@
 
 A single-page tool that shows what you need for different jobs in
 Finland, Sweden, Norway, France and Japan, and compares each requirement
-with the certificates you already have.
+with the certificates two people (you and your partner) already have.
 
-- **Toolbox:** tap certificates and languages to mark them as have / in progress.
-- **Overview table:** how ready you are for each job in each country.
+- **Two toolboxes:** tap certificates and languages to mark them as have / in progress.
+- **View switch:** show scores for one person or both side by side.
+- **Who fits best:** the top job + country matches for each person.
+- **Overview table:** how ready each of you is for each job in each country.
 - **Job cards:** checklist, whether the job is regulated by law, time needed,
   right-to-work notes and official links.
 

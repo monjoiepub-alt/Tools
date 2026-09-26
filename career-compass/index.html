@@ -67,14 +67,32 @@ thead th{font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;color:va
 tbody th{font-weight:500;white-space:nowrap}
 tr.cat th{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--accent);padding-top:16px;background:var(--surface)}
 tr:last-child td,tr:last-child th{border-bottom:0}
-.cell{width:100%;min-width:84px;border:0;border-radius:10px;padding:6px 10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start;font-weight:600}
-.cell .bar{height:6px;width:100%;border-radius:3px;background:var(--line);overflow:hidden}
+.cell{width:100%;min-width:96px;border:0;border-radius:10px;padding:6px 8px;display:flex;flex-direction:column;gap:4px;align-items:stretch;background:transparent;text-align:left}
+.cell:hover{background:var(--accent-soft)}
+.cell .line{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:6px;border-radius:7px;padding:3px 7px;font-weight:600;font-size:.9rem}
+.cell .ini{font-size:.72rem;font-weight:600;opacity:.85}
+.cell .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;min-width:24px}
 .cell .bar i{display:block;height:100%;background:currentColor}
-.cell small{font-weight:400;font-size:.72rem;opacity:.9}
+.cell .law{font-size:.72rem;color:var(--muted);padding-left:7px}
 .lv-hi{background:var(--ok-soft);color:var(--ok)}
 .lv-md{background:var(--mid-soft);color:var(--mid)}
 .lv-lo{background:var(--no-soft);color:var(--no)}
 .cell.sel{outline:3px solid var(--accent);outline-offset:-3px}
+.people{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px;align-items:start}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.person-head{display:flex;align-items:center;gap:10px}
+.person-head input{font:inherit;font-family:var(--font-display);font-weight:600;font-size:1.25rem;color:var(--ink);background:transparent;border:0;border-bottom:2px dashed var(--line);padding:2px 4px;width:100%;max-width:260px}
+.person-head input:focus{border-bottom-color:var(--accent);outline:none}
+.avatar{width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;font-family:var(--font-display);font-weight:800;flex:none}
+.avatar.sm{width:24px;height:24px;font-size:.75rem;margin-right:6px;vertical-align:middle}
+.av-me{background:var(--accent);color:var(--accent-ink)}
+.av-partner{background:var(--marker);color:#241c00}
+.fits{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
+.fitcol{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.fitlist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.fit{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.fit:hover{border-color:var(--accent)}
+.muted{color:var(--muted)}
 
 /* picker */
 .picker{display:flex;flex-direction:column;gap:12px}
@@ -97,8 +115,12 @@ tr:last-child td,tr:last-child th{border-bottom:0}
 .sum{font-size:.98rem}
 .label{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:500}
 ul.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.step{width:100%;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.step:hover{border-color:var(--accent)}
+.step{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.pills{display:flex;flex-direction:column;gap:4px}
+.pills .st{border:0;cursor:pointer}
+.pills .st:hover{filter:brightness(.95)}
+.meters{display:flex;flex-direction:column;gap:10px}
+.workline{display:block;margin-bottom:4px}
 .st{font-size:.75rem;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap;margin-top:2px;min-width:66px;text-align:center}
 .st.have{background:var(--ok-soft);color:var(--ok)}
 .st.prog,.st.part{background:var(--mid-soft);color:var(--mid)}
@@ -120,20 +142,15 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
   <header class="top">
     <div class="eyebrow">Finland · Sweden · Norway · France · Japan</div>
     <h1>Career Compass</h1>
-    <p class="lead">Pick a job and see what you need in each country. Your own certificates are already filled in, so you can see how close you are to each path.</p>
+    <p class="lead">Pick a job and see what you need in each country. Your certificates and your partner's are already filled in, so you can see who is closer to each path and how to divide the work.</p>
   </header>
 
   <section id="toolbox">
     <div class="sec-head">
-      <h2>1. Your toolbox</h2>
-      <p class="hint">Tap a chip to change it: off → ✓ have it → ~ in progress → off. Got a new certificate? Tap it inside any job card below and it is added here.</p>
+      <h2>1. Your toolboxes</h2>
+      <p class="hint">Tap a chip to change it: off → ✓ have it → ~ in progress → off. You can change the names too. Got a new certificate? Tap it inside any job card below and it is added here.</p>
     </div>
-    <div class="subhead">Certificates & studies</div>
-    <div class="chips" id="certChips"></div>
-    <div class="subhead">Languages at work level</div>
-    <div class="chips" id="langChips"></div>
-    <div class="subhead" id="extraHead" hidden>Added by you</div>
-    <div class="chips" id="extraChips"></div>
+    <div class="people" id="people"></div>
   </section>
 
   <section id="overview">
@@ -141,6 +158,8 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
       <h2>2. How close are you?</h2>
       <p class="hint">Each box shows how much of the required list you already have. Tap a box to open that job below.</p>
     </div>
+    <div class="chips" id="viewPick" role="group" aria-label="Show scores for"></div>
+    <div class="fits" id="fits"></div>
     <div class="legend">
       <span><span class="st have">60%+</span> close</span>
       <span><span class="st part">30–59%</span> some steps</span>
@@ -152,7 +171,7 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
   <section id="detail">
     <div class="sec-head">
       <h2>3. What you need</h2>
-      <p class="hint">Tap any line in a list to mark it as done. ✓ = you have it, ~ = partly or in progress, ✗ = still needed, + = optional extra.</p>
+      <p class="hint">Tap a status pill to mark a step as done. ✓ = have it, ~ = partly or in progress, ✗ = still needed, + = optional extra. In "Both of us" view each line has one pill per person.</p>
     </div>
     <div class="picker">
       <div class="subhead">Job</div>
@@ -164,9 +183,9 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
   </section>
 
   <footer>
-    <p>Information checked in September 2026. Rules and course names change often, so always confirm on the official website before you pay for a course or move. "Right to work" notes assume a Japanese passport and marriage to an EU (Belgian) citizen.</p>
+    <p>Information checked in September 2026. Rules and course names change often, so always confirm on the official website before you pay for a course or move. "Right to work" notes assume one Japanese and one Belgian (EU) citizen who are married.</p>
     <p>Your changes are saved only in this browser.</p>
-    <button class="reset" id="reset" type="button">Reset my toolbox to the start</button>
+    <button class="reset" id="reset" type="button">Reset both toolboxes to the start</button>
   </footer>
 </div>
 
@@ -178,18 +197,23 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
 var COUNTRIES = {
   FI:{name:"Finland", lang:"langFI",
       work:"As the spouse of an EU citizen, you can live and work here freely (EU free movement). You register with a residence card for family members of an EU citizen.",
+      workP:"As an EU citizen, he can live and work here freely. Register after 3 months.",
       workLink:["Migri: family of an EU citizen","https://migri.fi"]},
   SE:{name:"Sweden", lang:"langSV",
       work:"As the spouse of an EU citizen, you can live and work here freely (EU free movement). You register with a residence card for family members of an EU citizen.",
+      workP:"As an EU citizen, he can live and work here freely. Register after 3 months.",
       workLink:["Migrationsverket","https://www.migrationsverket.se"]},
   NO:{name:"Norway", lang:"langNO",
       work:"As the spouse of an EU citizen, you can live and work here freely (EEA free movement). You register with the police / UDI as a family member of an EU citizen.",
+      workP:"As an EU citizen, he can live and work here freely. Register after 3 months.",
       workLink:["UDI (Norwegian immigration)","https://www.udi.no"]},
   FR:{name:"France", lang:"langFR",
       work:"As the spouse of an EU citizen, you can live and work here freely (EU free movement). You register with a residence card for family members of an EU citizen.",
+      workP:"As an EU citizen, he can live and work here freely. Register after 3 months.",
       workLink:["France-Visas","https://france-visas.gouv.fr"]},
   JP:{name:"Japan", lang:"langJA",
       work:"You are Japanese, so no visa is needed.",
+      workP:"Spouse visa (日本人の配偶者等). It allows any kind of work.",
       workLink:null}
 };
 var ORDER = ["FI","SE","NO","FR","JP"];
@@ -199,6 +223,12 @@ var JOBS = [
   {id:"ski",     name:"Ski instructor",               cat:"Outdoor & adventure"},
   {id:"guide",   name:"Outdoor / wilderness guide",   cat:"Outdoor & adventure"},
   {id:"paddle",  name:"Kayak & canoe guide",          cat:"Outdoor & adventure"},
+  {id:"canyon",  name:"Canyon guide",                 cat:"Outdoor & adventure"},
+  {id:"ferrata", name:"Via ferrata guide",            cat:"Outdoor & adventure"},
+  {id:"winter",  name:"Winter & hiking guide",        cat:"Outdoor & adventure"},
+  {id:"mountain",name:"Mountain guide (IFMGA)",       cat:"Outdoor & adventure"},
+  {id:"parkbuild",name:"Adventure park builder",      cat:"Treetop adventure park"},
+  {id:"parkmgr", name:"Adventure park manager",       cat:"Treetop adventure park"},
   {id:"kinder",  name:"Kindergarten teacher",         cat:"Education & kids"},
   {id:"youth",   name:"Youth worker / camp leader",   cat:"Education & kids"},
   {id:"tour",    name:"Tour guide",                   cat:"Tourism & hospitality"},
@@ -217,13 +247,20 @@ var CERTS = [
   ["hygFI","Hygiene passport (Finland)"],
   ["jpEtiq","Japanese manner & etiquette"],
   ["epp1","Euro Paddle Pass 1"],
-  ["humak","Humak degree: Adventure & Outdoor Education"]
+  ["epp2","Euro Paddle Pass 2"],
+  ["humak","Humak degree: Adventure & Outdoor Education"],
+  ["bizDeg","International business degree"],
+  ["euNat","EU/EEA nationality"]
 ];
 var LANGS = [
   ["langJA","Japanese"],["langEN","English"],["langFI","Finnish"],
-  ["langSV","Swedish"],["langNO","Norwegian"],["langFR","French"]
+  ["langSV","Swedish"],["langNO","Norwegian"],["langFR","French"],
+  ["langNL","Dutch"],["langDE","German"]
 ];
-var START = {wfa:"have",anw:"have",drvB:"have",hygFI:"have",jpEtiq:"have",epp1:"have",humak:"prog",langJA:"have",langEN:"have"};
+var START_ME = {wfa:"have",anw:"have",drvB:"have",hygFI:"have",jpEtiq:"have",epp1:"have",humak:"prog",langJA:"have",langEN:"have"};
+var START_PARTNER = {wfa:"have",epp2:"have",bizDeg:"have",euNat:"have"};
+/* a higher certificate also counts as the lower one */
+var IMPLIES = {epp2:["epp1"]};
 
 /* ---------- helpers for the data ---------- */
 function R(id,t,o){ var r={id:id,t:t}; if(o){for(var k in o){r[k]=o[k];}} return r; }
@@ -235,6 +272,18 @@ var BEL_SE = R("belSE","Criminal record extract (utdrag ur belastningsregistret)
 var PSC1   = R("psc1","PSC1 first aid course (1 day)",{part:["wfa"],d:"France wants its own first aid card. Your WFA knowledge makes it easy."});
 var CARTE  = R("cartepro","Carte professionnelle d'éducateur sportif",{d:"Free professional card. Required to teach or lead any sport for money in France."});
 function L(id,t,o){ return R(id,t,o); }
+var CIC    = R("cic","International canyon guide certificate (e.g., CIC or ICOpro)");
+var SRT    = R("srt","Swiftwater rescue course (e.g., Rescue 3 SRT)",{part:["epp2"],d:"Your paddling skills help, but this is its own course."});
+var ROPE   = R("rope","Rope rescue skills (lowering, hauling, freeing a stuck person)");
+var AVA    = R("ava","Avalanche course (level 1–2)");
+var PREREQ = R("mtnList","Long personal list of climbs, ski tours and ice routes",{d:"Needed before you can apply. Start logging your trips now."});
+var EN1    = R("en1","Know the EN 15567-1 construction standard");
+var EN2    = R("en2","Know the EN 15567-2 operation standard");
+var ACCESS = R("access","Work at height / rope access training (e.g., IRATA Level 1)");
+var ARB    = R("arb","Tree-care (arborist) training: tree health and tree climbing");
+var BUILD  = R("build","Carpentry or construction experience");
+var STAFF  = R("staff","Park operator + rescue trainer course (e.g., ERCA levels)",{part:["wfa"]});
+var BIZ    = R("bizDeg","Business or management education",{part:["humak"]});
 
 /* ---------- the big table: DATA[job][country] ---------- */
 var DATA = {
@@ -635,23 +684,183 @@ patrol:{
          R("jrcSnow","日本赤十字社 雪上安全法救助員",{part:["wfa"]}),
          L("langJA","Japanese")],
   links:[["SAJ","https://www.saj.or.jp"],["Japanese Red Cross","https://www.jrc.or.jp"]]}
+},
+canyon:{
+ FI:{reg:"emp",time:"Courses abroad, 1–2 seasons.",
+  sum:"Finland has almost no canyons, so there is no Finnish canyon guide system. People train abroad (Spain, France, Switzerland) and use international certificates for summer seasons in Europe.",
+  steps:[CIC, SRT, FA(), L("langEN","English")],
+  links:[]},
+ SE:{reg:"emp",time:"Courses abroad, 1–2 seasons.",
+  sum:"Very little canyoning in Sweden and no national standard. Employers abroad want international canyon certificates and swiftwater rescue.",
+  steps:[CIC, SRT, FA(), L("langEN","English")],
+  links:[]},
+ NO:{reg:"emp",time:"1–2 seasons of training.",
+  sum:"Canyoning is growing in western Norway (for example Voss). No licence by law. Companies want international canyon certificates and swiftwater rescue training.",
+  steps:[CIC, SRT, FA(), L("langEN","English",{d:"Norwegian helps with local groups."})],
+  links:[]},
+ FR:{reg:"law",time:"About 2–3 years.",
+  sum:"Regulated by law. Paid canyon guiding needs the DEJEPS Canyonisme (the most complete diploma) or the high-mountain guide diploma. You must pass technical entry tests first.",
+  steps:[R("canyonTest","Entry tests (canyon technique and swimming)",{part:["epp1"]}),
+         R("dejepsCanyon","DEJEPS Canyonisme"),
+         PSC1, CARTE, L("langFR","French")],
+  links:[["Sports de nature: rules for guiding","https://www.sportsdenature.gouv.fr"]]},
+ JP:{reg:"emp",time:"Several weeks of company training.",
+  sum:"No national licence. Minakami (Gunma) is Japan's canyoning centre. Companies train new guides for weeks and test them. Lead guides often hold international certificates (like CIC), and many guides also hold a Japan Rafting Association licence.",
+  steps:[R("canyonJP","Company guide training + test"),
+         CIC, SRT, FA(), L("langJA","Japanese"),
+         R("rajJP","日本ラフティング協会 guide licence",{opt:true,part:["epp1"]})],
+  links:[["Minakami tourism: canyoning","https://www.enjoy-minakami.jp/spot/activity/canyoning/"]]}
+},
+ferrata:{
+ FI:{reg:"emp",time:"A few courses.",
+  sum:"Finland has very few via ferratas. No licence by law (Consumer Safety Act applies). Employers look for climbing instructor training and rope rescue skills.",
+  steps:[R("climbFI","Climbing instructor course (Finnish Climbing Association)"), ROPE, FA_FI, L("langEN","English")],
+  links:[["Tukes: safety of adventure services","https://tukes.fi"]]},
+ SE:{reg:"emp",time:"A few courses.",
+  sum:"Via ferratas exist in mountain areas like Åre. No licence by law. Companies want climbing leader training (Swedish Climbing Federation) or mountain guide level.",
+  steps:[R("climbSE","Climbing leader / instructor course (Svenska Klätterförbundet)"), ROPE, FA(), L("langEN","English")],
+  links:[]},
+ NO:{reg:"emp",time:"A few courses + logged climbs.",
+  sum:"Via ferratas exist in places like Loen and Romsdalen. No licence by law, but the industry follows Norsk Fjellsportforum (NF) standards for climbing instructors.",
+  steps:[R("nfClimb","NF climbing instructor certificate (klatreinstruktør)"), ROPE, FA(), L("langEN","English")],
+  links:[["Norsk Fjellsportforum (NF)","https://fjellsportforum.no"]]},
+ FR:{reg:"law",time:"About 2–3 years.",
+  sum:"Regulated by law. Paid via ferrata guiding needs the DEJEPS Escalade en milieux naturels (below 1500 m, also covers treetop parks) or the high-mountain guide diploma.",
+  steps:[R("dejepsEsc","DEJEPS Escalade en milieux naturels"), PSC1, CARTE, L("langFR","French")],
+  links:[["Sports de nature: climbing rules","https://www.sportsdenature.gouv.fr/escalade/reglementation/encadrement-de-l-activite"]]},
+ JP:{reg:"emp",time:"Depends on level.",
+  sum:"Via ferratas are very rare in Japan and there is no special qualification. The closest is a JMGA climbing guide certificate.",
+  steps:[R("jmgaClimb","JMGA 登攀ガイド (climbing guide)"), ROPE, FA(), L("langJA","Japanese")],
+  links:[["Japan Mountain Guides Association","https://www.jfmga.com"]]}
+},
+winter:{
+ FI:{reg:"emp",time:"Your degree + winter courses.",
+  sum:"No licence by law, but the Consumer Safety Act applies (safety document for each activity). Lapland hires many winter guides for snowshoeing, hiking, ice fishing and northern lights trips.",
+  steps:[R("humak","Outdoor education degree (your Humak degree) or erä- ja luonto-opas"),
+         FA_FI,
+         R("iceFI","Ice safety and ice rescue training"),
+         R("drvB","Driving licence B"),
+         L("langEN","English")],
+  links:[["Tukes: safety of adventure services","https://tukes.fi"]]},
+ SE:{reg:"emp",time:"Modules over about 1 year (summer + winter part).",
+  sum:"The standard for guiding in the Swedish mountains is Fjälledarnormen 2.0 (new in March 2026). Training has a summer part and a winter part, with first aid, navigation and camping skills.",
+  steps:[R("fjalledare","Fjälledare training (summer + winter part)",{part:["humak"]}),
+         AVA, FA(), L("langEN","English",{d:"Swedish helps with school groups."})],
+  links:[["Friluftsfrämjandet: become a fjälledare","https://www.friluftsframjandet.se/ledare/bli-ledare/fjalledare/"],["Svenska Fjälledare (SFLO)","https://svenskafjalledare.se"]]},
+ NO:{reg:"emp",time:"A few courses over 1–2 seasons.",
+  sum:"Summer hiking tours need no licence. Winter mountain and ski-touring trips follow Norsk Fjellsportforum (NF) standards, including avalanche courses. The International Mountain Leader (UIMLA) also exists in Norway.",
+  steps:[R("nfWinter","NF winter leader certificate (e.g., toppturleder)",{part:["humak"]}),
+         AVA, FA(), L("langEN","English"),
+         R("iml","International Mountain Leader (UIMLA)",{opt:true})],
+  links:[["Norsk Fjellsportforum (NF)","https://fjellsportforum.no"],["UIMLA","https://uimla.org"]]},
+ FR:{reg:"law",time:"About 2–4 years.",
+  sum:"Regulated by law. Paid hiking and snowshoe guiding in the mountains needs the AMM (Accompagnateur en moyenne montagne). It has a snow module for snowshoeing and counts as International Mountain Leader (UIMLA).",
+  steps:[R("amm","AMM diploma (entry test, training modules, trainee period)"), PSC1, CARTE, L("langFR","French")],
+  links:[["ENSA (mountain diplomas)","https://www.ensa.sports.gouv.fr"]]},
+ JP:{reg:"emp",time:"Exam + field experience.",
+  sum:"No national licence. JMGA 登山ガイド is the standard: Stage I for summer mountains, Stage II adds snowy mountains in winter.",
+  steps:[R("jmgaWinter","JMGA 登山ガイド Stage II (for snowy mountains)",{part:["humak"]}),
+         AVA, FA(),
+         R("drvJP","Japanese driving licence (convert yours: 外免切替)",{part:["drvB"]}),
+         L("langJA","Japanese")],
+  links:[["Japan Mountain Guides Association","https://www.jfmga.com"]]}
+},
+mountain:{
+ FI:{reg:"emp",time:"About 4–6 years.",
+  sum:"Finland has no IFMGA mountain guide association. Finnish guides train through another country's IFMGA programme (for example Sweden or Norway). This is the highest guide level: glaciers, rock, ice and ski mountaineering.",
+  steps:[PREREQ, R("ifmgaAbroad","IFMGA guide programme in another country"), AVA, FA()],
+  links:[["IFMGA","https://ifmga.net"]]},
+ SE:{reg:"emp",time:"About 4–6 years.",
+  sum:"Svenska Bergsguideorganisationen (SBO) is Sweden's IFMGA association and runs the mountain guide programme.",
+  steps:[PREREQ, R("sbo","SBO / IFMGA mountain guide programme"), AVA, FA()],
+  links:[["IFMGA member associations","https://ifmga.net/member-associations/member-associations"]]},
+ NO:{reg:"emp",time:"About 4–6 years.",
+  sum:"NORTIND (Norske Tindevegledere) is Norway's IFMGA association and runs the mountain guide education.",
+  steps:[PREREQ, R("nortind","NORTIND / IFMGA mountain guide programme"), AVA, FA()],
+  links:[["NORTIND","https://www.nortind.no/en/"]]},
+ FR:{reg:"law",time:"About 5+ years.",
+  sum:"Regulated by law. The Diplôme d'État de guide de haute montagne (ENSA, Chamonix) is the IFMGA diploma: entry exam (probatoire), then aspirant guide, then guide.",
+  steps:[PREREQ, R("probatoire","Entry exam (probatoire)"), R("aspirant","Aspirant guide training + trainee period"),
+         R("dehm","Diplôme d'État de guide de haute montagne"), PSC1, CARTE, L("langFR","French")],
+  links:[["ENSA","https://www.ensa.sports.gouv.fr"]]},
+ JP:{reg:"emp",time:"About 5+ years.",
+  sum:"JMGA is Japan's IFMGA association. The path goes from 山岳ガイド to 国際山岳ガイド (IFMGA).",
+  steps:[PREREQ, R("jmgaMtn","JMGA 山岳ガイド, then 国際山岳ガイド (IFMGA)"), AVA, FA(), L("langJA","Japanese")],
+  links:[["Japan Mountain Guides Association","https://www.jfmga.com"]]}
+},
+parkbuild:{
+ FI:{reg:"emp",time:"Courses + work with a builder company.",
+  sum:"Parks are built to the European standard SFS-EN 15567-1. Builders need rope access, tree knowledge and construction skills. An independent inspector (for example TÜV or ERCA) checks the finished course.",
+  steps:[EN1, ACCESS, ARB, BUILD, FA_FI, L("langEN","English",{d:"Finnish helps with local suppliers."})],
+  links:[["Tukes: safety of leisure services","https://tukes.fi/tuotteet-ja-palvelut/vapaa-ajan-palveluiden-turvallisuus/ohjeita-palvelujen-turvallisuudesta"]]},
+ SE:{reg:"emp",time:"Courses + work with a builder company.",
+  sum:"Parks are built to the European standard SS-EN 15567-1. Builders need rope access, tree knowledge and construction skills, and an independent inspection is done at the end.",
+  steps:[EN1, ACCESS, ARB, BUILD, FA(), L("langEN","English")],
+  links:[]},
+ NO:{reg:"emp",time:"Courses + work with a builder company.",
+  sum:"Parks are built to NS-EN 15567-1. Builders need rope access, tree knowledge and construction skills, and an independent inspection is done at the end.",
+  steps:[EN1, ACCESS, ARB, BUILD, FA(), L("langEN","English")],
+  links:[]},
+ FR:{reg:"emp",time:"Courses + work with a builder company.",
+  sum:"France has many parks (parcours acrobatiques en hauteur). They are built to NF EN 15567-1. Most builders are specialist companies; working for one is the usual way in.",
+  steps:[EN1, ACCESS, ARB, BUILD, PSC1, L("langFR","French"),
+         R("cqpOpah","CQP OPAH (to understand park operation)",{opt:true})],
+  links:[["Sports de nature: treetop park rules","https://www.sportsdenature.gouv.fr/grimpe-d-arbres-et-parcours-acrobatique-en-hauteur/reglementation-pah/encadrement"]]},
+ JP:{reg:"emp",time:"Courses + work with a builder company.",
+  sum:"Japan has no special national standard for these parks. Big parks follow European (EN 15567) methods. Rope access and tree-care skills are key.",
+  steps:[EN1, ACCESS, ARB, BUILD, FA(), L("langJA","Japanese")],
+  links:[]}
+},
+parkmgr:{
+ FI:{reg:"emp",time:"Short courses + business skills.",
+  sum:"Operation follows SFS-EN 15567-2: trained staff, a rescue plan, daily checks and a yearly inspection. The Consumer Safety Act also needs a safety document. A manager runs staff training, safety and the business side.",
+  steps:[EN2, STAFF, BIZ, R("safetyDocFI","Safety document (turvallisuusasiakirja) for Tukes",{part:["humak"]}), FA_FI, L("langEN","English",{d:"Finnish helps with staff and suppliers."})],
+  links:[["Tukes: safety of leisure services","https://tukes.fi/tuotteet-ja-palvelut/vapaa-ajan-palveluiden-turvallisuus/ohjeita-palvelujen-turvallisuudesta"]]},
+ SE:{reg:"emp",time:"Short courses + business skills.",
+  sum:"Operation follows SS-EN 15567-2: trained staff, a rescue plan, daily checks and a yearly inspection. A manager runs staff training, safety and the business side.",
+  steps:[EN2, STAFF, BIZ, FA(), L("langSV","Swedish",{part:["langEN"]})],
+  links:[]},
+ NO:{reg:"emp",time:"Short courses + business skills.",
+  sum:"Operation follows NS-EN 15567-2: trained staff, a rescue plan, daily checks and a yearly inspection. A manager runs staff training, safety and the business side.",
+  steps:[EN2, STAFF, BIZ, FA(), L("langNO","Norwegian",{part:["langEN"]})],
+  links:[]},
+ FR:{reg:"law",time:"CQP OPAH: a few weeks.",
+  sum:"In parks covered by the leisure collective agreement, staff must hold the CQP OPAH (required since 2007). Managers usually hold it too. Operation follows NF EN 15567-2.",
+  steps:[R("cqpOpah","CQP OPAH (Opérateur de parcours acrobatique en hauteur)"), EN2, BIZ, PSC1, L("langFR","French")],
+  links:[["Sports de nature: treetop park rules","https://www.sportsdenature.gouv.fr/grimpe-d-arbres-et-parcours-acrobatique-en-hauteur/reglementation-pah/encadrement"]]},
+ JP:{reg:"emp",time:"Short courses + business skills.",
+  sum:"No special national rules. Many parks are franchises that train their own staff with European methods. A manager runs staff training, safety and the business side.",
+  steps:[STAFF, BIZ, FA(), L("langJA","Japanese")],
+  links:[]}
 }
 };
 
 /* ---------- state ---------- */
-var KEY = "career-compass-v1";
+var KEY = "career-compass-v2";
+var PEOPLE = ["me","partner"];
 var state = load();
+function copy(o){ return JSON.parse(JSON.stringify(o)); }
 function load(){
-  var s = null;
+  var s = null, old = null;
   try { s = JSON.parse(localStorage.getItem(KEY)); } catch(e) {}
+  try { old = JSON.parse(localStorage.getItem("career-compass-v1")); } catch(e) {}
   if(!s || typeof s !== "object") s = {};
-  if(!s.certs) s.certs = JSON.parse(JSON.stringify(START));
-  if(!s.job) s.job = "ski";
+  if(!s.people){
+    s.people = {
+      me:{name:"Aya", certs: (old && old.certs) ? old.certs : copy(START_ME)},
+      partner:{name:"Partner", certs: copy(START_PARTNER)}
+    };
+  }
+  if(!s.view) s.view = "both";
+  if(!s.job) s.job = (old && old.job) || "ski";
   if(!s.countries) s.countries = ORDER.slice();
   if(!s.focus) s.focus = null;
   return s;
 }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
+function viewPeople(){ return state.view === "both" ? PEOPLE : [state.view]; }
+function pname(p){ return state.people[p].name || (p === "me" ? "Me" : "Partner"); }
+function initial(p){ return pname(p).trim().charAt(0).toUpperCase() || "?"; }
 
 /* labels for any id, so user-added items show a nice name */
 var LABELS = {};
@@ -660,28 +869,34 @@ Object.keys(DATA).forEach(function(j){ ORDER.forEach(function(c){
   DATA[j][c].steps.forEach(function(s){ if(!LABELS[s.id]) LABELS[s.id] = s.t; });
 });});
 
-function cycle(id){
-  var cur = state.certs[id];
-  if(!cur) state.certs[id] = "have";
-  else if(cur === "have") state.certs[id] = "prog";
-  else delete state.certs[id];
+function cycle(p, id){
+  var certs = state.people[p].certs, cur = certs[id];
+  if(!cur) certs[id] = "have";
+  else if(cur === "have") certs[id] = "prog";
+  else delete certs[id];
   save(); renderAll();
 }
 
-function status(step){
-  var s = state.certs[step.id];
+function has(p, id){
+  var certs = state.people[p].certs;
+  if(certs[id]) return certs[id];
+  for(var k in IMPLIES){ if(certs[k] === "have" && IMPLIES[k].indexOf(id) >= 0) return "have"; }
+  return null;
+}
+function status(step, p){
+  var s = has(p, step.id);
   if(s === "have") return "have";
   if(s === "prog") return "prog";
-  if(step.part && step.part.some(function(p){ return state.certs[p]; })) return "part";
+  if(step.part && step.part.some(function(x){ return has(p, x); })) return "part";
   return step.opt ? "opt" : "need";
 }
-function score(job, c){
+function score(job, c, p){
   var steps = DATA[job][c].steps.filter(function(s){ return !s.opt; });
   var got = 0;
-  steps.forEach(function(s){ var st = status(s); if(st === "have") got += 1; else if(st === "prog" || st === "part") got += 0.5; });
+  steps.forEach(function(s){ var st = status(s, p); if(st === "have") got += 1; else if(st === "prog" || st === "part") got += 0.5; });
   return {got:got, total:steps.length, pct: steps.length ? got/steps.length : 0};
 }
-function level(p){ return p >= 0.6 ? "hi" : (p >= 0.3 ? "md" : "lo"); }
+function level(x){ return x >= 0.6 ? "hi" : (x >= 0.3 ? "md" : "lo"); }
 function fmt(n){ return (Math.round(n*2)/2).toString().replace(".5","½"); }
 
 function el(tag, attrs, kids){
@@ -696,29 +911,73 @@ function el(tag, attrs, kids){
   return e;
 }
 
-/* ---------- toolbox ---------- */
-function chip(id, label){
-  var s = state.certs[id] || "off";
+/* ---------- toolboxes ---------- */
+function chip(p, id, label){
+  var s = has(p, id) || "off";
+  var implied = s === "have" && !state.people[p].certs[id];
   var mark = s === "have" ? "✓" : (s === "prog" ? "~" : "");
-  var sub = s === "prog" ? el("small",{text:"in progress"}) : null;
-  return el("button",{class:"chip",type:"button","data-s":s,"aria-label":label+": "+(s==="off"?"not yet":s==="have"?"have it":"in progress"),onclick:function(){ cycle(id); }},
+  var sub = s === "prog" ? el("small",{text:"in progress"}) : (implied ? el("small",{text:"included"}) : null);
+  return el("button",{class:"chip",type:"button","data-s":s,"aria-label":pname(p)+", "+label+": "+(s==="off"?"not yet":s==="have"?"have it":"in progress"),onclick:function(){ cycle(p, id); }},
     [el("span",{class:"dot",text:mark}), el("span",null,[label, sub ? " " : "", sub])]);
 }
 function renderToolbox(){
-  var cc = document.getElementById("certChips"); cc.textContent = "";
-  CERTS.forEach(function(c){ cc.appendChild(chip(c[0], c[1])); });
-  var lc = document.getElementById("langChips"); lc.textContent = "";
-  LANGS.forEach(function(c){ lc.appendChild(chip(c[0], c[1])); });
+  var box = document.getElementById("people"); box.textContent = "";
   var known = {}; CERTS.concat(LANGS).forEach(function(c){ known[c[0]] = 1; });
-  var ex = document.getElementById("extraChips"); ex.textContent = "";
-  var extras = Object.keys(state.certs).filter(function(id){ return !known[id]; });
-  extras.forEach(function(id){ ex.appendChild(chip(id, LABELS[id] || id)); });
-  document.getElementById("extraHead").hidden = extras.length === 0;
+  PEOPLE.forEach(function(p){
+    var certChips = el("div",{class:"chips"}), langChips = el("div",{class:"chips"}), extraChips = el("div",{class:"chips"});
+    CERTS.forEach(function(c){ certChips.appendChild(chip(p, c[0], c[1])); });
+    LANGS.forEach(function(c){ langChips.appendChild(chip(p, c[0], c[1])); });
+    var extras = Object.keys(state.people[p].certs).filter(function(id){ return !known[id]; });
+    extras.forEach(function(id){ extraChips.appendChild(chip(p, id, LABELS[id] || id)); });
+    var input = el("input",{id:"name-"+p,type:"text",value:pname(p),maxlength:"30","aria-label":"Name"});
+    input.addEventListener("input", function(){
+      state.people[p].name = input.value; save();
+      renderViewPick(); renderFits(); renderMatrix(); renderCards();
+    });
+    box.appendChild(el("div",{class:"person"},[
+      el("div",{class:"person-head"},[el("span",{class:"avatar av-"+p,text:initial(p)}), input]),
+      el("div",{class:"subhead",text:"Certificates & studies"}), certChips,
+      el("div",{class:"subhead",text:"Languages at work level"}), langChips,
+      extras.length ? el("div",{class:"subhead",text:"Added by tapping in job cards"}) : null,
+      extras.length ? extraChips : null
+    ]));
+  });
+}
+
+/* ---------- view switch ---------- */
+function renderViewPick(){
+  var vp = document.getElementById("viewPick"); vp.textContent = "";
+  [["me",pname("me")],["partner",pname("partner")],["both","Both of us"]].forEach(function(v){
+    vp.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(state.view===v[0]),text:v[1],
+      onclick:function(){ state.view = v[0]; save(); renderAll(); }}));
+  });
+}
+
+/* ---------- who fits best ---------- */
+function renderFits(){
+  var box = document.getElementById("fits"); box.textContent = "";
+  var cs = state.countries.length ? state.countries : ORDER;
+  viewPeople().forEach(function(p){
+    var all = [];
+    JOBS.forEach(function(j){ cs.forEach(function(c){ all.push({j:j, c:c, s:score(j.id, c, p)}); }); });
+    all.sort(function(a,b){ return b.s.pct - a.s.pct; });
+    var ol = el("ol",{class:"fitlist"});
+    all.slice(0,5).forEach(function(x){
+      var pct = Math.round(x.s.pct*100);
+      ol.appendChild(el("li",null,[el("button",{type:"button",class:"fit",onclick:function(){ openJob(x.j.id, x.c); }},
+        [el("span",{class:"st "+({hi:"have",md:"part",lo:"need"})[level(x.s.pct)],text:pct+"%"}),
+         el("span",null,[x.j.name+" ", el("span",{class:"muted",text:"· "+COUNTRIES[x.c].name})])])]));
+    });
+    box.appendChild(el("div",{class:"fitcol"},[
+      el("div",{class:"person-head"},[el("span",{class:"avatar av-"+p,text:initial(p)}), el("h3",{text:pname(p)})]),
+      ol]));
+  });
 }
 
 /* ---------- matrix ---------- */
 function renderMatrix(){
   var t = document.getElementById("matrix"); t.textContent = "";
+  var ps = viewPeople();
   var head = el("tr",null,[el("th",{text:"Job"})]);
   ORDER.forEach(function(c){ head.appendChild(el("th",{text:COUNTRIES[c].name})); });
   t.appendChild(el("thead",null,[head]));
@@ -727,14 +986,21 @@ function renderMatrix(){
     if(j.cat !== lastCat){ lastCat = j.cat; tb.appendChild(el("tr",{class:"cat"},[el("th",{colspan:"6",text:j.cat})])); }
     var tr = el("tr",null,[el("th",{scope:"row",text:j.name})]);
     ORDER.forEach(function(c){
-      var sc = score(j.id, c); var pct = Math.round(sc.pct*100);
-      var bar = el("span",{class:"bar"},[el("i",{style:"width:"+pct+"%"})]);
       var law = DATA[j.id][c].reg === "law";
       var sel = (state.job === j.id && state.focus === c) ? " sel" : "";
-      var b = el("button",{type:"button",class:"cell lv-"+level(sc.pct)+sel,
-        "aria-label":j.name+" in "+COUNTRIES[c].name+": "+pct+"% ready"+(law?", regulated by law":""),
-        onclick:function(){ openJob(j.id, c); }},
-        [el("span",{text:pct+"%"}), bar, law ? el("small",{text:"by law"}) : null]);
+      var labels = [], kids = [];
+      ps.forEach(function(p){
+        var sc = score(j.id, c, p), pct = Math.round(sc.pct*100);
+        labels.push(pname(p)+" "+pct+"%");
+        kids.push(el("span",{class:"line lv-"+level(sc.pct)},[
+          ps.length > 1 ? el("span",{class:"ini",text:initial(p)}) : null,
+          el("span",{class:"num",text:pct+"%"}),
+          el("span",{class:"bar"},[el("i",{style:"width:"+pct+"%"})])]));
+      });
+      if(law) kids.push(el("small",{class:"law",text:"by law"}));
+      var b = el("button",{type:"button",class:"cell"+sel,
+        "aria-label":j.name+" in "+COUNTRIES[c].name+": "+labels.join(", ")+(law?", regulated by law":""),
+        onclick:function(){ openJob(j.id, c); }}, kids);
       tr.appendChild(el("td",null,[b]));
     });
     tb.appendChild(tr);
@@ -770,31 +1036,45 @@ function renderPickers(){
 var ST_TEXT = {have:"✓ have", prog:"~ doing", part:"~ partly", need:"✗ need", opt:"+ extra"};
 function renderCards(){
   var box = document.getElementById("cards"); box.textContent = "";
+  var ps = viewPeople(), duo = ps.length > 1;
   var list = ORDER.filter(function(c){ return state.countries.indexOf(c) >= 0; });
   if(!list.length){ box.appendChild(el("p",{class:"note",text:"Pick at least one country above to see the details."})); return; }
   list.forEach(function(c){
-    var d = DATA[state.job][c], co = COUNTRIES[c], sc = score(state.job, c);
-    var lv = level(sc.pct);
-    var color = lv === "hi" ? "var(--ok)" : (lv === "md" ? "var(--mid)" : "var(--no)");
+    var d = DATA[state.job][c], co = COUNTRIES[c];
+    var meters = el("div",{class:"meters"});
+    ps.forEach(function(p){
+      var sc = score(state.job, c, p), lv = level(sc.pct);
+      var color = lv === "hi" ? "var(--ok)" : (lv === "md" ? "var(--mid)" : "var(--no)");
+      meters.appendChild(el("div",{class:"meter"},[
+        el("div",{class:"meter-label"},[duo ? el("span",{class:"avatar sm av-"+p,text:initial(p)}) : null,
+          (duo ? pname(p)+" has " : "You have ")+fmt(sc.got)+" of "+sc.total+" required steps"]),
+        el("div",{class:"bar"},[el("i",{style:"width:"+Math.round(sc.pct*100)+"%;background:"+color})])]));
+    });
     var steps = el("ul",{class:"steps"});
     d.steps.forEach(function(s){
-      var st = status(s);
-      steps.appendChild(el("li",null,[el("button",{type:"button",class:"step",
-        "aria-label":s.t+": "+ST_TEXT[st]+". Tap to change.",
-        onclick:function(){ cycle(s.id); }},
-        [el("span",{class:"st "+st,text:ST_TEXT[st]}),
-         el("span",{class:"step-t"},[s.t, s.d ? el("span",{class:"step-d",text:s.d}) : null])])]));
+      var pills = el("span",{class:"pills"});
+      ps.forEach(function(p){
+        var st = status(s, p);
+        pills.appendChild(el("button",{type:"button",class:"st "+st,
+          "aria-label":pname(p)+", "+s.t+": "+ST_TEXT[st]+". Tap to change.",
+          onclick:function(){ cycle(p, s.id); }},
+          [duo ? el("b",{text:initial(p)+" "}) : null, ST_TEXT[st]]));
+      });
+      steps.appendChild(el("li",{class:"step"},[pills,
+        el("span",{class:"step-t"},[s.t, s.d ? el("span",{class:"step-d",text:s.d}) : null])]));
     });
     var links = el("div",{class:"links"});
     d.links.forEach(function(l){ links.appendChild(el("a",{href:l[1],target:"_blank",rel:"noopener",text:l[0]+" ↗"})); });
-    var work = el("dd",null,[co.work, co.workLink ? " " : "", co.workLink ? el("a",{href:co.workLink[1],target:"_blank",rel:"noopener",text:co.workLink[0]+" ↗"}) : null]);
+    var work = el("dd");
+    ps.forEach(function(p){
+      work.appendChild(el("span",{class:"workline"},[duo ? el("b",{text:pname(p)+": "}) : null, p === "me" ? co.work : co.workP]));
+    });
+    if(co.workLink) work.appendChild(el("a",{href:co.workLink[1],target:"_blank",rel:"noopener",text:co.workLink[0]+" ↗"}));
     var card = el("article",{class:"card"+(state.focus===c?" focus":""),id:"card-"+c},[
       el("div",{class:"card-top"},[
         el("h3",null,[el("span",{class:"cc",text:c}), co.name]),
         el("span",{class:"reg "+d.reg,text:d.reg==="law"?"Required by law":"Employers decide"})]),
-      el("div",{class:"meter"},[
-        el("div",{class:"meter-label",text:"You have "+fmt(sc.got)+" of "+sc.total+" required steps"}),
-        el("div",{class:"bar"},[el("i",{style:"width:"+Math.round(sc.pct*100)+"%;background:"+color})])]),
+      meters,
       el("p",{class:"sum",text:d.sum}),
       el("div",{class:"label",text:"Checklist"}),
       steps,
@@ -806,10 +1086,12 @@ function renderCards(){
   });
 }
 
-function renderAll(){ renderToolbox(); renderMatrix(); renderPickers(); renderCards(); }
+function renderAll(){ renderToolbox(); renderViewPick(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
 
 document.getElementById("reset").addEventListener("click", function(){
-  state.certs = JSON.parse(JSON.stringify(START)); save(); renderAll();
+  state.people.me.certs = copy(START_ME);
+  state.people.partner.certs = copy(START_PARTNER);
+  save(); renderAll();
 });
 
 renderAll();
