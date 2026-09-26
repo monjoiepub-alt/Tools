@@ -22,3 +22,20 @@ in September 2026; always confirm on the official sites.
 
 To edit the job data, change the `DATA` object inside the `<script>` in
 `career-compass/index.html`.
+
+## Parlons (`parlons/index.html`)
+
+French flashcards and a daily 20-minute lesson for Aya, to talk with her Belgian
+husband, his family in Wallonia and strangers. Built like Hanasō.
+
+- **Daily lesson (30-day plan, review every 7th day, then automatic lessons by priority):**
+  sounds of the day (reading and listening, with a quiz) → topic and one grammar point →
+  cards → tonight's conversation with him (starter sentences, his part, "We talked! +30 XP").
+- **Decks:** first steps, with him (tu), with his family (tu), at the table, about me,
+  out and about (vous), Belgian French, outdoors and guiding, my story, home and couple life,
+  ~800 core words in topics, and grammar patterns. Belgian vs France differences are marked.
+- **Cards:** understand (FR → EN) and speak (EN → FR, unlocks later), three buttons, ★ priority,
+  spaced repetition. An easy pronunciation help fades once you know all the sounds in a card.
+- **Audio:** recorded offline for every card (SVOX Pico), phone voice only as a backup.
+  See `parlons/tools/README.md` to rebuild it.
+- Progress is saved in the browser; Settings has a backup code.
