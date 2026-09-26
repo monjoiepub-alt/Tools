@@ -48,7 +48,8 @@ Aya's family, with strangers, and with Aya.
     shop (Niseko), mountain hut on Fuji, Shikoku henro, Aomori dialect.
   - *Letters:* hiragana and katakana.
 - **Both directions:** every phrase has an understand card (JP → EN) and a
-  speaking card (EN → JP). The speaking card unlocks after the first one.
+  speaking card (EN → JP). In a lesson, each new word comes both ways:
+  first JP → EN, later in the same lesson EN → JP.
 - **Random order** every session. **Fixed lesson size:** each card gets one
   second try; if it is still hard, it comes back tomorrow.
 - **Three buttons:** See again / I know the meaning (but not the writing:
@@ -56,7 +57,8 @@ Aya's family, with strangers, and with Aya.
 - **Priority stars (★★★ / ★★ / ★):** new cards come in order of importance,
   and ★★★ cards come back more often. Tap the stars on a card to change them.
 - **Letter hunt:** letters he can already read light up in green.
-- **Writing grows with each card:** romaji → kana (as soon as he knows all
+- **Writing grows with each card:** romaji with the letters he already
+  learned shown in kana (ohayoう…) → all kana (as soon as he knows all
   of the card's letters) →
   kanji with furigana (after 3 weeks) → kanji only (after 2 months).
   Signs and menu words start in kanji with furigana.

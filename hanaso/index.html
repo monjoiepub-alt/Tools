@@ -259,6 +259,7 @@ b.kn{font-weight:700}
 .kt{aspect-ratio:1;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--line);font-size:20px}
 .kt.got{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .chip.retry{color:var(--hard);border-color:var(--hard)}
+.mix .kseg{font-family:var(--font-jp);font-weight:600;color:var(--accent)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
@@ -1384,6 +1385,28 @@ function knownChar(c) {
 const readable = it => [...it.kana].every(knownChar);
 /* "Letter hunt": letters he can already read light up. */
 const hunt = text => [...text].map(c => isKanaChar(c) && knownChar(c) ? `<b class="kn">${esc(c)}</b>` : esc(c)).join('');
+/* Mixed writing: romaji, except the letters you have already learned, which appear in kana.
+   Small letters (ゃ ゅ ょ), っ and ー stay with their letter so the sound is never split. */
+const SMALL = /[ゃゅょぁぃぅぇぉャュョァィゥェォー]/;
+function mixUnits(text) {
+  const cs = [...text]; let out = '';
+  for (let i = 0; i < cs.length;) {
+    let u = '';
+    if (cs[i] === 'っ' || cs[i] === 'ッ') u += cs[i++];
+    if (i < cs.length) u += cs[i++];
+    while (i < cs.length && SMALL.test(cs[i])) u += cs[i++];
+    if (![...u].some(isKanaChar)) { out += esc(PUNCT[u] ?? u); continue; }
+    out += [...u].every(knownChar) ? `<span class="kseg">${esc(u)}</span>` : esc(toRomaji(u));
+  }
+  return out;
+}
+function mixedHTML(it) {
+  return it.parsed.map(w => w.map(g => {
+    if (g.p) return knownChar(g.t) ? `<span class="kseg">${esc(g.t)}</span>` : (g.t === 'は' ? 'wa' : g.t === 'へ' ? 'e' : toRomaji(g.t));
+    return mixUnits(g.r || g.t);
+  }).join('')).join(' ');
+}
+const knowsSome = it => [...it.kana].some(c => isKanaChar(c) && knownChar(c));
 function huntStats(items) {
   let all = 0, known = 0;
   items.forEach(it => [...it.kana].forEach(c => { if (isKanaChar(c)) { all++; if (knownChar(c)) known++; } }));
@@ -1392,7 +1415,7 @@ function huntStats(items) {
 
 /* Writing level: 0 romaji, 1 kana, 2 kanji+furigana, 3 kanji.
    A card leaves romaji as soon as you know all of its letters. */
-const LEVELS = ['Romaji', 'Kana', 'Kanji + furigana', 'Kanji'];
+const LEVELS = ['Romaji + your letters', 'Kana', 'Kanji + furigana', 'Kanji'];
 function levelFor(it) {
   const s = S.settings.script;
   if (s !== 'auto') return +s;
@@ -1432,13 +1455,18 @@ function lessonFor(n) {
   return {n, auto: true, deck: d.id, t: d.name, jp: d.jp, cards, mission: missionFor(n, d.id)};
 }
 function lessonQueue(L) {
-  const dir = S.settings.dirs === 'en' ? 'en' : 'jp';
-  const fresh = (L.cards || []).map(it => ({it, dir: it.isKana ? 'jp' : dir, k: keyOf(it, it.isKana ? 'jp' : dir)}));
+  // Today's new words come twice, from both sides: first Japanese → English,
+  // then later in the same lesson English → Japanese.
+  const both = S.settings.dirs === 'both';
+  const first = S.settings.dirs === 'en' ? 'en' : 'jp';
+  const fresh = (L.cards || []).map(it => ({it, dir: it.isKana ? 'jp' : first, k: keyOf(it, it.isKana ? 'jp' : first)}));
+  const fresh2 = both ? (L.cards || []).filter(it => !it.isKana).map(it => ({it, dir: 'en', k: keyOf(it, 'en')})) : [];
   const inLesson = new Set(fresh.map(e => e.it.id));
+  const newCount = fresh.length + fresh2.length;
   let due = plan(0).due.filter(e => !inLesson.has(e.it.id));
-  due = due.slice(0, L.review ? 45 : Math.max(15, 42 - fresh.length));
+  due = due.slice(0, L.review ? 45 : Math.max(10, 42 - newCount));
   // Aim for about 15 minutes (~40 cards): if there are not enough reviews, practise the youngest cards you already know.
-  const target = Math.max(0, 40 - fresh.length);
+  const target = Math.max(0, 40 - newCount);
   if (due.length < target) {
     const have = new Set([...inLesson, ...due.map(e => e.it.id)]);
     Object.keys(S.cards).map(k => ({k, it: itemOfKey(k)})).filter(x => x.it && !have.has(x.it.id))
@@ -1446,13 +1474,11 @@ function lessonQueue(L) {
       .forEach(x => { if (due.length < target && !have.has(x.it.id)) { have.add(x.it.id); due.push({it: x.it, dir: x.k.slice(-2), k: x.k}); } });
   }
   // Random order every time, so you can't guess a card from its position.
-  shuffle(fresh); shuffle(due);
-  const q = []; let i = 0, j = 0;
-  while (i < fresh.length || j < due.length) {
-    for (let c = 0; c < 2 && i < fresh.length; c++) q.push(fresh[i++]);
-    if (j < due.length) q.push(due[j++]);
-  }
-  return q;
+  shuffle(fresh); shuffle(fresh2); shuffle(due);
+  const half = Math.ceil(due.length / 2);
+  const mix = (a, b) => { const q = []; let i = 0, j = 0; while (i < a.length || j < b.length) { for (let c = 0; c < 2 && i < a.length; c++) q.push(a[i++]); if (j < b.length) q.push(b[j++]); } return q; };
+  // Part 1: understand the new words. Part 2: say them (every speaking card comes after its understanding card).
+  return [...mix(fresh, due.slice(0, half)), ...mix(fresh2, due.slice(half))];
 }
 const minutesFor = (q, L) => Math.max(5, Math.round((q.length * 14 + (L.g ? 120 : 0) + 120 + (L.review ? 60 : 200)) / 60));
 
@@ -1655,7 +1681,7 @@ function todayPanel() {
 function viewHome() {
   const lc = ladderCounts();
   const steps = [
-    {lab: 'Romaji', when: 'new cards', sample: '<span class="sample rom">hana</span>'},
+    {lab: 'Romaji + your letters', when: 'new cards', sample: '<span class="sample rom">ha<span class="jp" style="color:var(--accent)">な</span></span>'},
     {lab: 'Kana', when: 'when you know its letters', sample: '<span class="sample jp">はな</span>'},
     {lab: 'Kanji + furigana', when: 'after 3 weeks', sample: '<span class="sample jp"><ruby>花<rt>はな</rt></ruby></span>'},
     {lab: 'Kanji', when: 'after 2 months', sample: '<span class="sample jp">花</span>'},
@@ -1665,7 +1691,7 @@ function viewHome() {
 
   <section class="section">
     <div><h2>How the writing grows</h2>
-    <p class="muted" style="font-size:15px;margin-top:4px">Each card starts in romaji. As soon as you know all of its letters, it switches to kana. Later come kanji. The numbers show your cards at each step.</p></div>
+    <p class="muted" style="font-size:15px;margin-top:4px">Each card starts in romaji, but the letters you have learned already appear in kana. When you know all of its letters, the card is fully in kana. Later come kanji. The numbers show your cards at each step.</p></div>
     <div class="ladder">
       ${steps.map((s, i) => `<div class="step">${s.sample}<span class="lab">${s.lab}</span><span class="when">${s.when}</span><span class="cnt">${lc[i]}</span></div>`).join('')}
     </div>
@@ -1813,7 +1839,7 @@ function viewSettings() {
       <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[10, '10'], [15, '15'], [20, '20'], [30, '30']])}</div>
       <div class="setting"><h3>New letters per lesson</h3><p class="muted" style="font-size:14px">Reading only, one letter at a time, with a memory trick and a short quiz.</p>${seg('lettersPerDay', [[2, '2'], [3, '3'], [5, '5']])}</div>
       <div class="setting"><h3>Writing</h3><p class="muted" style="font-size:14px">Auto: a card switches from romaji to kana as soon as you know all of its letters, then to kanji later.</p>
-        ${seg('script', [['auto', 'Auto'], [0, 'Romaji'], [1, 'Kana'], [2, 'Kanji + furigana'], [3, 'Kanji']])}</div>
+        ${seg('script', [['auto', 'Auto'], [0, 'Romaji + your letters'], [1, 'Kana'], [2, 'Kanji + furigana'], [3, 'Kanji']])}</div>
       <div class="setting"><h3>Card directions</h3><p class="muted" style="font-size:14px">Both ways: each phrase has an understand card (JP → EN) and a speaking card (EN → JP). The speaking card unlocks after the first one.</p>
         ${seg('dirs', [['both', 'Both ways'], ['jp', 'Only JP → EN'], ['en', 'Only EN → JP']])}</div>
       <div class="setting"><h3>Read Japanese aloud automatically</h3><p class="muted" style="font-size:14px">Off: the sound only plays when you tap Listen.</p>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
@@ -1873,14 +1899,14 @@ function jpBlock(it, lvl, big) {
   const len = it.kana.length;
   if (it.isKana) return `<div class="jp-main jp" style="font-size:96px;line-height:1.2">${esc(it.kana)}</div>`;
   const size = big ? (len <= 5 ? 50 : len <= 10 ? 38 : len <= 18 ? 30 : 25) : (len <= 10 ? 28 : 24);
-  if (lvl === 0) return `<div class="jp-main rom" style="font-size:${Math.round(size * .8)}px">${esc(it.romaji)}</div><div class="jp-sub jp">${hunt(it.kana)}</div>`;
+  if (lvl === 0) return `<div class="jp-main rom mix" style="font-size:${Math.round(size * .8)}px">${mixedHTML(it)}</div><div class="jp-sub" data-peek="rom" hidden>${esc(it.romaji)}</div>`;
   if (lvl === 1) return `<div class="jp-main jp" style="font-size:${size}px">${esc(it.kana)}</div><div class="jp-sub" data-peek="rom" hidden>${esc(it.romaji)}</div>`;
   if (lvl === 2 || !it.hasKanji) return `<div class="jp-main jp" style="font-size:${size}px">${it.ruby}</div>`;
   return `<div class="jp-main jp hide-rt" style="font-size:${size}px" data-peek="rt">${it.ruby}</div>`;
 }
 function peekButtons(it, lvl, noRom) {
   let b = `<button class="mini" data-act="speak" data-id="${esc(it.id)}">${ICON_SPEAK} Listen</button>`;
-  if (!it.isKana && lvl === 1 && !noRom) b += `<button class="mini" data-act="peek" data-k="rom">Show romaji</button>`;
+  if (!it.isKana && (lvl === 1 || (lvl === 0 && knowsSome(it))) && !noRom) b += `<button class="mini" data-act="peek" data-k="rom">Show romaji</button>`;
   if (!it.isKana && lvl === 3 && it.hasKanji) b += `<button class="mini" data-act="peek" data-k="rt">Show furigana</button>`;
   return `<div class="row-btns">${b}</div>`;
 }
