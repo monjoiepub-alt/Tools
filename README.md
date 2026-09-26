@@ -4,12 +4,15 @@
 
 A single-page tool that shows what you need for different jobs in
 Finland, Sweden, Norway, France and Japan, and compares each requirement
-with the certificates two people (you and your partner) already have.
+with the certificates two people (Aya and Max) already have.
 
 - **Two toolboxes:** tap certificates and languages to mark them as have / in progress.
 - **View switch:** show scores for one person or both side by side.
 - **Who fits best:** the top job + country matches for each person.
-- **Overview table:** how ready each of you is for each job in each country.
+- **Overview table:** readiness, cost left, or break-even time for each job in each country.
+- **Money:** rough course fees still to pay, time to get ready, typical pay, and when the
+  training (or a business investment) pays for itself. A slider sets how much of your
+  take-home pay goes to paying it back.
 - **Job cards:** checklist, whether the job is regulated by law, time needed,
   right-to-work notes and official links.
 
