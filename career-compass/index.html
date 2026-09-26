@@ -1412,7 +1412,7 @@ function renderCards(){
         (m.biz ? "Example owner profit: " : "Typical pay: ") + eur(m.pay[0]) + (m.biz ? " / month (yearly average)" : " / month before tax" + (m.pay[1] < 12 ? ", about " + m.pay[1] + " months a year" : ""))
         + (c === "JP" ? " (≈ " + yen(m.pay[0]) + ")" : "");
       rows.push(el("dt",{text:"Still to pay"}), el("dd",{text: m.blocked ? "Not possible: " + m.blocked : eur(m.cost) + (c === "JP" && m.cost ? " (≈ " + yen(m.cost) + ")" : "")}));
-      rows.push(el("dt",{text:"Time to get ready"}), el("dd",{text: m.blocked ? "—" : (m.ready ? "about " + dur(m.ready) : "ready now")}));
+      rows.push(el("dt",{text:"Time to get ready"}), el("dd",{text: m.blocked ? "—" : (!m.ready ? "ready now" : (m.ready < 1 ? "less than 1 month" : "about " + dur(m.ready)))}));
       rows.push(el("dt",{text:"Pay"}), el("dd",{text:payTxt}));
       var evenTxt = m.breakEven === null ? "—" :
         (m.cost === 0 ? "Nothing to pay back" :
