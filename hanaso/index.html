@@ -177,6 +177,62 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 .big .sub{font-size:20px;color:var(--muted)}
 .big .close-hint{font-size:14px;color:var(--muted);position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
+/* Lesson + gamification */
+.lesson-title{font-size:25px;margin-top:4px}
+.lesson-title .jp{font-size:17px;color:var(--muted);font-weight:600;margin-left:4px}
+.intro{gap:18px}
+.gram{background:var(--surface-2);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line)}
+.gram-p{font-size:26px;color:var(--accent)}
+.says{display:flex;flex-direction:column;gap:8px}
+.say{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.say .jp{font-size:20px;line-height:1.7}
+.say .rom{font-weight:700;font-size:15px}
+.say .en{color:var(--muted);font-size:14.5px}
+.wordchips{display:flex;flex-wrap:wrap;gap:6px}
+.wchip{font-size:13.5px;border:1px solid var(--line);border-radius:10px;padding:3px 8px;background:var(--surface-2)}
+.wchip .jp{font-size:15px}
+.mission{gap:16px}
+.mission-head{display:flex;gap:12px;align-items:center}
+.big-hanko{width:52px;height:52px;font-size:30px}
+.task{font-size:18px;font-weight:700;line-height:1.45}
+.aya{border-left:3px solid var(--shu);background:var(--surface-2);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:15.5px}
+.won{background:var(--accent-soft);color:var(--accent);border-radius:12px;padding:8px 12px;font-size:15px}
+.mission-mini{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:start;border:1.5px dashed var(--shu);border-radius:14px;padding:12px}
+.mission-mini p{font-size:15px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.wd{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:var(--muted);font-weight:700}
+.wd i{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:14px;color:var(--muted)}
+.wd i.did{background:var(--accent-soft);border-color:var(--accent-soft);color:var(--accent)}
+.wd i.les{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.wd i.talk{background:var(--shu);border-color:var(--shu);color:#fff;font-family:var(--font-jp)}
+.wd.is-today span{color:var(--ink)}
+.lvl{display:flex;flex-direction:column;gap:6px}
+.lvl-top{display:flex;justify-content:space-between;gap:8px;font-size:15px;flex-wrap:wrap}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cal-head .icon-btn{font-size:22px;line-height:1}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cw{font-size:12px;font-weight:700;color:var(--muted);text-align:center}
+.cd{aspect-ratio:1;max-width:100%;border-radius:10px;background:var(--surface);border:1px solid var(--line);position:relative;display:flex;align-items:flex-start;justify-content:flex-start;padding:3px 5px;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cd.did{background:var(--accent-soft)}
+.cd.les{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.cd.is-today{outline:2px solid var(--ink);outline-offset:-2px}
+.stamp{position:absolute;right:3px;bottom:3px;width:20px;height:20px;border-radius:5px;background:var(--shu);color:#fff;font-family:var(--font-jp);font-style:normal;font-size:13px;display:grid;place-items:center;transform:rotate(-6deg)}
+.stamp-mini{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:4px;background:var(--shu);color:#fff;font-family:var(--font-jp);font-size:11px;margin-right:6px}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.badge{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;opacity:.5}
+.badge.got{opacity:1;border-color:var(--hard)}
+.badge > .jp{flex:none;min-width:40px;height:40px;padding-inline:4px;border-radius:50%;display:grid;place-items:center;font-size:17px;background:var(--surface-2);color:var(--muted)}
+.badge.got > .jp{background:var(--hard);color:var(--surface)}
+.badge b{font-size:14px}
+.badge p{font-size:12.5px;color:var(--muted);line-height:1.3}
+.plan{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.plan li{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.plan li.now{border:2px solid var(--accent)}
+.plan li.done{opacity:.65}
+.pn{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--surface-2);font-variant-numeric:tabular-nums}
+.plan li.done .pn{background:var(--good);color:var(--surface)}
+.plan li.now .pn{background:var(--accent);color:var(--accent-ink)}
+
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
@@ -776,6 +832,214 @@ const DECKS = [
   ]},
 ];
 
+/* ============================================================
+   THE DAILY COURSE
+   Each lesson: topic + one grammar point + ~10 cards + a conversation mission with Aya.
+   items: 'deckId:kanji text' of existing cards. Grammar examples become cards too.
+   Every 7th day is a review day.
+   ============================================================ */
+const LESSONS = [
+  {t:'Hello!', jp:'あいさつ', g:{p:'X です', e:'です makes a sentence polite: "is / am / are". You don\'t need to say "I": Japanese often leaves it out.', ex:[
+    ['{元気|げんき} です。','I\'m fine.'],['{日本語|にほんご} ^は {難|むずか}しい です。','Japanese is difficult.']]},
+   items:['basics:おはようございます。','basics:こんにちは。','basics:こんばんは。','basics:ありがとうございます。','basics:すみません。','basics:はい。','basics:いいえ。','aya:おはよう。','aya:おやすみ。','aya:ありがとう。'],
+   m:{task:'Use only Japanese greetings with Aya today: in the morning, when you come home, and before bed.',
+      say:[['おはよう！','Good morning!'],['ただいま！','I\'m home!'],['おやすみ！','Good night!']],
+      aya:'Answer only in Japanese. When he says ただいま, answer おかえり！'}},
+  {t:'All about me', jp:'自己紹介', g:{p:'A は B です', e:'は (read "wa") marks the topic: "As for A, it is B". To say "is not", use じゃないです.', ex:[
+    ['{私|わたし} ^は ベルギー{人|じん} です。','I am Belgian.'],['{私|わたし} ^は {日本人|にほんじん} じゃない です。','I\'m not Japanese.']]},
+   items:['me:ベルギーから来ました。','me:フィンランドに住んでいます。','me:妻は日本人です。','me:日本語を勉強しています。','me:日本が大好きです。','v-people:私','v-people:名前','v-people:人','v-people:外国人'],
+   m:{task:'Introduce yourself to Aya as if you are meeting her family for the first time.',
+      say:[['はじめまして。','Nice to meet you.'],['{私|わたし} ^は ベルギー{人|じん} です。','I\'m Belgian.'],['フィンランド に {住|す}んで います。','I live in Finland.'],['よろしく ね。','Nice to meet you.']],
+      aya:'Play a relative he is meeting for the first time. Ask お名前は？ and どこから来たの？ and react with へえ！ (oh really!).'}},
+  {t:'Aya\'s family', jp:'家族', g:{p:'A の B', e:'の links two nouns, like "\'s" in English: あやの = Aya\'s. 私の = my.', ex:[
+    ['あや の お{母|かあ}さん','Aya\'s mother'],['{私|わたし} の {妻|つま} です。','This is my wife.']]},
+   items:['kin:家族','kin:お義父さん','kin:お義母さん','kin:両親','kin:おじいちゃん','kin:おばあちゃん','kin:お兄さん','kin:お姉さん','kin:弟','kin:妹','family:よろしくね。'],
+   m:{task:'Look at family photos with Aya. Point at each person and ask who it is.',
+      say:[['これ ^は {誰|だれ}？','Who is this?'],['あや の お{父|とう}さん？','Your father?'],['{優|やさ}しそう！','He looks kind!']],
+      aya:'Answer with the family words (お父さん, おばあちゃん…). Add one easy detail about each person.'}},
+  {t:'Numbers', jp:'数字', g:{p:'ひとつ, ふたつ, みっつ', e:'To count objects, use ひとつ, ふたつ, みっつ. For prices, time and phone numbers, use いち, に, さん.', ex:[
+    ['りんご を {二|ふた}つ ください。','Two apples, please.'],['{全部|ぜんぶ} で いくつ？','How many in total?']]},
+   items:['num:一','num:二','num:三','num:四','num:五','num:六','num:七','num:八','num:九','num:十','num:一つ','num:二つ','num:三つ'],
+   m:{task:'Number game! Aya shows fingers or objects, you say the number in Japanese. Then swap roles.',
+      say:[['いくつ？','How many?'],['{三|みっ}つ！','Three!'],['もう {一回|いっかい}！','One more time!']],
+      aya:'Go faster when he gets it right, slower when he struggles. Use random numbers from 1 to 10.'}},
+  {t:'At the table', jp:'食卓で', g:{p:'… ね / … よ', e:'Add ね to share a feeling ("isn\'t it?"). Add よ to tell something new ("you know!").', ex:[
+    ['おいしい ね！','It\'s delicious, isn\'t it!'],['これ、 {辛|から}い よ。','This one is spicy, you know.']]},
+   items:['table:いただきます。','table:ごちそうさま！','table:おいしい！','table:すごくおいしい！','table:これ何？','table:お腹いっぱい。','table:辛い？','table:おかわりいい？','v-food:甘い'],
+   m:{task:'Eat together tonight. Start with いただきます, say something about every dish, and finish with ごちそうさま.',
+      say:[['いただきます！','Let\'s eat!'],['これ {何|なに}？','What\'s this?'],['おいしい ね！','Delicious, isn\'t it!'],['ごちそうさま！','Thanks for the meal!']],
+      aya:'Name each dish in Japanese. Ask him おいしい？ and 辛い？'}},
+  {t:'Food I like', jp:'好きな食べ物', g:{p:'X が 好き', e:'好き means "liked". X が好き = I like X. Not liking: X は好きじゃない.', ex:[
+    ['{魚|さかな} が {好|す}き。','I like fish.'],['{納豆|なっとう} ^は {好|す}き じゃない。','I don\'t like natto.']]},
+   items:['v-food:肉','v-food:魚','v-food:野菜','v-food:果物','v-food:卵','v-food:牛乳','v-food:お茶','v-food:お酒','v-food:ビール','words:好き'],
+   m:{task:'Tell Aya three foods you like and one you don\'t. Then ask what she likes.',
+      say:[['{肉|にく} が {好|す}き。','I like meat.'],['{何|なに} が {好|す}き？','What do you like?'],['{私|わたし} も！','Me too!']],
+      aya:'Answer with 〜が好き and ask back 本当？ (really?). Name one food he doesn\'t know yet.'}},
+  {review:true, t:'Review: week 1', jp:'復習'},
+  {t:'My day', jp:'一日', g:{p:'time + に + verb', e:'に marks a clock time: 七時に = at 7 o\'clock. ます makes a verb polite: 起きます = (I) get up.', ex:[
+    ['{毎朝|まいあさ} {七時|しちじ} に {起|お}きます。','I get up at 7 every morning.'],['{夜|よる} {十一時|じゅういちじ} に {寝|ね}ます。','I go to bed at 11 at night.']]},
+   items:['v-time:朝','v-time:昼','v-time:夜','v-time:毎日','v-time:午前','v-time:午後','v-time:何時','words:今日','words:明日','words:昨日','words:今'],
+   m:{task:'Tell Aya about your normal day, from morning to night.',
+      say:[['{朝|あさ} {七時|しちじ} に {起|お}きます。','I get up at 7.'],['{何時|なんじ} に {寝|ね}る？','What time do you go to bed?'],['{毎日|まいにち} {忙|いそが}しい。','Every day is busy.']],
+      aya:'Ask 何時に起きる？ and 何時に寝る？ Then tell him about your day too.'}},
+  {t:'Doing things', jp:'動詞', g:{p:'〜ます / 〜ません', e:'Polite verbs: 食べます = eat, 食べません = don\'t eat. The same form is used for now and for the future.', ex:[
+    ['{明日|あした} {駅|えき} に {行|い}きます。','I\'ll go to the station tomorrow.'],['お{酒|さけ} ^は {飲|の}みません。','I don\'t drink alcohol.']]},
+   items:['v-verbs:行く','v-verbs:来る','v-verbs:帰る','v-verbs:食べる','v-verbs:飲む','v-verbs:見る','v-verbs:寝る','v-verbs:起きる','v-verbs:する','v-verbs:分かる'],
+   m:{task:'Plan tomorrow together, only in Japanese.',
+      say:[['{明日|あした}、 {何|なに} する？','What shall we do tomorrow?'],['スーパー に {行|い}きます。','I\'ll go to the supermarket.'],['{一緒|いっしょ} に {行|い}こう！','Let\'s go together!']],
+      aya:'Answer with today\'s verbs (行く, 見る, 食べる…). Help him turn them into the ます form.'}},
+  {t:'Just us', jp:'あやと', g:{p:'Casual speech', e:'With Aya and family, drop です and ます: 食べます → 食べる, 行きます → 行く. For a question, just raise your voice at the end: 食べる？', ex:[
+    ['{明日|あした} {行|い}く？','Are you going tomorrow?'],['うん、 {行|い}く。','Yeah, I\'m going.']]},
+   items:['aya:大好き。','aya:お腹空いた？','aya:何食べたい？','aya:疲れた。','aya:大丈夫？','aya:今日はどうだった？','aya:コーヒー飲む？','aya:もう寝よう。','v-small:うん','v-small:ううん'],
+   m:{task:'Talk only in casual Japanese with Aya for 10 minutes tonight.',
+      say:[['{今日|きょう} ^は どう だった？','How was your day?'],['{疲|つか}れた？','Tired?'],['{何|なに} {食|た}べたい？','What do you want to eat?']],
+      aya:'Keep it slow and simple. When he gets stuck, give him the first sound as a hint.'}},
+  {t:'This week', jp:'一週間', g:{p:'day + に', e:'Days of the week take に too: 月曜日に = on Monday. For your day off, use は: 日曜日は休み.', ex:[
+    ['{月曜日|げつようび} に {働|はたら}きます。','I work on Monday.'],['{週末|しゅうまつ} ^は {休|やす}み です。','The weekend is my day off.']]},
+   items:['v-time:月曜日','v-time:火曜日','v-time:水曜日','v-time:木曜日','v-time:金曜日','v-time:土曜日','v-time:日曜日','v-time:週末','v-time:今週','v-time:来週','v-time:休み'],
+   m:{task:'Make the plan for next week together, day by day, in Japanese.',
+      say:[['{月曜日|げつようび} ^は {何|なに} する？','What are we doing on Monday?'],['{日曜日|にちようび} ^は {休|やす}み。','Sunday is a day off.'],['いい ね！','Sounds good!']],
+      aya:'Write the week on paper in Japanese (月, 火, 水…) and fill it in together.'}},
+  {t:'Where is it?', jp:'どこ？', g:{p:'X は どこですか', e:'"Where is X?" The answer uses ここ (here), そこ (there, near you) or あそこ (over there).', ex:[
+    ['{銀行|ぎんこう} ^は どこ です か？','Where is the bank?'],['コンビニ ^は あそこ です。','The convenience store is over there.']]},
+   items:['v-places:店','v-places:コンビニ','v-places:スーパー','v-places:銀行','v-places:郵便局','v-people:病院','v-places:ここ','v-places:そこ','v-places:あそこ','v-places:どこ','out:トイレはどこですか？'],
+   m:{task:'Hide something at home. Ask Aya where it is in Japanese. She guides you with ここ, そこ and あそこ. Then swap.',
+      say:[['{鍵|かぎ} ^は どこ？','Where are the keys?'],['あそこ？','Over there?'],['あった！','Found it!']],
+      aya:'Only answer with ここ, そこ, あそこ, 右 and 左. No pointing!'}},
+  {t:'Directions', jp:'道案内', g:{p:'右に曲がって ください', e:'に shows the direction: 右に曲がる = turn right. Add ください to ask politely: 曲がってください.', ex:[
+    ['{次|つぎ} の {信号|しんごう} を {右|みぎ} に {曲|ま}がって ください。','Please turn right at the next traffic light.'],['まっすぐ {行|い}って ください。','Please go straight on.']]},
+   items:['v-places:右','v-places:左','v-places:まっすぐ','v-places:前','v-places:後ろ','v-places:近く','v-places:隣','signs:信号','signs:交差点','v-verbs:曲がる'],
+   m:{task:'Next time you drive or walk together, Aya is the navigator, only in Japanese.',
+      say:[['{右|みぎ}？ {左|ひだり}？','Right? Left?'],['まっすぐ？','Straight on?'],['{着|つ}いた！','We\'re here!']],
+      aya:'Give short directions: 右に曲がって, 左に曲がって, まっすぐ. Praise him when he reacts fast.'}},
+  {review:true, t:'Review: week 2', jp:'復習'},
+  {t:'Road signs', jp:'標識', g:{p:'〜禁止 / 〜注意', e:'Two words you will see everywhere on the road: 禁止 = forbidden, 注意 = caution.', ex:[
+    ['ここ ^は {駐車禁止|ちゅうしゃきんし} です。','No parking here.'],['{凍結注意|とうけつちゅうい} だ よ。','Careful, icy road.']]},
+   items:['signs:止まれ','signs:一時停止','signs:徐行','signs:一方通行','signs:進入禁止','signs:通行止め','signs:駐車禁止','signs:右折禁止','signs:追越し禁止','signs:最高速度'],
+   m:{task:'Sign quiz: Aya shows you road signs (on her phone or on the road), you read them.',
+      say:[['{止|と}まれ！','Stop!'],['{徐行|じょこう} だ ね。','Slow down, right?'],['これ、 {何|なん} て {読|よ}む の？','How do you read this?']],
+      aya:'Search 標識 on your phone and show him 10 signs, or read signs together on your next drive.'}},
+  {t:'On the road', jp:'運転', g:{p:'〜ても いいですか', e:'Asking for permission: 停めてもいいですか？ = May I park (here)?', ex:[
+    ['{写真|しゃしん} を {撮|と}って も いい です か？','May I take a photo?'],['{窓|まど} を {開|あ}けて も いい？','Can I open the window?']]},
+   items:['signs:踏切','signs:凍結注意','signs:チェーン規制','signs:冬用タイヤ','signs:高速道路','signs:料金所','signs:駐車場','signs:満車','signs:空車','signs:道の駅','signs:レギュラー満タンでお願いします。','signs:ここに停めてもいいですか？'],
+   m:{task:'Plan a real drive in Aomori on the map: where to get petrol, which 道の駅 to stop at, where to park. Say it in Japanese.',
+      say:[['{道|みち}の{駅|えき} で {休|やす}もう。','Let\'s rest at the roadside station.'],['ガソリン、 {大丈夫|だいじょうぶ}？','Is the petrol okay?'],['{高速|こうそく} で {行|い}く？','Shall we take the expressway?']],
+      aya:'Pick a real route and find the 道の駅 on it together.'}},
+  {t:'Weather', jp:'天気', g:{p:'weather + ね', e:'Weather is the easiest small talk in Japan. With strangers: 寒いですね！ With family: 寒いね！', ex:[
+    ['{今日|きょう} ^は {寒|さむ}い です ね。','It\'s cold today, isn\'t it?'],['{明日|あした} ^は {雪|ゆき} だ よ。','It\'s going to snow tomorrow.']]},
+   items:['v-nature:雪','v-nature:晴れ','v-nature:曇り','v-nature:暖かい','v-nature:涼しい','v-nature:春','v-nature:夏','v-nature:秋','v-nature:冬','words:暑い','words:寒い','v-nature:吹雪'],
+   m:{task:'Every morning this week, tell Aya the weather in Japanese.',
+      say:[['{今日|きょう} ^は {晴|は}れ！','It\'s sunny today!'],['{寒|さむ}い ね。','Cold, isn\'t it?'],['{雪|ゆき} が すごい！','So much snow!']],
+      aya:'Answer and add a season word, like 冬は長いね (winter is long, isn\'t it).'}},
+  {t:'Shopping', jp:'買い物', g:{p:'X を ください', e:'を marks the thing you want: これをください = This one, please. Price: いくらですか？', ex:[
+    ['この {傘|かさ} ^は いくら です か？','How much is this umbrella?'],['{袋|ふくろ} を ください。','A bag, please.']]},
+   items:['out:これはいくらですか？','out:これをください。','out:カードで払えますか？','out:袋はいりません。','v-work:円','v-work:お釣り','v-work:現金','v-work:値段','v-work:割引','num:千円'],
+   m:{task:'Shop role play at home: Aya is the shopkeeper, you buy three things.',
+      say:[['これ ^は いくら です か？','How much is this?'],['これ を ください。','This one, please.'],['カード で {払|はら}えます か？','Can I pay by card?']],
+      aya:'Use real shop phrases: いらっしゃいませ！ 〇〇円です。 袋はいりますか？'}},
+  {t:'Aomori food', jp:'青森の味', g:{p:'X に します', e:'Ordering: 定食にします = I\'ll have the set meal. For options: 大盛りでお願いします = Large, please.', ex:[
+    ['{定食|ていしょく} に します。','I\'ll have the set meal.'],['{大盛|おおも}り で お{願|ねが}い します。','A large portion, please.']]},
+   items:['menu:定食','menu:大盛り','menu:食券','menu:ホタテ','menu:マグロ','menu:りんご','menu:せんべい汁','menu:のっけ丼','menu:ご注文はお決まりですか？','menu:これを一つください。'],
+   m:{task:'Find the menu of a real Aomori restaurant online and order in Japanese. Aya is the waiter.',
+      say:[['{海鮮丼|かいせんどん} に します。','I\'ll have the seafood bowl.'],['おすすめ ^は？','What do you recommend?'],['お{会計|かいけい} お{願|ねが}い します。','The bill, please.']],
+      aya:'Start with ご注文はお決まりですか？ and add one surprise question, like 飲み物は？ (something to drink?).'}},
+  {t:'At home', jp:'家', g:{p:'ある / いる', e:'ある = there is (things). いる = there is (people and animals). Also for "have": 車がある = I have a car.', ex:[
+    ['{冷蔵庫|れいぞうこ} に ビール が ある。','There\'s beer in the fridge.'],['{猫|ねこ} が いる！','There\'s a cat!']]},
+   items:['v-home:部屋','v-home:台所','v-home:お風呂','v-home:窓','v-home:ドア','v-home:鍵','v-home:冷蔵庫','v-home:ストーブ','v-home:灯油','v-verbs:ある','v-verbs:いる'],
+   m:{task:'House tour: walk through your home and name everything in Japanese.',
+      say:[['これ ^は {台所|だいどころ}。','This is the kitchen.'],['{鍵|かぎ} ^は どこ に ある？','Where are the keys?'],['お{風呂|ふろ}、 {入|はい}る？','Taking a bath?']],
+      aya:'Put sticky notes with the Japanese word on 10 things at home. He reads them every day.'}},
+  {review:true, t:'Review: week 3', jp:'復習'},
+  {t:'Health', jp:'体と病院', g:{p:'X が 痛い', e:'Body part + が痛い = my X hurts. Very useful at the doctor.', ex:[
+    ['{頭|あたま} が {痛|いた}い です。','I have a headache.'],['お{腹|なか} が {痛|いた}い。','My stomach hurts.']]},
+   items:['v-people:頭','v-people:目','v-people:口','v-people:手','v-people:足','v-people:お腹','v-people:薬','v-people:医者','v-people:痛い','v-people:熱','v-people:風邪'],
+   m:{task:'Doctor role play: Aya is the doctor. Tell her what hurts.',
+      say:[['{頭|あたま} が {痛|いた}い です。','I have a headache.'],['{熱|ねつ} が あります。','I have a fever.'],['{薬|くすり} ^は あります か？','Do you have medicine?']],
+      aya:'Ask どこが痛いですか？ and いつから？ (since when?). Then point at body parts for him to name.'}},
+  {t:'Describing things', jp:'形容詞', g:{p:'い / な adjectives', e:'There are two kinds: 高い (い-adjective) and 静か (な-adjective). Before a noun: 高い店, 静かな店.', ex:[
+    ['{静|しず}か な {町|まち} です ね。','It\'s a quiet town, isn\'t it?'],['{高|たか}い {車|くるま}！','What an expensive car!']]},
+   items:['v-adj:いい','v-adj:悪い','v-adj:新しい','v-adj:古い','v-adj:高い','v-adj:安い','words:大きい','words:小さい','v-adj:静か','v-adj:綺麗','v-adj:便利','v-adj:難しい'],
+   m:{task:'Describe five things around you. Aya guesses what they are.',
+      say:[['{大|おお}きくて {白|しろ}い…','Big and white…'],['{高|たか}い？ {安|やす}い？','Expensive? Cheap?'],['{正解|せいかい}！','Correct!']],
+      aya:'Guess out loud in Japanese (冷蔵庫？). Then you describe, and he guesses.'}},
+  {t:'Please do it', jp:'〜てください', g:{p:'verb-て ください', e:'The て-form + ください = please do. 待つ → 待って, 見る → 見て, 書く → 書いて.', ex:[
+    ['ちょっと {見|み}て ください。','Please take a look.'],['ここ に {書|か}いて ください。','Please write here.']]},
+   items:['basics:ちょっと待ってください。','basics:ゆっくり話してください。','v-verbs:待つ','v-verbs:教える','v-verbs:手伝う','v-verbs:座る','v-verbs:開ける','v-verbs:閉める','v-verbs:使う','v-verbs:持つ'],
+   m:{task:'Simon says in Japanese! Give Aya orders with the て-form, then swap.',
+      say:[['{座|すわ}って！','Sit down!'],['{立|た}って！','Stand up!'],['{窓|まど} を {開|あ}けて！','Open the window!']],
+      aya:'Only follow the order if he says it right. Then give him five orders.'}},
+  {t:'Yesterday', jp:'昨日', g:{p:'〜ました / 〜かった', e:'Past tense. Verbs: 行きます → 行きました (went). い-adjectives: 楽しい → 楽しかった (was fun).', ex:[
+    ['{昨日|きのう} {温泉|おんせん} に {行|い}きました。','I went to an onsen yesterday.'],['すごく {楽|たの}しかった！','It was really fun!']]},
+   items:['aya:楽しかったね。','v-adj:楽しい','v-adj:嬉しい','v-adj:悲しい','v-adj:忙しい','v-adj:大変','v-time:先週','v-time:去年','v-time:最近','v-verbs:遊ぶ'],
+   m:{task:'Tell Aya about your best day so far, in the past tense.',
+      say:[['{昨日|きのう}、 {何|なに} した？','What did you do yesterday?'],['{楽|たの}しかった！','It was fun!'],['{疲|つか}れた…','I got tired…']],
+      aya:'Ask 何した？ どこ行った？ 何食べた？ about his day.'}},
+  {t:'Ski shop 1', jp:'スキーレンタル', g:{p:'polite ですか questions', e:'At work, always stay polite with customers: 初めてですか？ 何センチですか？', ex:[
+    ['サイズ ^は {大丈夫|だいじょうぶ} です か？','Is the size okay?'],['{初心者|しょしんしゃ} です か？','Are you a beginner?']]},
+   items:['ski:いらっしゃいませ！','ski:何名様ですか？','ski:スキーですか、スノーボードですか？','ski:初めてですか？','ski:身長は何センチですか？','ski:靴のサイズは何センチですか？','ski:少々お待ちください。','ski:ありがとうございました！'],
+   m:{task:'Shop role play: Aya is a Japanese customer renting skis. Serve her from "welcome" to "goodbye".',
+      say:[['いらっしゃいませ！','Welcome!'],['{身長|しんちょう} ^は {何|なん} センチ です か？','How tall are you?'],['{楽|たの}しんで ください！','Have fun!']],
+      aya:'Be a real customer: answer quickly, and ask one question he doesn\'t expect.'}},
+  {t:'Ski shop 2', jp:'道具', g:{p:'A ですか、B ですか', e:'Offering a choice: スキーですか、スノーボードですか？ = Skis or snowboard?', ex:[
+    ['{右|みぎ} です か、 {左|ひだり} です か？','Right or left?'],['ヘルメット ^は {要|い}ります か？','Do you need a helmet?']]},
+   items:['ski:板','ski:ストック','ski:ブーツ','ski:ゴーグル','ski:手袋','ski:ゲレンデ','ski:リフト','ski:パウダー','ski:初心者','ski:上級者','ski:レギュラーですか、グーフィーですか？'],
+   m:{task:'Gear game: Aya shows pictures of ski gear, you name them as fast as you can.',
+      say:[['これ ^は ストック です。','These are ski poles.'],['{初心者|しょしんしゃ} です か？','Are you a beginner?'],['パウダー、 {最高|さいこう}！','Powder is the best!']],
+      aya:'Show ski gear photos on your phone and time him!'}},
+  {review:true, t:'Review: week 4', jp:'復習'},
+  {t:'I want to…', jp:'〜たい', g:{p:'verb-たい', e:'Take the ます form, remove ます, add たい: 行きます → 行きたい = I want to go.', ex:[
+    ['{富士山|ふじさん} に {登|のぼ}りたい。','I want to climb Mt Fuji.'],['お{遍路|へんろ} を {歩|ある}きたい。','I want to walk the henro pilgrimage.']]},
+   items:['fuji:富士山','fuji:山小屋','fuji:頂上','fuji:登山','fuji:御来光','henro:お遍路さん','henro:札所','henro:お接待','v-verbs:登る','v-verbs:歩く'],
+   m:{task:'Dream list: tell Aya five things you want to do in Japan, using 〜たい.',
+      say:[['{御来光|ごらいこう} を {見|み}たい！','I want to see the sunrise from the summit!'],['{温泉|おんせん} に {行|い}きたい。','I want to go to an onsen.'],['あや ^は？','And you?']],
+      aya:'Answer with your own 〜たい list. Choose one dream and plan it for real!'}},
+  {t:'Our Japan story', jp:'私たちの日本', g:{p:'… から', e:'Reason + から = because / so: 寒いから = because it\'s cold.', ex:[
+    ['{寒|さむ}い から、 お{風呂|ふろ} に {入|はい}る。','It\'s cold, so I\'ll take a bath.'],['{日本語|にほんご} が {好|す}き だ から、 {毎日|まいにち} {勉強|べんきょう} する。','I like Japanese, so I study every day.']]},
+   items:['v-small:だから','v-small:どうして','v-small:なんで','v-adj:大切','v-time:将来','v-verbs:住む','v-verbs:働く','me:日本の食べ物が好きです。'],
+   m:{task:'You made it to day 30! Tell Aya in Japanese why you are learning Japanese.',
+      say:[['{日本語|にほんご} が {好|す}き だ から。','Because I like Japanese.'],['あや の {家族|かぞく} と {話|はな}したい から。','Because I want to talk with your family.'],['ありがとう、 {先生|せんせい}！','Thank you, teacher!']],
+      aya:'Tell him what you are proud of. Then look at the next 30 days together!'}},
+];
+const REVIEW_MISSIONS = [
+  {task:'Quiz time! Aya says ten words or sentences from this week in English. You answer in Japanese.',
+   say:[['もう {一度|いちど}！','Once more!'],['ちょっと {待|ま}って。','Wait a moment.'],['わかった！','Got it!']],
+   aya:'Mix everything from the week. One point per right answer. 8 or more = a treat!'},
+  {task:'Role play: Aya is a stranger in Aomori. Ask her the way to the station and to a konbini.',
+   say:[['すみません、 {駅|えき} ^は どこ です か？','Excuse me, where is the station?'],['ありがとう ございます！','Thank you!']],
+   aya:'Answer like a real local, a bit fast, so he has to use もう一度お願いします.'},
+  {task:'Road trip talk: on your next drive, name the signs, the weather and the food you see, in Japanese.',
+   say:[['あれ ^は {何|なん}？','What\'s that?'],['{雪|ゆき} だ！','Snow!'],['お{腹|なか} {空|す}いた。','I\'m hungry.']],
+   aya:'Point at things on the way and ask あれは何？'},
+  {task:'Full ski shop role play: welcome, sizes, gear and return time. Aya is the customer.',
+   say:[['{返却|へんきゃく} ^は {午後|ごご} {五時|ごじ} まで です。','Please return it by 5 pm.'],['お{待|ま}たせ しました。','Sorry to keep you waiting.']],
+   aya:'Play a customer who only speaks Japanese. Give him a score from 1 to 10!'},
+];
+const AUTO_MISSIONS = {
+  _: {task:'Pick three new words from today and use each one in a sentence with Aya.',
+      say:[['{今日|きょう} の ことば ^は…','Today\'s words are…'],['これ、 {合|あ}って る？','Is this right?']],
+      aya:'Correct him gently: say the sentence the right way, then let him say it again.'},
+  fuji: {task:'Plan your Fuji climb together in Japanese: which trail, which hut, what to bring.',
+      say:[['{何|なに} を {持|も}って {行|い}く？','What shall we bring?'],['{五合目|ごごうめ} から {登|のぼ}ろう。','Let\'s climb from the 5th station.']],
+      aya:'Look at a real Fuji trail map together and name the stations in Japanese.'},
+  henro: {task:'Plan the first days of the henro: which temples, and where to sleep.',
+      say:[['{一番|いちばん} から {歩|ある}こう。','Let\'s walk from temple number 1.'],['{宿坊|しゅくぼう} に {泊|と}まりたい。','I want to stay at a temple lodging.']],
+      aya:'Look at photos of henro pilgrims together and name everything they wear.'},
+  aomori: {task:'Try the Tsugaru words on Aya, or on her family!',
+      say:[['どさ？','Where are you going?'],['ゆさ。','To the bath.']],
+      aya:'Teach him one more dialect word you know.'},
+  ski: {task:'Ski shop role play again, with today\'s new words.',
+      say:[['いらっしゃいませ！','Welcome!'],['{少々|しょうしょう} お{待|ま}ち ください。','One moment, please.']],
+      aya:'Be a difficult customer this time!'},
+  menu: {task:'Next time you eat out, you order for both of you, in Japanese.',
+      say:[['これ と これ を ください。','This and this, please.'],['お{会計|かいけい} お{願|ねが}い します。','The bill, please.']],
+      aya:'Stay quiet and let him do it. Help only if he asks.'},
+  signs: {task:'On your next drive, read every sign you can out loud.',
+      say:[['あれ、 {何|なん} て {書|か}いて ある？','What does that say?'],['{徐行|じょこう}！','Slow down!']],
+      aya:'Count how many signs he reads correctly.'},
+};
+DECKS.push({id:'grammar', group:'core', prio:3, name:'Grammar patterns', jp:'文法', who:'Grammar', reg:'grammar', color:'#3B5B92',
+  cards: LESSONS.flatMap(l => l.g ? l.g.ex.map(([n, en]) => [n, en, l.g.p + ': ' + l.g.e]) : [])});
+
 const KANA_ROWS = 'あ a,い i,う u,え e,お o,か ka,き ki,く ku,け ke,こ ko,さ sa,し shi,す su,せ se,そ so,た ta,ち chi,つ tsu,て te,と to,な na,に ni,ぬ nu,ね ne,の no,は ha,ひ hi,ふ fu,へ he,ほ ho,ま ma,み mi,む mu,め me,も mo,や ya,ゆ yu,よ yo,ら ra,り ri,る ru,れ re,ろ ro,わ wa,を o,ん n';
 const KANA_DECKS = [
   {id:'hira', group:'letters', prio:2, name:'Hiragana', jp:'ひらがな', who:'Letter', reg:'kana', color:'#3D6FB0', kana:true, note:'Hiragana: the main Japanese alphabet. Used for grammar and many words.'},
@@ -884,21 +1148,34 @@ KANA_DECKS.forEach(d => {
   });
 });
 
+/* Link lessons to their cards, and make the mission phrases playable */
+const BY_REF = {};
+DECKS.forEach(d => DECK_ITEMS[d.id].forEach(it => { BY_REF[d.id + ':' + it.kanji] = it; }));
+function looseItem(n, en) {
+  const parsed = parse(n), kana = kanaText(parsed), id = 'say|' + kana;
+  if (!ITEMS[id]) ITEMS[id] = {id, en, parsed, kana, kanji: kanjiText(parsed), ruby: rubyHTML(parsed), romaji: romajiOf(parsed, /[。？！…]$/.test(n.trim())), hasKanji: flat(parsed).some(g => g.r), note: '', reg: 'casual', prio: 2, loose: true};
+  return ITEMS[id];
+}
+[...LESSONS.filter(l => l.m).map(l => l.m), ...REVIEW_MISSIONS, ...Object.values(AUTO_MISSIONS)].forEach(m => { m.sayItems = m.say.map(([n, en]) => looseItem(n, en)); });
+LESSONS.forEach(l => { if (!l.review) l.cards = [...l.items.map(r => BY_REF[r]), ...l.g.ex.map(([n]) => ITEMS['grammar|' + kanaText(parse(n))])]; });
+
 /* ============================================================
    STATE (saved in this browser)
    ============================================================ */
 const KEY = 'hanaso.v1';
 const CORE_ON = ['v-time','v-people','v-food','v-home','v-places','v-nature','v-verbs','v-adj','v-colour','v-small','v-work'];
 const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay: true, rate: 0.85,
-  decks: {basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
+  decks: {grammar:true, basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
     ...Object.fromEntries(CORE_ON.map(id => [id, true]))}};
-function blankSave() { return {cards: {}, prio: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0}, total: 0}; }
+const blankCourse = () => ({day: 1, last: 0, pending: null, cur: null});
+function blankSave() { return {cards: {}, prio: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
 function fromSaved(s) {
   const cards = {};
   // Older saves had one card per phrase; they become the "understand" (JP → EN) card.
   for (const k in (s.cards || {})) cards[k.includes('>') ? k : k + '>jp'] = s.cards[k];
   return {cards, prio: s.prio || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
-          day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: s.streak || {last: 0, count: 0}, total: s.total || 0};
+          day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0, ...(s.streak || {})}, total: s.total || 0,
+          xp: s.xp || 0, talks: s.talks || 0, log: s.log || {}, course: {...blankCourse(), ...(s.course || {})}};
 }
 function load() {
   try { const raw = localStorage.getItem(KEY); if (raw) return fromSaved(JSON.parse(raw)); } catch (e) {}
@@ -1004,6 +1281,82 @@ function levelFor(it) {
 }
 
 /* ============================================================
+   DAILY COURSE, XP AND BADGES
+   ============================================================ */
+function missionFor(n, deck) {
+  if (n <= LESSONS.length && LESSONS[n - 1].m) return LESSONS[n - 1].m;
+  if (n % 7 === 0) return REVIEW_MISSIONS[(n / 7 - 1) % REVIEW_MISSIONS.length];
+  return AUTO_MISSIONS[deck] || AUTO_MISSIONS._;
+}
+function lessonFor(n) {
+  if (n <= LESSONS.length) return {n, ...LESSONS[n - 1], mission: missionFor(n)};
+  if (n % 7 === 0) return {n, review: true, t: 'Review day', jp: '復習', mission: missionFor(n)};
+  // After the 30-day plan: the most important unseen cards, one deck at a time.
+  if (S.course.cur && S.course.cur.n === n) {
+    const d = ALL_DECKS.find(x => x.id === S.course.cur.deck);
+    return {n, auto: true, deck: d.id, t: d.name, jp: d.jp, cards: S.course.cur.ids.map(id => ITEMS[id]).filter(Boolean), mission: missionFor(n, d.id)};
+  }
+  const unseen = [];
+  DECKS.filter(d => d.id !== 'grammar' && S.settings.decks[d.id]).forEach((d, di) => DECK_ITEMS[d.id].forEach((it, i) => {
+    if (!S.cards[keyOf(it, 'jp')] && !S.cards[keyOf(it, 'en')]) unseen.push({it, d, p: prioOf(it), di, i});
+  }));
+  if (!unseen.length) return {n, review: true, t: 'Review day', jp: '復習', mission: AUTO_MISSIONS._};
+  const order = (a, b) => b.p - a.p || a.di - b.di || a.i - b.i;
+  unseen.sort(order);
+  const d = unseen[0].d;
+  const cards = unseen.filter(u => u.d === d).slice(0, 10).map(u => u.it);
+  S.course.cur = {n, deck: d.id, ids: cards.map(c => c.id)}; save();
+  return {n, auto: true, deck: d.id, t: d.name, jp: d.jp, cards, mission: missionFor(n, d.id)};
+}
+function lessonQueue(L) {
+  const dir = S.settings.dirs === 'en' ? 'en' : 'jp';
+  const fresh = (L.cards || []).map(it => ({it, dir: it.isKana ? 'jp' : dir, k: keyOf(it, it.isKana ? 'jp' : dir)}));
+  const inLesson = new Set(fresh.map(e => e.it.id));
+  let due = plan(0).due.filter(e => !inLesson.has(e.it.id));
+  due = due.slice(0, L.review ? 45 : Math.max(15, 42 - fresh.length));
+  // Aim for about 15 minutes (~40 cards): if there are not enough reviews, practise the youngest cards you already know.
+  const target = Math.max(0, 40 - fresh.length);
+  if (due.length < target) {
+    const have = new Set([...inLesson, ...due.map(e => e.it.id)]);
+    Object.keys(S.cards).map(k => ({k, it: itemOfKey(k)})).filter(x => x.it && !have.has(x.it.id))
+      .sort((a, b) => S.cards[a.k].ivl - S.cards[b.k].ivl)
+      .forEach(x => { if (due.length < target && !have.has(x.it.id)) { have.add(x.it.id); due.push({it: x.it, dir: x.k.slice(-2), k: x.k}); } });
+  }
+  const q = []; let i = 0, j = 0;
+  while (i < fresh.length || j < due.length) {
+    for (let c = 0; c < 2 && i < fresh.length; c++) q.push(fresh[i++]);
+    if (j < due.length) q.push(due[j++]);
+  }
+  return q;
+}
+const minutesFor = (q, L) => Math.max(5, Math.round((q.length * 14 + (L.g ? 120 : 0) + 120) / 60));
+
+function logToday() { const t = today(); return S.log[t] || (S.log[t] = {n: 0}); }
+function knownCount() {
+  const ids = new Set();
+  for (const k in S.cards) if (S.cards[k].reps > 0) { const it = itemOfKey(k); if (it && !it.isKana) ids.add(it.id); }
+  return ids.size;
+}
+const LEVEL_NAMES = [['たまご', 'Egg'], ['ひよこ', 'Chick'], ['わかば', 'Sprout'], ['つぼみ', 'Bud'], ['さくら', 'Cherry blossom'], ['たけ', 'Bamboo'], ['まつ', 'Pine'], ['やま', 'Mountain'], ['ふじ', 'Mt Fuji']];
+const LVL_XP = 400;
+function levelInfo() {
+  const lv = Math.floor(S.xp / LVL_XP);
+  return {lv: lv + 1, name: LEVEL_NAMES[Math.min(lv, LEVEL_NAMES.length - 1)], into: S.xp % LVL_XP};
+}
+const BADGES = [
+  ['一', 'First lesson', 'You finished day 1.', () => S.course.day > 1],
+  ['話', 'First conversation', 'You finished your first mission with Aya.', () => S.talks >= 1],
+  ['三', 'Not a quitter', '3 days in a row. In Japanese, someone who quits after 3 days is a 三日坊主!', () => S.streak.best >= 3],
+  ['週', 'One week', '7 days in a row.', () => S.streak.best >= 7],
+  ['百', '100 words', 'You know 100 words and phrases.', () => knownCount() >= 100],
+  ['十', 'Chatterbox', '10 conversations with Aya.', () => S.talks >= 10],
+  ['月', 'One month', '30 days in a row.', () => S.streak.best >= 30],
+  ['卒', '30-day plan', 'You finished the whole 30-day plan.', () => S.course.day > LESSONS.length],
+  ['三百', '300 words', 'You know 300 words and phrases.', () => knownCount() >= 300],
+  ['富士', '800 words', 'You know 800 words and phrases. Top of the mountain!', () => knownCount() >= 800],
+];
+
+/* ============================================================
    AUDIO
    ============================================================ */
 let jaVoice = null;
@@ -1069,10 +1422,58 @@ function deckRow(d) {
           <input type="checkbox" class="switch" id="deck-${d.id}" data-act="deck" data-id="${d.id}" ${S.settings.decks[d.id] ? 'checked' : ''} aria-label="Study ${esc(d.name)}">
         </div>`;
 }
+let calOff = 0;
+const dayDate = n => new Date(n * 864e5);
+function weekStrip() {
+  const t = today(), names = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  let h = '';
+  for (let n = t - 6; n <= t; n++) {
+    const L = S.log[n] || {};
+    h += `<div class="wd ${n === t ? 'is-today' : ''}"><span>${names[dayDate(n).getUTCDay()]}</span><i class="${L.t ? 'talk' : L.l ? 'les' : L.n ? 'did' : ''}">${L.t ? '話' : L.l ? '✓' : L.n ? '·' : ''}</i></div>`;
+  }
+  return h;
+}
+function levelBar() {
+  const L = levelInfo();
+  return `<div class="lvl"><div class="lvl-top"><span><b>Level ${L.lv}</b> · <span class="jp">${L.name[0]}</span> ${L.name[1]}</span><span class="muted">${S.xp} XP</span></div>
+    <div class="bar" style="--c:var(--accent);height:8px"><i style="width:${L.into / LVL_XP * 100}%"></i></div></div>`;
+}
+function todayPanel() {
+  const t = today();
+  const doneToday = S.course.last === t;
+  const P = S.course.pending;
+  const {due} = plan();
+  let main;
+  if (!doneToday) {
+    const L = lessonFor(S.course.day);
+    const q = lessonQueue(L);
+    main = `
+      <div><div class="eyebrow">Today · day ${L.n}${L.n <= LESSONS.length ? ' of ' + LESSONS.length : ''}</div>
+      <h1 class="lesson-title">${esc(L.t)} <span class="jp">${esc(L.jp)}</span></h1></div>
+      <div class="chips">${L.g ? `<span class="chip">grammar: <span class="jp">${esc(L.g.p)}</span></span>` : `<span class="chip">${L.review ? 'review day' : 'new words'}</span>`}<span class="chip">about ${minutesFor(q, L)} min</span><span class="chip">${(L.cards || []).length} new · ${q.length - (L.cards || []).length} review</span></div>
+      <button class="btn btn-primary" data-act="lesson" style="min-height:60px;font-size:19px">Start today's lesson</button>
+      <p class="muted" style="font-size:14px">Topic and grammar → cards → tonight's conversation with Aya.</p>`;
+  } else {
+    main = `
+      <div><div class="eyebrow">Today</div><h1 class="lesson-title">Lesson done! <span class="jp">お疲れさま</span></h1></div>
+      <div class="btn-row">
+        ${due.length ? `<button class="btn btn-soft" data-act="start">Extra practice (${due.length})</button>` : ''}
+        <button class="btn btn-line" data-act="lesson">Bonus: next lesson now</button>
+      </div>`;
+  }
+  const mission = P ? `
+    <div class="mission-mini">
+      <span class="hanko" aria-hidden="true">話</span>
+      <div><div class="eyebrow">Tonight's conversation · day ${P.n}</div><p>${esc(missionFor(P.n, P.deck).task)}</p></div>
+      <div class="btn-row" style="grid-column:1 / -1"><button class="btn btn-line" data-act="mission">Open</button><button class="btn btn-primary" data-act="talked">We talked! +30</button></div>
+    </div>` : '';
+  return `<section class="panel today">${main}${mission}
+    <div class="week">${weekStrip()}</div>
+    ${levelBar()}
+  </section>`;
+}
 function viewHome() {
-  const {due, fresh} = plan();
   const lc = ladderCounts();
-  const nothing = !due.length && !fresh.length;
   const steps = [
     {lab: 'Romaji', when: 'new cards', sample: '<span class="sample rom">hana</span>'},
     {lab: 'Kana', when: 'after 1 week', sample: '<span class="sample jp">はな</span>'},
@@ -1080,20 +1481,7 @@ function viewHome() {
     {lab: 'Kanji', when: 'after 2 months', sample: '<span class="sample jp">花</span>'},
   ];
   return `
-  <section class="panel today">
-    <div>
-      <div class="eyebrow">Today</div>
-      <h1 style="font-size:24px;margin-top:4px">${nothing ? 'All done for today. お疲れさま！' : 'Ready when you are'}</h1>
-    </div>
-    <div class="today-nums">
-      <div class="num"><b>${due.length}</b><span>to review</span></div>
-      <div class="num"><b>${fresh.length}</b><span>new cards</span></div>
-      <div class="num"><b>${S.day.n === today() ? S.day.reviews : 0}</b><span>done today</span></div>
-    </div>
-    ${nothing
-      ? `<button class="btn btn-soft" data-act="more" style="width:100%">Learn 5 more new cards</button>`
-      : `<button class="btn btn-primary" data-act="start">Start studying</button>`}
-  </section>
+  ${todayPanel()}
 
   <section class="section">
     <div><h2>How the writing grows</h2>
@@ -1152,9 +1540,46 @@ function viewProgress() {
   const all = Object.keys(S.cards).filter(k => itemOfKey(k));
   const strong = all.filter(k => S.cards[k].ivl >= 21).length;
   const hard = all.filter(k => S.cards[k].lapses > 0).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses).slice(0, 6);
+  const now = new Date();
+  const y = now.getFullYear(), mo = now.getMonth() + calOff;
+  const first = new Date(Date.UTC(y, mo, 1)), days = new Date(Date.UTC(y, mo + 1, 0)).getUTCDate();
+  const firstN = Math.floor(first.getTime() / 864e5), lead = (first.getUTCDay() + 6) % 7, t = today();
+  let cells = '<span class="cw">Mo</span><span class="cw">Tu</span><span class="cw">We</span><span class="cw">Th</span><span class="cw">Fr</span><span class="cw">Sa</span><span class="cw">Su</span>' + '<span></span>'.repeat(lead);
+  for (let d = 0; d < days; d++) {
+    const n = firstN + d, L = S.log[n] || {};
+    cells += `<div class="cd ${L.l ? 'les' : L.n ? 'did' : ''} ${n === t ? 'is-today' : ''}"><span>${d + 1}</span>${L.t ? '<i class="stamp">話</i>' : ''}</div>`;
+  }
+  const monthName = first.toLocaleDateString('en-GB', {month: 'long', year: 'numeric', timeZone: 'UTC'});
+  const talkDays = Object.values(S.log).filter(l => l.t).length, lessonDays = Object.values(S.log).filter(l => l.l).length;
   return `
   <section class="section">
-    <h2>Your progress</h2>
+    <h2>Your journey</h2>
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      ${levelBar()}
+      <div class="stats">
+        <div class="stat"><b>${streakNow()}</b><span>day streak (best ${S.streak.best || 0})</span></div>
+        <div class="stat"><b>${knownCount()}</b><span>words and phrases known</span></div>
+        <div class="stat"><b>${lessonDays}</b><span>lessons done</span></div>
+        <div class="stat"><b>${talkDays}</b><span>conversations with Aya</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="cal-head"><button class="icon-btn" data-act="cal" data-d="-1" aria-label="Previous month">‹</button><h2>${monthName}</h2><button class="icon-btn" data-act="cal" data-d="1" aria-label="Next month">›</button></div>
+    <div class="cal">${cells}</div>
+    <div class="legend"><span><i class="light"></i>studied</span><span><i></i>lesson done</span><span><b class="stamp-mini">話</b> talked with Aya</span></div>
+  </section>
+  <section class="section">
+    <h2>Badges</h2>
+    <div class="badges">${BADGES.map(([k, name, desc, test]) => { const ok = test(); return `<div class="badge ${ok ? 'got' : ''}"><span class="jp">${k}</span><div><b>${name}</b><p>${esc(desc)}</p></div></div>`; }).join('')}</div>
+  </section>
+  <section class="section">
+    <h2>The 30-day plan</h2>
+    <p class="muted" style="font-size:15px">One topic a day: grammar, cards, then a conversation with Aya. Every 7th day is a review day. After day 30, new lessons are picked by priority.</p>
+    <ol class="plan">${LESSONS.map((l, i) => { const n = i + 1, st = S.course.day > n ? 'done' : S.course.day === n ? 'now' : ''; return `<li class="${st}"><span class="pn">${st === 'done' ? '✓' : n}</span><div><b>${esc(l.t)}</b> <span class="jp muted">${esc(l.jp)}</span><div class="muted" style="font-size:13.5px">${l.g ? 'Grammar: ' + esc(l.g.p) : 'Review and quiz with Aya'}</div></div></li>`; }).join('')}</ol>
+  </section>
+  <section class="section">
+    <h2>Cards</h2>
     <div class="stats">
       <div class="stat"><b>${all.length}</b><span>cards started</span></div>
       <div class="stat"><b>${strong}</b><span>known well (3+ weeks)</span></div>
@@ -1278,6 +1703,7 @@ function showCard() {
   const top = `<div class="study-top"><button class="icon-btn" data-act="close" aria-label="Stop studying">${ICON_CLOSE}</button><div class="prog"><i style="width:${pct}%"></i></div><span class="count">${sess.pos}/${sess.queue.length}</span></div>`;
   if (!entry) {
     sess.cur = null;
+    if (sess.mode === 'lesson') return finishLesson();
     box.innerHTML = top + `<div class="done"><div class="jp">お疲れさまでした！</div><p style="font-size:19px"><b>Otsukaresama deshita!</b><br>Great work. You answered ${sess.answered} cards.</p>
       <div class="btn-row" style="width:100%"><button class="btn btn-soft" data-act="more">Learn 5 more</button><button class="btn btn-primary" data-act="close">Finish</button></div></div>`;
     return;
@@ -1342,12 +1768,88 @@ function grade(g) {
   }
   S.cards[k] = st;
   if (isNew) S.day.newSeen++;
-  S.day.reviews++; S.total++;
-  if (S.streak.last !== t) { S.streak.count = S.streak.last === t - 1 ? S.streak.count + 1 : 1; S.streak.last = t; }
+  S.day.reviews++; S.total++; S.xp++; logToday().n++;
+  if (S.streak.last !== t) { S.streak.count = S.streak.last === t - 1 ? S.streak.count + 1 : 1; S.streak.last = t; S.streak.best = Math.max(S.streak.best || 0, S.streak.count); }
   save();
   sess.answered++;
   sess.pos++;
   showCard();
+}
+
+/* ============================================================
+   DAILY LESSON FLOW: topic + grammar → cards → conversation mission
+   ============================================================ */
+function openStudy() { document.getElementById('study').hidden = false; document.body.style.overflow = 'hidden'; }
+function sayRow(it) {
+  return `<div class="say"><div><div class="jp">${it.ruby}</div><div class="rom">${esc(it.romaji)}</div><div class="en">${esc(it.en)}</div></div>
+    <button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button></div>`;
+}
+function startLesson() {
+  const L = lessonFor(S.course.day);
+  const q = lessonQueue(L);
+  sess = {mode: 'lesson', L, queue: q, pos: 0, answered: 0, xp0: S.xp};
+  openStudy();
+  if (L.g || L.cards) showIntro(); else if (q.length) showCard(); else finishLesson();
+}
+function showIntro() {
+  const {L, queue} = sess;
+  const newCount = (L.cards || []).length;
+  document.getElementById('studyIn').innerHTML = `
+    <div class="study-top"><button class="icon-btn" data-act="close" aria-label="Close">${ICON_CLOSE}</button><div class="prog"><i style="width:0%"></i></div><span class="count">Day ${L.n}</span></div>
+    <div class="card intro">
+      <div><div class="eyebrow">Day ${L.n} · today's topic</div>
+      <h1 class="lesson-title">${esc(L.t)} <span class="jp">${esc(L.jp)}</span></h1></div>
+      ${L.g ? `<div class="gram">
+        <div class="eyebrow">Grammar of the day</div>
+        <div class="gram-p jp">${esc(L.g.p)}</div>
+        <p>${esc(L.g.e)}</p>
+        <div class="says">${L.g.ex.map(([n]) => sayRow(ITEMS['grammar|' + kanaText(parse(n))])).join('')}</div>
+      </div>` : ''}
+      ${newCount ? `<div><div class="eyebrow" style="margin-bottom:8px">New today · ${newCount}</div>
+        <div class="wordchips">${L.cards.map(it => `<span class="wchip"><span class="jp">${it.ruby}</span> ${esc(it.en.length > 28 ? it.en.slice(0, 26) + '…' : it.en)}</span>`).join('')}</div></div>` : ''}
+    </div>
+    <div><button class="btn btn-primary" data-act="startcards">Start the cards · ${queue.length} cards · about ${minutesFor(queue, L) - (L.g ? 2 : 0) - 2} min</button></div>`;
+}
+function finishLesson() {
+  const {L} = sess;
+  const t = today();
+  if (!sess.finished) {
+    sess.finished = true;
+    if (S.course.day === L.n) {
+      S.course.day = L.n + 1; S.course.last = t; S.course.cur = null;
+      S.course.pending = {n: L.n, deck: L.deck || null};
+      S.xp += 20; logToday().l = L.n;
+      save();
+    }
+  }
+  showMission(L.mission, L.n, S.xp - sess.xp0);
+}
+function showMission(m, n, gained) {
+  document.getElementById('studyIn').innerHTML = `
+    <div class="study-top"><button class="icon-btn" data-act="close" aria-label="Close">${ICON_CLOSE}</button><div class="prog"><i style="width:100%"></i></div><span class="count">Day ${n}</span></div>
+    <div class="card mission">
+      ${gained != null ? `<div class="won"><span class="jp">お疲れさま！</span> Day ${n} done · <b>+${gained} XP</b></div>` : ''}
+      <div class="mission-head"><span class="hanko big-hanko" aria-hidden="true">話</span><div><div class="eyebrow">Tonight's conversation</div><h2>Talk with Aya</h2></div></div>
+      <p class="task">${esc(m.task)}</p>
+      <div><div class="eyebrow" style="margin-bottom:6px">You can start with</div><div class="says">${m.sayItems.map(sayRow).join('')}</div></div>
+      <div class="aya"><div class="eyebrow">Aya's part</div><p>${esc(m.aya)}</p></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-line" data-act="close">Later</button><button class="btn btn-primary" data-act="talked" style="flex:2 1 180px">We talked! +30 XP</button></div>`;
+}
+function openMission() {
+  const P = S.course.pending; if (!P) return;
+  sess = {mode: 'mission', queue: [], pos: 0, answered: 0};
+  openStudy();
+  showMission(missionFor(P.n, P.deck), P.n, null);
+}
+function talked() {
+  if (S.course.pending) {
+    S.course.pending = null; S.talks++; S.xp += 30; logToday().t = true;
+    const t = today();
+    if (S.streak.last !== t) { S.streak.count = S.streak.last === t - 1 ? S.streak.count + 1 : 1; S.streak.last = t; S.streak.best = Math.max(S.streak.best || 0, S.streak.count); }
+    save();
+  }
+  closeSession();
 }
 
 /* ============================================================
@@ -1371,6 +1873,11 @@ document.addEventListener('click', e => {
   if (!el) return;
   const act = el.dataset.act;
   if (act === 'start') startSession();
+  else if (act === 'lesson') startLesson();
+  else if (act === 'startcards') { if (sess.queue.length) showCard(); else finishLesson(); }
+  else if (act === 'talked') talked();
+  else if (act === 'mission') openMission();
+  else if (act === 'cal') { calOff += +el.dataset.d; render(); }
   else if (act === 'more') { if (sess) { const q = buildQueue(5); if (q.length) { sess = {queue: q, pos: 0, answered: sess.answered}; showCard(); } } else startSession(5); }
   else if (act === 'close') closeSession();
   else if (act === 'reveal') reveal();

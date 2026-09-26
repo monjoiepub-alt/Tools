@@ -22,6 +22,18 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 A flashcard app for learning Japanese on a phone, made for talking with
 Aya's family, with strangers, and with Aya.
 
+- **A daily 15-minute lesson:** open the app, tap *Start today's lesson*:
+  1. Topic of the day + one grammar pattern with examples and audio.
+  2. Cards: the day's new words mixed with reviews (~40 cards).
+  3. Tonight's conversation: a mission to do with Aya, with starter
+     sentences for him and a part for Aya. Tap *We talked!* when done.
+- **A 30-day plan** (greetings → family → food → time → verbs → places →
+  driving → weather → shopping → Aomori food → health → ski shop → dreams),
+  with a review day every 7th day. After day 30, lessons are picked by
+  priority, one deck at a time.
+- **Game:** XP (1 per card, 20 per lesson, 30 per conversation), levels
+  from たまご (egg) to ふじ (Mt Fuji), a streak, badges, and a calendar
+  where conversation days get a 話 stamp.
 - **About 950 phrases and words, plus the kana.** 176 sentences and 774 single
   words, in four groups:
   - *Everyday conversation:* First steps, With Aya's family (casual), At the
@@ -46,7 +58,8 @@ Aya's family, with strangers, and with Aya.
 Progress is saved in the browser (localStorage). Use Settings → Backup to
 copy a backup code.
 
-To add sentences, edit the `DECKS` list inside the `<script>`. A number
+To change the daily course, edit `LESSONS` (cards are linked as
+`'deckId:kanji text'`). To add sentences, edit the `DECKS` list inside the `<script>`. A number
 inside a deck's list (3, 2 or 1) sets the priority of the cards after it. Write
 `{漢字|かな}` for kanji with its reading, add `'read'` as the 4th field for
 signs and menu words (kanji first), put spaces between words (for the
