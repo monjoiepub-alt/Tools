@@ -46,7 +46,8 @@ Aya's family, with strangers, and with Aya.
   - *Letters:* hiragana and katakana.
 - **Both directions:** every phrase has an understand card (JP → EN) and a
   speaking card (EN → JP). The speaking card unlocks after the first one.
-- **Three buttons:** See again / Not sure / I know it.
+- **Three buttons:** See again / I know the meaning (but not the writing:
+  the card comes back without romaji, and stays without romaji) / I know it.
 - **Priority stars (★★★ / ★★ / ★):** new cards come in order of importance,
   and ★★★ cards come back more often. Tap the stars on a card to change them.
 - **Writing grows with each card:** romaji → kana (after 1 week) →

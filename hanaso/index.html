@@ -233,6 +233,8 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 .plan li.done .pn{background:var(--good);color:var(--surface)}
 .plan li.now .pn{background:var(--accent);color:var(--accent-ink)}
 
+.toast{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;max-width:528px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;font-size:15px;box-shadow:var(--shadow)}
+.grade .g-sub{font-size:12px;font-weight:400;color:var(--muted);line-height:1.2}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
@@ -264,6 +266,7 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
   <div class="study-in" id="studyIn"></div>
 </div>
 <div class="big" id="big" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <script>
 /* ============================================================
@@ -1168,12 +1171,12 @@ const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay:
   decks: {grammar:true, basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
     ...Object.fromEntries(CORE_ON.map(id => [id, true]))}};
 const blankCourse = () => ({day: 1, last: 0, pending: null, cur: null});
-function blankSave() { return {cards: {}, prio: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
+function blankSave() { return {cards: {}, prio: {}, wlvl: {}, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
 function fromSaved(s) {
   const cards = {};
   // Older saves had one card per phrase; they become the "understand" (JP → EN) card.
   for (const k in (s.cards || {})) cards[k.includes('>') ? k : k + '>jp'] = s.cards[k];
-  return {cards, prio: s.prio || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
+  return {cards, prio: s.prio || {}, wlvl: s.wlvl || {}, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
           day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0, ...(s.streak || {})}, total: s.total || 0,
           xp: s.xp || 0, talks: s.talks || 0, log: s.log || {}, course: {...blankCourse(), ...(s.course || {})}};
 }
@@ -1195,10 +1198,13 @@ const clampEase = e => Math.min(3.0, Math.max(1.3, e));
 const PRIO_MULT = {3: 0.8, 2: 1, 1: 1.3};
 const PRIO_TEXT = {3: '★★★', 2: '★★☆', 1: '★☆☆'};
 const prioOf = it => S.prio[it.id] || it.prio || 2;
-const GRADES = ['See again', 'Not sure', 'I know it'];
+const GRADES = ['See again', 'I know the meaning', 'I know it'];
+const GRADES_KANA = ['See again', 'Not sure', 'I know it'];
 function nextOf(st, g, it) {
   const m = PRIO_MULT[prioOf(it)];
   if (g === 0) return {again: true, ivl: st.ivl >= 3 ? Math.max(1, Math.round(st.ivl * 0.3)) : 0, ease: clampEase(st.ease - 0.2), lapsed: st.ivl > 0};
+  // Meaning known, writing not: show it again in this session without romaji. The schedule stays the same.
+  if (g === 1 && !it.isKana) return {again: true, writing: true, ivl: st.ivl, ease: st.ease};
   if (st.lapsed) return {ivl: Math.max(1, st.ivl), ease: st.ease};
   if (st.ivl === 0) {
     if (g === 1) return {again: true, ivl: 0, ease: st.ease};
@@ -1211,6 +1217,7 @@ function nextOf(st, g, it) {
   return {ivl: Math.min(365, ivl), ease: clampEase(ease)};
 }
 function fmtIvl(r, g) {
+  if (r.writing) return '…not the writing';
   if (r.again) return g === 0 ? 'in a few cards' : 'a bit later';
   const d = r.ivl;
   if (d < 14) return d + (d === 1 ? ' day' : ' days');
@@ -1276,8 +1283,9 @@ function levelFor(it) {
   const s = S.settings.script;
   if (s !== 'auto') return +s;
   const st = S.cards[keyOf(it, 'jp')] || S.cards[keyOf(it, 'en')]; const ivl = st ? st.ivl : 0;
-  if (it.reg === 'read') return ivl >= 21 ? 3 : 2;
-  return ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0;
+  const min = S.wlvl[it.id] || 0;
+  if (it.reg === 'read') return Math.max(min, ivl >= 21 ? 3 : 2);
+  return Math.max(min, ivl >= 60 ? 3 : ivl >= 21 ? 2 : ivl >= 7 ? 1 : 0);
 }
 
 /* ============================================================
@@ -1366,13 +1374,40 @@ function pickVoice() {
     jaVoice = vs.find(v => /kyoko|otoya|google|natural|nanami/i.test(v.name)) || vs[0] || null;
   } catch (e) { jaVoice = null; }
 }
-try { pickVoice(); speechSynthesis.onvoiceschanged = () => { pickVoice(); if (tab === 'settings') render(); }; } catch (e) {}
-function speak(it) {
+try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', () => { pickVoice(); if (tab === 'settings') render(); }); } catch (e) {}
+let utter = null, speakCheck = null;
+const NO_VOICE_HELP = 'On iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese. On Android: Settings → Text-to-speech → install Japanese.';
+function speak(it, fromUser = true) {
+  const synth = window.speechSynthesis;
+  if (!synth || typeof SpeechSynthesisUtterance === 'undefined') {
+    if (fromUser) toast('This app window cannot read aloud. Open the link in Safari (iPhone) or Chrome (Android).');
+    return;
+  }
   try {
-    const u = new SpeechSynthesisUtterance(it.kanji.replace(/…/g, ''));
-    u.lang = 'ja-JP'; if (jaVoice) u.voice = jaVoice; u.rate = S.settings.rate;
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
-  } catch (e) {}
+    if (!jaVoice) pickVoice();
+    // Keep a reference: some browsers stop speaking if the utterance is garbage-collected.
+    utter = new SpeechSynthesisUtterance(it.kanji.replace(/[…「」]/g, ''));
+    utter.lang = 'ja-JP'; if (jaVoice) utter.voice = jaVoice; utter.rate = S.settings.rate;
+    let started = false;
+    utter.onstart = () => { started = true; };
+    utter.onerror = e => {
+      if (e.error === 'interrupted' || e.error === 'canceled') return;
+      if (fromUser) toast(e.error === 'not-allowed' ? 'Tap Listen once to switch the voice on.' : 'The voice could not play (' + e.error + '). ' + (jaVoice ? '' : 'No Japanese voice found. ' + NO_VOICE_HELP));
+    };
+    const go = () => { synth.resume(); synth.speak(utter); };
+    // Cancelling and speaking in the same moment is unreliable on iPhone and Chrome, so wait a little after a cancel.
+    if (synth.speaking || synth.pending) { synth.cancel(); setTimeout(go, 120); } else go();
+    clearTimeout(speakCheck);
+    if (fromUser) speakCheck = setTimeout(() => {
+      if (!started && !synth.speaking) toast(jaVoice ? 'No sound? Check the volume, and on iPhone the silent switch.' : 'No Japanese voice found on this device. ' + NO_VOICE_HELP);
+    }, 2500);
+  } catch (e) { if (fromUser) toast('The voice could not play on this device.'); }
+}
+let toastT = null;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 6000);
 }
 
 /* ============================================================
@@ -1607,7 +1642,7 @@ function viewProgress() {
     <ol>
       <li>Study a little every day. 10 minutes is enough.</li>
       <li>When the card shows English, say the Japanese <b>out loud</b> before you check.</li>
-      <li>Be honest with the buttons. <b>See again</b> brings the card back in a few cards. <b>Not sure</b> brings it back soon. <b>I know it</b> pushes it further into the future.</li>
+      <li>Be honest with the buttons. <b>See again</b> brings the card back in a few cards. <b>I know the meaning</b> (but not the writing) shows it again without romaji, and the card stays without romaji from then on. <b>I know it</b> pushes it further into the future.</li>
       <li>Every phrase has two cards: first you learn to <b>understand</b> it (Japanese → English). Once you pass that, a <b>speaking</b> card (English → Japanese) unlocks.</li>
       <li>Stars show how important a card is. ★★★ cards come first and come back more often. Tap the stars on a card to change them.</li>
       <li>Use the phrases with Aya and her family. Real conversations are the best practice.</li>
@@ -1690,9 +1725,9 @@ function jpBlock(it, lvl, big) {
   if (lvl === 2 || !it.hasKanji) return `<div class="jp-main jp" style="font-size:${size}px">${it.ruby}</div>`;
   return `<div class="jp-main jp hide-rt" style="font-size:${size}px" data-peek="rt">${it.ruby}</div>`;
 }
-function peekButtons(it, lvl) {
+function peekButtons(it, lvl, noRom) {
   let b = `<button class="mini" data-act="speak" data-id="${esc(it.id)}">${ICON_SPEAK} Listen</button>`;
-  if (!it.isKana && lvl === 1) b += `<button class="mini" data-act="peek" data-k="rom">Show romaji</button>`;
+  if (!it.isKana && lvl === 1 && !noRom) b += `<button class="mini" data-act="peek" data-k="rom">Show romaji</button>`;
   if (!it.isKana && lvl === 3 && it.hasKanji) b += `<button class="mini" data-act="peek" data-k="rt">Show furigana</button>`;
   return `<div class="row-btns">${b}</div>`;
 }
@@ -1710,12 +1745,13 @@ function showCard() {
   }
   const {it, dir, k} = entry;
   const st = S.cards[k];
-  const lvl = levelFor(it);
-  sess.cur = {it, lvl, dir, k, revealed: false};
+  const lvl = Math.max(levelFor(it), entry.forceLvl || 0);
+  const noRom = !!entry.noRomaji;
+  sess.cur = {it, lvl, dir, k, noRom, revealed: false};
   const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${dir === 'jp' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
   let front;
   if (dir === 'jp') {
-    front = `<div class="ask">${it.isKana ? 'How do you read this?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
+    front = `<div class="ask">${it.isKana ? 'How do you read this?' : noRom ? 'Again, without romaji. Can you read it?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl, noRom)}</div>`;
   } else {
     const ctx = it.reg === 'polite' || it.reg === 'casual' ? `${it.deck.who.toLowerCase()}, ${it.reg}` : it.deck.who.toLowerCase();
     front = `<div class="ask">How do you say this in Japanese? <span style="font-weight:400">(${esc(ctx)})</span></div>
@@ -1723,25 +1759,25 @@ function showCard() {
   }
   box.innerHTML = top + `<div class="card" id="card">${chips}${front}<div id="answer"></div></div>
     <div id="actions"><button class="btn btn-primary" data-act="reveal">Show answer</button></div>`;
-  if (dir === 'jp' && S.settings.autoplay) speak(it);
+  if (dir === 'jp' && S.settings.autoplay) speak(it, false);
 }
 function renderGrades() {
   const {it, k} = sess.cur;
   const st = S.cards[k] || blankState();
-  document.getElementById('actions').innerHTML = `<div class="grades">${GRADES.map((l, g) => `<button class="grade" data-act="grade" data-g="${g}">${l}<small>${fmtIvl(nextOf(st, g, it), g)}</small></button>`).join('')}</div>`;
+  document.getElementById('actions').innerHTML = `<div class="grades">${(it.isKana ? GRADES_KANA : GRADES).map((l, g) => `<button class="grade" data-act="grade" data-g="${g}">${l}<small>${fmtIvl(nextOf(st, g, it), g)}</small></button>`).join('')}</div>`;
 }
 function reveal() {
-  const {it, lvl, dir} = sess.cur;
+  const {it, lvl, dir, noRom} = sess.cur;
   if (sess.cur.revealed) return;
   sess.cur.revealed = true;
   const forms = it.isKana ? `<dl class="forms"><dt>Romaji</dt><dd><b>${esc(it.romaji)}</b></dd><dt>Hiragana</dt><dd class="jp">${esc(String.fromCharCode(it.kana.charCodeAt(0) - (it.deck.id === 'kata' ? 0x60 : 0)))}</dd><dt>Katakana</dt><dd class="jp">${esc(String.fromCharCode(it.kana.charCodeAt(0) + (it.deck.id === 'hira' ? 0x60 : 0)))}</dd></dl>`
-    : `<dl class="forms"><dt>Romaji</dt><dd><b>${esc(it.romaji)}</b></dd><dt>Kana</dt><dd class="jp">${esc(it.kana)}</dd>${it.hasKanji ? `<dt>Kanji</dt><dd class="jp">${it.ruby}</dd>` : ''}</dl>`;
+    : `<dl class="forms">${noRom ? '' : `<dt>Romaji</dt><dd><b>${esc(it.romaji)}</b></dd>`}<dt>Kana</dt><dd class="jp">${esc(it.kana)}</dd>${it.hasKanji ? `<dt>Kanji</dt><dd class="jp">${it.ruby}</dd>` : ''}</dl>`;
   const head = dir === 'jp'
     ? `<div class="en-main" style="font-size:24px">${esc(it.isKana ? it.romaji : it.en)}</div>`
-    : `<div class="front" style="min-height:0;padding:0">${jpBlock(it, lvl, true)}${peekButtons(it, lvl)}</div>`;
+    : `<div class="front" style="min-height:0;padding:0">${jpBlock(it, lvl, true)}${peekButtons(it, lvl, noRom)}</div>`;
   document.getElementById('answer').innerHTML = `<div class="answer">${head}${forms}${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}</div>`;
   renderGrades();
-  if (dir === 'en' && S.settings.autoplay) speak(it);
+  if (dir === 'en' && S.settings.autoplay) speak(it, false);
 }
 function cyclePrio() {
   const it = sess.cur.it;
@@ -1759,7 +1795,13 @@ function grade(g) {
   const st = S.cards[k] || blankState();
   const r = nextOf(st, g, it);
   st.ease = r.ease;
-  if (r.again) {
+  if (r.writing) {
+    // Next time (and from now on) this phrase is shown without romaji.
+    const lvl = Math.max(sess.cur.lvl, 1);
+    S.wlvl[it.id] = Math.max(S.wlvl[it.id] || 0, lvl);
+    if (!S.cards[k]) { st.due = t; st.tried = true; }
+    sess.queue.splice(Math.min(sess.queue.length, sess.pos + 5), 0, {...sess.queue[sess.pos], forceLvl: lvl, noRomaji: true});
+  } else if (r.again) {
     if (r.lapsed) st.lapses++;
     st.ivl = r.ivl; st.due = t; st.lapsed = r.lapsed || st.lapsed; st.tried = true;
     sess.queue.splice(Math.min(sess.queue.length, sess.pos + (g === 0 ? 4 : 7)), 0, sess.queue[sess.pos]);
