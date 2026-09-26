@@ -49,6 +49,8 @@ Aya's family, with strangers, and with Aya.
   - *Letters:* hiragana and katakana.
 - **Both directions:** every phrase has an understand card (JP → EN) and a
   speaking card (EN → JP). The speaking card unlocks after the first one.
+- **Random order** every session. **Fixed lesson size:** each card gets one
+  second try; if it is still hard, it comes back tomorrow.
 - **Three buttons:** See again / I know the meaning (but not the writing:
   the card comes back without romaji, and stays without romaji) / I know it.
 - **Priority stars (★★★ / ★★ / ★):** new cards come in order of importance,

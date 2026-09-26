@@ -258,6 +258,7 @@ b.kn{font-weight:700}
 .kgrid.marks{grid-template-columns:repeat(auto-fill,minmax(38px,1fr))}
 .kt{aspect-ratio:1;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--line);font-size:20px}
 .kt.got{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip.retry{color:var(--hard);border-color:var(--hard)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
@@ -1352,6 +1353,7 @@ function plan(extraNew = 0) {
 }
 function buildQueue(extraNew = 0) {
   const {due, fresh} = plan(extraNew);
+  shuffle(fresh);
   const q = [];
   let i = 0, j = 0;
   while (i < due.length || j < fresh.length) {
@@ -1443,6 +1445,8 @@ function lessonQueue(L) {
       .sort((a, b) => S.cards[a.k].ivl - S.cards[b.k].ivl)
       .forEach(x => { if (due.length < target && !have.has(x.it.id)) { have.add(x.it.id); due.push({it: x.it, dir: x.k.slice(-2), k: x.k}); } });
   }
+  // Random order every time, so you can't guess a card from its position.
+  shuffle(fresh); shuffle(due);
   const q = []; let i = 0, j = 0;
   while (i < fresh.length || j < due.length) {
     for (let c = 0; c < 2 && i < fresh.length; c++) q.push(fresh[i++]);
@@ -1788,7 +1792,7 @@ function viewProgress() {
     <ol>
       <li>Study a little every day. 10 minutes is enough.</li>
       <li>When the card shows English, say the Japanese <b>out loud</b> before you check.</li>
-      <li>Be honest with the buttons. <b>See again</b> brings the card back in a few cards. <b>I know the meaning</b> (but not the writing) shows it again without romaji, and the card stays without romaji from then on. <b>I know it</b> pushes it further into the future.</li>
+      <li>Be honest with the buttons. <b>See again</b> gives the card one second try a few cards later. If it is still hard, it comes back tomorrow, so every lesson has a fixed size. <b>I know the meaning</b> (but not the writing) shows it again without romaji, and the card stays without romaji from then on. <b>I know it</b> pushes it further into the future.</li>
       <li>Every phrase has two cards: first you learn to <b>understand</b> it (Japanese → English). Once you pass that, a <b>speaking</b> card (English → Japanese) unlocks.</li>
       <li>Stars show how important a card is. ★★★ cards come first and come back more often. Tap the stars on a card to change them.</li>
       <li>Use the phrases with Aya and her family. Real conversations are the best practice.</li>
@@ -1897,7 +1901,7 @@ function showCard() {
   const lvl = Math.max(levelFor(it), entry.forceLvl || 0);
   const noRom = !!entry.noRomaji;
   sess.cur = {it, lvl, dir, k, noRom, revealed: false};
-  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${dir === 'jp' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${sess.queue[sess.pos].retry ? '<span class="chip retry">second try</span>' : st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${dir === 'jp' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
   let front;
   if (dir === 'jp') {
     front = `<div class="ask">${it.isKana ? 'How do you read this?' : noRom ? 'Again, without romaji. Can you read it?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl, noRom)}</div>`;
@@ -1944,16 +1948,22 @@ function grade(g) {
   const st = S.cards[k] || blankState();
   const r = nextOf(st, g, it);
   st.ease = r.ease;
+  // Each card gets ONE second try in a session. If it is still hard, it comes back tomorrow,
+  // so the lesson always ends at its planned size.
+  const entry = sess.queue[sess.pos];
+  const retryAt = () => Math.min(sess.queue.length, sess.pos + 3 + Math.floor(Math.random() * 4));
   if (r.writing) {
-    // Next time (and from now on) this phrase is shown without romaji.
+    // From now on this phrase is shown without romaji.
     const lvl = Math.max(sess.cur.lvl, 1);
     S.wlvl[it.id] = Math.max(S.wlvl[it.id] || 0, lvl);
     if (!S.cards[k]) { st.due = t; st.tried = true; }
-    sess.queue.splice(Math.min(sess.queue.length, sess.pos + 5), 0, {...sess.queue[sess.pos], forceLvl: lvl, noRomaji: true});
+    if (!entry.retry) sess.queue.splice(retryAt(), 0, {...entry, forceLvl: lvl, noRomaji: true, retry: true});
+    else if (st.due <= t) st.due = t + 1;
   } else if (r.again) {
     if (r.lapsed) st.lapses++;
-    st.ivl = r.ivl; st.due = t; st.lapsed = r.lapsed || st.lapsed; st.tried = true;
-    sess.queue.splice(Math.min(sess.queue.length, sess.pos + (g === 0 ? 4 : 7)), 0, sess.queue[sess.pos]);
+    st.ivl = r.ivl; st.lapsed = r.lapsed || st.lapsed; st.tried = true;
+    if (!entry.retry) { st.due = t; sess.queue.splice(retryAt(), 0, {...entry, retry: true}); }
+    else st.due = t + 1;
   } else {
     st.ivl = r.ivl; st.due = t + r.ivl; st.reps++; delete st.lapsed; delete st.tried;
   }
@@ -2029,7 +2039,7 @@ function showLetter() {
 }
 function startKanaQuiz() {
   const K = sess.kana;
-  K.quiz = [...K.units.flatMap(quizFrom), ...shuffle(reviewUnits(K.units.length ? 4 : 8).flatMap(quizFrom))];
+  K.quiz = shuffle([...K.units.flatMap(quizFrom), ...reviewUnits(K.units.length ? 4 : 8).flatMap(quizFrom)]);
   K.qi = 0; K.missed = new Set();
   if (!K.quiz.length) return finishLetters();
   showKanaQuestion();
