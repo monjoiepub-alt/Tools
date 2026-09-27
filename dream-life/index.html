@@ -174,7 +174,7 @@ footer{color:var(--muted);font-size:.88rem;display:flex;flex-direction:column;ga
       <h2 id="h-mx">Line by line</h2>
       <p class="hint">Green cell = cheapest country for that line. The small line under each number is the difference with the country you compare against. Click any number to change it for that country (purple border = your number, ↺ = back to the example). Untick a line to leave it out everywhere.</p>
     </div>
-    <div class="row"><div class="seg" id="viewSel"></div></div>
+    <div class="row"><span class="hint">Compare against:</span><div class="seg" id="baseSel2"></div><span class="hint" style="margin-left:12px">Show:</span><div class="seg" id="viewSel"></div></div>
     <div class="tbl-wrap"><table class="mx" id="mx"></table></div>
   </section>
 
@@ -352,7 +352,11 @@ const BYID = Object.fromEntries(ALL.map(i => [i.id, i]));
 const ROWS = [
  { g:"Buying: home", kind:"once", id:"house", lab:"House + 1–2 ha of land", nt:"~110 m² older house. Vercors (Drôme side) ~€2,440/m²; rural Jämtland; Kuusamo area; Hallingdal/Valdres.", def:V4(300000,200000,150000,290000) },
  { kind:"once", id:"fees", lab:"Transfer tax + notary", nt:"France ~7.5% · Sweden 1.5% stamp duty + ~1% mortgage deeds · Finland 3% · Norway 2.5%", calc:c => price(c) * V4(7.5,2.5,3,2.5)[c]/100 },
- { kind:"once", id:"reno", lab:"Renovation", nt:"insulation, roof, heating, kitchen, bathroom", def:V4(30000,30000,25000,35000) },
+ { kind:"once", id:"reno", lab:"Renovation", nt:"insulation, roof, heating, kitchen, bathroom · paid from your savings, not borrowed", def:V4(30000,30000,25000,35000) },
+ { kind:"param", sec:"once", id:"deposit", lab:"Deposit (% of house price)", nt:"10% is the usual minimum in all four countries. More deposit = smaller loan = less interest.", def:V4(10,10,10,10), pct:true },
+ { kind:"info", sec:"once", id:"dep", lab:"Deposit from your savings", calc:c => rowOn("house") ? price(c)*cell("deposit",c)/100 : 0 },
+ { kind:"info", sec:"once", id:"loan", lab:"Borrowed (mortgage)", calc:c => rowOn("house") ? mort(c).loan : 0 },
+ { kind:"info", sec:"once", id:"cash", lab:"Cash you need on buying day", nt:"deposit + transfer tax/notary + renovation", calc:c => rowOn("house") ? price(c)*cell("deposit",c)/100 + (rowOn("fees") ? cell("fees",c) : 0) + (rowOn("reno") ? cell("reno",c) : 0) : 0 },
  { g:"Buying: everything else", kind:"once", id:"o_veh", lab:"Vehicles", obj:"veh" },
  { kind:"once", id:"o_animals", lab:"Animals + fencing", obj:"animals" },
  { kind:"once", id:"o_tools", lab:"Makita workshop", obj:"tools" },
@@ -366,9 +370,9 @@ const ROWS = [
  { kind:"year", id:"hins", lab:"Home insurance", def:V4(500,600,500,900) },
  { kind:"year", id:"energy", lab:"Heating, power, water, waste, internet", nt:"cold mountain house, wood + electricity or heat pump", def:V4(3000,3000,3300,3200) },
  { kind:"year", id:"upkeep", lab:"House upkeep (1% of value)", calc:c => price(c)*0.01 },
- { g:"Every year: mortgage", kind:"year", id:"interest", lab:"Mortgage interest after tax relief", nt:"First year. Repaying the loan itself is saving, so it's not counted. Sweden deducts 30% of interest, Norway 22%, France and Finland 0%.", calc:c => mort(c).intNet, mortgage:true },
+ { g:"Every year: mortgage", kind:"year", id:"interest", lab:"Mortgage interest after tax relief", nt:"First year. Loan = house price − deposit (renovation is paid from savings). Repaying the loan itself is saving, so it's not counted. Sweden deducts 30% of interest, Norway 22%, France and Finland 0%.", calc:c => mort(c).intNet, mortgage:true },
  { kind:"param", id:"rate", lab:"Mortgage rate (%)", def:V4(3.3,3.0,3.0,5.2), pct:true },
- { kind:"info", id:"pay", lab:"Monthly payment (25 years, 10% deposit)", calc:c => mort(c).month },
+ { kind:"info", id:"pay", lab:"Monthly payment (25 years)", calc:c => mort(c).month },
  { g:"Every year: food & everyday", kind:"year", id:"food", lab:"Good food for two", nt:"Food price level vs EU (2024): France ~112, Sweden ~106, Finland ~110, Norway ~131", def:V4(9000,8600,8840,10530) },
  { kind:"year", id:"every", lab:"Everyday costs", nt:"phones, household, clothes, small stuff", def:V4(6000,6200,6400,6650) },
  { g:"Every year: healthcare", kind:"year", id:"health", lab:"Healthcare out of pocket, typical year", nt:"France: mutuelle for two ~€1,300 + small fees · Nordics: visit fees + adult dentist (paid mostly by you). The public systems are paid through income tax and social charges, which are in your income calculator.", def:V4(1600,1100,1000,1200) },
@@ -388,7 +392,7 @@ const ROWS = [
 
 /* ---------- STATE ---------- */
 function fresh(){ return { base:"fr", view:"both", cells:{}, off:{}, items:{}, regime:{fr:"reel",se:"ef_moms",fi:"tmi_vat",no:"enk_mva"}, marg:{},
-  inv:{ start:20000, add:6000, ret:6, years:10 }, mortOn:true, deposit:10, open:{veh:true} }; }
+  inv:{ start:20000, add:6000, ret:6, years:10 }, mortOn:true, open:{veh:true} }; }
 let S = fresh();
 try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.cells) { S = Object.assign(fresh(), s); S.inv = Object.assign(fresh().inv, s.inv); S.regime = Object.assign(fresh().regime, s.regime); } } catch(e){}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
@@ -401,7 +405,7 @@ function price(c){ return cell("house", c); }
 function rowOn(id){ return !S.off[id]; }
 
 function mort(c){
-  const rate = cell("rate", c)/100, loan = (price(c) + (rowOn("reno") ? cell("reno", c) : 0)) * (1 - S.deposit/100);
+  const rate = cell("rate", c)/100, loan = price(c) * (1 - cell("deposit", c)/100);
   const relief = V4(0,30,0,22)[c]/100, r = rate/12, n = 300;
   const month = loan > 0 ? (r ? loan*r/(1-Math.pow(1+r,-n)) : loan/n) : 0;
   return { loan, intNet: S.mortOn && rowOn("house") ? loan*rate*(1-relief) : 0, month: rowOn("house") ? month : 0 };
@@ -478,7 +482,9 @@ function seg(el, opts, cur, fn){
   el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => fn(b.dataset.k)));
 }
 function buildTop(){
-  seg(document.getElementById("baseSel"), CS.map(c => [c, CN[c]]), S.base, k => { S.base = k; save(); buildTop(); buildObjects(); update(); });
+  const pickBase = k => { S.base = k; save(); buildTop(); buildMatrix(); buildObjects(); update(); };
+  seg(document.getElementById("baseSel"), CS.map(c => [c, CN[c]]), S.base, pickBase);
+  seg(document.getElementById("baseSel2"), CS.map(c => [c, CN[c]]), S.base, pickBase);
   seg(document.getElementById("viewSel"), [["both","Buying + yearly"],["year","Only yearly"],["once","Only buying"]], S.view, k => { S.view = k; save(); buildTop(); buildMatrix(); update(); });
 }
 
@@ -487,8 +493,8 @@ function buildMatrix(){
   const tb = document.getElementById("mx");
   let h = `<thead><tr><th>Line</th>${CS.map(c=>`<th class="r">${CN[c]}${c===S.base?" ●":""}</th>`).join("")}</tr></thead><tbody>`;
   ROWS.forEach(r => {
-    const isOnce = r.kind==="once"||r.kind==="oncetotal";
-    const isYear = r.kind==="year"||r.kind==="yeartotal"||r.kind==="param"||r.kind==="info";
+    const isOnce = r.kind==="once"||r.kind==="oncetotal"||r.sec==="once";
+    const isYear = !isOnce;
     if (S.view==="year" && isOnce) return;
     if (S.view==="once" && isYear) return;
     if (r.g) h += `<tr class="grp"><td colspan="${CS.length+1}">${esc(r.g)}</td></tr>`;
@@ -536,7 +542,7 @@ function updateMatrix(){
     CS.forEach(c => {
       const td = document.getElementById(`mc-${r.id}-${c}`), d = document.getElementById(`d-${r.id}-${c}`);
       td.classList.toggle("cheap", summed && max - min > 1 && vals[c] === min && (rowOn(r.id) || r.kind.endsWith("total")));
-      if (c === S.base || !(summed || r.id==="healthmax" || r.id==="pay")) { d.textContent = ""; d.className = "dl"; return; }
+      if (c === S.base || !(summed || ["healthmax","pay","dep","loan","cash"].includes(r.id))) { d.textContent = ""; d.className = "dl"; return; }
       const diff = vals[c] - vals[S.base];
       d.textContent = Math.abs(diff) < 1 ? "same" : `${sgn(diff)} vs ${CN[S.base].slice(0,2).toUpperCase()}`;
       d.className = "dl " + (diff > 1 ? "d-up" : diff < -1 ? "d-dn" : "");
@@ -557,8 +563,7 @@ function buildSetup(){
     </div>
     <div class="grp"><span class="lbl">Mortgage</span>
       <label class="f" for="mo-on">Count mortgage interest<input type="checkbox" id="mo-on"></label>
-      <label class="f" for="mo-dep">Deposit (%)<input type="number" id="mo-dep" step="1"></label>
-      <p class="hint">Loan = house + renovation − deposit, over 25 years. Rates are in the table. 10% is the usual minimum deposit; check each bank.</p>
+      <p class="hint">Loan = house price − deposit, over 25 years. Renovation is paid from savings. Deposit % and rates are set per country in the table.</p>
     </div>
     <div class="grp"><span class="lbl">Company in each country</span>
       ${CS.map(c => `<div class="f"><label for="rg-${c}">${CN[c]}</label><select id="rg-${c}">${Object.entries(REG[c].list).map(([k,v])=>`<option value="${k}"${k===S.regime[c]?" selected":""}>${esc(v.label)}</option>`).join("")}</select></div>
@@ -570,7 +575,6 @@ function buildSetup(){
   bind("iv-ret", el => S.inv.ret = +el.value||0, el => {});
   bind("iv-years", el => S.inv.years = Math.max(1, +el.value||1), el => {});
   bind("mo-on", el => S.mortOn = el.checked, el => {});
-  bind("mo-dep", el => S.deposit = Math.min(100, Math.max(0, +el.value||0)), el => {});
   CS.forEach(c => {
     bind("rg-"+c, el => S.regime[c] = el.value, el => {});
     bind("mg-"+c, el => S.marg[c+":"+S.regime[c]] = +el.value||0, el => {});
@@ -583,7 +587,6 @@ function buildSetupVals(){
   document.getElementById("iv-ret").value = S.inv.ret;
   document.getElementById("iv-years").value = S.inv.years;
   document.getElementById("mo-on").checked = S.mortOn;
-  document.getElementById("mo-dep").value = S.deposit;
   CS.forEach(c => { const m = document.getElementById("mg-"+c); m.value = margOf(c); m.disabled = !regOf(c).vat && regOf(c).m === 0; });
 }
 function updateInvTable(){
