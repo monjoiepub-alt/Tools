@@ -25,20 +25,23 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 
 ## Dream Life Calculator (`dream-life/index.html`)
 
-What the "dream life" costs to buy and to keep every year, in France (Vercors),
-Finland or Norway, and how much a company can carry.
+A four-country budget for one specific "dream life": France (Vercors), Sweden
+(Jämtland/Åre), Finland (Kuusamo/Lapland) and Norway (Hallingdal/Valdres), side by side.
+Income and income tax are left out on purpose (handled in a separate calculator).
 
-- **Country:** switches prices, VAT, property fees and running costs.
-- **Company type:** e.g. French EI au réel / EURL vs micro-entrepreneur, Finnish
-  toiminimi with or without VAT, Norwegian ENK. Shows VAT recovered plus tax and
-  social charges saved, for the business share (%) of each object only.
-- **Objects by category:** home & land, vehicles (Hilux Extra Cab + camper cell),
-  animals, Makita workshop, kitchen, clothes, outdoor gear, yearly lifestyle.
-  Tick each object on or off, type your own buy price or yearly cost, and choose
-  what goes under the company.
-- **Country comparison:** the same choices priced in all three countries.
-- **Checks:** company rules, the Extra Cab's utility status, French guiding diplomas,
-  and fixes made to the original tool, buy-once and gear spreadsheets.
+- **The answer:** buying cost, yearly cost and a long-term total per country, ranked,
+  with the biggest differences against the country you compare with.
+- **Line by line:** house, transfer tax, renovation, property tax, insurance, energy,
+  upkeep, mortgage interest after tax relief, food (price level), everyday costs,
+  healthcare (typical year + worst-case caps), vehicles, animals, passes, travel,
+  investment tax and what the company carries. Every cell is editable per country.
+- **Investments:** tax while holding and when selling, depending on the amount
+  (French PEA 18.6% / 31.4%, Swedish ISK 1.065% above SEK 300,000 each, Finnish
+  30%/34% + equity savings account, Norwegian ASK + wealth tax).
+- **Company:** choose the company type per country; objects can go under the company
+  with a business share, giving VAT back plus tax saved.
+- **Objects:** vehicles, animals, Makita workshop, kitchen, clothes and outdoor gear,
+  each selectable, grouped by category.
 
-Prices are realistic September 2026 estimates in euros incl. VAT. Choices are saved
-in the browser (localStorage). Edit the objects in the `CATS` list in the `<script>`.
+Numbers are September 2026 estimates in euros (SEK 11.0, NOK 11.7). Changes are
+saved in the browser (localStorage). Edit `ROWS` and `OBJ` in the `<script>`.

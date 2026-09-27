@@ -7,7 +7,7 @@
   --bg:#F3F2F5; --surface:#FFFFFF; --ink:#1C1A22; --muted:#55505F; --line:#DAD6E0;
   --accent:#5B3F7A; --accent-ink:#FFFFFF; --accent-soft:#ECE4F3; --marker:#E9B824;
   --ok:#23794A; --ok-soft:#DDF0E3; --mid:#8A5A0E; --mid-soft:#F6EACB; --no:#A63D33; --no-soft:#F5DEDA;
-  --co:#1C5D78; --co-soft:#DCEBF1; --track:#E6E2EA;
+  --co:#1C5D78; --co-soft:#DCEBF1; --track:#EAE6EE; --grp:#F7F5F9;
   --font-body:"Lexend", "Segoe UI", system-ui, sans-serif;
   --font-display:"Bricolage Grotesque", "Lexend", system-ui, sans-serif;
 }
@@ -17,7 +17,7 @@
     --bg:#131118; --surface:#1C1922; --ink:#ECE8F1; --muted:#ABA4B6; --line:#2F2A38;
     --accent:#C4A6E0; --accent-ink:#131118; --accent-soft:#2D2438;
     --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
-    --co:#7CC0DB; --co-soft:#183440; --track:#29242F;
+    --co:#7CC0DB; --co-soft:#183440; --track:#29242F; --grp:#221E29;
   }
 }
 :root[data-theme="dark"]{
@@ -25,22 +25,21 @@
   --bg:#131118; --surface:#1C1922; --ink:#ECE8F1; --muted:#ABA4B6; --line:#2F2A38;
   --accent:#C4A6E0; --accent-ink:#131118; --accent-soft:#2D2438;
   --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
-  --co:#7CC0DB; --co-soft:#183440; --track:#29242F;
+  --co:#7CC0DB; --co-soft:#183440; --track:#29242F; --grp:#221E29;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;font-weight:400}
-.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
 h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
 h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-0.01em}
 h2{font-size:1.6rem;font-weight:800}
 h3{font-size:1.15rem;font-weight:600}
-p{margin:0;max-width:70ch}
+p{margin:0;max-width:72ch}
 a{color:var(--accent)}
 button,select,input{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--marker);outline-offset:2px;border-radius:6px}
-
 header.top{display:flex;flex-direction:column;gap:12px}
 .eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px}
 .eyebrow::before{content:"";width:22px;height:8px;background:var(--marker);border-radius:2px;display:inline-block}
@@ -49,155 +48,150 @@ section{display:flex;flex-direction:column;gap:16px}
 .sec-head{display:flex;flex-direction:column;gap:6px}
 .hint{color:var(--muted);font-size:.95rem}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-
-.btn{border:2px solid var(--accent);background:transparent;color:var(--accent);border-radius:10px;padding:7px 14px;font-weight:500;font-size:.95rem}
-.btn.solid{background:var(--accent);color:var(--accent-ink)}
-
-/* setup panel */
-.setup{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px 24px}
-.setup .grp{display:flex;flex-direction:column;gap:8px}
-.setup .lbl{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.btn{border:2px solid var(--accent);background:transparent;color:var(--accent);border-radius:10px;padding:6px 13px;font-weight:500;font-size:.92rem}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 14px;font-size:.95rem}
+.seg button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 13px;font-size:.92rem}
 .seg button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
-.setup select,.setup input[type=number]{border:1.5px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 8px;width:100%}
-.setup input[type=number]{max-width:110px;text-align:right;font-variant-numeric:tabular-nums}
-.inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+input[type=number]{border:1.5px solid var(--line);background:var(--bg);border-radius:6px;padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums;width:100px}
+input[type=number].custom{border-color:var(--accent);border-width:2px}
+input[type=checkbox]{width:19px;height:19px;accent-color:var(--accent);vertical-align:middle}
+select{border:1.5px solid var(--line);background:var(--bg);border-radius:6px;padding:4px 6px;max-width:100%}
+.num{font-variant-numeric:tabular-nums}
 
-/* tiles */
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:4px}
-.tile .k{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500}
-.tile .v{font-family:var(--font-display);font-size:1.9rem;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
-.tile .s{font-size:.88rem;color:var(--muted)}
-.tile.co{background:var(--co-soft);border-color:transparent}
-.tile.co .v{color:var(--co)}
+/* country cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.card.base{border-color:var(--accent);border-width:2px}
+.card .cn{font-family:var(--font-display);font-weight:800;font-size:1.3rem;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card .cn small{font-family:var(--font-body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.card .big{font-family:var(--font-display);font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.card .kv{display:flex;justify-content:space-between;gap:8px;font-size:.92rem;font-variant-numeric:tabular-nums}
+.card .kv span:first-child{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:500;width:fit-content}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.no{background:var(--no-soft);color:var(--no)}
+.pill.base{background:var(--accent-soft);color:var(--accent)}
+.d-up{color:var(--no)} .d-dn{color:var(--ok)}
+.verdict{background:var(--accent-soft);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.verdict ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 
-/* breakdown */
-.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+/* bars */
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.bars{display:flex;flex-direction:column;gap:9px}
-.bar{display:grid;grid-template-columns:150px 1fr 88px;gap:10px;align-items:center;font-size:.9rem}
-.bar .t{height:14px;background:var(--track);border-radius:4px;overflow:hidden;display:flex}
-.bar .t i{display:block;height:100%}
-.bar .n{text-align:right;font-variant-numeric:tabular-nums}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted)}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.sw{width:12px;height:10px;border-radius:2px;display:inline-block}
-@media (max-width:520px){ .bar{grid-template-columns:110px 1fr 76px} }
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:130px 1fr 96px;gap:10px;align-items:center;font-size:.92rem}
+.bar .t{height:18px;background:var(--track);border-radius:4px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--accent);border-radius:0 4px 4px 0}
+.bar.base .t i{background:var(--co)}
+.bar .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+@media (max-width:520px){ .bar{grid-template-columns:90px 1fr 80px} }
 
-/* tables */
-.tbl-wrap{overflow-x:auto}
+/* matrix */
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
 table{border-collapse:collapse;width:100%;font-size:.92rem}
-th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap;background:var(--surface);position:sticky;top:0}
 td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 tr:last-child td{border-bottom:0}
-.cmp td.best{color:var(--ok);font-weight:600}
+.mx td:first-child{min-width:230px}
+.mx tr.grp td{background:var(--grp);font-family:var(--font-display);font-weight:600;font-size:1rem;padding-block:8px}
+.mx tr.total td{font-weight:700;font-size:1rem;border-top:2px solid var(--ink)}
+.mx tr.off td:not(:first-child){opacity:.35}
+.mx tr.info td{color:var(--muted);font-size:.85rem}
+.mx .lab{font-weight:500}
+.mx .nt{display:block;font-size:.78rem;color:var(--muted);line-height:1.35;max-width:46ch}
+.mx .dl{display:block;font-size:.76rem;line-height:1.2;margin-top:2px}
+.mx td.cheap{background:var(--ok-soft)}
+.mx td.cheap .val{color:var(--ok);font-weight:600}
+.rst{border:0;background:none;color:var(--accent);font-size:.8rem;padding:0 3px}
+.cellwrap{display:inline-flex;align-items:center;gap:2px}
 
-/* categories */
+/* setup */
+.setup{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px 24px}
+.setup .grp{display:flex;flex-direction:column;gap:8px}
+.setup .lbl{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.f{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.93rem}
+
+/* objects */
 details.cat{background:var(--surface);border:1px solid var(--line);border-radius:14px}
-details.cat > summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+details.cat > summary{list-style:none;cursor:pointer;padding:12px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
 details.cat > summary::-webkit-details-marker{display:none}
-details.cat > summary .chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
-details.cat[open] > summary .chev{transform:rotate(45deg)}
-.cat-name{font-family:var(--font-display);font-weight:600;font-size:1.15rem}
-.cat-name small{display:block;font-family:var(--font-body);font-weight:400;font-size:.85rem;color:var(--muted)}
-.cat-sum{text-align:right;font-size:.9rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;display:inline-block}
+details[open] > summary .chev{transform:rotate(45deg)}
+.cat-name{font-family:var(--font-display);font-weight:600;font-size:1.1rem}
+.cat-name small{display:block;font-family:var(--font-body);font-weight:400;font-size:.83rem;color:var(--muted)}
+.cat-sum{text-align:right;font-size:.88rem;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cat-body{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
-.cat-tools{display:flex;flex-wrap:wrap;gap:8px}
 .items td{vertical-align:middle}
-.items tr.off td:not(:first-child){opacity:.45}
 .items td:nth-child(2){min-width:220px}
+.items tr.off td:not(:first-child){opacity:.45}
 .items .nm{font-weight:500}
 .items .dt{display:block;font-size:.8rem;color:var(--muted);line-height:1.35}
 .items .fl{display:block;font-size:.8rem;color:var(--mid);line-height:1.35}
 .items .fl::before{content:"⚑ "}
-.items .sub td{background:var(--bg);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;padding-block:5px}
-.items input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
-.items input[type=number]{width:92px;border:1.5px solid var(--line);background:var(--bg);border-radius:6px;padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums}
-.items input.custom{border-color:var(--accent)}
-.items input.pct{width:58px}
-.co-cell{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.items .sub td{background:var(--grp);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;padding-block:5px}
+.items input.pct{width:56px}
+.co-cell{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .co-cell input[type=checkbox]{accent-color:var(--co)}
-.tag{font-size:.75rem;border-radius:999px;padding:1px 8px;white-space:nowrap}
-.tag.no{background:var(--track);color:var(--muted)}
-.save{color:var(--co);font-size:.82rem;display:block}
-.rst{border:0;background:none;color:var(--accent);font-size:.8rem;padding:0 4px}
+.tag{font-size:.75rem;border-radius:999px;padding:1px 8px;white-space:nowrap;background:var(--track);color:var(--muted)}
+.save{color:var(--co);font-size:.82rem}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:2px 10px;font-size:.82rem;color:var(--muted)}
-.owned{display:flex;flex-direction:column;gap:6px}
-.owned b{font-size:.85rem}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:2px 10px;font-size:.8rem;color:var(--muted)}
 
-/* checks */
 .checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .check{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;border-top:5px solid var(--mid)}
-.check.no{border-top-color:var(--no)}
-.check.ok{border-top-color:var(--ok)}
-.check.co{border-top-color:var(--co)}
-.check p,.check ul{font-size:.95rem}
+.check.no{border-top-color:var(--no)} .check.ok{border-top-color:var(--ok)} .check.co{border-top-color:var(--co)}
+.check p,.check ul{font-size:.94rem}
 .check ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
-.check .src{font-size:.82rem;color:var(--muted)}
-footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap:6px}
+.src{font-size:.82rem;color:var(--muted)}
+footer{color:var(--muted);font-size:.88rem;display:flex;flex-direction:column;gap:6px}
 </style>
 
 <div class="wrap">
   <header class="top">
-    <div class="eyebrow">Tools · cost of everything</div>
+    <div class="eyebrow">Tools · four-country budget</div>
     <h1>Dream Life Calculator</h1>
-    <p class="lead">What the dream costs to buy and what it costs every year to keep, in France, Finland or Norway, and how much of it the company can carry. Pick objects one by one, change any number. Example prices are realistic September 2026 estimates.</p>
+    <p class="lead">Your dream life priced in France, Sweden, Finland and Norway, side by side: house, property tax, mortgage interest, food, healthcare, vehicles and their taxes, animals, passes, investment tax and what the company can carry. Income and income tax are left out (you have your own calculator for that). Every number is editable.</p>
+    <div class="row">
+      <span class="hint">Compare against:</span>
+      <div class="seg" id="baseSel"></div>
+    </div>
   </header>
 
-  <!-- SETUP -->
-  <section aria-labelledby="h-setup">
-    <h2 id="h-setup" class="sr" hidden>Setup</h2>
-    <div class="setup">
-      <div class="grp">
-        <span class="lbl">Country</span>
-        <div class="seg" id="country"></div>
-        <span class="hint" id="countryNote"></span>
-      </div>
-      <div class="grp">
-        <label class="lbl" for="regime">Company type</label>
-        <select id="regime"></select>
-        <span class="hint" id="regimeNote"></span>
-      </div>
-      <div class="grp">
-        <span class="lbl">Company numbers</span>
-        <div class="inline"><label for="marginal">Tax + social charges saved per €1 of expense (%)</label><input type="number" id="marginal" step="1"></div>
-        <span class="hint" id="vatNote"></span>
-      </div>
+  <!-- RESULT -->
+  <section aria-labelledby="h-res">
+    <div class="sec-head"><h2 id="h-res">The answer</h2><p class="hint" id="resHint"></p></div>
+    <div class="cards" id="cards"></div>
+    <div class="panel">
+      <h3 id="barTitle"></h3>
+      <div class="bars" id="bars"></div>
     </div>
+    <div class="verdict" id="verdict"></div>
   </section>
 
-  <!-- SUMMARY -->
-  <section aria-labelledby="h-sum">
-    <div class="sec-head"><h2 id="h-sum">What it costs</h2><p class="hint">Only the ticked objects count.</p></div>
-    <div class="tiles" id="tiles"></div>
-    <div class="split">
-      <div class="panel">
-        <h3>By category</h3>
-        <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>You pay</span><span><i class="sw" style="background:var(--co)"></i>Company saves</span></div>
-        <div class="row"><div class="seg" id="barmode"></div></div>
-        <div class="bars" id="bars"></div>
-      </div>
-      <div class="panel">
-        <h3>Same choices, three countries</h3>
-        <p class="hint">Your own typed prices stay the same in every country. Everything else uses each country's prices and company rules (best company type there).</p>
-        <div class="tbl-wrap"><table class="cmp" id="cmp"></table></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ITEMS -->
-  <section aria-labelledby="h-items">
+  <!-- MATRIX -->
+  <section aria-labelledby="h-mx">
     <div class="sec-head">
-      <h2 id="h-items">Pick your objects</h2>
-      <p class="hint">Tick to include. Type a price to replace the example (a purple border means it's your number, ↺ puts the example back). <b>Co.</b> puts the object under the company. <b>Pro %</b> is the real business share, because only that part is deductible.</p>
+      <h2 id="h-mx">Line by line</h2>
+      <p class="hint">Green cell = cheapest country for that line. The small line under each number is the difference with the country you compare against. Click any number to change it for that country (purple border = your number, ↺ = back to the example). Untick a line to leave it out everywhere.</p>
+    </div>
+    <div class="row"><div class="seg" id="viewSel"></div></div>
+    <div class="tbl-wrap"><table class="mx" id="mx"></table></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section aria-labelledby="h-set">
+    <div class="sec-head"><h2 id="h-set">Investments, mortgage and company</h2><p class="hint">These drive the calculated lines in the table.</p></div>
+    <div class="setup" id="setup"></div>
+    <div class="tbl-wrap"><table id="invtbl"></table></div>
+  </section>
+
+  <!-- OBJECTS -->
+  <section aria-labelledby="h-obj">
+    <div class="sec-head">
+      <h2 id="h-obj">Your objects</h2>
+      <p class="hint">These feed the Vehicles, Animals, Workshop, Kitchen, Clothes and Gear lines. Tick objects one by one. Prices shown are for <b id="objCountry"></b>; typing a price sets it for every country. <b>Co.</b> puts an object under the company; <b>Pro %</b> is its real business share.</p>
     </div>
     <div class="row">
-      <button class="btn" type="button" id="openAll">Open all</button>
-      <button class="btn" type="button" id="closeAll">Close all</button>
       <button class="btn" type="button" id="coAll">Everything allowed under the company</button>
       <button class="btn" type="button" id="coNone">Nothing under the company</button>
       <button class="btn" type="button" id="reset">Reset all numbers</button>
@@ -207,458 +201,551 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
 
   <!-- CHECKS -->
   <section aria-labelledby="h-checks">
-    <div class="sec-head"><h2 id="h-checks">Before you trust the numbers</h2><p class="hint">Red can break the plan. Yellow costs money if ignored. Blue is about the company.</p></div>
+    <div class="sec-head"><h2 id="h-checks">What the table can't show</h2><p class="hint">Red can change the choice. Yellow changes numbers. Blue is about the company.</p></div>
     <div class="checks" id="checks"></div>
   </section>
 
   <footer>
-    <p>All amounts in euros including VAT, as a private buyer pays them. The company saving is a simple estimate: VAT back plus the tax and social charges the expense removes, for the business share only. The tax part comes back over several years through depreciation, not on the day you buy. Ask an accountant before buying anything big through the company.</p>
-    <p>Your choices are saved in this browser only.</p>
+    <p>Example numbers are realistic September 2026 estimates for a couple in their 20s in a rural outdoor region, in euros (SEK 11.0 and NOK 11.7 per euro). Confirmed 2026 rules: French 18.6% social levies on investment gains and 31.4% flat tax; Swedish ISK tax 1.065% above SEK 300,000 per person; Finnish capital tax 30%/34% and €100,000 equity savings account; Norwegian wealth tax 1.0% above NOK 1.9 million per person; health cost caps; Swedish property fee cap SEK 10,425; Swedish Hilux vehicle tax. Other values (food, insurance, energy, passes, prices) are best estimates, so edit them when you know better.</p>
+    <p>Sources: <a href="https://fondkollen.se/skatt/sa-blir-isk-skatten-2026/" target="_blank" rel="noopener">ISK 2026</a> · <a href="https://www.skattepenger.no/fradrag/formuesskatt/" target="_blank" rel="noopener">Norway wealth tax 2026</a> · <a href="https://time2money.fr/prelevements-sociaux-2026/" target="_blank" rel="noopener">France 18.6% levies</a> · <a href="https://www.veronmaksajat.fi/neuvot/henkiloverotus/sijoittaminen/osakesaastotili/osakesaastotili/" target="_blank" rel="noopener">Finnish equity savings account</a> · <a href="https://boio.se/guide/fastighetsavgift" target="_blank" rel="noopener">Swedish property fee 2026</a> · <a href="https://www.helfo.no/regelverk/egenandeler-for-helsetjenester" target="_blank" rel="noopener">Norway health cap</a> · <a href="https://stm.fi/terveydenhuollon-maksukatto" target="_blank" rel="noopener">Finland health cap</a> · <a href="https://www.1177.se/Vastra-Gotaland/sa-fungerar-varden/kostnader-och-ersattningar/hogkostnadsskydd-for-oppenvard" target="_blank" rel="noopener">Sweden health cap</a> · <a href="https://www.ssb.no/priser-og-prisindekser/konsumpriser/statistikk/sammenlikning-av-prisniva-i-europa" target="_blank" rel="noopener">SSB food prices</a> · <a href="https://stat.fi/en/publication/cm1j7y3q42x3807uqrr2153d8" target="_blank" rel="noopener">Statistics Finland food prices</a> · <a href="https://xn--frmnsvrde-02ah5r.se/fordonsskatt/toyota-hilux-extra-cab-viii-facelift-2020--2-8-d-4d-204-hk--4x4" target="_blank" rel="noopener">Hilux tax Sweden</a> · <a href="https://www.legifiscal.fr/tva/tva-regles-declarations/camionnette-pick-up-strapontins-tva-recuperable.html" target="_blank" rel="noopener">Pick-up VAT France</a></p>
+    <p>Your changes are saved in this browser only.</p>
   </footer>
 </div>
 
 <script>
 "use strict";
-const KEY = "dream-life-cost-v2";
-const eur = n => (n < 0 ? "−" : "") + "€" + Math.round(Math.abs(n)).toLocaleString("en-IE");
-const kk = n => { const a = Math.abs(n); return (n<0?"−":"") + "€" + (a >= 100000 ? Math.round(a/1000) + "k" : a >= 10000 ? (a/1000).toFixed(1).replace(/\.0$/,"") + "k" : Math.round(a).toLocaleString("en-IE")); };
+const KEY = "dream-life-4c-v3";
+const CS = ["fr","se","fi","no"];
+const CN = { fr:"France", se:"Sweden", fi:"Finland", no:"Norway" };
+const CR = { fr:"Vercors", se:"Jämtland / Åre", fi:"Kuusamo / Lapland", no:"Hallingdal / Valdres" };
+const SEK = 11.0, NOK = 11.7;
+const eur = n => (n < -0.5 ? "−" : "") + "€" + Math.round(Math.abs(n)).toLocaleString("en-IE");
+const kk = n => { const a = Math.abs(n), s = n < -0.5 ? "−" : ""; return s + "€" + (a >= 1e6 ? (a/1e6).toFixed(2) + "M" : a >= 100000 ? Math.round(a/1000) + "k" : a >= 10000 ? (a/1000).toFixed(1).replace(/\.0$/,"") + "k" : Math.round(a).toLocaleString("en-IE")); };
+const sgn = n => (n > 0.5 ? "+" : n < -0.5 ? "−" : "±") + "€" + Math.round(Math.abs(n)).toLocaleString("en-IE");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const C3 = ["fr","fi","no"];
+const V4 = (fr,se,fi,no) => ({fr,se,fi,no});
 
-/* ---------- COUNTRIES & COMPANY RULES ---------- */
-const COUNTRY = {
-  fr:{ name:"France (Vercors)", vat:20, note:"Prices for the Vercors. Houses on the Drôme side (La Chapelle-en-Vercors) average ~€2,440/m²; Villard/Lans ~€3,450–3,550/m².",
-       regimes:{
-         reel:{ label:"EI au réel / EURL (real expenses, VAT registered)", vat:true, marginal:40, note:"Real expenses are deducted and VAT is recovered. Needs proper bookkeeping (an accountant costs ~€1,200–2,000/yr)." },
-         micro:{ label:"Micro-entrepreneur (flat allowance, no VAT)", vat:false, marginal:0, note:"Nothing is deductible: a flat allowance replaces real costs, and under the VAT threshold (€37,500 for services) you recover no VAT. Putting things under the company saves €0." }
-       }},
-  fi:{ name:"Finland (rural)", vat:25.5, note:"Rural house with land outside the big towns. Transfer tax 3%.",
-       regimes:{
-         tmi_vat:{ label:"Toiminimi, VAT registered", vat:true, marginal:32, note:"Expenses lower your income tax. YEL pension insurance is based on your declared work income, not profit, so it does not drop." },
-         tmi:{ label:"Toiminimi, not VAT registered (under €20,000 turnover)", vat:false, marginal:32, note:"Expenses still lower income tax, but no VAT comes back." }
-       }},
-  no:{ name:"Norway (rural)", vat:25, note:"Rough numbers. Rural house ~NOK 3.2 million. 2.5% document fee. Wages higher, most prices too.",
-       regimes:{
-         enk_mva:{ label:"ENK, VAT (MVA) registered", vat:true, marginal:36, note:"22% tax + 10.9% social security + bracket tax on the business profit." },
-         enk:{ label:"ENK, not VAT registered (under NOK 50,000)", vat:false, marginal:36, note:"Expenses lower tax, but no VAT comes back." }
-       }}
+/* ---------- COMPANY RULES ---------- */
+const REG = {
+  fr:{ vat:20, list:{
+    reel:{ label:"EI au réel / EURL", vat:true, m:40, note:"Real costs deducted, VAT recovered." },
+    micro:{ label:"Micro-entrepreneur", vat:false, m:0, note:"Nothing deductible, no VAT back." } } },
+  se:{ vat:25, list:{
+    ef_moms:{ label:"Enskild firma, VAT registered", vat:true, m:45, note:"Costs lower both income tax and egenavgifter (~29%)." },
+    ef:{ label:"Enskild firma, no VAT (< SEK 120,000)", vat:false, m:45, note:"Costs deductible, no VAT back." } } },
+  fi:{ vat:25.5, list:{
+    tmi_vat:{ label:"Toiminimi, VAT registered", vat:true, m:32, note:"Costs lower income tax. YEL pension doesn't drop." },
+    tmi:{ label:"Toiminimi, no VAT (< €20,000)", vat:false, m:32, note:"Costs deductible, no VAT back." } } },
+  no:{ vat:25, list:{
+    enk_mva:{ label:"ENK, VAT (MVA) registered", vat:true, m:36, note:"22% tax + 10.9% social security + bracket tax." },
+    enk:{ label:"ENK, no VAT (< NOK 50,000)", vat:false, m:36, note:"Costs deductible, no VAT back." } } }
 };
-const MULT = {
-  goods:  {fr:1,   fi:1.08, no:1.2},
-  animal: {fr:1,   fi:1.1,  no:1.35},
-  none:   {fr:1,   fi:1,    no:1}
-};
+const MULT = { goods:V4(1,1.05,1.07,1.18), animal:V4(1,1.1,1.1,1.35), none:V4(1,1,1,1) };
 
-/* ---------- ITEMS ----------
- buy/run: number (scaled by MULT[cls]) or {fr,fi,no}
- co: "no" | "mixed" | "yes"   biz: default business %   vb: VAT on purchase recoverable (false for private second-hand, property, animals)
- rv: share of running costs that carry VAT (insurance has none)  why: why not deductible */
+/* ---------- OBJECTS ---------- */
 const I = (id,name,dt,buy,run,o={}) => Object.assign({id,name,dt,buy,run,cls:"goods",co:"no",biz:0,vb:true,rv:1,on:true},o);
-const CATS = [
- { id:"home", name:"Home & land", sub:"Cabin with land, fees, renovation", items:[
-   I("house","Cabin / house with 1–2 ha of land","~110 m² old house, rural",{fr:300000,fi:150000,no:280000},{fr:7700,fi:6100,no:7300},{cls:"none",vb:false,rv:0,why:"Your home is private. A home office or workshop room can be partly deductible, ask an accountant.",dtRun:"property tax, insurance, heating + power, 1% upkeep"}),
-   I("fees","Notary / transfer fees","France ~7.5% on an old house · Finland 3% · Norway 2.5%",0,0,{cls:"none",vb:false,rv:0,calc:"fees",why:"Linked to the private home."}),
-   I("reno","Renovation budget","insulation, roof, heating, kitchen, bathroom",{fr:30000,fi:25000,no:35000},0,{cls:"none",vb:false,rv:0,why:"Work on your own home is private, even with company tools."})
+const OBJ = [
+ { id:"veh", name:"Vehicles", sub:"Hilux Extra Cab, camper cell, car, bikes. Yearly = fuel (15,000 km), insurance, service, road tax", items:[
+   I("hilux","Toyota Hilux Extra Cab 2.8 D-4D, new","4 seats = utility vehicle. Sweden: vehicle tax ~€1,950/yr for the first 3 years (malus), then ~€160 · Finland: price includes car tax, ~€1,100/yr vehicle tax",V4(44000,46000,52000,50000),V4(4300,4900,5500,5300),{cls:"none",co:"mixed",biz:70,rv:0.7}),
+   I("cell","Camper cell, used","slide-in, removable, keep it private",V4(14000,15000,15000,17000),300,{cls:"none",vb:false,why:"Living space, private use.",fl:"Fixed + registered as a camper = the truck loses its utility status."}),
+   I("canopy","Or: hard canopy + DIY interior","cheaper option instead of a cell",7500,150,{on:false,why:"Living space."}),
+   I("setup","Truck setup","all-terrain tyres, suspension for the cell, recovery kit, skid plate",3000,200,{co:"mixed",biz:70}),
+   I("mx5","Mazda MX-5 ND 2.0, used","weekend car",V4(19000,21000,23000,26000),V4(2200,2400,2500,2600),{cls:"none",vb:false,rv:0.5,why:"Sports car, private."}),
+   I("wrx","Or: Subaru WRX STI, used","",V4(27000,30000,32000,38000),V4(3200,3900,3500,3900),{cls:"none",on:false,vb:false,rv:0.5,why:"Sports car, private."}),
+   I("scram","Triumph Scrambler 900, used","A2: needs the 35 kW kit",V4(8500,9500,9500,11000),V4(900,900,950,1000),{cls:"none",vb:false,rv:0.5,why:"Private unless you run moto tours."}),
+   I("scram400","Or: Triumph Scrambler 400 X, new","A2 legal",V4(6500,7000,7200,8500),V4(700,700,750,800),{cls:"none",on:false,rv:0.5,why:"Private unless you run moto tours."}),
+   I("sm125","125cc supermoto / enduro, used","",V4(3200,3500,3600,4200),500,{cls:"none",vb:false,rv:0.5,why:"Private hobby."})
  ]},
- { id:"veh", name:"Vehicles", sub:"Hilux, camper cell, car, bikes", items:[
-   I("hilux","Toyota Hilux Extra Cab 2.8 D-4D, new","4 seats = utility vehicle (N1): no French malus, full VAT recovery",{fr:44000,fi:52000,no:48000},{fr:4600,fi:5100,no:5850},{cls:"none",co:"mixed",biz:70,rv:0.7,dtRun:"15,000 km diesel, insurance, service, road tax"}),
-   I("cell","Camper cell, used","slide-in, removable",{fr:14000,fi:15000,no:17000},300,{cls:"none",vb:false,rv:1,why:"Living space, private use. Buy it privately so the truck keeps its utility status.",fl:"Bolt it on for good and register it as a camper (VASP), and the truck loses its utility status."}),
-   I("canopy","Or: hard canopy + DIY interior","cheaper option instead of a cell",7500,150,{on:false,co:"no",why:"Living space, private use."}),
-   I("setup","Truck setup","all-terrain tyres ~€1,000, suspension for the cell ~€1,500, recovery kit, skid plate",3000,200,{co:"mixed",biz:70}),
-   I("mx5","Mazda MX-5 ND 2.0, used","weekend car",{fr:19000,fi:23000,no:26000},{fr:2200,fi:2400,no:2800},{cls:"none",vb:false,rv:0.5,why:"A sports car is a passenger car with no business use."}),
-   I("wrx","Or: Subaru WRX STI, used","",{fr:27000,fi:32000,no:38000},{fr:3200,fi:3400,no:3900},{cls:"none",on:false,vb:false,rv:0.5,why:"A sports car is a passenger car with no business use."}),
-   I("scram","Triumph Scrambler 900, used","A2 licence: needs the 35 kW restriction kit",{fr:8500,fi:9500,no:11000},900,{cls:"none",vb:false,rv:0.5,why:"Private, unless the company really runs motorbike tours with it.",fl:"Scrambler 1200 would need a full A licence (France: 2 years on A2 + 7 h course)."}),
-   I("scram400","Or: Triumph Scrambler 400 X, new","A2 legal as it is",{fr:6500,fi:7200,no:8500},700,{cls:"none",on:false,rv:0.5,why:"Private, unless the company really runs motorbike tours with it."}),
-   I("sm125","125cc supermoto / enduro, used","",{fr:3200,fi:3600,no:4200},500,{cls:"none",vb:false,rv:0.5,why:"Private hobby."})
- ]},
- { id:"animals", name:"Animals", sub:"Dogs, chickens, horse", items:[
-   I("dogs","2 dogs","buy/adopt + beds, crates, leads · yearly: food, vet, insurance, sitter in your travel month",2500,2800,{cls:"animal",vb:false,rv:0.4,why:"Pets are private."}),
-   I("hens","6 chickens + fox-proof coop","eggs worth ~€450/yr cover most of the feed",900,350,{cls:"animal",vb:false,rv:0.8,why:"Private food production."}),
-   I("horse","Horse","yearly: hay, farrier, vet, dentist, insurance",4000,3000,{cls:"animal",vb:false,rv:0.6,why:"Private, unless you run horse treks as a business."}),
-   I("companion","Companion pony or donkey","horses are herd animals; one alone is a welfare problem",1000,1400,{cls:"animal",vb:false,rv:0.6,why:"Private."}),
-   I("tack","Saddle, bridle, rugs, grooming kit","",1500,150,{cls:"animal",why:"Private."}),
+ { id:"animals", name:"Animals", sub:"Dogs, chickens, horse (prices ×1.1 in Sweden/Finland, ×1.35 in Norway)", items:[
+   I("dogs","2 dogs","buy/adopt + gear · yearly: food, vet, insurance, sitter in your travel month",2500,2800,{cls:"animal",vb:false,rv:0.4,why:"Pets are private."}),
+   I("hens","6 chickens + fox-proof coop","eggs worth ~€450/yr cover most feed",900,350,{cls:"animal",vb:false,why:"Private."}),
+   I("horse","Horse","yearly: hay, farrier, vet, dentist, insurance",4000,3000,{cls:"animal",vb:false,why:"Private unless horse treks are a business."}),
+   I("companion","Companion pony or donkey","one horse alone is a welfare problem",1000,1400,{cls:"animal",vb:false,why:"Private."}),
+   I("tack","Saddle, bridle, rugs, grooming","",1500,150,{cls:"animal",why:"Private."}),
    I("fence","Fencing + field shelter","for ~2 ha",6000,200,{cls:"animal",why:"Private."})
  ]},
- { id:"tools", name:"Makita workshop", sub:"From your tool sheet, prices converted from CAD to EU prices", items:[
+ { id:"tools", name:"Makita workshop", sub:"Your tool sheet, EU prices", items:[
    ["Power tools"],
-   I("t1","Cordless drill","Makita DDF487Z (18V LXT, body only)",95,0,{co:"mixed",biz:60}),
-   I("t2","Circular saw","Makita DSS611Z (18V LXT)",130,0,{co:"mixed",biz:60}),
-   I("t3","Plunge track saw + 1.4 m rail","Makita SP6000J1 (corded)",450,0,{co:"mixed",biz:60,fl:"Your sheet had CAD 320 with no rail. Cordless option: DSP600Z."}),
-   I("t4","Random orbital sander","Makita BO5041 (cordless: DBO180Z)",110,0,{co:"mixed",biz:60}),
-   I("t5","SDS rotary hammer","Makita HR2631FT, right for stone walls",260,0,{co:"mixed",biz:60}),
+   I("t1","Cordless drill","Makita DDF487Z",95,0,{co:"mixed",biz:60}),
+   I("t2","Circular saw","Makita DSS611Z",130,0,{co:"mixed",biz:60}),
+   I("t3","Plunge track saw + 1.4 m rail","Makita SP6000J1",450,0,{co:"mixed",biz:60}),
+   I("t4","Random orbital sander","Makita BO5041",110,0,{co:"mixed",biz:60}),
+   I("t5","SDS rotary hammer","Makita HR2631FT",260,0,{co:"mixed",biz:60}),
    I("t6","Heat gun","Makita HG5030K",75,0,{co:"mixed",biz:60}),
-   I("t7","Reciprocating saw","Makita JR3051T (cordless: DJR186Z)",150,0,{co:"mixed",biz:60}),
-   I("s1","Batteries 4× 5.0 Ah","Makita BL1850B · missing from your sheet",360,40,{co:"mixed",biz:60}),
-   I("s2","Fast twin charger","Makita DC18RD · missing from your sheet",90,0,{co:"mixed",biz:60}),
-   I("s4","Dust extractor","Makita VC2512L, for the track saw and sander",230,20,{co:"mixed",biz:60}),
+   I("t7","Reciprocating saw","Makita JR3051T",150,0,{co:"mixed",biz:60}),
+   I("s1","Batteries 4× 5.0 Ah","Makita BL1850B · was missing",360,40,{co:"mixed",biz:60}),
+   I("s2","Fast twin charger","Makita DC18RD · was missing",90,0,{co:"mixed",biz:60}),
+   I("s4","Dust extractor","Makita VC2512L",230,20,{co:"mixed",biz:60}),
    I("s5","Mitre saw","Makita LS1019L, optional",700,20,{on:false,co:"mixed",biz:60}),
    ["Chainsaws & garden"],
-   I("t8","Pruning chainsaw","Makita DUC353Z (2×18V, 35 cm)",300,40,{co:"mixed",biz:60}),
-   I("t9","Petrol chainsaw 50cc","Husqvarna 450 Mark II, for firewood",700,80,{co:"mixed",biz:50}),
-   I("s3","Chainsaw PPE","cut-resistant trousers + forestry helmet · missing from your sheet",250,0,{co:"mixed",biz:60}),
-   I("t29","String trimmer","Makita DUR190LZ (18V)",140,20,{co:"mixed",biz:60}),
-   I("t30","Hedge trimmer","Makita DUH523Z (18V)",130,0,{co:"mixed",biz:60}),
-   I("t31","Blower","Makita DUB186Z (18V)",85,0,{co:"mixed",biz:60}),
-   ["Hand tools"],
-   I("t10","Claw hammer 500 g","Estwing E3-20S",50,0,{co:"mixed",biz:60}),
-   I("t11","Dead-blow mallet","",30,0,{co:"mixed",biz:60}),
-   I("t12","Torque wrench 1/2\", 40–200 Nm","Proxxon or KS Tools",85,0,{co:"mixed",biz:60,fl:"Craftsman (your sheet) is hard to get in Europe."}),
-   I("t13","Combination wrenches 8–19 mm","Beta or KS Tools",70,0,{co:"mixed",biz:60}),
-   I("t14","Hex keys, T-handle","Wiha, metric",40,0,{co:"mixed",biz:60}),
-   I("t15","Utility knife","Stanley FatMax",20,10,{co:"mixed",biz:60}),
-   I("t16","F-clamps ×4","Bessey or Irwin",55,0,{co:"mixed",biz:60}),
-   I("t17","Quick clamps ×4","Irwin Quick-Grip",45,0,{co:"mixed",biz:60}),
-   I("t18","Wood chisels ×4","Narex",55,0,{co:"mixed",biz:60}),
-   I("t19","Scraper / putty knife set","",25,0,{co:"mixed",biz:60}),
-   I("t20","Snap ring pliers","Knipex",45,0,{co:"mixed",biz:60}),
-   I("t21","Ferrule crimper","Knipex 97 53 14",75,0,{co:"mixed",biz:60,fl:"Your sheet also had an IWISS crimper for the same job. Removed."}),
-   ["Measuring & electrical"],
-   I("t22","Speed square","Swanson",22,0,{co:"mixed",biz:60}),
-   I("t23","Combination square 300 mm","Shinwa",35,0,{co:"mixed",biz:60}),
-   I("t24","Chalk line","Stanley",15,0,{co:"mixed",biz:60}),
-   I("t25","Wall scanner (cables + pipes)","Bosch GMS 120",95,0,{co:"mixed",biz:60,fl:"Replaces the stud finder: stone and log houses have no studs to find."}),
-   I("t26","Digital caliper","Mitutoyo 500-196",120,0,{co:"mixed",biz:60,fl:"A real Mitutoyo is ~€120. At €45 it's a copy."}),
-   I("t28","Heat shrink + cable loom kit","",25,0,{co:"mixed",biz:60}),
+   I("t8","Pruning chainsaw","Makita DUC353Z",300,40,{co:"mixed",biz:60}),
+   I("t9","Petrol chainsaw 50cc","Husqvarna 450 Mark II",700,80,{co:"mixed",biz:50}),
+   I("s3","Chainsaw PPE","trousers + forestry helmet · was missing",250,0,{co:"mixed",biz:60}),
+   I("t29","String trimmer","Makita DUR190LZ",140,20,{co:"mixed",biz:60}),
+   I("t30","Hedge trimmer","Makita DUH523Z",130,0,{co:"mixed",biz:60}),
+   I("t31","Blower","Makita DUB186Z",85,0,{co:"mixed",biz:60}),
+   ["Hand, measuring, electrical"],
+   I("h1","Hammer, mallet, chisels, scrapers","Estwing, Narex",160,0,{co:"mixed",biz:60}),
+   I("h2","Torque wrench + combination wrenches","Proxxon / Beta / KS Tools",155,0,{co:"mixed",biz:60}),
+   I("h3","Hex keys, knife, snap ring pliers","Wiha, Stanley, Knipex",105,10,{co:"mixed",biz:60}),
+   I("h4","Clamps ×8","Bessey / Irwin",100,0,{co:"mixed",biz:60}),
+   I("h5","Ferrule crimper + heat shrink kit","Knipex (one crimper, not two)",100,0,{co:"mixed",biz:60}),
+   I("h6","Squares, chalk line","Swanson, Shinwa, Stanley",72,0,{co:"mixed",biz:60}),
+   I("h7","Wall scanner (cables + pipes)","Bosch GMS 120, instead of a stud finder",95,0,{co:"mixed",biz:60}),
+   I("h8","Digital caliper","Mitutoyo 500-196",120,0,{co:"mixed",biz:60}),
    ["Welding & mechanics"],
-   I("t32","MIG welder, 230 V","ESAB Rogue EM 160 class",600,40,{co:"mixed",biz:50,fl:"The Hobart Handler 140 in your sheet is 115 V and won't run on European power."}),
-   I("t33","Auto-darkening helmet","Optrel or Lincoln Viking",120,0,{co:"mixed",biz:50}),
-   I("t34","Welding gloves + clamps","",50,0,{co:"mixed",biz:50}),
-   I("t36","Flap disc set","Makita",30,30,{co:"mixed",biz:50}),
-   I("t37","Trolley jack 3 t, high lift","",220,0,{co:"mixed",biz:70,fl:"A 2 t low jack is too weak and too low for a Hilux (~2.1 t empty)."}),
-   I("t38","Axle stands 6 t, pair","",80,0,{co:"mixed",biz:70}),
-   I("t39","Oil drain pan 10 L + funnels","Hilux takes ~7.5 L of oil",35,0,{co:"mixed",biz:70}),
-   I("t41","Pressure brake bleeder","Gunson",70,0,{co:"mixed",biz:70}),
+   I("w1","MIG welder 230 V + helmet + gloves + discs","instead of the 115 V Hobart",800,70,{co:"mixed",biz:50}),
+   I("m1","Trolley jack 3 t + 6 t axle stands","sized for a Hilux",300,0,{co:"mixed",biz:70}),
+   I("m2","Drain pan 10 L, funnels, brake bleeder","",105,0,{co:"mixed",biz:70}),
    ["Shop & safety"],
-   I("t42","Workbench 180 cm","build it in timber",250,0,{co:"mixed",biz:60}),
-   I("t43","Rolling tool cabinet","Stier or Güde",450,0,{co:"mixed",biz:60}),
-   I("t44","Pegboard wall + small parts boxes","",95,0,{co:"mixed",biz:60}),
-   I("t46","Ear protection","3M Peltor",35,0,{co:"yes",biz:100}),
-   I("t47","FFP2/FFP3 masks","3M · N95 is the US label",25,25,{co:"yes",biz:100}),
-   I("t48","Safety boots S3","Solid Gear or Haix",170,0,{co:"yes",biz:100}),
-   I("t49","Fire extinguisher 6 kg ABC","",60,15,{co:"mixed",biz:60}),
-   I("s6","Workshop building / fit-out","only if the property has no barn",8000,150,{on:false,co:"mixed",biz:50,vb:true})
+   I("k1","Workbench, rolling cabinet, pegboard, boxes","",795,0,{co:"mixed",biz:60}),
+   I("k2","Ear protection, FFP masks, S3 boots, extinguisher","",290,40,{co:"yes",biz:100}),
+   I("s6","Workshop building / fit-out","only if the property has no barn",8000,150,{on:false,co:"mixed",biz:50})
  ]},
- { id:"kitchen", name:"Kitchen & knives", sub:"Buy once for life, prices converted from USD", items:[
-   I("b1","Pasta pot 6–7 L","Tramontina Tri-Ply",70,0,{why:"Private kitchen."}),
-   I("b2","Saucepans 2 L + 3.5 L","Tramontina Tri-Ply",100,0,{why:"Private kitchen."}),
-   I("b4","Frying pan 28 cm","Tramontina Tri-Ply",60,0,{why:"Private kitchen."}),
-   I("b5","Dutch oven 26 cm","Lodge Enameled (Staub ~€250 is the buy-once option in France)",95,0,{why:"Private kitchen."}),
-   I("b6","Carbon steel pan 24–26 cm","de Buyer Mineral B (French, cheaper in France)",70,0,{why:"Private kitchen."}),
-   I("b7","Crêpe pan 24 cm","de Buyer Blue Steel",40,0,{why:"Private kitchen."}),
-   I("b8","Wok 30–32 cm","carbon steel",50,0,{why:"Private kitchen."}),
-   I("b9","Tamagoyaki pan","Kotobuki",35,0,{why:"Private kitchen."}),
-   I("b10","Yukihira pan 18 cm","",40,0,{why:"Private kitchen."}),
-   I("b11","Chef knife 20 cm","Victorinox Fibrox",45,0,{why:"Private kitchen."}),
-   I("b12","Gyuto 21 cm","Tojiro DP",95,0,{why:"Private kitchen."}),
-   I("b13","Bread + paring knife","Victorinox",57,0,{why:"Private kitchen."}),
-   I("b15","Yanagiba 27 cm","Tojiro Shirogami · optional in your sheet",110,0,{on:false,why:"Private kitchen."}),
-   I("b16","Whetstone 1000/6000 + strop","King KW-65",75,0,{why:"Private kitchen."}),
-   I("b18","Magnetic knife bar","",25,0,{why:"Private kitchen."})
+ { id:"kitchen", name:"Kitchen & knives", sub:"Buy once for life", items:[
+   I("b1","Tramontina Tri-Ply set","pasta pot, 2 saucepans, 28 cm pan",275,0,{why:"Private kitchen."}),
+   I("b5","Dutch oven 26 cm","Lodge Enameled (Staub ~€250)",95,0,{why:"Private kitchen."}),
+   I("b6","de Buyer carbon + crêpe pan","Mineral B + Blue Steel",110,0,{why:"Private kitchen."}),
+   I("b8","Wok, tamagoyaki, yukihira","",125,0,{why:"Private kitchen."}),
+   I("b11","Knives: chef, gyuto, bread, paring","Victorinox + Tojiro DP",197,0,{why:"Private kitchen."}),
+   I("b15","Yanagiba 27 cm","optional",110,0,{on:false,why:"Private kitchen."}),
+   I("b16","Whetstone, strop, magnetic bar","King KW-65",100,0,{why:"Private kitchen."})
  ]},
- { id:"clothes", name:"Clothes & axes", sub:"Buy once for life · US items include VAT, duty and shipping", items:[
-   I("b22","Boots","White's MP Service Boot (US: ~$550 + VAT + duty + shipping)",750,20,{why:"Everyday clothing is never deductible."}),
-   I("b23","Leather belt","custom Etsy maker",60,0,{why:"Everyday clothing is never deductible."}),
-   I("b24","Leather trench coat","Schott NYC (US import)",950,15,{why:"Everyday clothing is never deductible.",fl:"With the wool coat, two dress coats are over half the clothes budget."}),
-   I("b25","Wool overcoat","Private White V.C. (UK import)",950,40,{why:"Everyday clothing is never deductible."}),
-   I("b26","Chore coat","Odin Mfg duck canvas (US import)",200,0,{why:"Everyday clothing is never deductible."}),
-   I("b27","Winter trousers","Filson Insulated Tin Cloth (US import)",360,15,{why:"Everyday clothing is never deductible."}),
-   I("b28","Work trousers","Pfanner Gladiator (Austria, protective)",200,0,{co:"mixed",biz:70}),
-   I("b29","Work gloves","Hestra Army Leather 3-finger (Sweden)",130,0,{co:"mixed",biz:70}),
-   I("b30","Fire / forge gloves","thick leather",35,0,{co:"mixed",biz:70}),
-   I("b31","Leather care","Obenauf's Heavy Duty LP",25,20,{why:"Private."}),
-   I("b19","Small forest axe","Gränsfors Bruk",200,0,{co:"mixed",biz:50,fl:"You already own a camp axe, an all-round axe and hatchets. Upgrade, not a need."}),
-   I("b20","Wildlife hatchet","Gränsfors Bruk",170,0,{on:false,co:"mixed",biz:50,fl:"You already own hatchets. Unticked."}),
-   I("b21","Axe care: file + linseed oil","",25,10,{co:"mixed",biz:50})
+ { id:"clothes", name:"Clothes & axes", sub:"Buy once for life · US items include VAT, duty, shipping", items:[
+   I("c1","White's MP boots","US import",750,20,{why:"Everyday clothing is never deductible."}),
+   I("c2","Schott leather trench","US import",950,15,{why:"Everyday clothing."}),
+   I("c3","Private White wool overcoat","UK import",950,40,{why:"Everyday clothing."}),
+   I("c4","Odin chore coat + Filson winter trousers + belt","US import",620,15,{why:"Everyday clothing."}),
+   I("c5","Pfanner Gladiator work trousers","protective",200,0,{co:"mixed",biz:70}),
+   I("c6","Hestra work + forge gloves","",165,0,{co:"mixed",biz:70}),
+   I("c7","Leather care","Obenauf's",25,20,{why:"Private."}),
+   I("c8","Gränsfors small forest axe + care","you already own axes",225,10,{co:"mixed",biz:50}),
+   I("c9","Gränsfors wildlife hatchet","you already own hatchets",170,0,{on:false,co:"mixed",biz:50})
  ]},
- { id:"gear", name:"Outdoor gear", sub:"Your 'To buy' sheet with real prices, ordered by safety, plus what's missing", items:[
-   ["Mountain safety (buy first)"],
-   I("g1","Avalanche kit","transceiver + shovel + probe, Ortovox or Mammut",450,0,{co:"mixed",biz:70}),
-   I("g2","Avalanche course (2 days)","a transceiver without practice is almost useless",300,0,{co:"mixed",biz:70}),
-   I("g3","Crampons","Petzl Vasak or Grivel G12",160,0,{co:"mixed",biz:70}),
-   I("g4","Ice axe","Petzl Summit",100,0,{co:"mixed",biz:70}),
+ { id:"gear", name:"Outdoor gear", sub:"Your 'To buy' sheet, ordered by safety", items:[
+   ["Mountain safety"],
+   I("g1","Avalanche kit","transceiver, shovel, probe",450,0,{co:"mixed",biz:70}),
+   I("g2","Avalanche course (2 days)","",300,0,{co:"mixed",biz:70}),
+   I("g3","Crampons + ice axe","Petzl / Grivel",260,0,{co:"mixed",biz:70}),
    I("g5","Canyoning descender","Petzl Pirana",45,0,{co:"mixed",biz:70}),
-   I("n1","Guide first-aid kit","WFR-level kit for groups · added by me",150,60,{co:"yes",biz:100}),
-   I("n2","Ski touring setup","skis, bindings, skins for your dual boots · added by me (not in your inventory)",1300,80,{co:"mixed",biz:50}),
-   I("n3","Rope + PPE renewal","climbing ropes and slings wear out, ~1 rope every 3–4 years · added by me",0,120,{co:"mixed",biz:70}),
+   I("n1","Guide first-aid kit","WFR-level, for groups",150,60,{co:"yes",biz:100}),
+   I("n2","Ski touring setup","skis, bindings, skins for your dual boots",1300,80,{co:"mixed",biz:50}),
+   I("n3","Rope + PPE renewal","~1 rope every 3–4 years",0,120,{co:"mixed",biz:70}),
    ["Bike"],
    I("g6","New MTB (trail / enduro)","good mid-range",3800,250,{co:"mixed",biz:40}),
    ["Paragliding"],
-   I("g7","Paragliding school to first licence","schools lend the wing while you learn",1500,0,{why:"Hobby, unless you become a tandem pilot."}),
-   I("g8","Paraglider wing EN-A / low EN-B","new · a good used wing after school ~€1,800",4000,0,{why:"Hobby."}),
-   I("g9","Harness with back protection","",900,0,{why:"Hobby."}),
-   I("g10","Reserve parachute","repack every year",700,80,{why:"Hobby."}),
-   I("g11","Paragliding helmet","",150,0,{why:"Hobby."}),
+   I("g7","School to first licence","",1500,0,{why:"Hobby."}),
+   I("g8","Wing, harness, reserve, helmet","new; used wing after school ~€1,800",5750,80,{why:"Hobby."}),
    ["BASE"],
-   I("g12","Skydiving course + ~200 jumps","BASE courses usually ask for ~200 skydives first",9000,0,{why:"Hobby."}),
-   I("g13","First BASE course","",3500,0,{why:"Hobby."}),
-   I("g14","BASE rig (container + canopy)","",3000,0,{why:"Hobby."}),
-   I("g15","BASE helmet","",200,0,{why:"Hobby."}),
+   I("g12","~200 skydives + first BASE course","usual entry requirement",12500,0,{why:"Hobby."}),
+   I("g14","BASE rig + helmet","",3200,0,{why:"Hobby."}),
    ["Every year"],
-   I("n4","Gear replacement budget","worn clothing, shoes, small gear",0,800,{co:"mixed",biz:40})
- ]},
- { id:"life", name:"Lifestyle every year", sub:"Food, travel, passes, fun money", items:[
-   I("food","Good food for two","quality groceries, local meat, markets",0,{fr:9000,fi:10000,no:13000},{cls:"none",rv:0,why:"Private."}),
-   I("every","Everyday costs","phones, internet, health top-up insurance, small stuff",0,{fr:6000,fi:6500,no:8000},{cls:"none",rv:0,why:"Private (a business phone line can be deducted)."}),
-   I("travel","One month of adventure travel","flights + ~€80/day for two",0,5000,{cls:"none",rv:0,why:"Holidays are private."}),
-   I("ski","Ski season passes ×2","Villard/Corrençon · Ruka/Levi · Hemsedal",0,{fr:900,fi:1300,no:1300},{cls:"none",rv:0,why:"Private. If you work for a ski school the pass is often free."}),
-   I("bike","Bike park passes ×2","",0,{fr:400,fi:300,no:500},{cls:"none",rv:0,why:"Private."}),
-   I("fun","Guilt-free fun money","so a €1,000 surprise never hurts",0,2400,{cls:"none",rv:0,why:"Private."})
+   I("n4","Gear replacement budget","",0,800,{co:"mixed",biz:40})
  ]}
 ];
-const ALL = []; CATS.forEach(c => c.items.forEach(it => { if (!Array.isArray(it)) { it.cat = c.id; ALL.push(it); } }));
+const ALL = []; OBJ.forEach(c => c.items.forEach(it => { if (!Array.isArray(it)) { it.cat = c.id; ALL.push(it); } }));
 const BYID = Object.fromEntries(ALL.map(i => [i.id, i]));
 
-const OWNED = {
-  "Sleeping":["Sleeping bags +15 / +5 / −12 down","3 kg tent","Ultralight tent","Summer + winter mats","Bivy bag"],
-  "Climbing & canyon":["70 m rope","60 m canyon rope","4 harnesses","2 Reverso","Grigri","Neox","Slings + quickdraws","Carabiners","2 via ferrata sets","Rappel 8","Prusik"],
-  "Cooking":["2 stoves","Pots","Thermoses","Cups, sporks, lunch box"],
-  "Footwear":["Approach shoes","Dual ski/touring boots","Hiking boots","Trail shoes","2 pairs winter boots"],
-  "Clothing":["Waterproof + shell jacket","Down jacket","Rain pants","Fleeces + merino layers","Hats, gloves, socks","2 wetsuits","Moto off-road suit"],
-  "Water & wheels":["SUP + paddle + pump","Inflatable boat","MTB protection","2 moto helmets","Roller blades","Off-road kick scooter","XC skis","Ice skates"],
-  "Other":["Insta360 X4 + mounts","Camp axe, hatchets, machete","First-aid kit","Repair kit","Water filter bottles","Running packs"]
-};
+/* ---------- MATRIX ROWS ----------
+ kind: once | year | param (not summed) | info (not summed, not editable)
+ def(c): default value · obj: object category (from objects) */
+const ROWS = [
+ { g:"Buying: home", kind:"once", id:"house", lab:"House + 1–2 ha of land", nt:"~110 m² older house. Vercors (Drôme side) ~€2,440/m²; rural Jämtland; Kuusamo area; Hallingdal/Valdres.", def:V4(300000,200000,150000,290000) },
+ { kind:"once", id:"fees", lab:"Transfer tax + notary", nt:"France ~7.5% · Sweden 1.5% stamp duty + ~1% mortgage deeds · Finland 3% · Norway 2.5%", calc:c => price(c) * V4(7.5,2.5,3,2.5)[c]/100 },
+ { kind:"once", id:"reno", lab:"Renovation", nt:"insulation, roof, heating, kitchen, bathroom", def:V4(30000,30000,25000,35000) },
+ { g:"Buying: everything else", kind:"once", id:"o_veh", lab:"Vehicles", obj:"veh" },
+ { kind:"once", id:"o_animals", lab:"Animals + fencing", obj:"animals" },
+ { kind:"once", id:"o_tools", lab:"Makita workshop", obj:"tools" },
+ { kind:"once", id:"o_kitchen", lab:"Kitchen & knives", obj:"kitchen" },
+ { kind:"once", id:"o_clothes", lab:"Clothes & axes", obj:"clothes" },
+ { kind:"once", id:"o_gear", lab:"Outdoor gear", obj:"gear" },
+ { kind:"once", id:"co_buy", lab:"Company carries (VAT back + tax saved)", nt:"From the objects you put under the company", calc:c => -coTotals(c).sBuy, isCo:true },
+ { kind:"oncetotal", id:"t_once", lab:"Total to buy" },
+
+ { g:"Every year: home", kind:"year", id:"ptax", lab:"Property tax", nt:"France: taxe foncière ~0.45% of value · Sweden: 0.75% of tax value, max SEK 10,425 · Finland: kiinteistövero, low in the countryside · Norway: eiendomsskatt, only in some municipalities", calc:c => ({fr:price(c)*0.0045, se:Math.min(price(c)*0.75*0.0075, 10425/SEK), fi:550, no:450})[c] },
+ { kind:"year", id:"hins", lab:"Home insurance", def:V4(500,600,500,900) },
+ { kind:"year", id:"energy", lab:"Heating, power, water, waste, internet", nt:"cold mountain house, wood + electricity or heat pump", def:V4(3000,3000,3300,3200) },
+ { kind:"year", id:"upkeep", lab:"House upkeep (1% of value)", calc:c => price(c)*0.01 },
+ { g:"Every year: mortgage", kind:"year", id:"interest", lab:"Mortgage interest after tax relief", nt:"First year. Repaying the loan itself is saving, so it's not counted. Sweden deducts 30% of interest, Norway 22%, France and Finland 0%.", calc:c => mort(c).intNet, mortgage:true },
+ { kind:"param", id:"rate", lab:"Mortgage rate (%)", def:V4(3.3,3.0,3.0,5.2), pct:true },
+ { kind:"info", id:"pay", lab:"Monthly payment (25 years, 10% deposit)", calc:c => mort(c).month },
+ { g:"Every year: food & everyday", kind:"year", id:"food", lab:"Good food for two", nt:"Food price level vs EU (2024): France ~112, Sweden ~106, Finland ~110, Norway ~131", def:V4(9000,8600,8840,10530) },
+ { kind:"year", id:"every", lab:"Everyday costs", nt:"phones, household, clothes, small stuff", def:V4(6000,6200,6400,6650) },
+ { g:"Every year: healthcare", kind:"year", id:"health", lab:"Healthcare out of pocket, typical year", nt:"France: mutuelle for two ~€1,300 + small fees · Nordics: visit fees + adult dentist (paid mostly by you). The public systems are paid through income tax and social charges, which are in your income calculator.", def:V4(1600,1100,1000,1200) },
+ { kind:"info", id:"healthmax", lab:"Bad year: most you can pay (2 adults, dentist extra)", nt:"France: mutuelle + €100 fee cap each · Sweden: SEK 1,450 care + SEK 3,800 medicine each · Finland: €815 care + €636 medicine each · Norway: NOK 3,278 each", calc:c => ({fr:1500, se:2*(1450+3800)/SEK, fi:2*(815+636), no:2*3278/NOK})[c] },
+ { g:"Every year: vehicles & animals", kind:"year", id:"r_veh", lab:"Vehicles", obj:"veh", nt:"fuel, insurance, service, road tax" },
+ { kind:"year", id:"r_animals", lab:"Animals", obj:"animals" },
+ { g:"Every year: lifestyle", kind:"year", id:"travel", lab:"One month of adventure travel", def:V4(5000,5000,5000,5000) },
+ { kind:"year", id:"ski", lab:"Ski season passes ×2", nt:"Villard/Corrençon · SkiStar Åre · Ruka · SkiStar Hemsedal", def:V4(900,1200,1300,1300) },
+ { kind:"year", id:"bike", lab:"Bike park passes ×2", nt:"Villard · Åre · Ruka · Hafjell/Trysil", def:V4(400,600,300,600) },
+ { kind:"year", id:"fun", lab:"Guilt-free fun money", def:V4(2400,2400,2400,2400) },
+ { kind:"year", id:"r_kit", lab:"Workshop, kit and gear upkeep", objs:["tools","kitchen","clothes","gear"] },
+ { g:"Every year: money", kind:"year", id:"invtax", lab:"Investment tax (average per year)", nt:"From the investment settings below: taxes while you hold + tax when you sell, spread over the years", calc:c => inv(c).perYear, invest:true },
+ { kind:"year", id:"co_run", lab:"Company carries", nt:"VAT back + tax saved on running costs", calc:c => -coTotals(c).sRun, isCo:true },
+ { kind:"yeartotal", id:"t_year", lab:"Total every year" }
+];
 
 /* ---------- STATE ---------- */
-function freshState(){ return { country:"fr", regime:{fr:"reel",fi:"tmi_vat",no:"enk_mva"}, marginal:{}, items:{}, open:{home:true,veh:true} }; }
-let S = freshState();
-try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.items) S = Object.assign(freshState(), s); } catch(e){}
+function fresh(){ return { base:"fr", view:"both", cells:{}, off:{}, items:{}, regime:{fr:"reel",se:"ef_moms",fi:"tmi_vat",no:"enk_mva"}, marg:{},
+  inv:{ start:20000, add:6000, ret:6, years:10 }, mortOn:true, deposit:10, open:{veh:true} }; }
+let S = fresh();
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.cells) { S = Object.assign(fresh(), s); S.inv = Object.assign(fresh().inv, s.inv); } } catch(e){}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
-const st = id => (S.items[id] = S.items[id] || {});
 
-function defBuy(it, c){ if (it.calc==="fees") return 0; return typeof it.buy==="object" ? it.buy[c] : it.buy * MULT[it.cls][c]; }
-function defRun(it, c){ return typeof it.run==="object" ? it.run[c] : it.run * MULT[it.cls][c]; }
-const FEE = {fr:7.5, fi:3, no:2.5};
-function buyOf(it, c){
-  if (it.calc==="fees") return buyOf(BYID.house, c) * FEE[c]/100;
-  const s = S.items[it.id]; return s && s.buy != null ? s.buy : Math.round(defBuy(it,c));
+/* ---------- MODEL ---------- */
+const R = Object.fromEntries(ROWS.map(r => [r.id, r]));
+function defOf(r, c){ return r.calc ? r.calc(c) : r.def ? r.def[c] : 0; }
+function cell(id, c){ const k = id+":"+c; return S.cells[k] != null ? S.cells[k] : defOf(R[id], c); }
+function price(c){ return cell("house", c); }
+function rowOn(id){ return !S.off[id]; }
+
+function mort(c){
+  const rate = cell("rate", c)/100, loan = (price(c) + (rowOn("reno") ? cell("reno", c) : 0)) * (1 - S.deposit/100);
+  const relief = V4(0,30,0,22)[c]/100, r = rate/12, n = 300;
+  const month = loan > 0 ? (r ? loan*r/(1-Math.pow(1+r,-n)) : loan/n) : 0;
+  return { loan, intNet: S.mortOn && rowOn("house") ? loan*rate*(1-relief) : 0, month: rowOn("house") ? month : 0 };
 }
-function runOf(it, c){ const s = S.items[it.id]; return s && s.run != null ? s.run : Math.round(defRun(it,c)); }
-function isOn(it){ const s = S.items[it.id]; return s && s.on != null ? s.on : it.on; }
-function isCo(it){ if (it.co==="no") return false; const s = S.items[it.id]; return s && s.co != null ? s.co : true; }
-function bizOf(it){ const s = S.items[it.id]; return s && s.biz != null ? s.biz : it.biz; }
-function regimeOf(c, key){ const r = COUNTRY[c].regimes[key || S.regime[c]]; return r; }
-function marginalOf(c, key){ const k = key || S.regime[c]; const m = S.marginal[c+":"+k]; return m != null ? m : COUNTRY[c].regimes[k].marginal; }
 
-/* company saving for one item */
-function calc(it, c, regimeKey){
-  const buy = buyOf(it,c), run = runOf(it,c);
+function objBuy(it, c){ const s = S.items[it.id]; if (s && s.buy != null) return s.buy; return Math.round(typeof it.buy==="object" ? it.buy[c] : it.buy * MULT[it.cls][c]); }
+function objRun(it, c){ const s = S.items[it.id]; if (s && s.run != null) return s.run; return Math.round(typeof it.run==="object" ? it.run[c] : it.run * MULT[it.cls][c]); }
+function objOn(it){ const s = S.items[it.id]; return s && s.on != null ? s.on : it.on; }
+function objCo(it){ if (it.co==="no") return false; const s = S.items[it.id]; return s && s.co != null ? s.co : true; }
+function objBiz(it){ const s = S.items[it.id]; return s && s.biz != null ? s.biz : it.biz; }
+function regOf(c){ return REG[c].list[S.regime[c]]; }
+function margOf(c){ const k = c+":"+S.regime[c]; return S.marg[k] != null ? S.marg[k] : regOf(c).m; }
+function objSave(it, c){
+  const buy = objBuy(it,c), run = objRun(it,c);
+  if (!objCo(it)) return { sBuy:0, sRun:0 };
+  const r = regOf(c), m = margOf(c)/100, b = objBiz(it)/100, v = REG[c].vat/100;
+  const bv = r.vat && it.vb ? buy*v/(1+v) : 0, rvv = r.vat ? run*it.rv*v/(1+v) : 0;
+  return { sBuy: bv*b + (buy-bv)*b*m, sRun: rvv*b + (run-rvv)*b*m };
+}
+function objCat(catId, c){
+  let buy = 0, run = 0;
+  ALL.forEach(it => { if (it.cat===catId && objOn(it)) { buy += objBuy(it,c); run += objRun(it,c); } });
+  return { buy, run };
+}
+function coTotals(c){
   let sBuy = 0, sRun = 0;
-  if (isCo(it) && it.co !== "no"){
-    const r = regimeOf(c, regimeKey), m = marginalOf(c, regimeKey)/100, b = bizOf(it)/100, v = COUNTRY[c].vat/100;
-    // VAT comes back on the business share; tax is saved on the business share of the price without that VAT
-    const buyVat = r.vat && it.vb ? buy * v/(1+v) : 0;
-    const runVat = r.vat ? run * it.rv * v/(1+v) : 0;
-    sBuy = buyVat * b + (buy - buyVat) * b * m;
-    sRun = runVat * b + (run - runVat) * b * m;
+  ALL.forEach(it => { if (objOn(it) && rowOn("o_"+it.cat)) { const s = objSave(it,c); sBuy += s.sBuy; sRun += s.sRun; } });
+  return { sBuy, sRun };
+}
+
+/* investments: accumulating index funds, all sold at the end */
+function inv(c){
+  const { start, add, ret, years } = S.inv, r = ret/100, N = Math.max(1, Math.round(years));
+  let V = start, contrib = start, hold = 0, shield = 0;
+  for (let y = 1; y <= N; y++){
+    V += add; contrib += add;
+    if (c === "se"){ const t = Math.max(0, V - 2*300000/SEK) * 0.01065; V -= t; hold += t; }
+    if (c === "no"){
+      const house = rowOn("house") ? price("no")*0.25 : 0, debt = S.mortOn && rowOn("house") ? mort("no").loan : 0;
+      const t = Math.max(0, 0.8*V + house - debt - 2*1900000/NOK) * 0.01; V -= t; hold += t;
+      shield += contrib * 0.035;
+    }
+    V *= 1 + r;
   }
-  return { buy, run, sBuy, sRun };
+  const gains = Math.max(0, V - contrib);
+  let exit = 0, how = "";
+  if (c === "fr"){ const f = Math.min(1, 2*150000/contrib), pea = N >= 5 ? 0.186 : 0.314; exit = gains*(f*pea + (1-f)*0.314);
+    how = N >= 5 ? (f < 1 ? "2 PEAs (€150k deposits each), rest in a normal account at 31.4%" : "2 PEAs: 18.6% social levies on gains after 5 years") : "PEA younger than 5 years: 31.4%"; }
+  if (c === "se"){ how = "ISK: 1.065% per year on the part above SEK 300,000 each, no tax when selling"; }
+  if (c === "fi"){ const per = gains/2; exit = 2*(0.30*Math.min(per,30000) + 0.34*Math.max(0,per-30000));
+    how = "Equity savings accounts (€100k each): 30% on gains (34% above €30k each per year) when you take money out"; }
+  if (c === "no"){ exit = Math.max(0, gains - shield) * 0.3784;
+    how = "ASK: 37.84% on gains above a small shield when you take money out, + 1% wealth tax above NOK 1.9M each (mortgage debt counts against it)"; }
+  return { V, contrib, gains, hold, exit, net: V - exit, perYear: S.inv.start || S.inv.add ? (hold+exit)/N : 0, how };
 }
-function totals(c, regimeKey){
-  const t = { buy:0, run:0, sBuy:0, sRun:0, cats:{} };
-  CATS.forEach(cat => t.cats[cat.id] = {buy:0,run:0,sBuy:0,sRun:0,n:0});
-  ALL.forEach(it => {
-    if (!isOn(it)) return;
-    const r = calc(it, c, regimeKey), ct = t.cats[it.cat];
-    ["buy","run","sBuy","sRun"].forEach(k => { t[k] += r[k]; ct[k] += r[k]; });
-    ct.n++;
+
+function val(id, c){
+  const r = R[id]; if (!rowOn(id)) return 0;
+  if (r.obj) return r.kind==="once" ? objCat(r.obj,c).buy : objCat(r.obj,c).run;
+  if (r.objs) return r.objs.reduce((s,o) => s + objCat(o,c).run, 0);
+  return cell(id, c);
+}
+function totalsOf(c){
+  let once = 0, year = 0;
+  ROWS.forEach(r => { if (r.kind==="once") once += val(r.id,c); if (r.kind==="year") year += val(r.id,c); });
+  return { once, year };
+}
+
+/* ---------- UI: base / view ---------- */
+function seg(el, opts, cur, fn){
+  el.innerHTML = opts.map(([k,t]) => `<button type="button" data-k="${k}" aria-pressed="${k===cur}">${t}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => fn(b.dataset.k)));
+}
+function buildTop(){
+  seg(document.getElementById("baseSel"), CS.map(c => [c, CN[c]]), S.base, k => { S.base = k; save(); buildTop(); buildObjects(); update(); });
+  seg(document.getElementById("viewSel"), [["both","Buying + yearly"],["year","Only yearly"],["once","Only buying"]], S.view, k => { S.view = k; save(); buildTop(); buildMatrix(); update(); });
+}
+
+/* ---------- UI: matrix ---------- */
+function buildMatrix(){
+  const tb = document.getElementById("mx");
+  let h = `<thead><tr><th>Line</th>${CS.map(c=>`<th class="r">${CN[c]}${c===S.base?" ●":""}</th>`).join("")}</tr></thead><tbody>`;
+  ROWS.forEach(r => {
+    const isOnce = r.kind==="once"||r.kind==="oncetotal";
+    const isYear = r.kind==="year"||r.kind==="yeartotal"||r.kind==="param"||r.kind==="info";
+    if (S.view==="year" && isOnce) return;
+    if (S.view==="once" && isYear) return;
+    if (r.g) h += `<tr class="grp"><td colspan="5">${esc(r.g)}</td></tr>`;
+    const cls = r.kind.endsWith("total") ? "total" : (r.kind==="info"||r.kind==="param") ? "info" : "";
+    const tick = (r.kind==="once"||r.kind==="year") ? `<input type="checkbox" data-row="${r.id}" aria-label="Include ${esc(r.lab)}"> ` : "";
+    h += `<tr class="${cls}" id="mr-${r.id}"><td>${tick}<span class="lab">${esc(r.lab)}</span>${r.nt?`<span class="nt">${esc(r.nt)}</span>`:""}${r.obj||r.objs?`<span class="nt">from your objects below</span>`:""}</td>`;
+    CS.forEach(c => {
+      const editable = !r.obj && !r.objs && !r.kind.endsWith("total") && r.kind!=="info" && !r.isCo && r.id!=="interest" && r.id!=="invtax";
+      h += `<td class="r" id="mc-${r.id}-${c}">${editable ? `<span class="cellwrap"><input type="number" step="any" id="in-${r.id}-${c}" aria-label="${esc(r.lab)}, ${CN[c]}"><button type="button" class="rst" id="rs-${r.id}-${c}" title="Back to example" hidden>↺</button></span>` : `<span class="val" id="v-${r.id}-${c}"></span>`}<span class="dl" id="d-${r.id}-${c}"></span></td>`;
+    });
+    h += `</tr>`;
   });
-  return t;
-}
-function bestRegime(c){
-  let best = null, bv = -1;
-  Object.keys(COUNTRY[c].regimes).forEach(k => { const t = totals(c,k); const v = t.sBuy + t.sRun*10; if (v > bv){ bv = v; best = k; } });
-  return best;
-}
-
-/* ---------- BUILD UI ---------- */
-function buildSetup(){
-  document.getElementById("country").innerHTML = C3.map(c => `<button type="button" data-c="${c}" aria-pressed="${c===S.country}">${COUNTRY[c].name}</button>`).join("");
-  document.querySelectorAll("#country button").forEach(b => b.addEventListener("click", () => {
-    S.country = b.dataset.c; save();
-    document.querySelectorAll("#country button").forEach(x => x.setAttribute("aria-pressed", x===b));
-    buildRegime(); refreshInputs(); update();
+  tb.innerHTML = h + `</tbody>`;
+  tb.querySelectorAll("[data-row]").forEach(el => {
+    el.checked = rowOn(el.dataset.row);
+    el.addEventListener("change", () => { S.off[el.dataset.row] = !el.checked; save(); update(); });
+  });
+  ROWS.forEach(r => CS.forEach(c => {
+    const el = document.getElementById(`in-${r.id}-${c}`); if (!el) return;
+    el.addEventListener("change", () => { S.cells[r.id+":"+c] = el.value === "" ? null : +el.value; if (S.cells[r.id+":"+c] == null) delete S.cells[r.id+":"+c]; save(); update(); });
+    document.getElementById(`rs-${r.id}-${c}`).addEventListener("click", () => { delete S.cells[r.id+":"+c]; save(); update(); });
   }));
-  buildRegime();
-  document.getElementById("regime").addEventListener("change", e => { S.regime[S.country] = e.target.value; save(); buildRegime(); update(); });
-  document.getElementById("marginal").addEventListener("change", e => { S.marginal[S.country+":"+S.regime[S.country]] = +e.target.value || 0; save(); update(); });
 }
-function buildRegime(){
-  const c = S.country, sel = document.getElementById("regime");
-  sel.innerHTML = Object.entries(COUNTRY[c].regimes).map(([k,r]) => `<option value="${k}"${k===S.regime[c]?" selected":""}>${esc(r.label)}</option>`).join("");
-  const r = regimeOf(c);
-  document.getElementById("regimeNote").textContent = r.note;
-  document.getElementById("marginal").value = marginalOf(c);
-  document.getElementById("marginal").disabled = r.marginal === 0 && !r.vat;
-  document.getElementById("vatNote").textContent = `VAT ${COUNTRY[c].vat}%: ${r.vat ? "the company gets it back on the business share." : "not recovered with this company type."}`;
-  document.getElementById("countryNote").textContent = COUNTRY[c].note;
+function updateMatrix(){
+  const T = Object.fromEntries(CS.map(c => [c, totalsOf(c)]));
+  ROWS.forEach(r => {
+    const tr = document.getElementById("mr-"+r.id); if (!tr) return;
+    tr.classList.toggle("off", (r.kind==="once"||r.kind==="year") && !rowOn(r.id));
+    const vals = {};
+    CS.forEach(c => {
+      vals[c] = r.kind==="oncetotal" ? T[c].once : r.kind==="yeartotal" ? T[c].year : (r.kind==="param"||r.kind==="info") ? cell(r.id,c) : val(r.id,c);
+      const inp = document.getElementById(`in-${r.id}-${c}`);
+      if (inp){
+        if (document.activeElement !== inp) inp.value = r.pct ? +vals[c].toFixed(2) : Math.round(vals[c]);
+        const custom = S.cells[r.id+":"+c] != null;
+        inp.classList.toggle("custom", custom);
+        document.getElementById(`rs-${r.id}-${c}`).hidden = !custom;
+      } else {
+        const v = document.getElementById(`v-${r.id}-${c}`);
+        v.textContent = r.id==="pay" ? eur(vals[c]) + "/mo" : eur(vals[c]);
+      }
+    });
+    const summed = r.kind==="once"||r.kind==="year"||r.kind.endsWith("total");
+    const vs = CS.map(c=>vals[c]), min = Math.min(...vs), max = Math.max(...vs);
+    CS.forEach(c => {
+      const td = document.getElementById(`mc-${r.id}-${c}`), d = document.getElementById(`d-${r.id}-${c}`);
+      td.classList.toggle("cheap", summed && max - min > 1 && vals[c] === min && (rowOn(r.id) || r.kind.endsWith("total")));
+      if (c === S.base || !(summed || r.id==="healthmax" || r.id==="pay")) { d.textContent = ""; d.className = "dl"; return; }
+      const diff = vals[c] - vals[S.base];
+      d.textContent = Math.abs(diff) < 1 ? "same" : `${sgn(diff)} vs ${CN[S.base].slice(0,2).toUpperCase()}`;
+      d.className = "dl " + (diff > 1 ? "d-up" : diff < -1 ? "d-dn" : "");
+    });
+  });
+  return T;
 }
 
-let barMode = "buy";
-function buildBarMode(){
-  const el = document.getElementById("barmode");
-  el.innerHTML = [["buy","To buy"],["run","Per year"]].map(([k,t]) => `<button type="button" data-m="${k}" aria-pressed="${k===barMode}">${t}</button>`).join("");
-  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { barMode = b.dataset.m; buildBarMode(); update(); }));
+/* ---------- UI: settings ---------- */
+function buildSetup(){
+  const box = document.getElementById("setup");
+  box.innerHTML = `
+    <div class="grp"><span class="lbl">Investments (index funds)</span>
+      <label class="f" for="iv-start">Invested now (€)<input type="number" id="iv-start" step="1000"></label>
+      <label class="f" for="iv-add">Added every year (€)<input type="number" id="iv-add" step="500"></label>
+      <label class="f" for="iv-ret">Return per year (%)<input type="number" id="iv-ret" step="0.5"></label>
+      <label class="f" for="iv-years">Years (also used for the long-term total)<input type="number" id="iv-years" step="1" min="1"></label>
+    </div>
+    <div class="grp"><span class="lbl">Mortgage</span>
+      <label class="f" for="mo-on">Count mortgage interest<input type="checkbox" id="mo-on"></label>
+      <label class="f" for="mo-dep">Deposit (%)<input type="number" id="mo-dep" step="1"></label>
+      <p class="hint">Loan = house + renovation − deposit, over 25 years. Rates are in the table. 10% is the usual minimum deposit; check each bank.</p>
+    </div>
+    <div class="grp"><span class="lbl">Company in each country</span>
+      ${CS.map(c => `<div class="f"><label for="rg-${c}">${CN[c]}</label><select id="rg-${c}">${Object.entries(REG[c].list).map(([k,v])=>`<option value="${k}"${k===S.regime[c]?" selected":""}>${esc(v.label)}</option>`).join("")}</select></div>
+        <label class="f" for="mg-${c}"><span class="hint">tax + charges saved per €1 (%)</span><input type="number" id="mg-${c}" step="1" style="width:70px"></label>`).join("")}
+    </div>`;
+  const bind = (id, fn, get) => { const el = document.getElementById(id); get(el); el.addEventListener("change", () => { fn(el); save(); buildSetupVals(); update(); }); };
+  bind("iv-start", el => S.inv.start = +el.value||0, el => {});
+  bind("iv-add", el => S.inv.add = +el.value||0, el => {});
+  bind("iv-ret", el => S.inv.ret = +el.value||0, el => {});
+  bind("iv-years", el => S.inv.years = Math.max(1, +el.value||1), el => {});
+  bind("mo-on", el => S.mortOn = el.checked, el => {});
+  bind("mo-dep", el => S.deposit = Math.min(100, Math.max(0, +el.value||0)), el => {});
+  CS.forEach(c => {
+    bind("rg-"+c, el => S.regime[c] = el.value, el => {});
+    bind("mg-"+c, el => S.marg[c+":"+S.regime[c]] = +el.value||0, el => {});
+  });
+  buildSetupVals();
+}
+function buildSetupVals(){
+  document.getElementById("iv-start").value = S.inv.start;
+  document.getElementById("iv-add").value = S.inv.add;
+  document.getElementById("iv-ret").value = S.inv.ret;
+  document.getElementById("iv-years").value = S.inv.years;
+  document.getElementById("mo-on").checked = S.mortOn;
+  document.getElementById("mo-dep").value = S.deposit;
+  CS.forEach(c => { const m = document.getElementById("mg-"+c); m.value = margOf(c); m.disabled = !regOf(c).vat && regOf(c).m === 0; });
+}
+function updateInvTable(){
+  const N = S.inv.years;
+  const X = Object.fromEntries(CS.map(c => [c, inv(c)]));
+  const best = Math.max(...CS.map(c => X[c].net));
+  const row = (lab, f, cls="") => `<tr class="${cls}"><td>${lab}</td>${CS.map(c=>`<td class="r">${f(X[c], c)}</td>`).join("")}</tr>`;
+  document.getElementById("invtbl").innerHTML = `<thead><tr><th>Investments after ${N} years</th>${CS.map(c=>`<th class="r">${CN[c]}</th>`).join("")}</tr></thead><tbody>
+    ${row("You put in", x => eur(x.contrib))}
+    ${row("Value before selling", x => eur(x.V))}
+    ${row("Tax paid while holding", x => eur(x.hold))}
+    ${row("Tax if you sell everything", x => eur(x.exit))}
+    ${row("<b>You keep</b>", x => `<b style="color:${x.net===best?"var(--ok)":"inherit"}">${eur(x.net)}</b>`)}
+    ${row("Tax as a share of the gain", x => x.gains > 0 ? Math.round((x.hold+x.exit)/(x.gains+x.hold)*100) + "%" : "–")}
+    <tr><td>How it's taxed</td>${CS.map(c=>`<td style="font-size:.8rem;color:var(--muted);min-width:180px">${esc(X[c].how)}</td>`).join("")}</tr>
+  </tbody>`;
 }
 
-function buildCats(){
+/* ---------- UI: objects ---------- */
+function buildObjects(){
+  const c = S.base;
+  document.getElementById("objCountry").textContent = CN[c];
   const box = document.getElementById("cats");
-  box.innerHTML = CATS.map(cat => {
+  box.innerHTML = OBJ.map(cat => {
     let rows = "";
     cat.items.forEach(it => {
       if (Array.isArray(it)) { rows += `<tr class="sub"><td colspan="6">${esc(it[0])}</td></tr>`; return; }
-      const coCell = it.co === "no"
-        ? `<span class="tag no" title="${esc(it.why||"Private")}">private</span>`
-        : `<span class="co-cell"><input type="checkbox" id="co-${it.id}" aria-label="Put ${esc(it.name)} under the company"><input type="number" class="pct" id="bz-${it.id}" min="0" max="100" step="5" aria-label="Business share %">%</span>`;
-      rows += `<tr id="row-${it.id}">
-        <td><input type="checkbox" id="on-${it.id}" aria-label="Include ${esc(it.name)}"></td>
-        <td><span class="nm">${esc(it.name)}</span>${it.dt?`<span class="dt">${esc(it.dt)}</span>`:""}${it.dtRun?`<span class="dt">Per year: ${esc(it.dtRun)}</span>`:""}${it.fl?`<span class="fl">${esc(it.fl)}</span>`:""}${it.co==="no"&&it.why?`<span class="dt">Company: ${esc(it.why)}</span>`:""}</td>
-        <td class="r">${it.calc ? `<span id="fee-${it.id}"></span>` : `<input type="number" id="buy-${it.id}" min="0" step="any" aria-label="Buy price for ${esc(it.name)}"><button type="button" class="rst" id="rb-${it.id}" title="Back to example price" hidden>↺</button>`}</td>
-        <td class="r"><input type="number" id="run-${it.id}" min="0" step="any" aria-label="Yearly cost for ${esc(it.name)}"><button type="button" class="rst" id="rr-${it.id}" title="Back to example price" hidden>↺</button></td>
-        <td>${coCell}</td>
-        <td class="r"><span class="save" id="sv-${it.id}"></span></td>
-      </tr>`;
+      const coCell = it.co==="no" ? `<span class="tag" title="${esc(it.why||"Private")}">private</span>`
+        : `<span class="co-cell"><input type="checkbox" id="co-${it.id}" aria-label="Under the company"><input type="number" class="pct" id="bz-${it.id}" min="0" max="100" step="5" aria-label="Business share">%</span>`;
+      rows += `<tr id="or-${it.id}"><td><input type="checkbox" id="on-${it.id}" aria-label="Include ${esc(it.name)}"></td>
+        <td><span class="nm">${esc(it.name)}</span>${it.dt?`<span class="dt">${esc(it.dt)}</span>`:""}${it.fl?`<span class="fl">${esc(it.fl)}</span>`:""}${it.co==="no"&&it.why?`<span class="dt">Company: ${esc(it.why)}</span>`:""}</td>
+        <td class="r"><input type="number" id="ob-${it.id}" min="0" step="any" aria-label="Buy price"><button type="button" class="rst" id="obr-${it.id}" hidden>↺</button></td>
+        <td class="r"><input type="number" id="orun-${it.id}" min="0" step="any" aria-label="Per year"><button type="button" class="rst" id="orr-${it.id}" hidden>↺</button></td>
+        <td>${coCell}</td><td class="r"><span class="save" id="sv-${it.id}"></span></td></tr>`;
     });
-    let extra = "";
-    if (cat.id === "tools") extra = `<div class="owned"><b>You already own (26):</b><div class="chips">${["Makita impact driver","Makita grinder 125 mm","Makita jigsaw","Screwdrivers + bits","Pliers ×4 + cable cutters + strippers","Adjustable wrenches ×3","Hammer","Pry bar","Hatchet + axe","Files ×4","4 hand saws","Tape, ruler, level","Multimeter","Safety glasses ×3","Work gloves ×2"].map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`;
-    if (cat.id === "gear") extra = `<div class="owned"><b>You already own (~100 items):</b>${Object.entries(OWNED).map(([k,v])=>`<div class="chips"><span class="chip" style="border-color:var(--accent);color:var(--accent)">${k}</span>${v.map(t=>`<span class="chip">${esc(t)}</span>`).join("")}</div>`).join("")}</div>`;
-    return `<details class="cat" id="cat-${cat.id}"${S.open[cat.id]?" open":""}>
-      <summary><i class="chev"></i><span class="cat-name">${esc(cat.name)}<small>${esc(cat.sub)}</small></span><span class="cat-sum" id="sum-${cat.id}"></span></summary>
-      <div class="cat-body">
-        <div class="cat-tools"><button type="button" class="btn" data-all="${cat.id}">Tick all</button><button type="button" class="btn" data-none="${cat.id}">Untick all</button></div>
-        ${extra}
-        <div class="tbl-wrap"><table class="items"><thead><tr><th></th><th>Object</th><th class="r">Buy €</th><th class="r">Per year €</th><th>Co. · Pro %</th><th class="r">Co. saves</th></tr></thead><tbody>${rows}</tbody></table></div>
-      </div></details>`;
+    return `<details class="cat" id="cat-${cat.id}"${S.open[cat.id]?" open":""}><summary><i class="chev"></i><span class="cat-name">${esc(cat.name)}<small>${esc(cat.sub)}</small></span><span class="cat-sum" id="cs-${cat.id}"></span></summary>
+      <div class="cat-body"><div class="row"><button type="button" class="btn" data-all="${cat.id}">Tick all</button><button type="button" class="btn" data-none="${cat.id}">Untick all</button></div>
+      <div class="tbl-wrap" style="border:0"><table class="items"><thead><tr><th></th><th>Object</th><th class="r">Buy €</th><th class="r">Per year €</th><th>Co. · Pro %</th><th class="r">Co. saves</th></tr></thead><tbody>${rows}</tbody></table></div></div></details>`;
   }).join("");
-
-  CATS.forEach(cat => {
-    const d = document.getElementById("cat-"+cat.id);
-    d.addEventListener("toggle", () => { S.open[cat.id] = d.open; save(); });
-  });
+  OBJ.forEach(cat => { const d = document.getElementById("cat-"+cat.id); d.addEventListener("toggle", () => { S.open[cat.id] = d.open; save(); }); });
   box.querySelectorAll("[data-all],[data-none]").forEach(b => b.addEventListener("click", () => {
-    const id = b.dataset.all || b.dataset.none, on = !!b.dataset.all;
-    CATS.find(c=>c.id===id).items.forEach(it => { if (!Array.isArray(it)) st(it.id).on = on; });
-    save(); refreshInputs(); update();
+    const id = b.dataset.all || b.dataset.none;
+    ALL.filter(i => i.cat===id).forEach(it => { (S.items[it.id] = S.items[it.id]||{}).on = !!b.dataset.all; });
+    save(); update();
   }));
+  const st = id => (S.items[id] = S.items[id] || {});
   ALL.forEach(it => {
-    const on = document.getElementById("on-"+it.id);
-    on.addEventListener("change", () => { st(it.id).on = on.checked; save(); refreshInputs(); update(); });
-    ["buy","run"].forEach(f => {
-      const el = document.getElementById(f+"-"+it.id); if (!el) return;
-      el.addEventListener("change", () => { st(it.id)[f] = el.value === "" ? null : Math.max(0, +el.value || 0); save(); refreshInputs(); update(); });
-      const rb = document.getElementById((f==="buy"?"rb-":"rr-")+it.id);
-      rb.addEventListener("click", () => { st(it.id)[f] = null; save(); refreshInputs(); update(); });
+    document.getElementById("on-"+it.id).addEventListener("change", e => { st(it.id).on = e.target.checked; save(); update(); });
+    [["ob","obr","buy"],["orun","orr","run"]].forEach(([a,b,f]) => {
+      document.getElementById(a+"-"+it.id).addEventListener("change", e => { st(it.id)[f] = e.target.value==="" ? null : Math.max(0,+e.target.value||0); save(); update(); });
+      document.getElementById(b+"-"+it.id).addEventListener("click", () => { st(it.id)[f] = null; save(); update(); });
     });
     if (it.co !== "no"){
-      const co = document.getElementById("co-"+it.id), bz = document.getElementById("bz-"+it.id);
-      co.addEventListener("change", () => { st(it.id).co = co.checked; save(); refreshInputs(); update(); });
-      bz.addEventListener("change", () => { st(it.id).biz = Math.min(100, Math.max(0, +bz.value || 0)); save(); update(); });
+      document.getElementById("co-"+it.id).addEventListener("change", e => { st(it.id).co = e.target.checked; save(); update(); });
+      document.getElementById("bz-"+it.id).addEventListener("change", e => { st(it.id).biz = Math.min(100, Math.max(0, +e.target.value||0)); save(); update(); });
     }
   });
-  refreshInputs();
 }
-function refreshInputs(){
-  const c = S.country;
+function updateObjects(){
+  const c = S.base;
   ALL.forEach(it => {
     const s = S.items[it.id] || {};
-    document.getElementById("on-"+it.id).checked = isOn(it);
-    document.getElementById("row-"+it.id).classList.toggle("off", !isOn(it));
-    ["buy","run"].forEach(f => {
-      const el = document.getElementById(f+"-"+it.id); if (!el) return;
-      el.value = f==="buy" ? buyOf(it,c) : runOf(it,c);
-      const custom = s[f] != null;
-      el.classList.toggle("custom", custom);
-      document.getElementById((f==="buy"?"rb-":"rr-")+it.id).hidden = !custom;
+    document.getElementById("on-"+it.id).checked = objOn(it);
+    document.getElementById("or-"+it.id).classList.toggle("off", !objOn(it));
+    [["ob","obr","buy",objBuy],["orun","orr","run",objRun]].forEach(([a,b,f,fn]) => {
+      const el = document.getElementById(a+"-"+it.id);
+      if (document.activeElement !== el) el.value = fn(it,c);
+      el.classList.toggle("custom", s[f] != null);
+      document.getElementById(b+"-"+it.id).hidden = s[f] == null;
     });
     if (it.co !== "no"){
-      document.getElementById("co-"+it.id).checked = isCo(it);
-      const bz = document.getElementById("bz-"+it.id); bz.value = bizOf(it); bz.disabled = !isCo(it);
+      document.getElementById("co-"+it.id).checked = objCo(it);
+      const bz = document.getElementById("bz-"+it.id); bz.value = objBiz(it); bz.disabled = !objCo(it);
     }
+    const sv = objSave(it,c);
+    document.getElementById("sv-"+it.id).innerHTML = objOn(it) && (sv.sBuy || sv.sRun) ? `${sv.sBuy?eur(sv.sBuy):""}${sv.sBuy&&sv.sRun?"<br>":""}${sv.sRun?eur(sv.sRun)+"/yr":""}` : "";
+  });
+  OBJ.forEach(cat => {
+    const t = objCat(cat.id, c);
+    let sb = 0, sr = 0; ALL.forEach(it => { if (it.cat===cat.id && objOn(it)) { const s = objSave(it,c); sb += s.sBuy; sr += s.sRun; } });
+    document.getElementById("cs-"+cat.id).innerHTML = `${t.buy?`<b>${eur(t.buy)}</b> to buy<br>`:""}<b>${eur(t.run)}</b>/yr${sb+sr?`<br><span class="save">co. carries ${eur(sb)}${sr?` + ${eur(sr)}/yr`:""}</span>`:""}`;
   });
 }
 
 /* ---------- UPDATE ---------- */
 function update(){
-  const c = S.country, t = totals(c), r = regimeOf(c);
-  const fee = document.getElementById("fee-fees"); if (fee) fee.textContent = eur(buyOf(BYID.fees, c));
-  ALL.forEach(it => {
-    const x = calc(it, c);
-    document.getElementById("sv-"+it.id).innerHTML = isOn(it) && (x.sBuy || x.sRun) ? `${x.sBuy?eur(x.sBuy):""}${x.sBuy&&x.sRun?"<br>":""}${x.sRun?eur(x.sRun)+"/yr":""}` : "";
+  const T = updateMatrix();
+  updateObjects();
+  updateInvTable();
+  const N = S.inv.years, B = S.base;
+  const long = c => T[c].once + N*T[c].year;
+  const order = [...CS].sort((a,b) => long(a) - long(b));
+  document.getElementById("resHint").textContent = `Long-term total = everything you buy + ${N} years of yearly costs. Change the years under Investments.`;
+  document.getElementById("cards").innerHTML = CS.map(c => {
+    const d = long(c) - long(B), rank = order.indexOf(c)+1;
+    return `<div class="card${c===B?" base":""}">
+      <div class="cn">${CN[c]}<small>${CR[c]}</small></div>
+      ${rank===1?`<span class="pill ok">Cheapest</span>`:c===B?`<span class="pill base">You compare against this</span>`:`<span class="pill no">#${rank} of 4</span>`}
+      <span class="big">${kk(long(c))}</span><span class="hint">over ${N} years</span>
+      <div class="kv"><span>To buy</span><span>${eur(T[c].once)}</span></div>
+      <div class="kv"><span>Every year</span><span>${eur(T[c].year)}</span></div>
+      <div class="kv"><span>Per month</span><span>${eur(T[c].year/12)}</span></div>
+      ${c!==B?`<div class="kv"><span>vs ${CN[B]}</span><span class="${d>0?"d-up":"d-dn"}">${sgn(d)}</span></div>`:""}
+    </div>`;
+  }).join("");
+  const mx = Math.max(...CS.map(long));
+  document.getElementById("barTitle").textContent = `Total over ${N} years`;
+  document.getElementById("bars").innerHTML = order.map(c => `<div class="bar${c===B?" base":""}"><span>${CN[c]}</span><span class="t" title="${CN[c]}: ${eur(long(c))} over ${N} years"><i style="width:${long(c)/mx*100}%"></i></span><span class="n">${kk(long(c))}</span></div>`).join("");
+
+  // verdict: biggest line differences vs base
+  const lines = [];
+  CS.filter(c => c !== B).forEach(c => {
+    const diffs = ROWS.filter(r => r.kind==="once"||r.kind==="year").map(r => {
+      const d = (val(r.id,c) - val(r.id,B)) * (r.kind==="year" ? N : 1);
+      return [r.kind==="once" && r.obj ? "buying " + r.lab.toLowerCase() : r.lab, d, r.kind];
+    }).filter(x => Math.abs(x[1]) > 50).sort((a,b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0,4);
+    const tot = long(c) - long(B);
+    lines.push(`<li><b>${CN[c]}</b> is ${tot<0?`<span class="d-dn">${eur(-tot)} cheaper</span>`:`<span class="d-up">${eur(tot)} more expensive</span>`} than ${CN[B]} over ${N} years. Biggest reasons: ${diffs.map(([l,d,k]) => `${esc(l.toLowerCase())} ${sgn(d)}${k==="year"?` (${sgn(d/N)}/yr)`:""}`).join(", ")}.</li>`);
   });
-  CATS.forEach(cat => {
-    const ct = t.cats[cat.id];
-    document.getElementById("sum-"+cat.id).innerHTML = `${ct.buy?`<b>${eur(ct.buy - ct.sBuy)}</b> to buy<br>`:""}<b>${eur(ct.run - ct.sRun)}</b>/yr` + (ct.sBuy+ct.sRun ? `<br><span class="save">co. saves ${eur(ct.sBuy)}${ct.sRun?` + ${eur(ct.sRun)}/yr`:""}</span>` : "");
-  });
-
-  const netBuy = t.buy - t.sBuy, netRun = t.run - t.sRun;
-  const hb = t.cats.home.buy;
-  document.getElementById("tiles").innerHTML = `
-    <div class="tile"><span class="k">To buy everything</span><span class="v">${eur(t.buy)}</span><span class="s">${eur(t.buy - hb)} without the house, fees and renovation</span></div>
-    <div class="tile"><span class="k">To keep it all, per year</span><span class="v">${eur(t.run)}</span><span class="s">${eur(t.run/12)} a month, including food, travel and passes</span></div>
-    <div class="tile co"><span class="k">Company saves</span><span class="v">${eur(t.sBuy)}</span><span class="s">on buying, plus ${eur(t.sRun)} every year · ${esc(r.label.split(" (")[0])}</span></div>
-    <div class="tile"><span class="k">What you really pay</span><span class="v">${eur(netBuy)}</span><span class="s">then ${eur(netRun)}/yr (${eur(netRun/12)} a month)</span></div>`;
-
-  // bars
-  const vals = CATS.map(cat => { const ct = t.cats[cat.id]; return barMode==="buy" ? [cat.name, ct.buy - ct.sBuy, ct.sBuy] : [cat.name, ct.run - ct.sRun, ct.sRun]; });
-  const max = Math.max(1, ...vals.map(v => v[1]+v[2]));
-  document.getElementById("bars").innerHTML = vals.map(([n,p,s]) => `<div class="bar"><span>${esc(n)}</span><span class="t" title="${esc(n)}: you pay ${eur(p)}, company saves ${eur(s)}"><i style="width:${p/max*100}%;background:var(--accent)"></i><i style="width:${s/max*100}%;background:var(--co)"></i></span><span class="n">${kk(p+s)}</span></div>`).join("");
-
-  // country compare
-  const rows = C3.map(cc => { const rk = bestRegime(cc), x = totals(cc, rk); return {cc, rk, x}; });
-  const minOf = f => Math.min(...rows.map(f));
-  const fBuy = o => o.x.buy - o.x.sBuy, fRun = o => o.x.run - o.x.sRun;
-  document.getElementById("cmp").innerHTML = `<thead><tr><th>Country</th><th class="r">Buy</th><th class="r">Per year</th><th class="r">Co. saves</th><th class="r">You pay</th><th class="r">Then / yr</th></tr></thead><tbody>${
-    rows.map(o => `<tr><td>${esc(COUNTRY[o.cc].name)}${o.cc===c?" ●":""}<span class="dt" style="display:block;font-size:.78rem;color:var(--muted)">${esc(COUNTRY[o.cc].regimes[o.rk].label.split(" (")[0])}</span></td>
-      <td class="r">${kk(o.x.buy)}</td><td class="r">${kk(o.x.run)}</td><td class="r" style="color:var(--co)">${kk(o.x.sBuy)} + ${kk(o.x.sRun)}/yr</td>
-      <td class="r ${fBuy(o)===minOf(fBuy)?"best":""}">${kk(fBuy(o))}</td><td class="r ${fRun(o)===minOf(fRun)?"best":""}">${kk(fRun(o))}</td></tr>`).join("")
-  }</tbody>`;
-
-  drawChecks(t);
+  const yearOnly = [...CS].sort((a,b) => T[a].year - T[b].year);
+  lines.push(`<li>Yearly costs only (without the house purchase): cheapest ${CN[yearOnly[0]]} at ${eur(T[yearOnly[0]].year)}, most expensive ${CN[yearOnly[3]]} at ${eur(T[yearOnly[3]].year)}.</li>`);
+  document.getElementById("verdict").innerHTML = `<h3>What the numbers say</h3><ul>${lines.join("")}</ul><p class="hint">Money is only half of it: income, jobs you're allowed to do, language, light and mountains are not in this table.</p>`;
+  drawChecks(T);
 }
 
-function drawChecks(t){
-  const c = S.country, r = regimeOf(c);
+function drawChecks(T){
   const cards = [];
-  if (c==="fr" && S.regime.fr==="micro") cards.push(["no","Micro-entrepreneur: the company saves nothing",
-    `<p>In micro-entreprise, real costs are never deducted. A flat allowance (50% for services) replaces them, and below €37,500 of turnover you charge and recover no VAT. The Hilux under the company would save €0. Switch to <b>EI au réel</b> or an <b>EURL</b> to deduct costs and recover VAT.</p>
-     <p class="src"><a href="https://bpifrance-creation.fr/encyclopedie/micro-entreprise-regime-auto-entrepreneur/fiscal-social-comptable/micro-entrepreneur" target="_blank" rel="noopener">Bpifrance Création</a></p>`]);
-  cards.push(["co","Hilux Extra Cab under the company",
-    `<ul><li>In France a 4-seat Extra Cab is a utility vehicle (N1) if the registration card (field S.1) says 4 seats. No CO₂ malus, and full VAT recovery on the purchase, servicing and fuel.</li>
-     <li>Keep the camper cell <b>private and removable</b>. If it is fixed and the truck is re-registered as a camper (VASP), it stops being a utility vehicle.</li>
-     <li>Only the business share is deductible. Keep a logbook: 70% business means 70% of kilometres for clients, work sites or gear transport.</li>
-     <li>When the company sells the truck later, VAT and tax apply to the sale price.</li></ul>
-     <p class="src"><a href="https://www.legifiscal.fr/tva/tva-regles-declarations/camionnette-pick-up-strapontins-tva-recuperable.html" target="_blank" rel="noopener">LégiFiscal</a> · <a href="https://lignonautomobiles.com/fiscalite-pick-up-2026-tva-malus-et-taxes-sur-les-emissions-ce-que-vous-devez-vraiment-savoir-avant-dacheter/" target="_blank" rel="noopener">Lignon Automobiles</a></p>`]);
-  cards.push(["no","Paid guiding in France needs French diplomas",
-    `<p>In France, only holders of a recognised diploma can guide or teach a sport for money (Code du sport L212-1). Ski, canyoning, via ferrata and mountain terrain are "specific environments" with state diplomas (moniteur de ski, AMM, canyon DE). WFR, EPP2 and rope level 1 are not enough on their own.</p>
-     <p>This matters for the company: guiding gear is only deductible if the company really earns money with it. Until then the gear is private. Check whether your Finnish qualifications can be recognised.</p>
-     <p class="src"><a href="https://www.sportsdenature.gouv.fr/canyonisme/reglementation/encadrement" target="_blank" rel="noopener">sportsdenature.gouv.fr</a> · <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037388193" target="_blank" rel="noopener">Article L212-1</a></p>`]);
-  cards.push(["co","Your toiminimi and the move",
-    `<p>A Finnish toiminimi is for business taxed in Finland. Once you live in France, work done there is normally taxed in France, so you'd open a French business (EI or EURL) and close or pause the toiminimi. Anything bought through the toiminimi and moved abroad can count as taken out of the business. Plan the order of buying and moving with an accountant.</p>`]);
-  cards.push(["mid","Tools under the company",
-    `<p>Tools are deductible for the work the company does (construction, gardening, repairs for clients). Renovating your own house is private, so the default business share is 60%, not 100%. Tax offices look hard at big tool purchases made the same year as a private renovation.</p>`]);
-  cards.push(["mid","Horse: the real needs",
-    `<ul><li>A companion pony or donkey is included, because keeping one horse alone is a welfare problem.</li><li>Plan ~1 ha of good grazing per animal, plus winter hay.</li><li>Horses live 25–30 years.</li></ul>`]);
-  cards.push(["mid","Problems fixed in your lists",
-    `<ul><li>Tool prices were in Canadian dollars, buy-once prices in US dollars. All now in euros for Europe.</li>
-     <li>Hobart welder (115 V), Husky, Torin and Craftsman replaced with European options.</li>
-     <li>Added: Makita batteries and charger, chainsaw PPE, dust extractor.</li>
-     <li>Removed: second ferrule crimper, bed liner and roof rack (useless under a camper cell).</li>
-     <li>Gear: ordered by safety instead of "everything urgent". Added a ski touring setup (you own dual boots but no touring skis), a guide first-aid kit and rope renewal.</li></ul>`]);
-  if (c==="no") cards.push(["mid","Norway numbers are rough",
-    `<p>Norway was never analysed in detail. Most prices here are France × 1.2–1.35. Check the car prices on finn.no before trusting them.</p>`]);
+  cards.push(["no","Income isn't in here, and it decides",
+    `<p>This table compares costs only. Norway looks expensive but pays the highest wages; France looks mid-range but has high social charges on self-employed income (~40% of profit on the real regime). Put the result next to your income calculator: what counts is <b>income after tax − these costs</b> in each country.</p>`]);
+  cards.push(["no","Paid guiding: France needs French diplomas",
+    `<p>In France only state diplomas allow paid guiding (ski instructor, mountain leader AMM, canyon DE, via ferrata). Sweden, Finland and Norway have no general legal diploma requirement for guiding; industry certificates and insurance rules apply instead (Norway requires certified mountain guides on glaciers in practice). Your WFR, EPP2 and rope work are directly usable in the Nordics, and not enough on their own in France.</p>
+     <p class="src"><a href="https://www.sportsdenature.gouv.fr/canyonisme/reglementation/encadrement" target="_blank" rel="noopener">sportsdenature.gouv.fr</a></p>`]);
+  cards.push(["mid","Investment tax: what changes with the amount",
+    `<ul><li><b>Sweden:</b> first SEK 300,000 each (~€54,500 together) are tax-free every year. Above that, 1.065% of the value per year, even in bad years.</li>
+     <li><b>Norway:</b> wealth tax starts above NOK 1.9 million each (~€325k together). Mortgage debt is subtracted and the home counts at only 25%, so with a big mortgage you'll pay none for years.</li>
+     <li><b>Finland:</b> €100,000 each into an equity savings account; 34% instead of 30% on gains above €30,000 a year each, so sell in chunks.</li>
+     <li><b>France:</b> PEA takes €150,000 each; after 5 years only 18.6% social levies on gains. Open them now, the 5-year clock starts at opening.</li></ul>`]);
+  cards.push(["mid","Mortgage: interest relief changes the real rate",
+    `<p>Sweden gives back 30% of mortgage interest, Norway 22%. France and Finland give nothing. Norway's high rates (~5%) are partly softened by that, Sweden's become ~2.1% after relief.</p>`]);
+  cards.push(["mid","Hilux taxes",
+    `<ul><li><b>France:</b> Extra Cab is exempt from the CO₂ malus, no yearly road tax.</li>
+     <li><b>Sweden:</b> ~SEK 21,600/yr (~€1,950) for the first 3 years (malus), then ~SEK 1,800. Buying one that's 3+ years old skips the malus.</li>
+     <li><b>Finland:</b> car tax is inside the higher price, plus a yearly vehicle tax with a diesel part.</li>
+     <li><b>Norway:</b> a new pick-up pays a one-off registration tax, and the price here is a rough estimate. Check finn.no.</li></ul>
+     <p class="src"><a href="https://xn--frmnsvrde-02ah5r.se/fordonsskatt/toyota-hilux-extra-cab-viii-facelift-2020--2-8-d-4d-204-hk--4x4" target="_blank" rel="noopener">förmånsvärde.se</a></p>`]);
+  cards.push(["mid","Healthcare: cheap, but paid elsewhere",
+    `<p>Out-of-pocket costs are small everywhere. The Nordic yearly caps protect you in a bad year, but adult dentists are mostly paid by you there. In France the mutuelle is the main cost. Note Finland's cap is the highest (€815 care + €636 medicine each). With your sports, check that your insurance covers mountain rescue and helicopter evacuation: in France rescue is usually free, but ski-slope rescue is charged.</p>`]);
+  cards.push(["co","Company per country",
+    `<ul><li>France micro-entrepreneur: nothing deductible. Only EI au réel / EURL makes the company column count.</li>
+     <li>Sweden enskild firma: costs lower income tax <i>and</i> self-employed contributions, so the saving per € is the highest.</li>
+     <li>A Finnish toiminimi can't carry costs once you live and work in another country; you'd open a local business there.</li>
+     <li>The Hilux Extra Cab is a utility vehicle in all four, so VAT comes back on its business share.</li></ul>`]);
+  cards.push(["mid","Numbers to check yourself",
+    `<p>House prices vary a lot inside each region. The Norway truck price and Norwegian property tax (some municipalities have none) are the roughest numbers. Food uses the 2024 price level vs the EU; rural shops are often dearer.</p>`]);
   document.getElementById("checks").innerHTML = cards.map(([cl,h,b]) => `<div class="check ${cl}"><h3>${h}</h3>${b}</div>`).join("");
 }
 
-/* ---------- GLOBAL BUTTONS ---------- */
-document.getElementById("openAll").addEventListener("click", () => { CATS.forEach(c => { document.getElementById("cat-"+c.id).open = true; }); });
-document.getElementById("closeAll").addEventListener("click", () => { CATS.forEach(c => { document.getElementById("cat-"+c.id).open = false; }); });
-document.getElementById("coAll").addEventListener("click", () => { ALL.forEach(it => { if (it.co!=="no") st(it.id).co = true; }); save(); refreshInputs(); update(); });
-document.getElementById("coNone").addEventListener("click", () => { ALL.forEach(it => { if (it.co!=="no") st(it.id).co = false; }); save(); refreshInputs(); update(); });
-let resetArmed = false;
+/* ---------- GLOBAL ---------- */
+document.getElementById("coAll").addEventListener("click", () => { ALL.forEach(it => { if (it.co!=="no") (S.items[it.id]=S.items[it.id]||{}).co = true; }); save(); update(); });
+document.getElementById("coNone").addEventListener("click", () => { ALL.forEach(it => { if (it.co!=="no") (S.items[it.id]=S.items[it.id]||{}).co = false; }); save(); update(); });
+let armed = false;
 document.getElementById("reset").addEventListener("click", e => {
-  if (!resetArmed){ resetArmed = true; e.target.textContent = "Click again to reset everything"; setTimeout(()=>{ resetArmed=false; e.target.textContent="Reset all numbers"; }, 4000); return; }
-  resetArmed = false; e.target.textContent = "Reset all numbers";
-  S = freshState(); save(); buildSetup(); buildCats(); update();
+  if (!armed){ armed = true; e.target.textContent = "Click again to reset everything"; setTimeout(()=>{ armed=false; e.target.textContent="Reset all numbers"; }, 4000); return; }
+  armed = false; e.target.textContent = "Reset all numbers";
+  S = fresh(); save(); buildTop(); buildMatrix(); buildSetup(); buildObjects(); update();
 });
-
-buildSetup(); buildBarMode(); buildCats(); update();
+buildTop(); buildMatrix(); buildSetup(); buildObjects(); update();
 </script>
