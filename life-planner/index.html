@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ridgeline Life Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Lexend:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#EDE6D6; --surface:#F7F2E7; --surface-2:#E4DAC3; --ink:#23302B; --muted:#4A554F; --slate:#35505C;
+  --line:#C7BA9C; --moss:#4F6F52; --moss-soft:#AFC4AB; --rust:#9C4A2E;
+  --good:#2F6B3A; --bad:#A3402A; --good-soft:#DCE8D5; --bad-soft:#F1DBD2;
+  --s1:#2268A0; --s2:#B8661A; --flag:#9C4A2E; --focus:#B8862E;
+  --font-body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --font-display:"Spectral",Georgia,serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#141917; --surface:#1C2320; --surface-2:#242D29; --ink:#E9E4D8; --muted:#AEB6AE; --slate:#A9C3CC;
+    --line:#3A4540; --moss:#7FA57F; --moss-soft:#3F5A43; --rust:#E08A6D;
+    --good:#8BCB91; --bad:#EE8F76; --good-soft:#1F3524; --bad-soft:#3D221B;
+    --s1:#4A93D6; --s2:#C47624; --flag:#E6A07F; --focus:#D9A94E;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#141917; --surface:#1C2320; --surface-2:#242D29; --ink:#E9E4D8; --muted:#AEB6AE; --slate:#A9C3CC;
+  --line:#3A4540; --moss:#7FA57F; --moss-soft:#3F5A43; --rust:#E08A6D;
+  --good:#8BCB91; --bad:#EE8F76; --good-soft:#1F3524; --bad-soft:#3D221B;
+  --s1:#4A93D6; --s2:#C47624; --flag:#E6A07F; --focus:#D9A94E;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:84px}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0;line-height:1.2;color:var(--ink)}
+p{margin:0}
+a{color:var(--slate)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.wrap{max-width:820px;margin:0 auto;padding:24px 16px 40px;display:flex;flex-direction:column;gap:22px}
+
+/* header */
+header{border-bottom:1px solid var(--line);padding-bottom:18px;display:flex;flex-direction:column;gap:10px}
+.top-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.eyebrow{font-size:.85rem;color:var(--slate);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+header h1{font-size:clamp(2rem,6vw,2.6rem);font-weight:700}
+.lead{color:var(--muted);max-width:62ch}
+.theme-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:.9rem;white-space:nowrap}
+.names{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.names .field{flex:1 1 200px}
+
+/* sections */
+details.sec{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.sec>summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary h2{font-size:1.35rem}
+details.sec>summary .chev{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .2s;font-size:.8rem;color:var(--muted)}
+details.sec[open]>summary .chev{transform:rotate(180deg)}
+.sec-body{padding:0 18px 18px;display:flex;flex-direction:column;gap:14px}
+.hint{font-size:.95rem;color:var(--muted);max-width:65ch}
+.sub-title{font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-top:6px}
+
+.person-block{border:1px solid var(--line);border-radius:6px;padding:14px;background:var(--surface-2)}
+.person-block .who{font-family:var(--font-display);font-size:1.15rem;font-weight:600;margin-bottom:4px}
+.axis{padding:14px 0;border-bottom:1px solid var(--line)}
+.axis:last-child{border-bottom:none;padding-bottom:0}
+.axis-label{font-size:.95rem;color:var(--slate);font-weight:600;margin-bottom:8px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{flex:1 1 auto;min-width:fit-content;padding:10px 14px;border:1px solid var(--line);background:var(--surface);border-radius:5px;font-size:.95rem;text-align:left;line-height:1.3;transition:background .15s,border-color .15s}
+.seg button:hover{border-color:var(--slate)}
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:500}
+.note{font-size:.92rem;color:var(--muted);margin-top:8px;line-height:1.55;max-width:70ch}
+.flag{color:var(--flag);font-weight:600}
+.warn{font-size:.95rem;color:var(--bad);background:var(--bad-soft);border-radius:5px;padding:8px 12px;margin-top:10px;font-weight:500}
+.warn::before{content:"⚠ ";}
+.inputs-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.field{flex:1 1 120px;display:flex;flex-direction:column;gap:4px;font-size:.88rem;color:var(--slate);font-weight:500}
+.field input,.field select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:5px;background:var(--surface);font-size:16px;color:var(--ink);font-weight:400}
+.person-block .field input,.person-block .field select{background:var(--bg)}
+.link-btn{font-size:.9rem;color:var(--slate);text-decoration:underline;background:none;border:none;padding:0;margin-top:8px;text-align:left}
+.check{display:flex;align-items:center;gap:8px;font-size:.95rem;margin-top:4px}
+.check input{width:20px;height:20px}
+.money-block{border-top:1px solid var(--line);padding-top:12px}
+.money-block:first-child{border-top:none;padding-top:0}
+
+/* results */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.card h2{font-size:1.35rem}
+.group-title{font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:600;margin-top:4px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.stat{background:var(--surface-2);border-radius:6px;padding:12px 14px}
+.stat .num{font-family:var(--font-display);font-size:1.45rem;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.stat.pos .num{color:var(--good)}
+.stat.neg .num{color:var(--bad)}
+.stat .lbl{font-size:.9rem;color:var(--ink);margin-top:4px;line-height:1.35}
+.stat .sub{font-size:.82rem;color:var(--muted);margin-top:3px;line-height:1.4}
+.callout{font-size:1rem;background:var(--surface-2);border-left:4px solid var(--slate);border-radius:4px;padding:10px 14px}
+
+/* calendar */
+.cal-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface-2)}
+table.cal{border-collapse:separate;border-spacing:2px;min-width:620px;width:100%;font-size:.82rem}
+table.cal th{font-weight:600;color:var(--slate);padding:6px 4px;text-align:center}
+table.cal th[scope="row"]{text-align:left;white-space:nowrap;padding-right:10px;font-size:.88rem;color:var(--ink)}
+table.cal td{white-space:nowrap;text-align:center;padding:8px 4px;border-radius:4px;background:var(--surface);font-variant-numeric:tabular-nums;min-width:44px}
+table.cal td.pos{background:var(--good-soft);color:var(--good);font-weight:600}
+table.cal td.neg{background:var(--bad-soft);color:var(--bad);font-weight:600}
+table.cal td.empty{color:var(--muted)}
+
+/* trainings */
+.formations{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface-2)}
+.formation-row{padding:12px 14px;border-bottom:1px solid var(--line)}
+.formation-row:last-child{border-bottom:none}
+.formation-row .fname{font-weight:600}
+.formation-row .fwho{font-size:.85rem;color:var(--slate);font-weight:500}
+.formation-row .fmeta{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:.92rem;color:var(--muted);margin-top:4px}
+.formation-row .fmeta b{color:var(--ink);font-weight:600}
+.empty{font-size:.95rem;color:var(--muted);font-style:italic;padding:12px 14px}
+
+/* chart */
+.chart-host{position:relative;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);padding:10px 6px 4px}
+.chart-host svg{display:block;touch-action:pan-y}
+.chart-host svg:focus-visible{outline:3px solid var(--focus)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.15);border-radius:6px;padding:8px 11px;font-size:.85rem;line-height:1.45;min-width:180px;z-index:3}
+.tip b{font-weight:600}
+.tip .row{display:flex;justify-content:space-between;gap:14px;font-variant-numeric:tabular-nums}
+.tip .sw{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.88rem;color:var(--muted);padding:6px 4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend svg{flex:none}
+.data-table{width:100%;border-collapse:collapse;font-size:.9rem;font-variant-numeric:tabular-nums}
+.data-table th,.data-table td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
+.data-table th:first-child,.data-table td:first-child{text-align:left}
+.data-table th{color:var(--slate);font-weight:600}
+.table-scroll{overflow-x:auto}
+details.inner>summary{cursor:pointer;color:var(--slate);font-size:.95rem;font-weight:500;padding:4px 0}
+
+/* scenarios */
+.save-row{display:flex;gap:8px;flex-wrap:wrap}
+.save-row input{flex:1 1 220px;padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);font-size:16px}
+.btn{padding:10px 16px;border:1px solid var(--moss);background:var(--moss);color:var(--bg);border-radius:5px;font-size:.95rem;font-weight:500;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--slate)}
+.tool-row{display:flex;gap:8px;flex-wrap:wrap}
+.scenario-item{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.scenario-item.is-compared{border-color:var(--slate);box-shadow:inset 3px 0 0 var(--slate)}
+.scenario-item .name{font-weight:600;word-break:break-word}
+.scenario-item .meta{font-size:.85rem;color:var(--muted);margin-top:2px}
+.scenario-item .actions{display:flex;gap:4px;flex-wrap:wrap}
+.scenario-item .actions button{border:1px solid transparent;background:none;color:var(--slate);font-size:.9rem;padding:6px 8px;border-radius:4px;text-decoration:underline}
+.scenario-item .actions button[aria-pressed="true"]{background:var(--slate);color:var(--bg);text-decoration:none}
+.scenario-item .actions button.del{color:var(--bad)}
+.compare-box{border:1px dashed var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:12px}
+
+/* sources */
+.src-group{display:flex;flex-direction:column;gap:8px}
+.src-item{border-bottom:1px solid var(--line);padding:8px 0;font-size:.93rem}
+.src-item:last-child{border-bottom:none}
+.src-item .src-head{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.src-item .src-head b{font-weight:600}
+.badge{font-size:.75rem;font-weight:600;border-radius:999px;padding:1px 9px;white-space:nowrap}
+.badge.sourced{background:var(--good-soft);color:var(--good)}
+.badge.estimate{background:var(--bad-soft);color:var(--bad)}
+.src-item p{color:var(--muted);margin-top:2px}
+
+/* notice + sticky bar */
+.notice{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:6px;font-size:.95rem;z-index:10;max-width:calc(100% - 32px);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.sticky-bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--bg);z-index:5}
+.sticky-bar .inner{max-width:820px;margin:0 auto;padding:10px 16px;display:flex;gap:6px 22px;flex-wrap:wrap;font-size:.9rem;line-height:1.35}
+.sticky-bar b{font-family:var(--font-display);font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums}
+.sticky-bar .k{opacity:.8;display:block;font-size:.78rem}
+
+footer{font-size:.9rem;color:var(--muted);text-align:center;margin-top:8px}
+
+@media (max-width:520px){
+  body{font-size:16px}
+  details.sec>summary,.card{padding-left:14px;padding-right:14px}
+  .sec-body{padding:0 14px 14px}
+  .stat .num{font-size:1.25rem}
+  .sticky-bar .inner{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:.8rem;padding:8px 12px}
+  .sticky-bar .k{font-size:.72rem}
+  .sticky-bar b{font-size:.95rem}
+  body{padding-bottom:76px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="top-row">
+      <div class="eyebrow">Life planner</div>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Change colour theme">Theme: auto</button>
+    </div>
+    <h1>Ridgeline</h1>
+    <p class="lead">Pick a job for each season, choose where and how you live, and see what it means for money over the next 15 years. Pay, hours and months can be edited for every job. <span class="flag">[estimate]</span> means the number still needs checking.</p>
+    <div class="names">
+      <label class="field">Person 1 name<input type="text" id="name-p1" maxlength="30" autocomplete="off"></label>
+      <label class="field">Person 2 name<input type="text" id="name-p2" maxlength="30" autocomplete="off"></label>
+    </div>
+  </header>
+
+  <details class="sec" open id="sec-jobs">
+    <summary><h2>1. Jobs by season</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body">
+      <p class="hint">Choose one job per season for each person. Under each job you can change the pay, hours, number of months and the start month.</p>
+      <div class="person-block">
+        <div class="who" data-name="p1"></div>
+        <div id="slot-p1Winter"></div>
+        <div id="slot-p1Summer"></div>
+        <div id="warn-p1"></div>
+      </div>
+      <div class="person-block">
+        <div class="who" data-name="p2"></div>
+        <div id="slot-p2Winter"></div>
+        <div id="slot-p2Summer"></div>
+        <div id="warn-p2"></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec" open id="sec-choices">
+    <summary><h2>2. Life choices</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body"><div id="axes"></div></div>
+  </details>
+
+  <details class="sec" id="sec-money">
+    <summary><h2>3. Money settings</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body" id="money"></div>
+  </details>
+
+  <section class="card" aria-labelledby="res-title">
+    <h2 id="res-title">4. What this combination gives</h2>
+    <div id="results"></div>
+    <div class="callout" id="breakevenNote"></div>
+  </section>
+
+  <section class="card" aria-labelledby="inc-title">
+    <h2 id="inc-title">5. Income per year</h2>
+    <p class="hint">Once all training is finished. Take-home pay after social charges and income tax, before paying back the training loan.</p>
+    <div class="stat-grid" id="incomeGrid"></div>
+  </section>
+
+  <details class="sec" open id="sec-cal">
+    <summary><h2>6. The year, month by month</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body">
+      <p class="hint">Who earns what in each month (before deductions), and whether the household is in plus or minus that month. Shown for a normal year after training.</p>
+      <div id="calendar"></div>
+    </div>
+  </details>
+
+  <details class="sec" open id="sec-train">
+    <summary><h2>7. Training needed</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body">
+      <p class="hint">Cost, length, and how long each training takes to pay for itself once you work in that job (living costs not included).</p>
+      <div id="formations"></div>
+    </div>
+  </details>
+
+  <details class="sec" open id="sec-chart">
+    <summary><h2>8. Savings over 15 years</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body">
+      <p class="hint">Top: the household's total savings at the end of each year. Below, on the same years: training → working for each job, and the training loan. Hover, tap, or use the arrow keys on the chart to see each year.</p>
+      <div class="chart-host" id="mainChart"></div>
+      <div class="legend" id="mainLegend"></div>
+      <details class="inner"><summary>Show the numbers as a table</summary><div class="table-scroll" id="mainTable"></div></details>
+    </div>
+  </details>
+
+  <details class="sec" open id="sec-scen">
+    <summary><h2>9. Saved scenarios</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body">
+      <p class="hint">Save the current setup under a name, then pick two to compare. Saved in this browser only — use export or a share link to move them to another device.</p>
+      <div class="save-row">
+        <label class="sr-only" for="scenarioName">Scenario name</label>
+        <input type="text" id="scenarioName" placeholder="e.g. Lapland + husky + guide" maxlength="80">
+        <button class="btn" id="saveBtn" type="button">Save</button>
+      </div>
+      <div class="tool-row">
+        <button class="btn ghost" id="shareBtn" type="button">Copy share link</button>
+        <button class="btn ghost" id="exportBtn" type="button">Export all (.json)</button>
+        <label class="btn ghost">Import (.json)<input type="file" id="importInput" accept=".json,application/json" hidden></label>
+      </div>
+      <div id="scenarioList" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="compareArea"></div>
+    </div>
+  </details>
+
+  <details class="sec" id="sec-src">
+    <summary><h2>10. Sources &amp; estimates</h2><span class="chev" aria-hidden="true">▼</span></summary>
+    <div class="sec-body">
+      <p class="hint">Every number the planner uses, and whether it comes from a source or is a guess to check. Links go to the official websites to start checking from.</p>
+      <div id="sources"></div>
+    </div>
+  </details>
+
+  <footer>Personal tool — rough numbers, to adjust together as you research.</footer>
+</div>
+
+<div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+<div class="sticky-bar" aria-label="Quick summary"><div class="inner" id="stickyBar"></div></div>
+
+<script>
+// ================= Data =================
+const HORIZON = 15;              // years shown
+const WEEKS_PER_MONTH = 4.33;    // 52 / 12
+const VAN_MONTHLY = 300;
+const COMPANY_DEDUCTION = 0.25;  // share of training cost saved through the company
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const SEASON_LABEL = { winter:'Winter season', summer:'Summer season' };
+const SLOTS = [
+  { key:'p1Winter', person:'p1', season:'winter' },
+  { key:'p1Summer', person:'p1', season:'summer' },
+  { key:'p2Winter', person:'p2', season:'winter' },
+  { key:'p2Summer', person:'p2', season:'summer' }
+];
+const LINKS = {
+  ffme:{ label:'FFME', url:'https://www.ffme.fr' },
+  ensa:{ label:'ENSA', url:'https://www.ensa.sports.gouv.fr' },
+  nols:{ label:'NOLS', url:'https://www.nols.edu' },
+  vero:{ label:'Vero (Finnish Tax Administration)', url:'https://www.vero.fi/en/' },
+  impots:{ label:'impots.gouv.fr', url:'https://www.impots.gouv.fr' },
+  urssaf:{ label:'URSSAF', url:'https://www.urssaf.fr' }
+};
+
+// Pay level: 1 = France. A job's pay is scaled by (country pay level ÷ pay level of the job's home market).
+const COUNTRIES = {
+  france:  { label:'France (Grenoble / Vercors)', wage:1.0, housePrice:260000, rent:950, col:2300, tax:8,
+             charges:{ employee:22, independent:38, mix:30 }, links:['impots','urssaf'],
+             note:'Busy, competitive guiding market with work all year round.' },
+  lapland: { label:'Lapland (Finland)', wage:0.9, housePrice:130000, rent:700, col:1900, tax:20,
+             charges:{ employee:10, independent:25, mix:18 }, links:['vero'],
+             note:'Very seasonal market (winter), less competition. [estimate] Pay level ~10% below France; lower social charges but higher income tax than France.' },
+  other:   { label:'Other (Pyrenees / Slovenia)', wage:0.85, housePrice:160000, rent:750, col:1800, tax:10,
+             charges:{ employee:22, independent:33, mix:27 }, links:[],
+             note:'[estimate] Growing market, less public data. Pay level ~15% below France.' }
+};
+
+const ACTS = {
+  p1: {
+    mountain_guide: { label:'Mountain guide', home:'france', seasons:['winter','summer'], trainingCost:12500, trainingYears:3,
+      defaults:{ winter:{rate:18,hours:45,months:5,start:12}, summer:{rate:18,hours:40,months:4,start:6} }, links:['ffme'],
+      note:'[estimate] Based on FFME DEJEPS reference prices (€9,285–14,500). One diploma covers summer and winter, so it is counted once.' },
+    canyoning: { label:'Canyoning guide (DEJEPS)', home:'france', seasons:['summer'], trainingCost:9800, trainingYears:1.3,
+      defaults:{ summer:{rate:20,hours:38,months:4,start:6} }, links:['ffme'],
+      note:'Cost from FFME DEJEPS Canyoning: €8,500–11,200. Summer job.' },
+    via_ferrata: { label:'Via ferrata guide', home:'france', seasons:['summer'], trainingCost:5000, trainingYears:1,
+      defaults:{ summer:{rate:17,hours:35,months:4,start:6} },
+      note:'[estimate] Little public data; a lighter certificate.' },
+    lapland_guide: { label:'Lapland guide (snowmobile / snowshoe)', home:'lapland', seasons:['winter'], trainingCost:0, trainingYears:0,
+      defaults:{ winter:{rate:16,hours:50,months:5,start:12} },
+      note:'Qualifications already done — only the WFR renewal counts (listed separately as "Prerequisite").' },
+    rest: { label:'No paid work', seasons:['winter','summer'], trainingCost:0, trainingYears:0, defaults:{},
+      note:'Off-season, training, or looking for work.' }
+  },
+  p2: {
+    ski_instructor: { label:'Ski instructor', home:'france', seasons:['winter'], trainingCost:8500, trainingYears:3,
+      defaults:{ winter:{rate:20,hours:30,months:4,start:12} }, links:['ensa'],
+      note:'Cost from ENSA, DE Ski: €8,482. Season of 3–5 months.' },
+    husky_guide: { label:'Husky guide', home:'lapland', seasons:['winter'], trainingCost:0, trainingYears:0,
+      defaults:{ winter:{rate:16,hours:50,months:5,start:12} },
+      note:'[estimate] Same pay and hours as the Lapland guide — change them if the qualifications are different.' },
+    kindergarten: { label:'Kindergarten teacher', home:'france', seasons:['winter','summer'], trainingCost:3500, trainingYears:1.5,
+      defaults:{ winter:{rate:14,hours:35,months:6,start:9}, summer:{rate:14,hours:35,months:2,start:3} },
+      note:'[estimate] Getting a foreign diploma recognised; cost varies. School-year job (summer is mostly holidays).' },
+    climbing_seasonal: { label:'Indoor climbing instructor (seasonal)', home:'france', seasons:['summer'], trainingCost:1500, trainingYears:0.5,
+      defaults:{ summer:{rate:15,hours:25,months:4,start:6} },
+      note:'[estimate] Summer contract at a climbing gym, short federation certificate.' },
+    climbing_fulltime: { label:'Indoor climbing instructor (full-time)', home:'france', seasons:['winter','summer'], yearRound:true, trainingCost:2500, trainingYears:0.5,
+      defaults:{ winter:{rate:15,hours:35,months:6,start:10}, summer:{rate:15,hours:35,months:6,start:4} },
+      note:'[estimate] Year-round job at a gym — choose it for both seasons to show a continuous job.' },
+    rest: { label:'No paid work', seasons:['winter','summer'], trainingCost:0, trainingYears:0, defaults:{},
+      note:'Off-season, training, or looking for work.' }
+  }
+};
+const WFR = { label:'Prerequisite — WFR renewal (NOLS)', person:'p1', cost:400, years:0.05, links:['nols'],
+  note:'3-day course (24 h), $320–470 depending on the place. Needed as soon as Person 1 has any paid job.' };
+
+const AXES = {
+  country: { label:'Country' },  // options come from COUNTRIES
+  company: { label:'Own company (multi-activity)', options:{
+    yes:{ label:'Yes', setupCost:3000, income:12000, note:'[estimate] Training costs are tax-deductible (~25% corporate tax), which lowers the cost to finance. Extra income of €12,000/yr from year 2 — it depends a lot on how the business is run.' },
+    no: { label:'No', setupCost:0, income:0, note:'Simpler taxes, no deduction, income only from employment / guiding.' }
+  }},
+  workZone: { label:'Where you work', options:{
+    same:{ label:'Same country', income:0, cost:0, note:'Stable, no regular travel costs.' },
+    intl:{ label:'International', income:3500, cost:4000, note:'[estimate] Seasonal jobs abroad: +€3,500 income and +€4,000 costs per year.' }
+  }},
+  status: { label:'Work status', options:{
+    employee:{ label:'Employee', note:'Stable income, predictable social charges.' },
+    independent:{ label:'Self-employed', note:'[estimate] Higher social charges, more freedom and more risk.' },
+    mix:{ label:'Mix', note:'Combines both statuses depending on the job.' }
+  }},
+  housing: { label:'Home base', options:{
+    buy: { label:'Buy', mode:'buy', note:'Price, down payment and mortgage are editable in Money settings. Builds up home value (shown as "wealth" in the chart).' },
+    rent:{ label:'Long-term rent', mode:'rent', note:'Flexible, no money tied up.' },
+    van: { label:'Live in a van', mode:'van', note:'Most freedom to move, ~€300/month upkeep, limited comfort.' }
+  }},
+  rhythm: { label:'Work rhythm', options:{
+    seasonal:{ label:'Seasonal, several countries', income:4000, cost:3000, note:'[estimate] Summer + winter work combined: +€4,000 income and +€3,000 travel/logistics per year.' },
+    fixed:   { label:'Year-round, one base', income:0, cost:0, note:'Stable, but income can drop off-season unless the work is varied.' }
+  }}
+};
+AXES.country.options = COUNTRIES;
+
+// ================= Helpers =================
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v,a,b) => Math.min(Math.max(v,a),b);
+const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : 0; };
+const eur0 = new Intl.NumberFormat('en-IE',{ style:'currency', currency:'EUR', maximumFractionDigits:0 });
+const eur2 = new Intl.NumberFormat('en-IE',{ style:'currency', currency:'EUR', minimumFractionDigits:2, maximumFractionDigits:2 });
+const eurC = new Intl.NumberFormat('en-IE',{ style:'currency', currency:'EUR', notation:'compact', maximumFractionDigits:1 });
+const fmt = n => eur0.format(Math.round(n)).replace('-','−');
+const fmtC = n => eurC.format(n).replace('-','−');
+const fmtSigned = n => (n>0.5?'+':'') + fmt(n);
+const yrs = n => { const v = Math.round(n*10)/10; return `${v} year${v===1?'':'s'}`; };
+const noteHtml = t => esc(t||'').replace('[estimate]','<span class="flag">[estimate]</span>');
+const name = (sel, p) => (sel.names && sel.names[p] && sel.names[p].trim()) || (p==='p1'?'Person 1':'Person 2');
+
+const store = (() => {
+  const mem = {};
+  return {
+    get(k){ try { const v = localStorage.getItem(k); return v===null ? (mem[k] ?? null) : v; } catch(e){ return mem[k] ?? null; } },
+    set(k,v){ mem[k]=v; try { localStorage.setItem(k,v); } catch(e){} }
+  };
+})();
+const KEY_CURRENT='ridgeline.current.v1', KEY_SCEN='ridgeline.scenarios.v1', KEY_THEME='ridgeline.theme', KEY_MIGRATED='ridgeline.migrated.v1';
+
+let noticeTimer;
+function notify(msg){
+  const n = $('notice'); n.textContent = msg; n.hidden = false;
+  clearTimeout(noticeTimer); noticeTimer = setTimeout(()=>{ n.hidden = true; }, 3500);
+}
+
+// ================= Selection (state) =================
+function defaultCfg(slot, id){
+  const d = ACTS[slot.person][id] && ACTS[slot.person][id].defaults[slot.season];
+  return d ? {...d} : null;
+}
+function applyAutoDefaults(sel){
+  const c = COUNTRIES[sel.country];
+  if(!sel.deductCustom){ sel.charges = c.charges[sel.status]; sel.tax = c.tax; }
+  if(!sel.houseCustom){ sel.housePrice = c.housePrice; sel.downPayment = Math.round(c.housePrice*0.2); }
+}
+function defaultSelection(){
+  const sel = {
+    version:2, names:{ p1:'Max', p2:'Aya' },
+    country:'france', company:'no', workZone:'same', status:'employee', housing:'rent', rhythm:'fixed',
+    slots:{ p1Winter:{id:'lapland_guide'}, p1Summer:{id:'canyoning'}, p2Winter:{id:'husky_guide'}, p2Summer:{id:'climbing_seasonal'} },
+    colMonthly:1667,
+    charges:22, tax:8, deductCustom:false,
+    housePrice:260000, downPayment:52000, houseCustom:false,
+    mortgageRate:3.5, mortgageYears:20, ownerCosts:1, appreciation:1.5,
+    loanRate:5, trainingIncome:30,
+    startSavings:0, badEvery:0, badHit:30, efMonths:3, calIncludeLoan:true
+  };
+  SLOTS.forEach(s => sel.slots[s.key].cfg = defaultCfg(s, sel.slots[s.key].id));
+  applyAutoDefaults(sel);
+  return sel;
+}
+// Accepts anything (old French version, older saves, shared links) and returns a complete, valid selection.
+const LEGACY_IDS = { guide_montagne:'mountain_guide', viaferrata:'via_ferrata', guide_laponie:'lapland_guide', repos:'rest' };
+function normalize(raw){
+  const out = defaultSelection();
+  if(!raw || typeof raw!=='object') return out;
+  const s = {...raw};
+  if(s.maxHiver){ // first (French) version of this planner
+    const map = { p1Winter:'maxHiver', p1Summer:'maxEte', p2Winter:'wifeHiver', p2Summer:'wifeEte' };
+    s.slots = {};
+    Object.entries(map).forEach(([k,old]) => { s.slots[k] = { id: LEGACY_IDS[s[old]] || s[old], cfg: s[old+'_cfg'] || null }; });
+    if(s.status==='mixStatus') s.status='mix';
+    if(s.apport!=null){ s.downPayment = s.apport; s.houseCustom = true; }
+  }
+  Object.keys(out).forEach(k => {
+    if(k==='slots' || k==='names') return;
+    if(s[k]!==undefined && typeof s[k]===typeof out[k] && (typeof s[k]!=='number' || Number.isFinite(s[k]))) out[k] = s[k];
+  });
+  Object.keys(AXES).forEach(a => { if(!AXES[a].options[out[a]]) out[a] = defaultSelection()[a]; });
+  if(s.names && typeof s.names==='object') ['p1','p2'].forEach(p => { if(typeof s.names[p]==='string') out.names[p] = s.names[p].slice(0,30); });
+  SLOTS.forEach(slot => {
+    const src = (s.slots && s.slots[slot.key]) || {};
+    const acts = ACTS[slot.person];
+    let id = src.id;
+    if(!acts[id] || !acts[id].seasons.includes(slot.season)) id = out.slots[slot.key].id;
+    const def = defaultCfg(slot, id);
+    let cfg = null;
+    if(def){
+      cfg = {...def};
+      if(src.cfg && typeof src.cfg==='object') Object.keys(def).forEach(f => { const v = src.cfg[f]; if(typeof v==='number' && Number.isFinite(v)) cfg[f] = v; });
+      cfg.start = clamp(Math.round(cfg.start)||1, 1, 12);
+    }
+    out.slots[slot.key] = { id, cfg };
+  });
+  applyAutoDefaults(out);
+  return out;
+}
+
+// ================= Model =================
+function pmt(P, annualPct, years){
+  if(P<=0 || years<=0) return 0;
+  const r = annualPct/100/12, n = years*12;
+  return r===0 ? P/n : P*r/(1-Math.pow(1+r,-n));
+}
+function balanceAfter(P, annualPct, years, monthsPaid){
+  if(P<=0 || years<=0) return 0;
+  const n = years*12, k = Math.min(monthsPaid, n);
+  if(k>=n) return 0;
+  const r = annualPct/100/12;
+  if(r===0) return P*(1-k/n);
+  const p = pmt(P, annualPct, years);
+  return P*Math.pow(1+r,k) - p*(Math.pow(1+r,k)-1)/r;
+}
+function monthFills(cfg){
+  const f = new Array(12).fill(0);
+  if(!cfg) return f;
+  let left = clamp(cfg.months, 0, 24), m = ((Math.round(cfg.start)||1)-1+12)%12;
+  while(left>0){ const part = Math.min(1,left); f[m] += part; left -= part; m = (m+1)%12; }
+  return f;
+}
+// Share of a job's full pay earned in year index i (0 = first year) while its training lasts `trainingYears`.
+function incomeFactor(trainingYears, i, trainShare){
+  if(!(trainingYears>0)) return 1;
+  const inTraining = clamp(trainingYears - i, 0, 1);
+  return inTraining*trainShare + (1-inTraining);
+}
+
+function computeScenario(sel){
+  const country = COUNTRIES[sel.country];
+  const comp = AXES.company.options[sel.company], zone = AXES.workZone.options[sel.workZone];
+  const rhy = AXES.rhythm.options[sel.rhythm], house = AXES.housing.options[sel.housing];
+  const deductPct = Math.max(0, sel.charges) + Math.max(0, sel.tax);
+  const keep = Math.max(0, 1 - deductPct/100);
+  const trainShare = clamp(sel.trainingIncome, 0, 100)/100;
+
+  const slots = SLOTS.map(slot => {
+    const { id, cfg } = sel.slots[slot.key];
+    const act = ACTS[slot.person][id];
+    const factor = act.home ? country.wage / COUNTRIES[act.home].wage : 1;
+    const rate = cfg ? cfg.rate*factor : 0;
+    const monthly = cfg ? rate*cfg.hours*WEEKS_PER_MONTH : 0;
+    return { ...slot, id, act, cfg, factor, rate, monthly, annual: cfg ? monthly*cfg.months : 0, fills: monthFills(cfg) };
+  });
+
+  // Training (one entry per person + job, even when a job covers both seasons)
+  const deduction = sel.company==='yes' ? COMPANY_DEDUCTION : 0;
+  const byKey = {};
+  slots.forEach(s => {
+    if(s.id==='rest') return;
+    const k = s.person+':'+s.id;
+    if(!byKey[k]) byKey[k] = { key:k, id:s.id, label:s.act.label, person:s.person, trainingCost:s.act.trainingCost, trainingYears:s.act.trainingYears, income:0 };
+    byKey[k].income += s.annual;
+  });
+  const formations = Object.values(byKey);
+  if(slots.some(s => s.person===WFR.person && s.id!=='rest'))
+    formations.push({ key:'wfr', label:WFR.label, person:WFR.person, trainingCost:WFR.cost, trainingYears:WFR.years, income:0, isPrereq:true });
+  const grossTraining = formations.reduce((a,f)=>a+f.trainingCost, 0);
+  const netTraining = grossTraining*(1-deduction);
+  const totalDebt = netTraining + comp.setupCost;
+  const yearsToFull = Math.max(0, ...formations.filter(f=>!f.isPrereq).map(f=>f.trainingYears));
+  const repaymentYears = totalDebt>0 ? Math.max(5, Math.ceil(yearsToFull)) : 0;
+  const loanMonthly = pmt(totalDebt, sel.loanRate, repaymentYears);
+  const loanAnnual = loanMonthly*12;
+
+  // Housing
+  let downPayment = 0, principal = 0, housingMonthly = 0, ownerCost = 0, housingLabel;
+  if(house.mode==='buy'){
+    downPayment = clamp(sel.downPayment, 0, Math.max(0, sel.housePrice));
+    principal = Math.max(sel.housePrice - downPayment, 0);
+    housingMonthly = pmt(principal, sel.mortgageRate, sel.mortgageYears);
+    ownerCost = Math.max(0, sel.housePrice)*Math.max(0, sel.ownerCosts)/100;
+    housingLabel = 'Mortgage payment';
+  } else if(house.mode==='rent'){
+    housingMonthly = country.rent; housingLabel = 'Rent';
+  } else {
+    housingMonthly = VAN_MONTHLY; housingLabel = 'Van upkeep';
+  }
+  const equityAt = t => house.mode!=='buy' ? 0 :
+    sel.housePrice*Math.pow(1+sel.appreciation/100, t) - balanceAfter(principal, sel.mortgageRate, sel.mortgageYears, t*12);
+
+  const livingAnnual = Math.max(0, sel.colMonthly)*12;
+  const extraCosts = zone.cost + rhy.cost;
+  const sharedFull = comp.income + zone.income + rhy.income;
+  const costsAnnual = livingAnnual + housingMonthly*12 + ownerCost + extraCosts; // a normal year (mortgage still running)
+
+  // Year-by-year
+  const points = [];
+  let cash = sel.startSavings - downPayment;
+  points.push({ t:0, cash, wealth: cash + equityAt(0), income:0, costs:0, bad:false });
+  for(let t=1; t<=HORIZON; t++){
+    const i = t-1;
+    const jobs = slots.reduce((a,s) => a + s.annual*incomeFactor(s.act.trainingYears, i, trainShare), 0);
+    const shared = zone.income + rhy.income + (t>=2 ? comp.income : 0);
+    const bad = sel.badEvery>0 && t % sel.badEvery===0;
+    const gross = (jobs + shared)*(bad ? 1 - clamp(sel.badHit,0,100)/100 : 1);
+    const income = gross*keep;
+    const housingYear = house.mode==='buy'
+      ? (t <= sel.mortgageYears ? housingMonthly*12 : 0) + ownerCost
+      : housingMonthly*12;
+    const loan = t<=repaymentYears ? loanAnnual : 0;
+    const costs = livingAnnual + housingYear + extraCosts + loan;
+    cash += income - costs;
+    points.push({ t, cash, wealth: cash + equityAt(t), income, costs, bad, loan });
+  }
+  const firstNeg = points.findIndex(p => p.cash < 0);
+  const breakeven = firstNeg===-1 ? 0 : points.findIndex((p,idx) => idx>firstNeg && p.cash>=0); // 0 = never below zero, -1 = not within 15 years
+
+  // Normal year after training
+  const grossFull = slots.reduce((a,s)=>a+s.annual, 0) + sharedFull;
+  const netFull = grossFull*keep;
+  const personGross = p => slots.filter(s=>s.person===p).reduce((a,s)=>a+s.annual, 0);
+  const p1Net = personGross('p1')*keep, p2Net = personGross('p2')*keep, sharedNet = sharedFull*keep;
+  const savingsWithLoan = netFull - costsAnnual - loanAnnual;
+  const savingsAfterLoan = netFull - costsAnnual;
+
+  // Month by month
+  const monthlyCosts = costsAnnual/12 + (sel.calIncludeLoan ? loanMonthly : 0);
+  const months = MONTHS.map((m, idx) => {
+    const per = p => slots.filter(s=>s.person===p).reduce((a,s)=>a + s.monthly*s.fills[idx], 0);
+    const p1 = per('p1'), p2 = per('p2');
+    const net = (p1 + p2 + sharedFull/12)*keep;
+    return { m, p1, p2, net, balance: net - monthlyCosts,
+      jobs: slots.filter(s=>s.fills[idx]>0).map(s=>({ person:s.person, label:s.act.label, part:s.fills[idx] })) };
+  });
+  let cum = 0, peak = 0, buffer = 0;
+  for(let k=0; k<24; k++){ cum += months[k%12].balance; peak = Math.max(peak, cum); buffer = Math.max(buffer, peak - cum); }
+  const leanMonths = months.filter(x => x.balance < 0).length;
+  const efTarget = Math.max(0, sel.efMonths)*(costsAnnual/12 + loanMonthly);
+  const cushion = efTarget + buffer;
+  const cushionYear = points.findIndex(p => p.cash >= cushion);
+
+  // Warnings per person
+  const warnings = { p1:[], p2:[] };
+  ['p1','p2'].forEach(p => {
+    const ps = slots.filter(s => s.person===p);
+    const over = MONTHS.filter((m,idx) => ps.reduce((a,s)=>a+s.fills[idx],0) > 1.001);
+    if(over.length) warnings[p].push(`The winter and summer jobs overlap in ${over.join(', ')}. Change the months or start months so one person is not counted twice.`);
+    ps.forEach(s => {
+      if(s.act.yearRound && ps.some(o => o.key!==s.key && o.id!==s.id))
+        warnings[p].push(`"${s.act.label}" is a year-round job — choose it for both winter and summer, otherwise the income is too low.`);
+    });
+  });
+  if(deductPct >= 100) warnings.p1.push('Social charges + income tax add up to 100% or more, so take-home pay is zero. Check Money settings.');
+
+  // Payback per training
+  formations.forEach(f => {
+    const netCost = f.trainingCost*(1-deduction);
+    const netInc = f.income*keep;
+    f.netCost = netCost;
+    f.paybackYears = f.isPrereq ? null : (netCost===0 ? 0 : (netInc>0 ? netCost/netInc : Infinity));
+    f.paybackAt = (f.paybackYears===null || f.paybackYears===Infinity) ? null : f.trainingYears + f.paybackYears;
+  });
+
+  return {
+    keep, deductPct, slots, formations, deduction, grossTraining, netTraining, totalDebt, yearsToFull,
+    repaymentYears, loanMonthly, loanAnnual, downPayment, housingMonthly, housingLabel, ownerCost,
+    livingAnnual, extraCosts, costsAnnual, points, breakeven,
+    grossFull, netFull, p1Net, p2Net, sharedNet, savingsWithLoan, savingsAfterLoan,
+    months, monthlyCosts, buffer, leanMonths, efTarget, cushion, cushionYear, warnings,
+    isBuy: house.mode==='buy'
+  };
+}
+
+// ================= Rendering: inputs =================
+let selection;
+
+function segButtons(options, current){
+  return Object.keys(options).map(k =>
+    `<button type="button" data-v="${k}" aria-pressed="${k===current}">${esc(options[k].label)}</button>`).join('');
+}
+function numField(label, attrs, value, step, extra=''){
+  return `<label class="field">${label}<input type="number" inputmode="decimal" min="0" step="${step}" value="${value}" ${attrs}>${extra}</label>`;
+}
+
+function renderSlot(slot){
+  const el = $('slot-'+slot.key);
+  const acts = ACTS[slot.person];
+  const cur = selection.slots[slot.key];
+  const act = acts[cur.id];
+  const opts = Object.fromEntries(Object.entries(acts).filter(([k,a]) => a.seasons.includes(slot.season)));
+  const cfg = cur.cfg;
+  el.innerHTML = `
+    <div class="axis">
+      <div class="axis-label">${SEASON_LABEL[slot.season]}</div>
+      <div class="seg" role="group" aria-label="${SEASON_LABEL[slot.season]}">${segButtons(opts, cur.id)}</div>
+      <p class="note">${noteHtml(act.note)}</p>
+      ${cfg ? `
+      <div class="inputs-row">
+        ${numField('Pay (€/hour)', 'data-f="rate"', cfg.rate, 0.5)}
+        ${numField('Hours / week', 'data-f="hours"', cfg.hours, 1)}
+        ${numField('Months', 'data-f="months"', cfg.months, 0.5)}
+        <label class="field">Starts in<select data-f="start">${MONTHS.map((m,i)=>`<option value="${i+1}"${cfg.start===i+1?' selected':''}>${m}</option>`).join('')}</select></label>
+      </div>
+      <p class="note" data-eff="${slot.key}"></p>` : ''}
+    </div>`;
+  el.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    selection.slots[slot.key] = { id:b.dataset.v, cfg: defaultCfg(slot, b.dataset.v) };
+    renderAll();
+  });
+  el.querySelectorAll('[data-f]').forEach(inp => {
+    const ev = inp.tagName==='SELECT' ? 'onchange' : 'oninput';
+    inp[ev] = () => { selection.slots[slot.key].cfg[inp.dataset.f] = num(inp.value); computeAndRender(); };
+  });
+}
+
+function renderAxes(){
+  const c = $('axes');
+  c.innerHTML = Object.keys(AXES).map(k => {
+    const axis = AXES[k], opt = axis.options[selection[k]];
+    return `<div class="axis">
+      <div class="axis-label">${axis.label}</div>
+      <div class="seg" role="group" aria-label="${esc(axis.label)}" data-axis="${k}">${segButtons(axis.options, selection[k])}</div>
+      <p class="note">${noteHtml(opt.note)}</p>
+    </div>`;
+  }).join('');
+  c.querySelectorAll('.seg').forEach(seg => seg.querySelectorAll('button').forEach(b => b.onclick = () => {
+    selection[seg.dataset.axis] = b.dataset.v;
+    applyAutoDefaults(selection);
+    renderAll();
+  }));
+}
+
+function renderMoney(){
+  const s = selection, c = COUNTRIES[s.country], statusLabel = AXES.status.options[s.status].label;
+  const housing = AXES.housing.options[s.housing].mode;
+  $('money').innerHTML = `
+    <div class="money-block">
+      <div class="sub-title">Everyday living</div>
+      <p class="note">Food, transport, insurance, daily life — for both of you, not including housing. Default is from your real life now (~€20,000/yr for two).</p>
+      <div class="inputs-row">${numField('Living costs (€/month, for two)', 'data-k="colMonthly"', s.colMonthly, 50)}</div>
+      <button class="link-btn" type="button" data-action="colCountry">Use the ${esc(c.label)} estimate instead: ${fmt(c.col)}/month [estimate]</button>
+    </div>
+    <div class="money-block">
+      <div class="sub-title">Tax &amp; social charges</div>
+      <p class="note">Taken from all income. ${s.deductCustom ? '<b>You changed these by hand</b> — they no longer follow the country and work status.' : `Following the <b>${esc(c.label)}</b> + <b>${esc(statusLabel)}</b> estimate. <span class="flag">[estimate]</span>`}</p>
+      <div class="inputs-row">
+        ${numField('Social charges (%)', 'data-k="charges" data-group="deduct"', s.charges, 1)}
+        ${numField('Income tax (%)', 'data-k="tax" data-group="deduct"', s.tax, 1)}
+      </div>
+      ${s.deductCustom ? `<button class="link-btn" type="button" data-action="resetDeduct">Reset to the ${esc(c.label)} + ${esc(statusLabel)} estimate</button>` : ''}
+    </div>
+    <div class="money-block">
+      <div class="sub-title">Home</div>
+      ${housing==='buy' ? `
+        <p class="note">${s.houseCustom ? '<b>You changed the price by hand</b> — it no longer follows the country.' : `Following the <b>${esc(c.label)}</b> price. <span class="flag">[estimate]</span>`}</p>
+        <div class="inputs-row">
+          ${numField('House price (€)', 'data-k="housePrice" data-group="house"', s.housePrice, 1000)}
+          ${numField('Down payment (€)', 'data-k="downPayment" data-group="house"', s.downPayment, 500)}
+        </div>
+        <div class="inputs-row">
+          ${numField('Mortgage rate (%/yr)', 'data-k="mortgageRate"', s.mortgageRate, 0.1)}
+          ${numField('Mortgage length (years)', 'data-k="mortgageYears"', s.mortgageYears, 1)}
+        </div>
+        <div class="inputs-row">
+          ${numField('Owner costs (% of price/yr)', 'data-k="ownerCosts"', s.ownerCosts, 0.1)}
+          ${numField('Home value growth (%/yr)', 'data-k="appreciation"', s.appreciation, 0.1)}
+        </div>
+        <p class="note">Owner costs = repairs, property tax, insurance. <span class="flag">[estimate]</span> ~1% of the price per year.</p>
+        ${s.houseCustom ? `<button class="link-btn" type="button" data-action="resetHouse">Reset to the ${esc(c.label)} price (${fmt(c.housePrice)}, 20% down)</button>` : ''}
+      ` : `<p class="note">${housing==='rent' ? `Rent in ${esc(c.label)}: <b>${fmt(c.rent)}/month</b> <span class="flag">[estimate]</span>.` : `Van upkeep: <b>${fmt(VAN_MONTHLY)}/month</b> <span class="flag">[estimate]</span>.`} Choose "Buy" in Life choices to see house price and mortgage settings.</p>`}
+    </div>
+    <div class="money-block">
+      <div class="sub-title">Training loan</div>
+      <p class="note">All training is paid with a loan, repaid over at least 5 years (longer if training takes longer). While a job's training is running, that job earns only part of its pay (e.g. work-study).</p>
+      <div class="inputs-row">
+        ${numField('Loan interest (%/yr)', 'data-k="loanRate"', s.loanRate, 0.1)}
+        ${numField('Pay while training (% of full pay)', 'data-k="trainingIncome"', s.trainingIncome, 5)}
+      </div>
+    </div>
+    <div class="money-block">
+      <div class="sub-title">Safety margin</div>
+      <p class="note">Seasonal work is not steady. Test what happens with a bad season now and then (injury, no snow, fewer bookings).</p>
+      <div class="inputs-row">
+        ${numField('Savings you start with (€)', 'data-k="startSavings"', s.startSavings, 500)}
+        <label class="field">Bad season
+          <select data-k="badEvery">
+            ${[[0,'Never'],[2,'Every 2 years'],[3,'Every 3 years'],[4,'Every 4 years'],[5,'Every 5 years'],[7,'Every 7 years']].map(([v,l])=>`<option value="${v}"${s.badEvery===v?' selected':''}>${l}</option>`).join('')}
+          </select>
+        </label>
+        ${numField('Income lost in a bad season (%)', 'data-k="badHit"', s.badHit, 5)}
+        ${numField('Emergency fund (months of costs)', 'data-k="efMonths"', s.efMonths, 1)}
+      </div>
+    </div>`;
+  $('money').querySelectorAll('[data-k]').forEach(inp => {
+    const ev = inp.tagName==='SELECT' ? 'onchange' : 'oninput';
+    inp[ev] = () => {
+      selection[inp.dataset.k] = num(inp.value);
+      if(inp.dataset.group==='deduct' && !selection.deductCustom){ selection.deductCustom = true; }
+      if(inp.dataset.group==='house' && !selection.houseCustom){ selection.houseCustom = true; }
+      computeAndRender();
+    };
+    // re-render once editing is done so the "changed by hand" text and reset links appear
+    if(inp.dataset.group) inp.onchange = () => renderMoney();
+  });
+  $('money').querySelectorAll('[data-action]').forEach(b => b.onclick = () => {
+    const a = b.dataset.action;
+    if(a==='colCountry'){ selection.colMonthly = COUNTRIES[selection.country].col; }
+    if(a==='resetDeduct'){ selection.deductCustom = false; applyAutoDefaults(selection); }
+    if(a==='resetHouse'){ selection.houseCustom = false; applyAutoDefaults(selection); }
+    renderMoney(); computeAndRender();
+  });
+}
+
+function renderNames(){
+  ['p1','p2'].forEach(p => {
+    const inp = $('name-'+p);
+    if(document.activeElement!==inp) inp.value = selection.names[p];
+    document.querySelectorAll(`[data-name="${p}"]`).forEach(el => el.textContent = name(selection, p));
+  });
+}
+
+function renderAll(){
+  renderNames();
+  SLOTS.forEach(renderSlot);
+  renderAxes();
+  renderMoney();
+  computeAndRender();
+}
+
+// ================= Rendering: results =================
+function stat(value, label, sub='', tone=''){
+  return `<div class="stat ${tone}"><div class="num">${value}</div><div class="lbl">${label}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+}
+const tone = n => n>=0 ? 'pos' : 'neg';
+
+function breakevenText(r){
+  if(r.breakeven===0) return 'Savings never go below zero with these numbers. 🎉';
+  if(r.breakeven===-1) return '<span class="flag">Savings do not get back above zero within 15 years</span> with these numbers.';
+  return `Savings go below zero at first, and are back above zero by the <b>end of year ${r.breakeven}</b>.`;
+}
+
+function computeAndRender(){
+  const r = computeScenario(selection);
+  const s = selection;
+
+  // effective pay notes under each job
+  r.slots.forEach(sl => {
+    const el = document.querySelector(`[data-eff="${sl.key}"]`);
+    if(!el || !sl.cfg) return;
+    const local = Math.abs(sl.factor-1) > 0.001
+      ? `At ${esc(COUNTRIES[s.country].label)} pay levels this is about <b>${eur2.format(sl.rate)}/h</b> <span class="flag">[estimate]</span>. `
+      : '';
+    el.innerHTML = `${local}≈ <b>${fmt(sl.monthly)}</b> per month, <b>${fmt(sl.annual)}</b> for the season (before tax and charges).`;
+  });
+  ['p1','p2'].forEach(p => {
+    $('warn-'+p).innerHTML = r.warnings[p].map(w => `<div class="warn">${esc(w)}</div>`).join('');
+  });
+
+  // results
+  const deductSub = r.deduction>0 ? `Before tax deduction ${fmt(r.grossTraining)} → after ~25%: ${fmt(r.netTraining)}` : '';
+  const loanLbl = r.totalDebt>0 ? `Loan payment for ${r.repaymentYears} years (at ${s.loanRate}%)` : 'Loan payment (no loan needed)';
+  const last = r.points[HORIZON];
+  $('results').innerHTML = `
+    <div class="group-title">Getting started</div>
+    <div class="stat-grid">
+      ${stat(fmt(r.totalDebt), 'Training debt (on a loan)', deductSub)}
+      ${stat(r.totalDebt>0 ? fmt(r.loanMonthly)+'/mo' : '—', loanLbl)}
+      ${stat(fmt(r.downPayment), 'Down payment for a home')}
+      ${stat(yrs(r.yearsToFull), 'Until all training is done and both earn full pay')}
+    </div>
+    <div class="group-title">A normal year</div>
+    <div class="stat-grid">
+      ${stat(fmt(r.livingAnnual), 'Living costs (not housing)')}
+      ${stat(fmt(r.housingMonthly*12 + r.ownerCost), `Housing — ${r.housingLabel}`, `${fmt(r.housingMonthly)}/month${r.ownerCost ? ` + ${fmt(r.ownerCost)}/yr owner costs` : ''}`)}
+      ${stat(fmt(r.costsAnnual + r.loanAnnual), 'All costs per year while repaying (living + home + loan' + (r.extraCosts ? ' + travel' : '') + ')')}
+      ${stat(fmtSigned(r.savingsWithLoan), `Saved per year while the loan runs ${r.savingsWithLoan>=0?'(plus)':'(minus)'}`, 'After training, full pay', tone(r.savingsWithLoan))}
+      ${stat(fmtSigned(r.savingsAfterLoan), `Saved per year once the loan is paid ${r.savingsAfterLoan>=0?'(plus)':'(minus)'}`, '', tone(r.savingsAfterLoan))}
+    </div>
+    <div class="group-title">Safety cushion</div>
+    <div class="stat-grid">
+      ${stat(fmt(r.buffer), 'Buffer to get through the quiet months', `${r.leanMonths} month${r.leanMonths===1?'':'s'} a year in minus`)}
+      ${stat(fmt(r.efTarget), `Emergency fund (${s.efMonths} months of costs)`)}
+      ${stat(r.cushionYear===-1 ? 'Not in 15 yrs' : (r.cushionYear===0 ? 'From the start' : `Year ${r.cushionYear}`), `Savings reach buffer + emergency fund (${fmt(r.cushion)})`, '', r.cushionYear===-1 ? 'neg' : 'pos')}
+    </div>
+    <div class="group-title">After 15 years</div>
+    <div class="stat-grid">
+      ${stat(fmtSigned(last.cash), 'Savings', '', tone(last.cash))}
+      ${r.isBuy ? stat(fmtSigned(last.wealth), 'Wealth (savings + home value − mortgage left)', '', tone(last.wealth)) : ''}
+    </div>`;
+  $('breakevenNote').innerHTML = breakevenText(r);
+
+  // income
+  const sharedLine = Math.abs(r.sharedNet)>1 ? `incl. ${fmt(r.sharedNet)} shared (company / work zone / rhythm)` : '';
+  $('incomeGrid').innerHTML = `
+    ${stat(fmt(r.p1Net), `${esc(name(s,'p1'))} — take-home / year`)}
+    ${stat(fmt(r.p2Net), `${esc(name(s,'p2'))} — take-home / year`)}
+    ${stat(fmt(r.netFull), 'Household total / year', sharedLine + (sharedLine?' · ':'') + `${Math.round(r.deductPct)}% tax &amp; charges`, 'pos')}`;
+
+  renderCalendar(r);
+  renderFormations(r);
+  renderMainChart(r);
+  renderSticky(r);
+  renderSources();
+  store.set(KEY_CURRENT, JSON.stringify(selection));
+}
+
+function renderCalendar(r){
+  const s = selection;
+  const personRow = p => `<tr><th scope="row">${esc(name(s,p))}</th>${r.months.map(m => {
+    const v = m[p];
+    const jobs = m.jobs.filter(j=>j.person===p).map(j=>j.label).join(' + ');
+    return v>0 ? `<td title="${esc(jobs)}: ${fmt(v)}">${fmtC(v)}</td>` : `<td class="empty" title="No paid work">–</td>`;
+  }).join('')}</tr>`;
+  $('calendar').innerHTML = `
+    <div class="cal-scroll">
+      <table class="cal">
+        <caption class="sr-only">Income and household balance per month</caption>
+        <thead><tr><th></th>${MONTHS.map(m=>`<th scope="col">${m}</th>`).join('')}</tr></thead>
+        <tbody>
+          ${personRow('p1')}${personRow('p2')}
+          <tr><th scope="row">Plus / minus</th>${r.months.map(m =>
+            `<td class="${m.balance>=0?'pos':'neg'}" title="Take-home ${fmt(m.net)} − costs ${fmt(r.monthlyCosts)}">${m.balance>=0?'+':''}${fmtC(m.balance)}</td>`).join('')}</tr>
+        </tbody>
+      </table>
+    </div>
+    <label class="check"><input type="checkbox" id="calLoan" ${s.calIncludeLoan?'checked':''}> Include training loan payments in the costs</label>
+    <p class="note">Monthly costs: <b>${fmt(r.monthlyCosts)}</b>. ${r.leanMonths ? `<b>${r.leanMonths}</b> month${r.leanMonths===1?' is':'s are'} in minus — you need about <b>${fmt(r.buffer)}</b> saved to get through them.` : 'Every month is in plus. 🙌'}</p>`;
+  $('calLoan').onchange = e => { selection.calIncludeLoan = e.target.checked; computeAndRender(); };
+}
+
+function renderFormations(r){
+  const s = selection;
+  if(!r.formations.length){
+    $('formations').innerHTML = '<div class="formations"><div class="empty">No training needed with this combination ("No paid work" everywhere).</div></div>';
+    return;
+  }
+  const payback = f => {
+    if(f.isPrereq) return 'needed before any job';
+    if(f.trainingCost===0) return 'no cost';
+    if(f.paybackYears===Infinity) return 'never (no income from it)';
+    return `after ${yrs(f.paybackYears)} of work`;
+  };
+  const parallel = ['p1','p2'].filter(p => r.formations.filter(f => f.person===p && !f.isPrereq && f.trainingYears>0).length > 1);
+  $('formations').innerHTML = `<div class="formations">${r.formations.map(f => `
+    <div class="formation-row">
+      <div class="fwho">${esc(name(s,f.person))}</div>
+      <div class="fname">${esc(f.label)}</div>
+      <div class="fmeta">
+        <span>Cost: <b>${fmt(f.trainingCost)}</b>${r.deduction>0 && f.trainingCost>0 ? ` (${fmt(f.netCost)} after deduction)` : ''}</span>
+        <span>Length: <b>${f.trainingYears ? yrs(f.trainingYears) : 'none'}</b></span>
+        <span>Pays for itself: <b>${payback(f)}</b></span>
+      </div>
+    </div>`).join('')}</div>
+    ${parallel.map(p => `<p class="note">${esc(name(s,p))} has two trainings. The planner assumes they run <b>at the same time</b>; if they happen one after the other, full pay comes later than shown.</p>`).join('')}`;
+}
+
+function renderSticky(r){
+  $('stickyBar').innerHTML = `
+    <div><span class="k">Household take-home / yr</span><b>${fmt(r.netFull)}</b></div>
+    <div><span class="k">Saved / yr after loan</span><b>${fmtSigned(r.savingsAfterLoan)}</b></div>
+    <div><span class="k">Back above zero</span><b>${r.breakeven===0 ? 'never below' : r.breakeven===-1 ? 'not in 15 yrs' : 'year '+r.breakeven}</b></div>`;
+}
+
+// ================= Charts (SVG) =================
+const measureCtx = document.createElement('canvas').getContext('2d');
+function textW(t, font){ measureCtx.font = font; return measureCtx.measureText(t).width; }
+function niceStep(range, count){
+  const raw = range/Math.max(1,count), mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw/mag;
+  return (f<=1 ? 1 : f<=2 ? 2 : f<=2.5 ? 2.5 : f<=5 ? 5 : 10)*mag;
+}
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* o = { series:[{name, color, dash, values[0..15], short}], bands:[t], breakeven, rows:[{label, kind, training, paybackAt, until}],
+         tooltip(t) -> html, ariaLabel } */
+function renderTimeline(host, o){
+  const W = Math.max(280, host.clientWidth - 12);
+  const narrow = W < 540;
+  const font = '400 13px Lexend, sans-serif', bold = '600 13px Lexend, sans-serif';
+  let min = Math.min(0, ...o.series.flatMap(s=>s.values)), max = Math.max(0, ...o.series.flatMap(s=>s.values));
+  if(max-min < 1){ max += 1000; min -= 1000; }
+  const step = niceStep(max-min, 4);
+  min = Math.floor(min/step)*step; max = Math.ceil(max/step)*step;
+  const ticks = []; for(let v=min; v<=max+step/2; v+=step) ticks.push(v);
+  const padL = Math.ceil(Math.max(...ticks.map(v => textW(fmtC(v), font)))) + 12;
+  const endLabels = !narrow && o.series.length <= 4;
+  const padR = endLabels ? Math.ceil(Math.max(...o.series.map(s => textW(s.short||s.name, bold)))) + 16 : 14;
+  const top = 12, lineH = narrow ? 180 : 220, axisH = 28;
+  const rows = o.rows || [];
+  const rowH = 42, rowsTop = top + lineH + axisH + (rows.length ? 10 : 0);
+  const H = rowsTop + rows.length*rowH + 6;
+  const plotW = W - padL - padR;
+  const x = t => padL + (t/HORIZON)*plotW;
+  const y = v => top + ((max - v)/(max - min))*lineH;
+  const everyYear = plotW/HORIZON >= 30;
+
+  let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" tabindex="0" aria-label="${esc(o.ariaLabel)}" style="font-family:Lexend,sans-serif">`;
+  // bad-season bands
+  (o.bands||[]).forEach(t => { svg += `<rect x="${x(t-1)}" y="${top}" width="${x(t)-x(t-1)}" height="${lineH}" fill="var(--line)" opacity="0.45"/>`; });
+  // grid + y labels
+  ticks.forEach(v => {
+    svg += `<line x1="${padL}" x2="${padL+plotW}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1" ${v===0?'':'opacity="0.6"'}/>`;
+    svg += `<text x="${padL-8}" y="${y(v)+4}" text-anchor="end" font-size="13" fill="var(--muted)">${esc(fmtC(v))}</text>`;
+  });
+  // zero line stronger
+  svg += `<line x1="${padL}" x2="${padL+plotW}" y1="${y(0)}" y2="${y(0)}" stroke="var(--ink)" stroke-width="1.25" stroke-dasharray="4 4" opacity="0.7"/>`;
+  // x axis
+  for(let t=0; t<=HORIZON; t++){
+    const show = everyYear || t%5===0;
+    svg += `<line x1="${x(t)}" x2="${x(t)}" y1="${top+lineH}" y2="${top+lineH+5}" stroke="var(--line)"/>`;
+    if(show) svg += `<text x="${x(t)}" y="${top+lineH+20}" text-anchor="${t===0?'start':t===HORIZON?'end':'middle'}" font-size="13" fill="var(--muted)">${t===0?'Now':(everyYear?t:'Year '+t)}</text>`;
+  }
+  // series lines
+  o.series.forEach(s => {
+    const d = s.values.map((v,t) => `${t?'L':'M'}${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('');
+    svg += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" ${s.dash?'stroke-dasharray="7 5"':''}/>`;
+  });
+  // direct end labels (nudged apart if too close)
+  if(endLabels){
+    const ends = o.series.map(s => ({ s, y: y(s.values[HORIZON]) })).sort((a,b)=>a.y-b.y);
+    for(let i=1;i<ends.length;i++) if(ends[i].y - ends[i-1].y < 16) ends[i].y = ends[i-1].y + 16;
+    ends.forEach(e => { svg += `<text x="${padL+plotW+8}" y="${e.y+4}" font-size="13" font-weight="600" fill="var(--ink)">${esc(e.s.short||e.s.name)}</text>`; });
+  }
+  // gantt rows
+  rows.forEach((row,i) => {
+    const ry = rowsTop + i*rowH;
+    let lbl = row.label;
+    const maxW = W - padL - 6;
+    if(textW(lbl, font) > maxW){ while(lbl.length > 4 && textW(lbl+'…', font) > maxW) lbl = lbl.slice(0,-1); lbl += '…'; }
+    svg += `<text x="${padL}" y="${ry+13}" font-size="13" fill="var(--ink)"><title>${esc(row.label)}</title>${esc(lbl)}</text>`;
+    const by = ry+19, bh = 14;
+    if(row.kind==='debt'){
+      svg += `<rect x="${x(0)}" y="${by}" width="${Math.max(2, x(Math.min(row.until,HORIZON))-x(0))}" height="${bh}" rx="3" fill="var(--rust)"/>`;
+    } else {
+      const tr = Math.min(row.training, HORIZON);
+      if(tr>0) svg += `<rect x="${x(0)}" y="${by}" width="${Math.max(3, x(tr)-x(0))}" height="${bh}" rx="3" fill="var(--moss)"/>`;
+      const ws = tr>0 ? x(tr)+2 : x(0);
+      if(tr<HORIZON) svg += `<rect x="${ws}" y="${by}" width="${Math.max(0, x(HORIZON)-ws)}" height="${bh}" rx="3" fill="var(--moss-soft)"/>`;
+      if(row.paybackAt!=null && row.paybackAt<=HORIZON && row.paybackAt>0){
+        const px = x(row.paybackAt);
+        svg += `<rect x="${px-2}" y="${by-4}" width="4" height="${bh+8}" rx="1" fill="var(--ink)"/>`;
+      }
+    }
+  });
+  // break-even marker
+  if(o.breakeven>0){
+    const bx = x(o.breakeven);
+    svg += `<line x1="${bx}" x2="${bx}" y1="${top}" y2="${H-4}" stroke="var(--ink)" stroke-width="1.25" stroke-dasharray="2 4"/>`;
+    const lbl = 'Back above zero', lw = textW(lbl, '600 12px Lexend, sans-serif');
+    const lx = bx + 6 + lw > padL+plotW ? bx - 6 - lw : bx + 6;
+    svg += `<text x="${lx}" y="${top+12}" font-size="12" font-weight="600" fill="var(--ink)">${lbl}</text>`;
+  }
+  // hover layer
+  svg += `<g class="hover" visibility="hidden"><line class="guide" y1="${top}" y2="${H-4}" stroke="var(--ink)" stroke-width="1" opacity="0.5"/>`;
+  o.series.forEach((s,i) => { svg += `<circle class="dot${i}" r="5" fill="${s.color}" stroke="var(--surface-2)" stroke-width="2"/>`; });
+  svg += `</g><rect class="hit" x="${padL-10}" y="0" width="${plotW+20}" height="${H}" fill="transparent"/></svg>`;
+
+  host.innerHTML = svg + '<div class="tip" hidden></div>';
+  const el = host.querySelector('svg'), tip = host.querySelector('.tip'), g = el.querySelector('.hover');
+  let cur = null;
+  const show = t => {
+    cur = t;
+    g.setAttribute('visibility','visible');
+    const gx = x(t);
+    g.querySelector('.guide').setAttribute('x1', gx); g.querySelector('.guide').setAttribute('x2', gx);
+    o.series.forEach((s,i) => { const c = g.querySelector('.dot'+i); c.setAttribute('cx', gx); c.setAttribute('cy', y(s.values[t])); });
+    tip.innerHTML = o.tooltip(t); tip.hidden = false;
+    const tw = tip.offsetWidth, left = gx + 14 + tw > W ? gx - 14 - tw : gx + 14;
+    tip.style.left = Math.max(4, left + 6) + 'px'; tip.style.top = '14px';
+  };
+  const hide = () => { cur = null; g.setAttribute('visibility','hidden'); tip.hidden = true; };
+  const fromEvent = e => { const b = el.getBoundingClientRect(); return clamp(Math.round((e.clientX - b.left - padL)/plotW*HORIZON), 0, HORIZON); };
+  el.addEventListener('pointermove', e => show(fromEvent(e)));
+  el.addEventListener('pointerdown', e => show(fromEvent(e)));
+  el.addEventListener('pointerleave', e => { if(e.pointerType==='mouse') hide(); });
+  el.addEventListener('blur', hide);
+  el.addEventListener('keydown', e => {
+    if(e.key==='ArrowRight' || e.key==='ArrowLeft'){
+      e.preventDefault();
+      show(clamp((cur ?? -1) + (e.key==='ArrowRight' ? 1 : -1), 0, HORIZON));
+    } else if(e.key==='Escape') hide();
+  });
+}
+
+function legendLine(color, dash){
+  return `<svg width="22" height="10" aria-hidden="true"><line x1="1" x2="21" y1="5" y2="5" stroke="${color}" stroke-width="2.5" stroke-linecap="round" ${dash?'stroke-dasharray="5 4"':''}/></svg>`;
+}
+function legendBox(color, w=14, h=10){
+  return `<svg width="${w}" height="12" aria-hidden="true"><rect x="0" y="${(12-h)/2}" width="${w}" height="${h}" rx="2" fill="${color}"/></svg>`;
+}
+
+function renderMainChart(r){
+  const s = selection;
+  const series = [{ name:'Savings', short:'Savings', color:'var(--s1)', values:r.points.map(p=>p.cash) }];
+  if(r.isBuy) series.push({ name:'Wealth (savings + home value)', short:'Wealth', color:'var(--s2)', dash:true, values:r.points.map(p=>p.wealth) });
+  const rows = r.formations.filter(f => !f.isPrereq).map(f => ({ label:`${name(s,f.person)} · ${f.label}`, training:f.trainingYears, paybackAt:f.trainingCost>0 ? f.paybackAt : null }));
+  if(r.repaymentYears>0) rows.push({ label:'Training loan repayment', kind:'debt', until:r.repaymentYears });
+  const bands = r.points.filter(p=>p.bad).map(p=>p.t);
+  renderTimeline($('mainChart'), {
+    series, rows, bands, breakeven: r.breakeven,
+    ariaLabel: `Savings over 15 years. ${breakevenText(r).replace(/<[^>]+>/g,'')} Savings after 15 years: ${fmt(r.points[HORIZON].cash)}.`,
+    tooltip: t => {
+      const p = r.points[t];
+      return `<b>${t===0 ? 'Now (start)' : 'End of year '+t}</b>${p.bad ? ' · bad season' : ''}
+        <div class="row"><span><span class="sw" style="background:var(--s1)"></span>Savings</span><b>${fmt(p.cash)}</b></div>
+        ${r.isBuy ? `<div class="row"><span><span class="sw" style="background:var(--s2)"></span>Wealth</span><b>${fmt(p.wealth)}</b></div>` : ''}
+        ${t>0 ? `<div class="row"><span>Take-home that year</span><span>${fmt(p.income)}</span></div>
+        <div class="row"><span>Costs that year</span><span>${fmt(p.costs)}</span></div>` : ''}`;
+    }
+  });
+  const hasTraining = rows.some(rw => rw.kind!=='debt' && rw.training>0);
+  const hasPayback = rows.some(rw => rw.paybackAt!=null && rw.paybackAt<=HORIZON && rw.paybackAt>0);
+  $('mainLegend').innerHTML = [
+    `<span>${legendLine('var(--s1)')}Savings</span>`,
+    r.isBuy ? `<span>${legendLine('var(--s2)', true)}Wealth (savings + home value − mortgage left)</span>` : '',
+    `<span>${legendLine('var(--ink)', true)}Zero</span>`,
+    r.breakeven>0 ? `<span>${legendLine('var(--ink)', true)}Back above zero</span>` : '',
+    bands.length ? `<span>${legendBox('var(--line)')}Bad season</span>` : '',
+    hasTraining ? `<span>${legendBox('var(--moss)')}Training</span>` : '',
+    rows.length ? `<span>${legendBox('var(--moss-soft)')}Working</span>` : '',
+    hasPayback ? `<span>${legendBox('var(--ink)',4,14)}Training paid for itself</span>` : '',
+    r.repaymentYears>0 ? `<span>${legendBox('var(--rust)')}Loan repayment</span>` : ''
+  ].join('');
+  $('mainTable').innerHTML = `<table class="data-table">
+    <thead><tr><th>Year</th><th>Take-home</th><th>Costs</th><th>Savings</th>${r.isBuy?'<th>Wealth</th>':''}</tr></thead>
+    <tbody>${r.points.map(p => `<tr><td>${p.t===0?'Now':p.t}${p.bad?' (bad season)':''}</td><td>${p.t?fmt(p.income):'—'}</td><td>${p.t?fmt(p.costs):'—'}</td><td>${fmt(p.cash)}</td>${r.isBuy?`<td>${fmt(p.wealth)}</td>`:''}</tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ================= Scenarios =================
+function loadScenarios(){
+  try { const a = JSON.parse(store.get(KEY_SCEN)); return Array.isArray(a) ? a.filter(x => x && x.id && x.selection) : []; } catch(e){ return []; }
+}
+function saveScenarios(list){ store.set(KEY_SCEN, JSON.stringify(list)); }
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+let compareIds = [];
+
+function saveScenario(){
+  const inp = $('scenarioName'), nm = inp.value.trim();
+  if(!nm){ notify('Give the scenario a name first.'); inp.focus(); return; }
+  const list = loadScenarios();
+  list.unshift({ id:newId(), name:nm, savedAt:Date.now(), selection: JSON.parse(JSON.stringify(selection)) });
+  saveScenarios(list); inp.value = '';
+  renderScenarioList(); notify(`Saved "${nm}".`);
+}
+
+function renderScenarioList(){
+  const list = loadScenarios();
+  compareIds = compareIds.filter(id => list.some(x => x.id===id));
+  const el = $('scenarioList');
+  if(!list.length){ el.innerHTML = '<p class="empty" style="padding:0">No saved scenarios yet.</p>'; renderCompare(); return; }
+  el.innerHTML = list.map(item => {
+    const r = computeScenario(normalize(item.selection));
+    const on = compareIds.includes(item.id);
+    return `<div class="scenario-item${on?' is-compared':''}">
+      <div>
+        <div class="name">${esc(item.name)}</div>
+        <div class="meta">${fmt(r.totalDebt)} debt · ${fmtSigned(r.savingsAfterLoan)}/yr after loan · ${r.breakeven===0?'never below zero':r.breakeven===-1?'not above zero in 15 yrs':'above zero by year '+r.breakeven}</div>
+      </div>
+      <div class="actions">
+        <button type="button" data-act="load" data-id="${item.id}">Load</button>
+        <button type="button" data-act="compare" data-id="${item.id}" aria-pressed="${on}">Compare</button>
+        <button type="button" class="del" data-act="delete" data-id="${item.id}">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+  renderCompare();
+}
+
+$('scenarioList').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const list = loadScenarios(), item = list.find(x => x.id===b.dataset.id); if(!item) return;
+  if(b.dataset.act==='load'){
+    selection = normalize(item.selection); renderAll();
+    notify(`Loaded "${item.name}".`); window.scrollTo({ top:0, behavior:'smooth' });
+  } else if(b.dataset.act==='compare'){
+    const i = compareIds.indexOf(item.id);
+    if(i>=0) compareIds.splice(i,1); else { compareIds.push(item.id); if(compareIds.length>2) compareIds.shift(); }
+    renderScenarioList();
+  } else if(b.dataset.act==='delete'){
+    if(!confirm(`Delete "${item.name}"?`)) return;
+    saveScenarios(list.filter(x => x.id!==item.id)); renderScenarioList();
+  }
+});
+
+function renderCompare(){
+  const area = $('compareArea');
+  if(compareIds.length < 2){
+    area.innerHTML = compareIds.length===1 ? '<p class="note">Pick a second scenario with "Compare".</p>' : '';
+    return;
+  }
+  const list = loadScenarios();
+  const [a, b] = compareIds.map(id => list.find(x => x.id===id));
+  if(!a || !b){ area.innerHTML=''; return; }
+  const sa = normalize(a.selection), sb = normalize(b.selection);
+  const ra = computeScenario(sa), rb = computeScenario(sb);
+  const be = r => r.breakeven===0 ? 'never below zero' : r.breakeven===-1 ? 'not in 15 years' : 'year '+r.breakeven;
+  const rows = [
+    ['Training debt', fmt(ra.totalDebt), fmt(rb.totalDebt)],
+    ['Loan payment / month', fmt(ra.loanMonthly), fmt(rb.loanMonthly)],
+    ['Down payment', fmt(ra.downPayment), fmt(rb.downPayment)],
+    ['Until full pay', yrs(ra.yearsToFull), yrs(rb.yearsToFull)],
+    ['Person 1 take-home / yr', `${fmt(ra.p1Net)} <small>(${esc(name(sa,'p1'))})</small>`, `${fmt(rb.p1Net)} <small>(${esc(name(sb,'p1'))})</small>`],
+    ['Person 2 take-home / yr', `${fmt(ra.p2Net)} <small>(${esc(name(sa,'p2'))})</small>`, `${fmt(rb.p2Net)} <small>(${esc(name(sb,'p2'))})</small>`],
+    ['Household take-home / yr', fmt(ra.netFull), fmt(rb.netFull)],
+    ['Costs / yr (without loan)', fmt(ra.costsAnnual), fmt(rb.costsAnnual)],
+    ['Saved / yr after loan', fmtSigned(ra.savingsAfterLoan), fmtSigned(rb.savingsAfterLoan)],
+    ['Buffer for quiet months', fmt(ra.buffer), fmt(rb.buffer)],
+    ['Back above zero', be(ra), be(rb)],
+    ['Savings after 15 years', fmt(ra.points[HORIZON].cash), fmt(rb.points[HORIZON].cash)],
+    ['Wealth after 15 years', fmt(ra.points[HORIZON].wealth), fmt(rb.points[HORIZON].wealth)]
+  ];
+  area.innerHTML = `<div class="compare-box">
+    <div class="sub-title" style="margin:0">Comparing</div>
+    <div class="table-scroll"><table class="data-table">
+      <thead><tr><th></th><th>${legendLine('var(--s1)')} ${esc(a.name)}</th><th>${legendLine('var(--s2)', true)} ${esc(b.name)}</th></tr></thead>
+      <tbody>${rows.map(rw => `<tr><td>${rw[0]}</td><td>${rw[1]}</td><td>${rw[2]}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <div class="chart-host" id="compareChart"></div>
+    <div class="legend"><span>${legendLine('var(--s1)')}${esc(a.name)} — savings</span><span>${legendLine('var(--s2)', true)}${esc(b.name)} — savings</span></div>
+  </div>`;
+  const short = n => n.length > 16 ? n.slice(0,15)+'…' : n;
+  renderTimeline($('compareChart'), {
+    series:[
+      { name:a.name, short:short(a.name), color:'var(--s1)', values:ra.points.map(p=>p.cash) },
+      { name:b.name, short:short(b.name), color:'var(--s2)', dash:true, values:rb.points.map(p=>p.cash) }
+    ],
+    ariaLabel:`Savings over 15 years: ${a.name} ends at ${fmt(ra.points[HORIZON].cash)}, ${b.name} ends at ${fmt(rb.points[HORIZON].cash)}.`,
+    tooltip: t => `<b>${t===0?'Now (start)':'End of year '+t}</b>
+      <div class="row"><span><span class="sw" style="background:var(--s1)"></span>${esc(short(a.name))}</span><b>${fmt(ra.points[t].cash)}</b></div>
+      <div class="row"><span><span class="sw" style="background:var(--s2)"></span>${esc(short(b.name))}</span><b>${fmt(rb.points[t].cash)}</b></div>`
+  });
+}
+
+// share link / export / import
+const toB64 = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+const fromB64 = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64), c => c.charCodeAt(0)));
+$('shareBtn').onclick = async () => {
+  const url = location.href.split('#')[0] + '#s=' + encodeURIComponent(toB64(JSON.stringify(selection)));
+  try { await navigator.clipboard.writeText(url); notify('Share link copied. Anyone who opens it sees this exact setup.'); }
+  catch(e){ window.prompt('Copy this link:', url); }
+};
+$('exportBtn').onclick = () => {
+  const data = { app:'ridgeline', version:1, exportedAt:new Date().toISOString(), current:selection, scenarios:loadScenarios() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `ridgeline-scenarios-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+};
+$('importInput').onchange = async e => {
+  const file = e.target.files[0]; e.target.value = '';
+  if(!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    const incoming = Array.isArray(data) ? data : (data.scenarios || []);
+    const list = loadScenarios();
+    let added = 0;
+    incoming.forEach(it => { if(it && it.selection){ list.push({ id:newId(), name:String(it.name||'Imported').slice(0,80), savedAt:it.savedAt||Date.now(), selection:normalize(it.selection) }); added++; } });
+    saveScenarios(list); renderScenarioList();
+    notify(`Imported ${added} scenario${added===1?'':'s'}.`);
+  } catch(err){ notify('Could not read that file — is it a Ridgeline export?'); }
+};
+
+// Move scenarios saved by the first (French) version inside Claude into this list, once.
+async function migrateLegacy(){
+  if(!window.storage || !window.storage.list || store.get(KEY_MIGRATED)) return;
+  try {
+    const res = await window.storage.list('scenario:', false);
+    const keys = (res && res.keys) || [];
+    const list = loadScenarios(); let added = 0;
+    for(const k of keys){
+      try {
+        const r = await window.storage.get(k, false);
+        if(r && r.value){ const d = JSON.parse(r.value); list.push({ id:newId(), name:String(d.name||k), savedAt:d.savedAt||Date.now(), selection:normalize(d.selection) }); added++; }
+      } catch(e){}
+    }
+    saveScenarios(list); store.set(KEY_MIGRATED, '1');
+    if(added){ renderScenarioList(); notify(`Brought over ${added} scenario${added===1?'':'s'} from the old version.`); }
+  } catch(e){}
+}
+
+// ================= Sources =================
+function renderSources(){
+  const isEst = t => /\[estimate\]/.test(t||'');
+  const item = (title, text, est, links=[]) => `<div class="src-item">
+    <div class="src-head"><b>${esc(title)}</b><span class="badge ${est?'estimate':'sourced'}">${est ? 'Estimate — check' : 'From a source'}</span></div>
+    <p>${esc((text||'').replace('[estimate] ',''))}${links.length ? ' — ' + links.map(l => `<a href="${LINKS[l].url}" target="_blank" rel="noopener">${esc(LINKS[l].label)}</a>`).join(', ') : ''}</p>
+  </div>`;
+  const jobs = [];
+  ['p1','p2'].forEach(p => Object.values(ACTS[p]).forEach(a => {
+    if(!a.home) return;
+    const pay = Object.entries(a.defaults).map(([se,d]) => `${se}: €${d.rate}/h, ${d.hours} h/week, ${d.months} months`).join('; ');
+    jobs.push(item(a.label, `Training ${fmt(a.trainingCost)}, ${a.trainingYears ? yrs(a.trainingYears) : 'none'}. ${a.note} Pay [estimate]: ${pay}.`, isEst(a.note), a.links||[]));
+  }));
+  jobs.push(item(WFR.label, `${fmt(WFR.cost)}. ${WFR.note}`, false, WFR.links));
+  const countries = Object.values(COUNTRIES).map(c => item(c.label,
+    `House ${fmt(c.housePrice)}, rent ${fmt(c.rent)}/month, living ${fmt(c.col)}/month, pay level ×${c.wage}, income tax ${c.tax}%, social charges ${c.charges.employee}% (employee) / ${c.charges.independent}% (self-employed) / ${c.charges.mix}% (mix).`, true, c.links));
+  const choices = ['company','workZone','rhythm'].flatMap(k => Object.values(AXES[k].options).filter(o => isEst(o.note)).map(o => item(`${AXES[k].label}: ${o.label}`, o.note, true)));
+  const model = [
+    item('Hours → money', `Monthly pay = pay per hour × hours per week × ${WEEKS_PER_MONTH} weeks.`, false),
+    item('Training loan', `Interest ${selection.loanRate}%/yr (you can change it), paid back over at least 5 years, starting in year 1.`, true),
+    item('Pay while training', `A job earns ${selection.trainingIncome}% of its full pay while its own training runs. Jobs without training earn full pay from year 1.`, true),
+    item('Company', `Training costs ~${COMPANY_DEDUCTION*100}% cheaper through the company, €3,000 to set it up.`, true),
+    item('Van life', `${fmt(VAN_MONTHLY)}/month upkeep.`, true),
+    item('Home', `Owner costs ${selection.ownerCosts}% and value growth ${selection.appreciation}% per year (both editable).`, true),
+    item('What is not included', 'Inflation, pay rises, interest on savings, children, pensions and one-off big purchases (car, van, equipment).', false)
+  ];
+  $('sources').innerHTML = `
+    <div class="sub-title">Jobs &amp; training</div><div class="src-group">${jobs.join('')}</div>
+    <div class="sub-title">Countries</div><div class="src-group">${countries.join('')}</div>
+    <div class="sub-title">Life choices</div><div class="src-group">${choices.join('')}</div>
+    <div class="sub-title">How the planner calculates</div><div class="src-group">${model.join('')}</div>`;
+}
+
+// ================= Theme =================
+const THEMES = ['auto','light','dark'];
+function applyTheme(t){
+  if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);
+  $('themeBtn').textContent = 'Theme: ' + t;
+}
+$('themeBtn').onclick = () => {
+  const cur = store.get(KEY_THEME) || 'auto';
+  const next = THEMES[(THEMES.indexOf(cur)+1) % THEMES.length];
+  store.set(KEY_THEME, next); applyTheme(next);
+};
+
+// ================= Start =================
+['p1','p2'].forEach(p => $('name-'+p).oninput = e => {
+  selection.names[p] = e.target.value;
+  renderNames(); computeAndRender(); renderScenarioList();
+});
+$('saveBtn').onclick = saveScenario;
+$('scenarioName').addEventListener('keydown', e => { if(e.key==='Enter') saveScenario(); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => computeAndRender());
+let resizeTimer;
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { computeAndRender(); renderCompare(); }, 120); });
+document.querySelectorAll('details.sec').forEach(d => d.addEventListener('toggle', () => { if(d.open){ computeAndRender(); renderCompare(); } }));
+
+(function init(){
+  applyTheme(store.get(KEY_THEME) || 'auto');
+  let fromLink = false;
+  const m = location.hash.match(/^#s=(.+)$/);
+  if(m){
+    try { selection = normalize(JSON.parse(fromB64(decodeURIComponent(m[1])))); fromLink = true; } catch(e){}
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+  if(!selection){
+    let saved = null; try { saved = JSON.parse(store.get(KEY_CURRENT)); } catch(e){}
+    selection = normalize(saved);
+  }
+  renderAll();
+  renderScenarioList();
+  if(fromLink) notify('Loaded the setup from a share link. Save it as a scenario to keep it.');
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { computeAndRender(); renderCompare(); });
+  migrateLegacy();
+})();
+</script>
+</body>
+</html>
