@@ -25,20 +25,20 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 
 ## Dream Life Calculator (`dream-life/index.html`)
 
-A 10-year (2027–2036) cost plan for a "dream life": Hilux + camper cell, a cabin
-with land on a mortgage, dogs, chickens, a horse, motorbikes, a sports car,
-a Makita workshop, buy-once-for-life kit and outdoor gear.
+What the "dream life" costs to buy and to keep every year, in France (Vercors),
+Finland or Norway, and how much a company can carry.
 
-- **Short answer:** one-off cost of everything, yearly cost once everything is
-  owned, the gross income that needs, the lowest savings point and a "€1,000 test".
-- **Chart and year table:** savings at the end of each year against an emergency buffer.
-- **Steps:** tick, pick a version (e.g. used diesel vs new hybrid Hilux) and a year.
-  "Find the earliest year I can afford each step" plans them in priority order.
-- **Country presets:** France (Vercors), Finland (rural), Norway (rural).
-- **Shopping lists:** the tool, buy-once and gear spreadsheets, converted to euros
-  for Europe, with problems in the original lists marked.
-- **Reality checks:** mortgage limits, the French CO₂ malus on double-cab pick-ups,
-  teaching rules for non-EU nationals, licences, animal needs, insurance.
+- **Country:** switches prices, VAT, property fees and running costs.
+- **Company type:** e.g. French EI au réel / EURL vs micro-entrepreneur, Finnish
+  toiminimi with or without VAT, Norwegian ENK. Shows VAT recovered plus tax and
+  social charges saved, for the business share (%) of each object only.
+- **Objects by category:** home & land, vehicles (Hilux Extra Cab + camper cell),
+  animals, Makita workshop, kitchen, clothes, outdoor gear, yearly lifestyle.
+  Tick each object on or off, type your own buy price or yearly cost, and choose
+  what goes under the company.
+- **Country comparison:** the same choices priced in all three countries.
+- **Checks:** company rules, the Extra Cab's utility status, French guiding diplomas,
+  and fixes made to the original tool, buy-once and gear spreadsheets.
 
-All amounts are rough September 2026 estimates in today's euros. Changes are
-saved in the browser (localStorage). Edit the data at the top of the `<script>`.
+Prices are realistic September 2026 estimates in euros incl. VAT. Choices are saved
+in the browser (localStorage). Edit the objects in the `CATS` list in the `<script>`.
