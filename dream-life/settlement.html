@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Settlement Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F3F2F5; --surface:#FFFFFF; --ink:#1C1A22; --muted:#55505F; --line:#DAD6E0;
+  --accent:#5B3F7A; --accent-ink:#FFFFFF; --accent-soft:#ECE4F3; --marker:#E9B824;
+  --ok:#23794A; --ok-soft:#DDF0E3; --mid:#8A5A0E; --mid-soft:#F6EACB; --no:#A63D33; --no-soft:#F5DEDA;
+  --co:#1C5D78; --co-soft:#DCEBF1; --track:#EAE6EE; --grp:#F7F5F9;
+  --s1:#F5DEDA; --s1i:#A63D33; --s2:#F6EACB; --s2i:#8A5A0E; --s3:#EEEBF1; --s3i:#55505F; --s4:#E2F0E6; --s4i:#2E6B45; --s5:#C9E8D3; --s5i:#1B5E36;
+  --font-body:"Lexend", "Segoe UI", system-ui, sans-serif;
+  --font-display:"Bricolage Grotesque", "Lexend", system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#131118; --surface:#1C1922; --ink:#ECE8F1; --muted:#ABA4B6; --line:#2F2A38;
+    --accent:#C4A6E0; --accent-ink:#131118; --accent-soft:#2D2438;
+    --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
+    --co:#7CC0DB; --co-soft:#183440; --track:#29242F; --grp:#221E29;
+    --s1:#3E1E1B; --s1i:#F08A7E; --s2:#3A2E14; --s2i:#E3B45A; --s3:#29242F; --s3i:#ABA4B6; --s4:#1B3325; --s4i:#8FD6AA; --s5:#1F4A30; --s5i:#A8E8C0;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131118; --surface:#1C1922; --ink:#ECE8F1; --muted:#ABA4B6; --line:#2F2A38;
+  --accent:#C4A6E0; --accent-ink:#131118; --accent-soft:#2D2438;
+  --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
+  --co:#7CC0DB; --co-soft:#183440; --track:#29242F; --grp:#221E29;
+  --s1:#3E1E1B; --s1i:#F08A7E; --s2:#3A2E14; --s2i:#E3B45A; --s3:#29242F; --s3i:#ABA4B6; --s4:#1B3325; --s4i:#8FD6AA; --s5:#1F4A30; --s5i:#A8E8C0;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-0.01em}
+h2{font-size:1.5rem;font-weight:800}
+p{margin:0;max-width:72ch}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--marker);outline-offset:2px;border-radius:6px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:8px;background:var(--marker);border-radius:2px;display:inline-block}
+header{display:flex;flex-direction:column;gap:12px}
+.lead{font-size:1.1rem;color:var(--muted)}
+.hint{color:var(--muted);font-size:.93rem}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.navlink{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--accent);border-radius:10px;padding:6px 13px;font-weight:500;text-decoration:none;width:fit-content}
+.alert{background:var(--mid-soft);border-radius:12px;padding:12px 16px;font-size:.95rem}
+section{display:flex;flex-direction:column;gap:12px}
+.seg button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:.88rem}
+.seg button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.weights{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.w{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.9rem}
+.w .ctl{display:flex;align-items:center;gap:6px}
+.w button{width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);font-weight:600}
+.w b{min-width:22px;text-align:center;font-variant-numeric:tabular-nums}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;white-space:nowrap}
+th.on{color:var(--accent)}
+th small{display:block;font-weight:400;text-transform:none}
+td.place{text-align:left;padding-left:12px;min-width:210px}
+td.place .nm{font-weight:600}
+td.place .nt{display:block;font-size:.78rem;color:var(--muted)}
+tr.main{cursor:pointer}
+tr.main:hover td{background:var(--grp)}
+.sc{display:inline-block;width:28px;height:28px;line-height:28px;border-radius:6px;font-weight:600;font-size:.85rem;font-variant-numeric:tabular-nums}
+.v1{background:var(--s1);color:var(--s1i)} .v2{background:var(--s2);color:var(--s2i)} .v3{background:var(--s3);color:var(--s3i)} .v4{background:var(--s4);color:var(--s4i)} .v5{background:var(--s5);color:var(--s5i)}
+.tot{display:inline-block;padding:2px 10px;border-radius:999px;font-weight:800;font-family:var(--font-display);font-size:1rem;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:.72rem;border-radius:999px;padding:1px 8px;margin-left:4px;vertical-align:middle}
+.chip.eur{background:var(--co-soft);color:var(--co)}
+.chip.fix{background:var(--accent-soft);color:var(--accent)}
+.dual{font-weight:600;font-size:.82rem}
+.dual.y{color:var(--ok)} .dual.n{color:var(--no)}
+.yrs{font-size:.82rem;font-weight:600;white-space:nowrap}
+.yrs.sp{color:var(--accent)}
+td.detail{text-align:left;padding:0 10px 14px;background:var(--grp)}
+.det{display:flex;flex-direction:column;gap:10px;padding-top:12px}
+.det .box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:.93rem}
+.det .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:.85rem;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+footer{color:var(--muted);font-size:.88rem;display:flex;flex-direction:column;gap:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Tools · where should we settle</div>
+    <h1>Settlement Score</h1>
+    <p class="lead">14 places scored on 12 things that matter to you, for a Belgian with a Japanese spouse who wants a cheap house to renovate. Change the weights and the ranking updates. The five places with a € badge also have full cost data in the calculator, and it uses these same weights.</p>
+    <a class="navlink" href="index.html">→ Open the Dream Life Calculator (costs)</a>
+    <div class="alert"><b>Dual citizenship:</b> Japan, Slovenia, Bulgaria and Georgia would make you give up your Belgian passport to naturalise, and with it EU free movement. France, Finland, Sweden, Norway, Romania, New Zealand and the USA let you keep both.</div>
+  </header>
+
+  <section aria-labelledby="h-w">
+    <h2 id="h-w">What matters most (weights)</h2>
+    <p class="hint">0 = ignore, 5 = very important. Saved in this browser, and the calculator's fit scores use them too.</p>
+    <div class="weights" id="weights"></div>
+    <div class="row"><button class="navlink" style="border-width:2px;background:none" type="button" id="resetW">Reset weights</button></div>
+  </section>
+
+  <section aria-labelledby="h-t">
+    <h2 id="h-t">Ranking</h2>
+    <div class="row"><span class="hint">Sort by:</span><div class="seg row" id="sort"></div></div>
+    <div class="legend">
+      <span><i class="sc v5" style="width:18px;height:18px"></i>9–10 excellent</span>
+      <span><i class="sc v4" style="width:18px;height:18px"></i>7–8 good</span>
+      <span><i class="sc v3" style="width:18px;height:18px"></i>5–6 average</span>
+      <span><i class="sc v2" style="width:18px;height:18px"></i>3–4 weak</span>
+      <span><i class="sc v1" style="width:18px;height:18px"></i>1–2 blocker</span>
+      <span>· Tap a row for the full verdict</span>
+    </div>
+    <div class="tbl-wrap"><table id="tbl"></table></div>
+  </section>
+
+  <footer>
+    <p><b>Corrected in September 2026:</b> Norway is in the EEA, so free movement applies to you and your wife (paperwork 4 → 7). Citizenship years updated: Finland 8 (5 with the language test) since Oct 2024, Sweden 8 since 6 June 2026, Norway 8 (6 with income), France B2 French from 2026. France's business scores lowered because paid guiding needs French diplomas. "Western Sweden" replaced by Jämtland/Åre to match the cost calculator. Japan: farmland and mortgage rules added. Rows marked "corrected" show what changed.</p>
+    <p>Sources: <a href="https://migri.fi/en/period-of-residence" target="_blank" rel="noopener">Migri (Finland)</a> · <a href="https://www.migrationsverket.se/nyheter/news-archive/2026-05-06-new-rules-for-swedish-citizenship-from-6-june-2026.html" target="_blank" rel="noopener">Migrationsverket (Sweden)</a> · <a href="https://www.udi.no/en/want-to-apply/citizenship/citizenship-for-eueea-nationals-who-have-held-a-residence-permit-in-norway/" target="_blank" rel="noopener">UDI (Norway)</a> · <a href="https://www.sportsdenature.gouv.fr/canyonisme/reglementation/encadrement" target="_blank" rel="noopener">French guiding rules</a> · <a href="https://japan-law-tax.com/blog/real-estate-japan/buy-farm-land-japan/" target="_blank" rel="noopener">Japan farmland</a></p>
+  </footer>
+</div>
+
+<script src="settlement-data.js"></script>
+<script>
+"use strict";
+let W = settleWeights(), sortBy = "overall", open = null;
+const saveW = () => { try { localStorage.setItem(SETTLE_KEY, JSON.stringify({ weights: W })); } catch(e){} };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const band = v => v >= 9 ? 5 : v >= 7 ? 4 : v >= 5 ? 3 : v >= 3 ? 2 : 1;
+
+function buildWeights(){
+  document.getElementById("weights").innerHTML = SETTLE_CRITERIA.map(c => `<div class="w"><span>${esc(c.label)}</span><span class="ctl">
+    <button type="button" data-k="${c.key}" data-d="-1" aria-label="Less important: ${esc(c.label)}">−</button><b id="wv-${c.key}">${W[c.key]}</b>
+    <button type="button" data-k="${c.key}" data-d="1" aria-label="More important: ${esc(c.label)}">+</button></span></div>`).join("");
+  document.querySelectorAll("#weights button").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.k; W[k] = Math.max(0, Math.min(5, W[k] + +b.dataset.d));
+    document.getElementById("wv-"+k).textContent = W[k]; saveW(); render();
+  }));
+}
+function buildSort(){
+  const opts = [["overall","★ Overall"]].concat(SETTLE_CRITERIA.map(c => [c.key, c.short]));
+  const el = document.getElementById("sort");
+  el.innerHTML = opts.map(([k,t]) => `<button type="button" data-k="${k}" aria-pressed="${k===sortBy}">${esc(t)}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { sortBy = b.dataset.k; buildSort(); render(); }));
+}
+function render(){
+  const rows = SETTLE_PLACES.map(p => ({ p, total: settleScore(p, W) }))
+    .sort((a,b) => sortBy === "overall" ? b.total - a.total : (b.p.scores[sortBy] - a.p.scores[sortBy]) || (b.total - a.total));
+  const cols = SETTLE_CRITERIA.length + 4;
+  let h = `<thead><tr><th style="text-align:left;padding-left:12px">Place</th>${SETTLE_CRITERIA.map(c => `<th class="${c.key===sortBy?"on":""}">${esc(c.short)}<small>×${W[c.key]}</small></th>`).join("")}<th>Score</th><th>Citizen</th><th>Dual?</th></tr></thead><tbody>`;
+  rows.forEach(({p,total}, i) => {
+    h += `<tr class="main" data-id="${p.id}" tabindex="0" aria-expanded="${open===p.id}">
+      <td class="place"><span class="nm">#${i+1} ${p.flag} ${esc(p.name)}</span>${p.calc?`<span class="chip eur" title="Full cost data in the calculator">€</span>`:""}${p.fixed?`<span class="chip fix">corrected</span>`:""}<span class="nt">${esc(p.note)}</span></td>
+      ${SETTLE_CRITERIA.map(c => `<td><span class="sc v${band(p.scores[c.key])}">${p.scores[c.key]}</span></td>`).join("")}
+      <td><span class="tot sc v${band(total/10)}" style="width:auto">${total}</span></td>
+      <td><span class="yrs${p.citizenship.spouse?" sp":""}">${esc(p.citizenship.years)}</span></td>
+      <td><span class="dual ${p.citizenship.dual?"y":"n"}">${p.citizenship.dual?"✓ Yes":"✗ No"}</span></td></tr>`;
+    if (open === p.id) h += `<tr><td class="detail" colspan="${cols}"><div class="det">
+      <div class="box"><span class="lbl">Verdict</span><p>${esc(p.comments)}</p></div>
+      <div class="box"><span class="lbl">Citizenship path</span><p>${esc(p.citizenship.note)}</p></div>
+      ${p.fixed?`<div class="box"><span class="lbl">Corrected</span><p>${esc(p.fixed)}</p></div>`:""}
+      ${p.calc?`<a class="navlink" href="index.html">→ See what ${esc(p.name)} costs in the calculator</a>`:""}
+    </div></td></tr>`;
+  });
+  const t = document.getElementById("tbl");
+  t.innerHTML = h + `</tbody>`;
+  t.querySelectorAll("tr.main").forEach(tr => {
+    const toggle = () => { open = open === tr.dataset.id ? null : tr.dataset.id; render(); };
+    tr.addEventListener("click", toggle);
+    tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+  });
+}
+document.getElementById("resetW").addEventListener("click", () => {
+  SETTLE_CRITERIA.forEach(c => W[c.key] = c.weight); saveW(); buildWeights(); render();
+});
+buildWeights(); buildSort(); render();
+</script>
+</body>
+</html>

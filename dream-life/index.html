@@ -72,6 +72,9 @@ select{border:1.5px solid var(--line);background:var(--bg);border-radius:6px;pad
 .pill.no{background:var(--no-soft);color:var(--no)}
 .pill.base{background:var(--accent-soft);color:var(--accent)}
 .d-up{color:var(--no)} .d-dn{color:var(--ok)}
+.fit{display:flex;justify-content:space-between;gap:8px;font-size:.92rem;align-items:center;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
+.fit b{font-family:var(--font-display);font-size:1.15rem}
+.navlink{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--accent);border-radius:10px;padding:6px 13px;font-weight:500;text-decoration:none;width:fit-content}
 .verdict{background:var(--accent-soft);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
 .verdict ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 
@@ -148,9 +151,10 @@ footer{color:var(--muted);font-size:.88rem;display:flex;flex-direction:column;ga
 
 <div class="wrap">
   <header class="top">
-    <div class="eyebrow">Tools · four-country budget</div>
+    <div class="eyebrow">Tools · five-country budget</div>
     <h1>Dream Life Calculator</h1>
-    <p class="lead">Your dream life priced in France, Sweden, Finland and Norway, side by side: house, property tax, mortgage interest, food, healthcare, vehicles and their taxes, animals, passes, investment tax and what the company can carry. Income and income tax are left out (you have your own calculator for that). Every number is editable.</p>
+    <p class="lead">Your dream life priced in France, Sweden, Finland, Norway and Japan, side by side: house, property tax, mortgage interest, food, healthcare, vehicles and their taxes, animals, passes, investment tax and what the company can carry. Income and income tax are left out (you have your own calculator for that). Every number is editable.</p>
+    <a class="navlink" href="settlement.html">→ Open the Settlement Score (where would we be happy?)</a>
     <div class="row">
       <span class="hint">Compare against:</span>
       <div class="seg" id="baseSel"></div>
@@ -212,18 +216,19 @@ footer{color:var(--muted);font-size:.88rem;display:flex;flex-direction:column;ga
   </footer>
 </div>
 
+<script src="settlement-data.js"></script>
 <script>
 "use strict";
 const KEY = "dream-life-4c-v3";
-const CS = ["fr","se","fi","no"];
-const CN = { fr:"France", se:"Sweden", fi:"Finland", no:"Norway" };
-const CR = { fr:"Vercors", se:"Jämtland / Åre", fi:"Kuusamo / Lapland", no:"Hallingdal / Valdres" };
-const SEK = 11.0, NOK = 11.7;
+const CS = ["fr","se","fi","no","jp"];
+const CN = { fr:"France", se:"Sweden", fi:"Finland", no:"Norway", jp:"Japan" };
+const CR = { fr:"Vercors", se:"Jämtland / Åre", fi:"Äkäslompolo / Ylläs", no:"Hallingdal / Valdres", jp:"Nagano (rural akiya)" };
+const SEK = 11.0, NOK = 11.7, JPY = 170;
 const eur = n => (n < -0.5 ? "−" : "") + "€" + Math.round(Math.abs(n)).toLocaleString("en-IE");
 const kk = n => { const a = Math.abs(n), s = n < -0.5 ? "−" : ""; return s + "€" + (a >= 1e6 ? (a/1e6).toFixed(2) + "M" : a >= 100000 ? Math.round(a/1000) + "k" : a >= 10000 ? (a/1000).toFixed(1).replace(/\.0$/,"") + "k" : Math.round(a).toLocaleString("en-IE")); };
 const sgn = n => (n > 0.5 ? "+" : n < -0.5 ? "−" : "±") + "€" + Math.round(Math.abs(n)).toLocaleString("en-IE");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const V4 = (fr,se,fi,no) => ({fr,se,fi,no});
+const V4 = (fr,se,fi,no,jp) => ({fr,se,fi,no,jp});
 
 /* ---------- COMPANY RULES ---------- */
 const REG = {
@@ -236,31 +241,34 @@ const REG = {
   fi:{ vat:25.5, list:{
     tmi_vat:{ label:"Toiminimi, VAT registered", vat:true, m:32, note:"Costs lower income tax. YEL pension doesn't drop." },
     tmi:{ label:"Toiminimi, no VAT (< €20,000)", vat:false, m:32, note:"Costs deductible, no VAT back." } } },
+  jp:{ vat:10, list:{
+    kojin:{ label:"Kojin jigyō, consumption-tax exempt (< ¥10M)", vat:false, m:30, note:"Costs lower income tax, resident tax and National Health Insurance. No consumption tax back." },
+    kojin_ct:{ label:"Kojin jigyō, consumption-tax registered", vat:true, m:30, note:"10% consumption tax recovered on business purchases." } } },
   no:{ vat:25, list:{
     enk_mva:{ label:"ENK, VAT (MVA) registered", vat:true, m:36, note:"22% tax + 10.9% social security + bracket tax." },
     enk:{ label:"ENK, no VAT (< NOK 50,000)", vat:false, m:36, note:"Costs deductible, no VAT back." } } }
 };
-const MULT = { goods:V4(1,1.05,1.07,1.18), animal:V4(1,1.1,1.1,1.35), none:V4(1,1,1,1) };
+const MULT = { goods:V4(1,1.05,1.07,1.18,0.95), animal:V4(1,1.1,1.1,1.35,1.15), none:V4(1,1,1,1,1) };
 
 /* ---------- OBJECTS ---------- */
 const I = (id,name,dt,buy,run,o={}) => Object.assign({id,name,dt,buy,run,cls:"goods",co:"no",biz:0,vb:true,rv:1,on:true},o);
 const OBJ = [
  { id:"veh", name:"Vehicles", sub:"Hilux Extra Cab, camper cell, car, bikes. Yearly = fuel (15,000 km), insurance, service, road tax", items:[
-   I("hilux","Toyota Hilux Extra Cab 2.8 D-4D, new","4 seats = utility vehicle. Sweden: vehicle tax ~€1,950/yr for the first 3 years (malus), then ~€160 · Finland: price includes car tax, ~€1,100/yr vehicle tax",V4(44000,46000,52000,50000),V4(4300,4900,5500,5300),{cls:"none",co:"mixed",biz:70,rv:0.7}),
-   I("cell","Camper cell, used","slide-in, removable, keep it private",V4(14000,15000,15000,17000),300,{cls:"none",vb:false,why:"Living space, private use.",fl:"Fixed + registered as a camper = the truck loses its utility status."}),
+   I("hilux","Toyota Hilux Extra Cab 2.8 D-4D, new","4 seats = utility vehicle. Sweden: vehicle tax ~€1,950/yr for the first 3 years (malus), then ~€160 · Finland: price includes car tax, ~€1,100/yr vehicle tax · Japan: sold new as a 1-number truck, cheap diesel, yearly inspection (shaken)",V4(44000,46000,52000,50000,25000),V4(4300,4900,5500,5300,2500),{cls:"none",co:"mixed",biz:70,rv:0.7}),
+   I("cell","Camper cell, used","slide-in, removable, keep it private",V4(14000,15000,15000,17000,12000),300,{cls:"none",vb:false,why:"Living space, private use.",fl:"Fixed + registered as a camper = the truck loses its utility status."}),
    I("canopy","Or: hard canopy + DIY interior","cheaper option instead of a cell",7500,150,{on:false,why:"Living space."}),
    I("setup","Truck setup","all-terrain tyres, suspension for the cell, recovery kit, skid plate",3000,200,{co:"mixed",biz:70}),
-   I("mx5","Mazda MX-5 ND 2.0, used","weekend car",V4(19000,21000,23000,26000),V4(2200,2400,2500,2600),{cls:"none",vb:false,rv:0.5,why:"Sports car, private."}),
-   I("wrx","Or: Subaru WRX STI, used","",V4(27000,30000,32000,38000),V4(3200,3900,3500,3900),{cls:"none",on:false,vb:false,rv:0.5,why:"Sports car, private."}),
-   I("scram","Triumph Scrambler 900, used","A2: needs the 35 kW kit",V4(8500,9500,9500,11000),V4(900,900,950,1000),{cls:"none",vb:false,rv:0.5,why:"Private unless you run moto tours."}),
-   I("scram400","Or: Triumph Scrambler 400 X, new","A2 legal",V4(6500,7000,7200,8500),V4(700,700,750,800),{cls:"none",on:false,rv:0.5,why:"Private unless you run moto tours."}),
-   I("sm125","125cc supermoto / enduro, used","",V4(3200,3500,3600,4200),500,{cls:"none",vb:false,rv:0.5,why:"Private hobby."})
+   I("mx5","Mazda MX-5 ND 2.0, used","weekend car",V4(19000,21000,23000,26000,11000),V4(2200,2400,2500,2600,1600),{cls:"none",vb:false,rv:0.5,why:"Sports car, private."}),
+   I("wrx","Or: Subaru WRX STI, used","",V4(27000,30000,32000,38000,21000),V4(3200,3900,3500,3900,2400),{cls:"none",on:false,vb:false,rv:0.5,why:"Sports car, private."}),
+   I("scram","Triumph Scrambler 900, used","A2: needs the 35 kW kit",V4(8500,9500,9500,11000,7000),V4(900,900,950,1000,700),{cls:"none",vb:false,rv:0.5,why:"Private unless you run moto tours."}),
+   I("scram400","Or: Triumph Scrambler 400 X, new","A2 legal",V4(6500,7000,7200,8500,4600),V4(700,700,750,800,550),{cls:"none",on:false,rv:0.5,why:"Private unless you run moto tours."}),
+   I("sm125","125cc supermoto / enduro, used","",V4(3200,3500,3600,4200,2000),V4(500,500,500,550,300),{cls:"none",vb:false,rv:0.5,why:"Private hobby."})
  ]},
  { id:"animals", name:"Animals", sub:"Dogs, chickens, horse (prices ×1.1 in Sweden/Finland, ×1.35 in Norway)", items:[
    I("dogs","2 dogs","buy/adopt + gear · yearly: food, vet, insurance, sitter in your travel month",2500,2800,{cls:"animal",vb:false,rv:0.4,why:"Pets are private."}),
    I("hens","6 chickens + fox-proof coop","eggs worth ~€450/yr cover most feed",900,350,{cls:"animal",vb:false,why:"Private."}),
-   I("horse","Horse","yearly: hay, farrier, vet, dentist, insurance",4000,3000,{cls:"animal",vb:false,why:"Private unless horse treks are a business."}),
-   I("companion","Companion pony or donkey","one horse alone is a welfare problem",1000,1400,{cls:"animal",vb:false,why:"Private."}),
+   I("horse","Horse","yearly: hay, farrier, vet, dentist, insurance · Japan: hay mostly imported, few horse vets",V4(4000,4400,4400,5400,6000),V4(3000,3300,3300,4050,6000),{cls:"animal",vb:false,why:"Private unless horse treks are a business."}),
+   I("companion","Companion pony or donkey","one horse alone is a welfare problem",V4(1000,1100,1100,1350,1500),V4(1400,1540,1540,1890,2800),{cls:"animal",vb:false,why:"Private."}),
    I("tack","Saddle, bridle, rugs, grooming","",1500,150,{cls:"animal",why:"Private."}),
    I("fence","Fencing + field shelter","for ~2 ha",6000,200,{cls:"animal",why:"Private."})
  ]},
@@ -350,10 +358,10 @@ const BYID = Object.fromEntries(ALL.map(i => [i.id, i]));
  kind: once | year | param (not summed) | info (not summed, not editable)
  def(c): default value · obj: object category (from objects) */
 const ROWS = [
- { g:"Buying: home", kind:"once", id:"house", lab:"House + 1–2 ha of land", nt:"~110 m² older house. Vercors (Drôme side) ~€2,440/m²; rural Jämtland; Kuusamo area; Hallingdal/Valdres.", def:V4(300000,200000,150000,290000) },
- { kind:"once", id:"fees", lab:"Transfer tax + notary", nt:"France ~7.5% · Sweden 1.5% stamp duty + ~1% mortgage deeds · Finland 3% · Norway 2.5%", calc:c => price(c) * V4(7.5,2.5,3,2.5)[c]/100 },
- { kind:"once", id:"reno", lab:"Renovation", nt:"insulation, roof, heating, kitchen, bathroom · paid from your savings, not borrowed", def:V4(30000,30000,25000,35000) },
- { kind:"param", sec:"once", id:"deposit", lab:"Deposit (% of house price)", nt:"10% is the usual minimum in all four countries. More deposit = smaller loan = less interest.", def:V4(10,10,10,10), pct:true },
+ { g:"Buying: home", kind:"once", id:"house", lab:"House to renovate + land", nt:"Cheap but not a ruin, renovated little by little. France: fixer-upper in the Vercors/Trièves villages · Sweden: rural Jämtland · Finland: outside Äkäslompolo village (inside it ~€4,700/m²) · Norway: old småbruk in Valdres/Hallingdal · Japan: habitable akiya from the town's akiya bank (¥0.5–5M)", def:V4(190000,110000,90000,170000,30000) },
+ { kind:"once", id:"fees", lab:"Transfer tax + notary", nt:"France ~7.5% · Sweden 1.5% stamp duty + ~1% mortgage deeds · Finland 3% · Norway 2.5% · Japan ~10% on a cheap house (registration, acquisition tax, agent, scrivener)", calc:c => price(c) * V4(7.5,2.5,3,2.5,10)[c]/100 },
+ { kind:"once", id:"reno", lab:"Renovation (done little by little)", nt:"insulation, roof, heating, kitchen, bathroom, mostly your own work · paid from savings, not borrowed · Japan: towns often give ¥1–5M renovation grants, not counted here", def:V4(60000,50000,45000,60000,40000) },
+ { kind:"param", sec:"once", id:"deposit", lab:"Deposit (% of house price)", nt:"10% is the usual minimum. More deposit = smaller loan = less interest. With a cheap house you may pay 100% (no mortgage).", def:V4(10,10,10,10,10), pct:true },
  { kind:"info", sec:"once", id:"dep", lab:"Deposit from your savings", calc:c => rowOn("house") ? price(c)*cell("deposit",c)/100 : 0 },
  { kind:"info", sec:"once", id:"loan", lab:"Borrowed (mortgage)", calc:c => rowOn("house") ? mort(c).loan : 0 },
  { kind:"info", sec:"once", id:"cash", lab:"Cash you need on buying day", nt:"deposit + transfer tax/notary + renovation", calc:c => rowOn("house") ? price(c)*cell("deposit",c)/100 + (rowOn("fees") ? cell("fees",c) : 0) + (rowOn("reno") ? cell("reno",c) : 0) : 0 },
@@ -366,32 +374,32 @@ const ROWS = [
  { kind:"once", id:"co_buy", lab:"Company carries (VAT back + tax saved)", nt:"From the objects you put under the company", calc:c => -coTotals(c).sBuy, isCo:true },
  { kind:"oncetotal", id:"t_once", lab:"Total to buy" },
 
- { g:"Every year: home", kind:"year", id:"ptax", lab:"Property tax", nt:"France: taxe foncière ~0.45% of value · Sweden: 0.75% of tax value, max SEK 10,425 · Finland: kiinteistövero, low in the countryside · Norway: eiendomsskatt, only in some municipalities", calc:c => ({fr:price(c)*0.0045, se:Math.min(price(c)*0.75*0.0075, 10425/SEK), fi:550, no:450})[c] },
- { kind:"year", id:"hins", lab:"Home insurance", def:V4(500,600,500,900) },
- { kind:"year", id:"energy", lab:"Heating, power, water, waste, internet", nt:"cold mountain house, wood + electricity or heat pump", def:V4(3000,3000,3300,3200) },
- { kind:"year", id:"upkeep", lab:"House upkeep (1% of value)", calc:c => price(c)*0.01 },
- { g:"Every year: mortgage", kind:"year", id:"interest", lab:"Mortgage interest after tax relief", nt:"First year. Loan = house price − deposit (renovation is paid from savings). Repaying the loan itself is saving, so it's not counted. Sweden deducts 30% of interest, Norway 22%, France and Finland 0%.", calc:c => mort(c).intNet, mortgage:true },
- { kind:"param", id:"rate", lab:"Mortgage rate (%)", def:V4(3.3,3.0,3.0,5.2), pct:true },
+ { g:"Every year: home", kind:"year", id:"ptax", lab:"Property tax", nt:"France: taxe foncière ~0.45% of value · Sweden: 0.75% of tax value, max SEK 10,425 · Finland: kiinteistövero, low in the countryside · Norway: eiendomsskatt, only in some municipalities · Japan: fixed asset tax 1.4% of a low assessed value", calc:c => ({fr:Math.max(price(c)*0.0045, 700), se:Math.min(price(c)*0.75*0.0075, 10425/SEK), fi:450, no:450, jp:300})[c] },
+ { kind:"year", id:"hins", lab:"Home insurance", def:V4(500,600,500,900,400) },
+ { kind:"year", id:"energy", lab:"Heating, power, water, waste, internet", nt:"cold mountain house, wood + electricity or heat pump · Lapland winters and old Japanese houses (kerosene) cost more until insulated", def:V4(3000,3000,3800,3200,2800) },
+ { kind:"year", id:"upkeep", lab:"House upkeep (1% of value, at least €1,500)", calc:c => Math.max(price(c)*0.01, 1500) },
+ { g:"Every year: mortgage", kind:"year", id:"interest", lab:"Mortgage interest after tax relief", nt:"First year. Loan = house price − deposit (renovation is paid from savings). Repaying the loan itself is saving, so it's not counted. Sweden deducts 30% of interest, Norway 22%, France and Finland 0%. Japan: a 0.7% loan credit exists, but old akiya usually fail the 1982 earthquake standard it needs.", calc:c => mort(c).intNet, mortgage:true },
+ { kind:"param", id:"rate", lab:"Mortgage rate (%)", def:V4(3.3,3.0,3.0,5.2,1.8), pct:true },
  { kind:"info", id:"pay", lab:"Monthly payment (25 years)", calc:c => mort(c).month },
- { g:"Every year: food & everyday", kind:"year", id:"food", lab:"Good food for two", nt:"Food price level vs EU (2024): France ~112, Sweden ~106, Finland ~110, Norway ~131", def:V4(9000,8600,8840,10530) },
- { kind:"year", id:"every", lab:"Everyday costs", nt:"phones, household, clothes, small stuff", def:V4(6000,6200,6400,6650) },
- { g:"Every year: healthcare", kind:"year", id:"health", lab:"Healthcare out of pocket, typical year", nt:"France: mutuelle for two ~€1,300 + small fees · Nordics: visit fees + adult dentist (paid mostly by you). The public systems are paid through income tax and social charges, which are in your income calculator.", def:V4(1600,1100,1000,1200) },
- { kind:"info", id:"healthmax", lab:"Bad year: most you can pay (2 adults, dentist extra)", nt:"France: mutuelle + €100 fee cap each · Sweden: SEK 1,450 care + SEK 3,800 medicine each · Finland: €815 care + €636 medicine each · Norway: NOK 3,278 each", calc:c => ({fr:1500, se:2*(1450+3800)/SEK, fi:2*(815+636), no:2*3278/NOK})[c] },
+ { g:"Every year: food & everyday", kind:"year", id:"food", lab:"Good food for two", nt:"Food price level vs EU (2024): France ~112, Sweden ~106, Finland ~110, Norway ~131 · Japan: cheap with the weak yen, but rice and fruit are dear", def:V4(9000,8600,8840,10530,7500) },
+ { kind:"year", id:"every", lab:"Everyday costs", nt:"phones, household, clothes, small stuff", def:V4(6000,6200,6400,6650,5000) },
+ { g:"Every year: healthcare", kind:"year", id:"health", lab:"Healthcare out of pocket, typical year", nt:"France: mutuelle for two ~€1,300 + small fees · Nordics: visit fees + adult dentist (paid mostly by you) · Japan: 30% of every bill, dentist included. The public systems are paid through income tax and social charges, which are in your income calculator.", def:V4(1600,1100,1000,1200,700) },
+ { kind:"info", id:"healthmax", lab:"Bad year: most you can pay (2 adults, dentist extra)", nt:"France: mutuelle + €100 fee cap each · Sweden: SEK 1,450 care + SEK 3,800 medicine each · Finland: €815 care + €636 medicine each · Norway: NOK 3,278 each · Japan: ~¥80,000/month cap each, lower from the 4th month, so a long illness adds up", calc:c => ({fr:1500, se:2*(1450+3800)/SEK, fi:2*(815+636), no:2*3278/NOK, jp:3000})[c] },
  { g:"Every year: vehicles & animals", kind:"year", id:"r_veh", lab:"Vehicles", obj:"veh", nt:"fuel, insurance, service, road tax" },
  { kind:"year", id:"r_animals", lab:"Animals", obj:"animals" },
- { g:"Every year: lifestyle", kind:"year", id:"travel", lab:"One month of adventure travel", def:V4(5000,5000,5000,5000) },
- { kind:"year", id:"ski", lab:"Ski season passes ×2", nt:"Villard/Corrençon · SkiStar Åre · Ruka · SkiStar Hemsedal", def:V4(900,1200,1300,1300) },
- { kind:"year", id:"bike", lab:"Bike park passes ×2", nt:"Villard · Åre · Ruka · Hafjell/Trysil", def:V4(400,600,300,600) },
- { kind:"year", id:"fun", lab:"Guilt-free fun money", def:V4(2400,2400,2400,2400) },
+ { g:"Every year: lifestyle", kind:"year", id:"travel", lab:"One month of adventure travel", def:V4(5000,5000,5000,5000,5000) },
+ { kind:"year", id:"ski", lab:"Ski season passes ×2", nt:"Villard/Corrençon · SkiStar Åre · Ylläs · SkiStar Hemsedal · Nagano local resorts", def:V4(900,1200,1200,1300,800) },
+ { kind:"year", id:"bike", lab:"Bike park passes ×2", nt:"Villard · Åre · Ylläs · Hafjell/Trysil · Hakuba/Fujimi", def:V4(400,600,300,600,300) },
+ { kind:"year", id:"fun", lab:"Guilt-free fun money", def:V4(2400,2400,2400,2400,2400) },
  { kind:"year", id:"r_kit", lab:"Workshop, kit and gear upkeep", objs:["tools","kitchen","clothes","gear"] },
- { g:"Every year: money", kind:"year", id:"proins", lab:"Professional liability insurance", nt:"Guiding (canyoning, paddling, ski) + tree work at height. Fully a business cost: the company line takes the tax off.", def:V4(2000,1500,1200,1800) },
+ { g:"Every year: money", kind:"year", id:"proins", lab:"Professional liability insurance", nt:"Guiding (canyoning, paddling, ski) + tree work at height. Fully a business cost: the company line takes the tax off.", def:V4(2000,1500,1200,1800,1000) },
  { kind:"year", id:"invtax", lab:"Investment tax (average per year)", nt:"From the investment settings below: taxes while you hold + tax when you sell, spread over the years", calc:c => inv(c).perYear, invest:true },
  { kind:"year", id:"co_run", lab:"Company carries", nt:"VAT back + tax saved on running costs", calc:c => -coTotals(c).sRun, isCo:true },
  { kind:"yeartotal", id:"t_year", lab:"Total every year" }
 ];
 
 /* ---------- STATE ---------- */
-function fresh(){ return { base:"fr", view:"both", cells:{}, off:{}, items:{}, regime:{fr:"reel",se:"ef_moms",fi:"tmi_vat",no:"enk_mva"}, marg:{},
+function fresh(){ return { base:"fr", view:"both", cells:{}, off:{}, items:{}, regime:{fr:"reel",jp:"kojin",se:"ef_moms",fi:"tmi_vat",no:"enk_mva"}, marg:{},
   inv:{ start:20000, add:6000, ret:6, years:10 }, mortOn:true, open:{veh:true} }; }
 let S = fresh();
 try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.cells) { S = Object.assign(fresh(), s); S.inv = Object.assign(fresh().inv, s.inv); S.regime = Object.assign(fresh().regime, s.regime); } } catch(e){}
@@ -406,7 +414,7 @@ function rowOn(id){ return !S.off[id]; }
 
 function mort(c){
   const rate = cell("rate", c)/100, loan = price(c) * (1 - cell("deposit", c)/100);
-  const relief = V4(0,30,0,22)[c]/100, r = rate/12, n = 300;
+  const relief = V4(0,30,0,22,0)[c]/100, r = rate/12, n = 300;
   const month = loan > 0 ? (r ? loan*r/(1-Math.pow(1+r,-n)) : loan/n) : 0;
   return { loan, intNet: S.mortOn && rowOn("house") ? loan*rate*(1-relief) : 0, month: rowOn("house") ? month : 0 };
 }
@@ -456,6 +464,8 @@ function inv(c){
   let exit = 0, how = "";
   if (c === "fr"){ const f = Math.min(1, 2*150000/contrib), pea = N >= 5 ? 0.186 : 0.314; exit = gains*(f*pea + (1-f)*0.314);
     how = N >= 5 ? (f < 1 ? "2 PEAs (€150k deposits each), rest in a normal account at 31.4%" : "2 PEAs: 18.6% social levies on gains after 5 years") : "PEA younger than 5 years: 31.4%"; }
+  if (c === "jp"){ const f = Math.min(1, 2*18000000/JPY/contrib); exit = gains*(1-f)*0.20315;
+    how = "NISA: ¥18M each (~€106k) with no tax at all. Above that, 20.315% on gains. NISA must be closed if you move away from Japan"; }
   if (c === "se"){ how = "ISK: 1.065% per year on the part above SEK 300,000 each, no tax when selling"; }
   if (c === "fi"){ const per = gains/2; exit = 2*(0.30*Math.min(per,30000) + 0.34*Math.max(0,per-30000));
     how = "Equity savings accounts (€100k each): 30% on gains (34% above €30k each per year) when you take money out"; }
@@ -671,6 +681,13 @@ function updateObjects(){
   });
 }
 
+/* ---------- FIT (from the Settlement Score page) ---------- */
+function fitOf(c){
+  if (typeof SETTLE_PLACES === "undefined") return null;
+  const p = SETTLE_PLACES.find(x => x.calc === c);
+  return p ? { score: settleScore(p, settleWeights()), name: p.name } : null;
+}
+
 /* ---------- UPDATE ---------- */
 function update(){
   const T = updateMatrix();
@@ -690,6 +707,7 @@ function update(){
       <div class="kv"><span>Every year</span><span>${eur(T[c].year)}</span></div>
       <div class="kv"><span>Per month</span><span>${eur(T[c].year/12)}</span></div>
       ${c!==B?`<div class="kv"><span>vs ${CN[B]}</span><span class="${d>0?"d-up":"d-dn"}">${sgn(d)}</span></div>`:""}
+      ${fitOf(c)?`<div class="fit"><span class="hint">Fit score</span><b>${fitOf(c).score}<span class="hint">/100</span></b></div>`:""}
     </div>`;
   }).join("");
   const mx = Math.max(...CS.map(long));
@@ -707,6 +725,13 @@ function update(){
     lines.push(`<li><b>${CN[c]}</b> is ${tot<0?`<span class="d-dn">${eur(-tot)} cheaper</span>`:`<span class="d-up">${eur(tot)} more expensive</span>`} than ${CN[B]} over ${N} years. Biggest reasons: ${diffs.map(([l,d,k]) => `${esc(l.toLowerCase())} ${sgn(d)}${k==="year"?` (${sgn(d/N)}/yr)`:""}`).join(", ")}.</li>`);
   });
   const yearOnly = [...CS].sort((a,b) => T[a].year - T[b].year);
+  const fits = CS.map(c => [c, fitOf(c)]).filter(x => x[1]);
+  if (fits.length){
+    const bestFit = fits.reduce((a,b) => b[1].score > a[1].score ? b : a)[0], cheapest = order[0];
+    lines.push(bestFit === cheapest
+      ? `<li><b>${CN[bestFit]}</b> is both the best fit (${fitOf(bestFit).score}/100) and the cheapest. Easy choice on paper.</li>`
+      : `<li>Best fit: <b>${CN[bestFit]}</b> (${fitOf(bestFit).score}/100). Cheapest: <b>${CN[cheapest]}</b> (${fitOf(cheapest).score}/100). The better fit costs <b>${eur(long(bestFit)-long(cheapest))}</b> more over ${N} years, about ${eur((long(bestFit)-long(cheapest))/N)} a year for ${fitOf(bestFit).score-fitOf(cheapest).score} extra fit points.</li>`);
+  }
   lines.push(`<li>Yearly costs only (without the house purchase): cheapest ${CN[yearOnly[0]]} at ${eur(T[yearOnly[0]].year)}, most expensive ${CN[yearOnly[yearOnly.length-1]]} at ${eur(T[yearOnly[yearOnly.length-1]].year)}.</li>`);
   document.getElementById("verdict").innerHTML = `<h3>What the numbers say</h3><ul>${lines.join("")}</ul><p class="hint">Money is only half of it: income, jobs you're allowed to do, language, light and mountains are not in this table.</p>`;
   drawChecks(T);
@@ -719,7 +744,7 @@ function drawChecks(T){
   cards.push(["no","Tax residency is not a 183-day game",
     `<p>Where you pay tax is decided by where your home, spouse and centre of life are, not only by counting days. While you travel, you stay tax resident where you are still registered or keep a home, and that country can tax your income worldwide (Finland does while you keep a home there). Salary from Japan, New Zealand, Canada or Australia is taxed there from day one (Australia: 15% on a working-holiday salary up to A$45,000). The 183-day rule in tax treaties is about short employee stays, not about a business owner's home. <b>Before the world tour: deregister properly from Finland and don't stay registered anywhere by accident.</b></p>`]);
   cards.push(["no","Paid guiding: France needs French diplomas",
-    `<p>In France only state diplomas allow paid guiding (ski instructor, mountain leader AMM, canyon DE, via ferrata). Sweden, Finland and Norway have no general legal diploma requirement for guiding; industry certificates and insurance rules apply instead (Norway requires certified mountain guides on glaciers in practice). Your WFR, EPP2 and rope work are directly usable in the Nordics, and not enough on their own in France.</p>
+    `<p>In France only state diplomas allow paid guiding (ski instructor, mountain leader AMM, canyon DE, via ferrata). Sweden, Finland, Norway and Japan have no general legal diploma requirement for guiding; industry certificates and insurance rules apply instead (Norway requires certified mountain guides on glaciers in practice). Your WFR, EPP2 and rope work are directly usable in the Nordics, and not enough on their own in France.</p>
      <p class="src"><a href="https://www.sportsdenature.gouv.fr/canyonisme/reglementation/encadrement" target="_blank" rel="noopener">sportsdenature.gouv.fr</a></p>`]);
   cards.push(["mid","Which canyoning certification? It depends on the country",
     `<ul><li><b>France:</b> only the French state diploma (DE JEPS canyonisme) lets you guide canyons for money without extra steps. A foreign certificate needs official recognition first, and because canyoning is a "specific environment" France can ask for an aptitude test or extra training. Long and selective, but it's the key to France.</li>
@@ -757,14 +782,28 @@ function drawChecks(T){
     `<ul><li><b>Sweden:</b> first SEK 300,000 each (~€54,500 together) are tax-free every year. Above that, 1.065% of the value per year, even in bad years.</li>
      <li><b>Norway:</b> wealth tax starts above NOK 1.9 million each (~€325k together). Mortgage debt is subtracted and the home counts at only 25%, so with a big mortgage you'll pay none for years.</li>
      <li><b>Finland:</b> €100,000 each into an equity savings account; 34% instead of 30% on gains above €30,000 a year each, so sell in chunks.</li>
+     <li><b>Japan:</b> NISA ¥18M each, completely tax-free. Above that 20.315%.</li>
      <li><b>France:</b> PEA takes €150,000 each; after 5 years only 18.6% social levies on gains. Open them now, the 5-year clock starts at opening.</li></ul>`]);
+  cards.push(["no","Japan: land, horse and mortgage",
+    `<ul><li>Land classed as <b>farmland</b> (農地) can only be bought with the agricultural committee's permission, and you must farm it. An akiya with a big field is often farmland, so 1–2 ha for a horse is not simple. Look for plots already classed as residential or forest, or rent the field.</li>
+     <li>Banks lend to foreigners on a spouse visa mostly with your wife as co-borrower, at ~0.3–0.5% more than for Japanese buyers. Flat 35 fixed loans are for Japanese and permanent residents. With a ¥5M akiya, paying cash is simpler.</li>
+     <li>Many towns give <b>¥1–5M renovation grants</b> to akiya-bank buyers. Not included in the table, so the real renovation cost can be lower.</li>
+     <li>Horses in Japan are rare and costly: hay is mostly imported and horse vets are few.</li></ul>
+     <p class="src"><a href="https://japan-law-tax.com/blog/real-estate-japan/buy-farm-land-japan/" target="_blank" rel="noopener">Japan farmland law</a> · <a href="https://www.japan-realestate-analytics.com/blog/japan-banks-mortgage-foreigners-2026" target="_blank" rel="noopener">Mortgages for foreigners 2026</a> · <a href="https://www.akiyajapan.com/articles/akiya-houses-for-sale-in-japan" target="_blank" rel="noopener">Akiya prices</a></p>`]);
+  cards.push(["mid","Japan: taxes and money",
+    `<ul><li><b>NISA:</b> ¥18M per person (~€106k) invested with no tax at all, ¥3.6M a year each. Above that, 20.315%. NISA has to be closed if you move away.</li>
+     <li>For your first 5 years in Japan, foreign income is only taxed if you bring it into Japan. After that, your worldwide income and investments count.</li>
+     <li>National Health Insurance and pension are paid on income (that's in your income calculator), then you pay 30% of each medical bill.</li>
+     <li>Guiding needs no national licence in Japan, and the Hilux is sold new there as a "1-number" truck with low running costs.</li></ul>
+     <p class="src"><a href="https://www.retirejapan.com/nisa/" target="_blank" rel="noopener">NISA guide</a></p>`]);
   cards.push(["mid","Mortgage: interest relief changes the real rate",
     `<p>Sweden gives back 30% of mortgage interest, Norway 22%. France and Finland give nothing. Norway's high rates (~5%) are partly softened by that, Sweden's become ~2.1% after relief.</p>`]);
   cards.push(["mid","Hilux taxes",
     `<ul><li><b>France:</b> Extra Cab is exempt from the CO₂ malus, no yearly road tax.</li>
      <li><b>Sweden:</b> ~SEK 21,600/yr (~€1,950) for the first 3 years (malus), then ~SEK 1,800. Buying one that's 3+ years old skips the malus.</li>
      <li><b>Finland:</b> car tax is inside the higher price, plus a yearly vehicle tax with a diesel part.</li>
-     <li><b>Norway:</b> a new pick-up pays a one-off registration tax, and the price here is a rough estimate. Check finn.no.</li></ul>
+     <li><b>Norway:</b> a new pick-up pays a one-off registration tax, and the price here is a rough estimate. Check finn.no.</li>
+     <li><b>Japan:</b> the Hilux is sold new at ~¥4.3M. As a truck it needs an inspection every year, but tax, fuel and insurance are cheap.</li></ul>
      <p class="src"><a href="https://xn--frmnsvrde-02ah5r.se/fordonsskatt/toyota-hilux-extra-cab-viii-facelift-2020--2-8-d-4d-204-hk--4x4" target="_blank" rel="noopener">förmånsvärde.se</a></p>`]);
   cards.push(["mid","Healthcare: cheap, but paid elsewhere",
     `<p>Out-of-pocket costs are small everywhere. The Nordic yearly caps protect you in a bad year, but adult dentists are mostly paid by you there. In France the mutuelle is the main cost. Note Finland's cap is the highest (€815 care + €636 medicine each). With your sports, check that your insurance covers mountain rescue and helicopter evacuation: in France rescue is usually free, but ski-slope rescue is charged.</p>`]);
@@ -772,7 +811,7 @@ function drawChecks(T){
     `<ul><li>France micro-entrepreneur: nothing deductible. Only EI au réel / EURL makes the company column count.</li>
      <li>Sweden enskild firma: costs lower income tax <i>and</i> self-employed contributions, so the saving per € is the highest.</li>
      <li>A Finnish toiminimi can't carry costs once you live and work in another country; you'd open a local business there.</li>
-     <li>The Hilux Extra Cab counts as a utility vehicle in all four, so VAT comes back on its business share.</li></ul>`]);
+     <li>The Hilux Extra Cab counts as a utility vehicle in all five (a "1-number" truck in Japan), so VAT comes back on its business share.</li></ul>`]);
   cards.push(["mid","Numbers to check yourself",
     `<p>House prices vary a lot inside each region. The Norway truck price and Norwegian property tax (some municipalities have none) are the roughest numbers. Food uses the 2024 price level vs the EU; rural shops are often dearer.</p>`]);
   document.getElementById("checks").innerHTML = cards.map(([cl,h,b]) => `<div class="check ${cl}"><h3>${h}</h3>${b}</div>`).join("");

@@ -23,26 +23,34 @@ in September 2026; always confirm on the official sites.
 To edit the job data, change the `DATA` object inside the `<script>` in
 `career-compass/index.html`.
 
-## Dream Life Calculator (`dream-life/index.html`)
+## Dream Life Calculator (`dream-life/`)
 
-A four-country budget for one specific "dream life": France (Vercors), Sweden
-(Jämtland/Åre), Finland (Kuusamo/Lapland) and Norway (Hallingdal/Valdres), side by side.
-Income and income tax are left out on purpose (handled in a separate calculator).
+Two connected pages for choosing where to settle: one scores how well each place fits,
+the other prices the full "dream life" there.
 
-- **The answer:** buying cost, yearly cost and a long-term total per country, ranked,
-  with the biggest differences against the country you compare with.
-- **Line by line:** house, transfer tax, renovation, property tax, insurance, energy,
-  upkeep, mortgage interest after tax relief, food (price level), everyday costs,
-  healthcare (typical year + worst-case caps), vehicles, animals, passes, travel,
-  professional liability insurance,
-  investment tax and what the company carries. Every cell is editable per country.
-- **Investments:** tax while holding and when selling, depending on the amount
-  (French PEA 18.6% / 31.4%, Swedish ISK 1.065% above SEK 300,000 each, Finnish
-  30%/34% + equity savings account, Norwegian ASK + wealth tax).
-- **Company:** choose the company type per country; objects can go under the company
-  with a business share, giving VAT back plus tax saved.
+### Settlement Score (`dream-life/settlement.html`)
+14 places scored 1–10 on 12 criteria (property, green mountains, outdoor sports,
+paperwork, language, guiding tourism, business potential, van life, healthcare…),
+with editable weights, sorting, citizenship years and dual-citizenship rules.
+Places with a € badge also have full cost data in the calculator.
+
+### Cost calculator (`dream-life/index.html`)
+France (Vercors), Sweden (Jämtland/Åre), Finland (Äkäslompolo/Ylläs), Norway
+(Hallingdal/Valdres) and Japan (rural Nagano akiya), side by side. Income and income
+tax are left out on purpose (handled in a separate calculator).
+
+- **The answer:** buying cost, yearly cost, long-term total and the fit score from the
+  Settlement Score (using the same weights), ranked against any chosen country.
+- **Line by line:** a cheap house to renovate, fees, renovation paid from savings,
+  deposit / amount borrowed / cash needed on buying day, property tax, insurance,
+  energy, upkeep, mortgage interest after tax relief, food, everyday costs, healthcare,
+  vehicles, animals, passes, travel, professional insurance, investment tax and what
+  the company carries. Every cell is editable per country.
+- **Investments:** tax while holding and when selling by amount (French PEA, Swedish
+  ISK, Finnish equity savings account, Norwegian ASK + wealth tax, Japanese NISA).
 - **Objects:** vehicles, animals, Makita workshop, kitchen, clothes and outdoor gear,
-  each selectable, grouped by category.
+  each selectable, with a company toggle and business share.
 
-Numbers are September 2026 estimates in euros (SEK 11.0, NOK 11.7). Changes are
-saved in the browser (localStorage). Edit `ROWS` and `OBJ` in the `<script>`.
+Both pages read `dream-life/settlement-data.js` (scores and weights). Numbers are
+September 2026 estimates in euros (SEK 11.0, NOK 11.7, JPY 170). Changes are saved
+in the browser (localStorage).
