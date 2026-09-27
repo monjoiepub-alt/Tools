@@ -25,7 +25,7 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 
 ## Dream Life Calculator (`dream-life/index.html`)
 
-A four-country budget for one specific "dream life": France (Vercors), Sweden
+A five-country budget for one specific "dream life": France (Vercors), Belgium (Ardennes), Sweden
 (Jämtland/Åre), Finland (Kuusamo/Lapland) and Norway (Hallingdal/Valdres), side by side.
 Income and income tax are left out on purpose (handled in a separate calculator).
 
@@ -34,9 +34,10 @@ Income and income tax are left out on purpose (handled in a separate calculator)
 - **Line by line:** house, transfer tax, renovation, property tax, insurance, energy,
   upkeep, mortgage interest after tax relief, food (price level), everyday costs,
   healthcare (typical year + worst-case caps), vehicles, animals, passes, travel,
+  professional liability insurance,
   investment tax and what the company carries. Every cell is editable per country.
 - **Investments:** tax while holding and when selling, depending on the amount
-  (French PEA 18.6% / 31.4%, Swedish ISK 1.065% above SEK 300,000 each, Finnish
+  (French PEA 18.6% / 31.4%, Belgian 10% above €10,000, Swedish ISK 1.065% above SEK 300,000 each, Finnish
   30%/34% + equity savings account, Norwegian ASK + wealth tax).
 - **Company:** choose the company type per country; objects can go under the company
   with a business share, giving VAT back plus tax saved.
