@@ -94,6 +94,27 @@ tr:last-child td,tr:last-child th{border-bottom:0}
 .fit{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .fit:hover{border-color:var(--accent)}
 .muted{color:var(--muted)}
+.sec-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.eye{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:.9rem;color:var(--muted);flex:none}
+.eye:hover{border-color:var(--accent);color:var(--accent)}
+section.collapsed > :not(.sec-head){display:none!important}
+section.collapsed .sec-head .hint{display:none}
+section.collapsed .sec-title h2{color:var(--muted)}
+details.fold{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+details.fold > summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:12px 14px}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary::before{content:"▸";color:var(--accent);font-weight:600;transition:transform .15s}
+details.fold[open] > summary::before{transform:rotate(90deg)}
+.fold-title{font-weight:600}
+.fold-sum{color:var(--muted);font-size:.9rem}
+details.fold > :not(summary){margin:0 14px 14px}
+.fold-body{display:flex;flex-direction:column;gap:10px}
+.best-item.pair{grid-template-columns:auto 1fr}
+.best-title.big{font-family:var(--font-display);font-size:1.3rem;font-weight:800}
+.pair-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.pair-total{margin-top:10px;font-weight:500}
+#bestFor{margin-bottom:4px}
+@media (max-width:520px){ .pair-row{grid-template-columns:auto 1fr} .pair-row .pick{grid-column:2;justify-self:start} }
 .goals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:12px}
 .goal{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 16px}
 .goal:hover{border-color:var(--accent)}
@@ -208,9 +229,10 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
   <section id="best">
     <div class="sec-head">
       <h2>2. Find my best option</h2>
-      <p class="hint">What matters most to you right now? Tap one.</p>
+      <p class="hint">Choose for one person or for both of you together, then tap what matters most right now.</p>
     </div>
-    <div class="goals" id="goalPick" role="group" aria-label="Best option for"></div>
+    <div class="chips" id="bestFor" role="group" aria-label="Best option for whom"></div>
+    <div class="goals" id="goalPick" role="group" aria-label="What matters most"></div>
     <div class="goal-result" id="goalResult"></div>
   </section>
 
@@ -969,7 +991,8 @@ arborist:{
   links:[["Utdanning.no","https://utdanning.no"]]},
  FR:{reg:"emp",time:"1 year (work-study).",
   sum:"The CS Arboriste élagueur (1 year, work-study) is the normal diploma for tree climbing, pruning and felling. It includes rescuing an injured person from a tree.",
-  steps:[R("csArb","CS Arboriste élagueur",{part:["arb"]}),
+  steps:[R("arbPre","First: a level-4 diploma (Bac Pro, BP) or 1 year of full-time pruning work",{part:["arb"],d:"This is the entry rule for the CS. So in France you usually need 2 diplomas."}),
+         R("csArb","CS Arboriste élagueur (1,030 hours, about 1 year)",{part:["arb"],d:"Free as an apprentice. As an adult about €7,000, often paid by CPF or France Travail."}),
          SST, L("langFR","French")],
   links:[["France Compétences: CS Arboriste élagueur","https://www.francecompetences.fr/recherche/rncp/39898/"]]},
  JP:{reg:"law",time:"A few days of required courses.",
@@ -1161,7 +1184,7 @@ var COST = {
   frTT:[2000,6], frCP:[1500,2], frEuro:[1500,12], frDE:[8000,36], skiJP:[1500,12], cartepro:[0,1],
   ea1FI:[200,0.25], firstaid:[200,0.25], psc1:[70,0.1], wfr:[800,0.5], ea2FI:[250,0.25],
   pse1:[300,0.5], pse2:[300,0.5], jrcFA:[100,0.25], advFA:[600,0.5], sst:[200,0.1],
-  humak:[0,36], guideEduSE:[0,12], guideEduNO:[0,12], nfNO:[1000,6], amm:[6000,30], jmga:[1500,12],
+  humak:[0,36], guideEduSE:[0,12], guideEduNO:[0,12], nfNO:[1000,6], amm:[4500,30], jmga:[1500,12],
   drvB:[2000,3], drvJP:[300,1],
   epp2:[400,1], paddleFI:[800,2], paddleSE:[800,2], vaatt:[800,2], bpjepsCK:[8000,12], canoeJP:[800,3],
   eduFIk:[0,36], crimFI:[15,0.5], eduSEk:[0,42], legitSE:[150,4], belSE:[0,0.5], eduNOk:[0,36], polNO:[0,0.5],
@@ -1182,17 +1205,41 @@ var COST = {
   iceFI:[200,0.25], fjalledare:[3000,12], ava:[500,0.5], nfWinter:[1500,6], iml:[5000,24], jmgaWinter:[1500,24],
   mtnList:[5000,48], ifmgaAbroad:[30000,48], sbo:[25000,48], nortind:[25000,48], probatoire:[500,6],
   aspirant:[15000,36], dehm:[5000,12], jmgaMtn:[20000,60],
-  en1:[600,0.5], access:[1800,0.5], arb:[5000,12], build:[0,24], cqpOpah:[2000,1], en2:[500,0.5],
+  en1:[600,0.5], access:[1500,0.5], arb:[5000,12], build:[0,24], cqpOpah:[2000,1], en2:[500,0.5],
   staff:[1200,0.5], bizDeg:[0,36], safetyDocFI:[0,0.5],
   parkInvest:[300000,12], parkLand:[5000,6], parkInsure:[5000,1],
   sawFI:[400,0.25], ttk:[100,0.1], etw:[600,2], sawSE:[800,0.5], fagArb:[0,24], sawNO:[500,0.25],
-  csArb:[0,12], ropeJP:[150,0.1], battoku:[150,0.1], arbJP:[1500,1], offshoreNO:[2000,0.5], cqpCordiste:[4000,2],
+  csArb:[7000,12], arbPre:[4000,12], ropeJP:[150,0.1], battoku:[150,0.1], arbJP:[1500,1], offshoreNO:[2000,0.5], cqpCordiste:[4000,2],
   vapepa:[0,6], winterSkills:[500,6], pelastaja:[0,18], liveSE:[0,12], fjallraddare:[0,3], hjelpekorps:[0,12],
   ropeRescue:[600,0.5], frNat:null, gendarme:[0,48], grimp:[0,36], jpNat:null, policeJP:[0,36],
   med1:[700,0.5], pplh:[30000,6], cplh:[45000,6], hours:[15000,24], heslo:[4000,0.5], mtnFly:[3000,1],
   med1JP:[300,0.5], pplJP:[45000,6], cplJP:[25000,6], radioJP:[100,3],
   langFI:[1000,18], langSV:[1000,18], langNO:[1000,18], langFR:[1000,18], langEN:[500,12], langJA:[1000,24]
 };
+
+/* GEAR[job] = [id, what, EUR, countries (all if missing)]: equipment you buy yourself */
+var GEAR = {
+  ski:      ["gearSki","Own gear: skis, boots, ski clothing",1500],
+  guide:    ["gearOut","Own gear: tent, sleeping bag, backpack, clothing, first aid kit",1500],
+  paddle:   ["gearPad","Own gear: drysuit, life jacket, paddle, throw bag",1200],
+  canyon:   ["gearCan","Own gear: wetsuit, harness, helmet, ropes",1500],
+  ferrata:  ["gearFer","Own gear: harness, helmet, ropes, rescue kit",1500],
+  winter:   ["gearWin","Own gear: skis or snowshoes, avalanche kit, winter clothing",2000],
+  mountain: ["gearMtn","Own gear: ski touring, ice and rock climbing kit",6000],
+  parkbuild:["gearBld","Own gear: rope access kit and tools",3000],
+  arborist: ["gearArb","Own gear: climbing kit, cut-proof clothing, helmet, chainsaws",4000],
+  rope:     ["gearRope","Own gear: personal rope access kit",1500],
+  patrol:   ["gearPat","Own gear: skis, boots, clothing",1500],
+  rescue:   ["gearRes","Own gear: mountain and winter kit",1500,["FI","SE","NO"]]
+};
+Object.keys(GEAR).forEach(function(job){
+  var g = GEAR[job];
+  COST[g[0]] = [g[2], 0.5];
+  LABELS[g[0]] = g[1];
+  (g[3] || ORDER).forEach(function(c){
+    DATA[job][c].steps.push(R(g[0], g[1], {d:"About €" + g[2].toLocaleString("en") + ". Tick it if you already own it."}));
+  });
+});
 
 /* PAY[job] = {country: [monthly gross pay in EUR, months of work per year]}.
    null = no regular salary (volunteer). For own businesses it is example owner profit per month. */
@@ -1366,43 +1413,69 @@ var GOALS = [
   ["balanced","Balanced","A good mix of all of the above"]
 ];
 function dots(n){ return "●●●●●".slice(0,n) + "○○○○○".slice(0,5-n); }
-function candidates(){
-  var p = state.view, cs = state.countries.length ? state.countries : ORDER, out = [];
-  visibleJobs().forEach(function(j){ cs.forEach(function(c){
+function jobsOf(p){ return JOBS.filter(function(j){ return state.allJobs || j.who === p; }); }
+function candidates(p, cs, jobs){
+  var out = [];
+  jobs.forEach(function(j){ cs.forEach(function(c){
     var m = money(j.id, c, p);
     if(m.blocked || !m.pay) return; /* skip what is not possible or unpaid */
-    out.push({j:j, c:c, m:m, v:value5(j.id, c, p), free:FREEDOM[j.id], stab:STABILITY[j.id], ready:score(j.id, c, p).pct});
+    out.push({j:j, c:c, p:p, m:m, v:value5(j.id, c, p), free:FREEDOM[j.id], stab:STABILITY[j.id]});
   }); });
   return out;
 }
-function rankFor(goal){
-  var list = candidates();
-  var v = function(x){ return x.v === null ? -1e9 : x.v; };
-  var sorters = {
-    freedom:  function(a,b){ return b.free - a.free || v(b) - v(a); },
-    money:    function(a,b){ return v(b) - v(a); },
-    stability:function(a,b){ return b.stab - a.stab || v(b) - v(a); },
-    invest:   function(a,b){ return a.m.cost - b.m.cost || v(b) - v(a); },
-    quick:    function(a,b){ return a.m.ready - b.m.ready || v(b) - v(a); }
-  };
-  if(goal === "balanced"){
-    var vals = list.map(v).filter(function(n){ return n > -1e9; });
-    var vMin = Math.min.apply(null, vals), vMax = Math.max.apply(null, vals);
-    var cMax = Math.max.apply(null, list.map(function(x){ return x.m.cost; })) || 1;
-    var rMax = Math.max.apply(null, list.map(function(x){ return x.m.ready; })) || 1;
-    list.forEach(function(x){
-      var money01 = x.v === null ? 0 : (x.v - vMin) / ((vMax - vMin) || 1);
-      /* log scale so €500 vs €5k matters as much as €5k vs €50k */
-      var cost01 = 1 - Math.log(1 + x.m.cost) / Math.log(1 + cMax);
-      x.bal = (money01 + x.free/5 + x.stab/5 + cost01 + (1 - x.m.ready/rMax)) / 5;
-    });
-    list.sort(function(a,b){ return b.bal - a.bal; });
-  } else {
-    list.sort(sorters[goal]);
-  }
-  return list;
+function vv(x){ return x.v === null ? -1e9 : x.v; }
+var SORTERS = {
+  freedom:  function(a,b){ return b.free - a.free || vv(b) - vv(a); },
+  money:    function(a,b){ return vv(b) - vv(a); },
+  stability:function(a,b){ return b.stab - a.stab || vv(b) - vv(a); },
+  invest:   function(a,b){ return a.m.cost - b.m.cost || vv(b) - vv(a); },
+  quick:    function(a,b){ return a.m.ready - b.m.ready || vv(b) - vv(a); },
+  balanced: function(a,b){ return b.bal - a.bal; }
+};
+function rankFor(goal, p, cs){
+  var list = candidates(p, cs, jobsOf(p));
+  if(!list.length) return list;
+  /* balanced: equal mix of money, freedom, stability, low cost and quick start (all 0–1) */
+  var vals = list.map(vv).filter(function(n){ return n > -1e9; });
+  var vMin = Math.min.apply(null, vals), vMax = Math.max.apply(null, vals);
+  var cMax = Math.max.apply(null, list.map(function(x){ return x.m.cost; })) || 1;
+  var rMax = Math.max.apply(null, list.map(function(x){ return x.m.ready; })) || 1;
+  list.forEach(function(x){
+    var money01 = x.v === null ? 0 : (x.v - vMin) / ((vMax - vMin) || 1);
+    var cost01 = 1 - Math.log(1 + x.m.cost) / Math.log(1 + cMax); /* log: €500 vs €5k matters like €5k vs €50k */
+    x.bal = (money01 + x.free/5 + x.stab/5 + cost01 + (1 - x.m.ready/rMax)) / 5;
+  });
+  return list.sort(SORTERS[goal]);
+}
+/* for Together: lower = better pair */
+function pairScore(goal, a, b){
+  return {
+    freedom:  -(a.free + b.free) - (vv(a) + vv(b))/1e7,
+    money:    -(vv(a) + vv(b)),
+    stability:-(a.stab + b.stab) - (vv(a) + vv(b))/1e7,
+    invest:   a.m.cost + b.m.cost,
+    quick:    Math.max(a.m.ready, b.m.ready),
+    balanced: -(a.bal + b.bal)
+  }[goal];
+}
+function whyLine(x){
+  return ["Freedom " + dots(x.free), "Stability " + dots(x.stab),
+    x.m.cost ? eur(x.m.cost) + " to pay" : "nothing to pay",
+    x.m.ready ? "ready in " + (x.m.ready < 1 ? "under 1 month" : "about " + dur(x.m.ready)) : "ready now",
+    x.v === null ? "no regular salary" : "5-year value " + signed(x.v)].join("  ·  ");
+}
+function openBtn(x, label){
+  return el("button",{type:"button",class:"pick",text:label||"Open",onclick:function(){
+    if(x.p !== state.view){ state.view = x.p; }
+    openJob(x.j.id, x.c);
+  }});
 }
 function renderGoals(){
+  var bf = document.getElementById("bestFor"); bf.textContent = "";
+  [[false, pname(state.view)],[true, "Together (" + pname("me") + " + " + pname("partner") + ")"]].forEach(function(o){
+    bf.appendChild(el("button",{type:"button",class:"pick","aria-pressed":String(!!state.together===o[0]),text:o[1],
+      onclick:function(){ state.together = o[0]; save(); renderGoals(); }}));
+  });
   var gp = document.getElementById("goalPick"); gp.textContent = "";
   GOALS.forEach(function(g){
     gp.appendChild(el("button",{type:"button",class:"goal","aria-pressed":String(state.goal===g[0]),
@@ -1412,29 +1485,57 @@ function renderGoals(){
   var box = document.getElementById("goalResult"); box.textContent = "";
   if(!state.goal) return;
   var g = GOALS.filter(function(x){ return x[0] === state.goal; })[0];
-  /* 3 different jobs, each in its best country, plus where else it ranks well */
+  var cs = state.countries.length ? state.countries : ORDER;
+  var ol = el("ol",{class:"best"});
+
+  if(state.together){
+    /* best job for each person in each country, then rank the countries */
+    var ra = rankFor(state.goal, "me", cs), rb = rankFor(state.goal, "partner", cs), pairs = [];
+    cs.forEach(function(c){
+      var a = ra.filter(function(x){ return x.c === c; })[0], b = rb.filter(function(x){ return x.c === c; })[0];
+      if(a && b) pairs.push({c:c, a:a, b:b, s:pairScore(state.goal, a, b)});
+    });
+    pairs.sort(function(x,y){ return x.s - y.s; });
+    if(!pairs.length){ box.appendChild(el("p",{class:"note",text:"No country works for both of you with the countries picked in part 4."})); return; }
+    box.appendChild(el("h3",{text:"Best for " + g[1].toLowerCase() + " together: top countries"}));
+    pairs.slice(0,3).forEach(function(pr, i){
+      var yA = yearly(pr.a.j.id, pr.c), yB = yearly(pr.b.j.id, pr.c);
+      var tot = [eur(yA + yB) + " a year before tax", eur(pr.a.m.cost + pr.b.m.cost) + " to pay",
+        (pr.a.v !== null && pr.b.v !== null) ? "5-year value " + signed(pr.a.v + pr.b.v) : ""].filter(Boolean).join("  ·  ");
+      var person = function(x){
+        return el("div",{class:"pair-row"},[
+          el("span",{class:"avatar sm av-"+x.p,text:initial(x.p)}),
+          el("div",null,[el("div",{class:"best-title",text:x.j.name}), el("div",{class:"best-why",text:whyLine(x)})]),
+          openBtn(x)]);
+      };
+      ol.appendChild(el("li",{class:"best-item pair"},[
+        el("span",{class:"rank",text:String(i+1)}),
+        el("div",{class:"best-body"},[
+          el("div",{class:"best-title big",text:COUNTRIES[pr.c].name}),
+          person(pr.a), person(pr.b),
+          el("div",{class:"pair-total",text:"Together: " + tot})])]));
+    });
+    box.appendChild(ol);
+    box.appendChild(el("p",{class:"hint",text:"For each country: " + pname("me") + "'s best job and " + pname("partner") + "'s best job for this goal, using both toolboxes. Tap the button again to close."}));
+    return;
+  }
+
+  /* one person: 3 different jobs, each in its best country */
   var top = [], seen = {};
-  rankFor(state.goal).forEach(function(x){
+  rankFor(state.goal, state.view, cs).forEach(function(x){
     if(seen[x.j.id]){ seen[x.j.id].also.push(COUNTRIES[x.c].name); return; }
     if(top.length < 3){ x.also = []; seen[x.j.id] = x; top.push(x); }
   });
   if(!top.length){ box.appendChild(el("p",{class:"note",text:"No jobs to compare. Pick at least one country in part 4."})); return; }
   box.appendChild(el("h3",{text:"Best for " + g[1].toLowerCase() + ": " + pname(state.view) + "'s top 3"}));
-  var ol = el("ol",{class:"best"});
   top.forEach(function(x, i){
-    var why = [
-      "Freedom " + dots(x.free), "Stability " + dots(x.stab),
-      x.m.cost ? eur(x.m.cost) + " still to pay" : "nothing left to pay",
-      x.m.ready ? "ready in " + (x.m.ready < 1 ? "under 1 month" : "about " + dur(x.m.ready)) : "ready now",
-      x.v === null ? "no regular salary" : "5-year value " + signed(x.v)
-    ];
     ol.appendChild(el("li",{class:"best-item"},[
       el("span",{class:"rank",text:String(i+1)}),
       el("div",{class:"best-body"},[
         el("div",{class:"best-title"},[x.j.name + " ", el("span",{class:"muted",text:"· " + COUNTRIES[x.c].name})]),
-        el("div",{class:"best-why",text:why.join("  ·  ")}),
+        el("div",{class:"best-why",text:whyLine(x)}),
         x.also.length ? el("div",{class:"best-why",text:"Next best countries: " + x.also.slice(0,2).join(", ")}) : null]),
-      el("button",{type:"button",class:"pick",text:"Open",onclick:function(){ openJob(x.j.id, x.c); }})]));
+      openBtn(x)]));
   });
   box.appendChild(ol);
   box.appendChild(el("p",{class:"hint",text:"Uses " + pname(state.view) + "'s toolbox, the countries picked in part 4, and the jobs shown now. Unpaid (volunteer) and not-possible options are left out. Tap the button again to close."}));
@@ -1546,6 +1647,7 @@ function renderMatrix(){
 function openJob(job, c){
   state.job = job; state.focus = c;
   if(state.countries.indexOf(c) < 0) state.countries.push(c);
+  state.hidden.detail = false;
   save(); renderAll();
   var card = document.getElementById("card-"+c);
   (card || document.getElementById("detail")).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
@@ -1568,6 +1670,11 @@ function renderPickers(){
         save(); renderAll();
       }}));
   });
+}
+function fold(title, summary, body, open){
+  var d = el("details",{class:"fold"},[el("summary",null,[el("span",{class:"fold-title",text:title}), summary ? el("span",{class:"fold-sum",text:summary}) : null]), body]);
+  if(open) d.open = true;
+  return d;
 }
 var ST_TEXT = {have:"✓ have", prog:"~ doing", part:"~ partly", need:"✗ need", opt:"+ extra"};
 function renderCards(){
@@ -1599,7 +1706,7 @@ function renderCards(){
       steps.appendChild(el("li",{class:"step"},[pills,
         el("span",{class:"step-t"},[s.t, s.d ? el("span",{class:"step-d",text:s.d}) : null])]));
     });
-    var moneyBox = el("div",{class:"money"},[el("div",{class:"label",text:"Money (rough estimate)"})]);
+    var moneyBox = el("div",{class:"money"},[el("div",{class:"label",text:"Rough estimate"})]);
     ps.forEach(function(p){
       var m = money(state.job, c, p), rows = [];
       var who = duo ? el("span",{class:"avatar sm av-"+p,text:initial(p)}) : null;
@@ -1631,26 +1738,49 @@ function renderCards(){
       work.appendChild(el("span",{class:"workline"},[duo ? el("b",{text:pname(p)+": "}) : null, p === "me" ? co.work : co.workP]));
     });
     if(co.workLink) work.appendChild(el("a",{href:co.workLink[1],target:"_blank",rel:"noopener",text:co.workLink[0]+" ↗"}));
-    var card = el("article",{class:"card"+(state.focus===c?" focus":""),id:"card-"+c},[
+    var focus = state.focus === c;
+    var sc0 = score(state.job, c, ps[0]), m0 = money(state.job, c, ps[0]), v0 = value5(state.job, c, ps[0]);
+    var doneTxt = fmt(sc0.got) + " of " + sc0.total + " done";
+    var moneyTxt = m0.blocked ? "not possible" : (eur(m0.cost) + " to pay" + (v0 !== null ? " · 5-year value " + signed(v0) : ""));
+    var card = el("article",{class:"card"+(focus?" focus":""),id:"card-"+c},[
       el("div",{class:"card-top"},[
         el("h3",null,[el("span",{class:"cc",text:c}), co.name]),
         el("span",{class:"reg "+d.reg,text:d.reg==="law"?"Required by law":"Employers decide"})]),
       meters,
       el("p",{class:"sum",text:d.sum}),
-      el("div",{class:"label",text:"Checklist"}),
-      steps,
-      moneyBox,
-      el("dl",{class:"facts"},[el("dt",{text:"Freedom"}),el("dd",{class:"dots",text:dots(FREEDOM[state.job])}),
+      fold("Checklist", doneTxt, steps, focus),
+      fold("Money", moneyTxt, moneyBox, focus),
+      fold("Rules, time and links", "", el("div",{class:"fold-body"},[el("dl",{class:"facts"},[el("dt",{text:"Freedom"}),el("dd",{class:"dots",text:dots(FREEDOM[state.job])}),
         el("dt",{text:"Stability"}),el("dd",{class:"dots",text:dots(STABILITY[state.job])}),
         el("dt",{text:"Time"}),el("dd",{text:d.time}),el("dt",{text:"Right to work"}),work]),
       d.links.length ? el("div",{class:"label",text:"Official info"}) : null,
-      d.links.length ? links : null
+      d.links.length ? links : null]), false)
     ]);
     box.appendChild(card);
   });
 }
 
-function renderAll(){ renderViewPick(); if(!state.view) return; renderToolbox(); renderGoals(); renderMetricPick(); renderLegend(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
+var SECTIONS = ["toolbox","best","overview","detail"];
+var EYE_OPEN = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+var EYE_SHUT = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 3l18 18" stroke="currentColor" stroke-width="2"/></svg>';
+function renderEyes(){
+  if(!state.hidden) state.hidden = {overview:true};
+  SECTIONS.forEach(function(id){
+    var sec = document.getElementById(id), head = sec.querySelector(".sec-head");
+    var btn = head.querySelector(".eye");
+    if(!btn){
+      var h2 = head.querySelector("h2"), row = el("div",{class:"sec-title"});
+      head.insertBefore(row, h2); row.appendChild(h2);
+      btn = el("button",{type:"button",class:"eye",onclick:function(){ state.hidden[id] = !state.hidden[id]; save(); renderEyes(); }});
+      row.appendChild(btn);
+    }
+    var hidden = !!state.hidden[id];
+    sec.classList.toggle("collapsed", hidden);
+    btn.innerHTML = (hidden ? EYE_SHUT : EYE_OPEN) + "<span>" + (hidden ? "Show" : "Hide") + "</span>";
+    btn.setAttribute("aria-expanded", String(!hidden));
+  });
+}
+function renderAll(){ renderViewPick(); if(!state.view) return; renderEyes(); renderToolbox(); renderGoals(); renderMetricPick(); renderLegend(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
 
 document.getElementById("save").addEventListener("input", function(e){
   state.save = +e.target.value; save();

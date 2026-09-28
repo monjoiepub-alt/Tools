@@ -10,7 +10,10 @@ with the certificates two people (Aya and Max) already have.
   toolbox, jobs and numbers ("Show all jobs" shows the other person's jobs too).
 - **Toolbox:** tap certificates and languages to mark them as have / in progress.
 - **Find my best option:** buttons for freedom, money, stability, lower investment,
-  quickest start and balanced; shows the top 3 different jobs with their best country.
+  quickest start and balanced; shows the top 3 different jobs with their best country,
+  or with **Together** the best country for a job pair (one job each).
+- **Eye buttons:** hide or show each part of the page; job cards fold into
+  Checklist, Money and Rules sections.
 - **Who fits best:** the top job + country matches for each person.
 - **Overview table:** readiness, cost left, break-even time, yearly pay or 5-year value
   (take-home pay over 5 years minus training fees) for each job in each country.
@@ -20,7 +23,7 @@ with the certificates two people (Aya and Max) already have.
 - **Job cards:** checklist, whether the job is regulated by law, time needed,
   right-to-work notes and official links.
 
-Your changes are saved in the browser (localStorage). Information was checked
+Costs include own equipment (tick it if you already own it). Your changes are saved in the browser (localStorage). Information was checked
 in September 2026; always confirm on the official sites.
 
 To edit the job data, change the `DATA` object inside the `<script>` in
