@@ -25,20 +25,21 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 
 ## Aya & Max Money Plan (`money-plan/index.html`)
 
-A rebuild of the "Plan investment" spreadsheet (budget, three investment mixes,
-capital build-up from age 25) that is more realistic:
+An investment forecast from age 25, built from the "Plan investment" spreadsheet,
+that gets more accurate every year as real results are added.
 
-- **Household budget:** net pay, basic costs, saving %, emergency fund goal in months,
-  and where each month's pay goes (Joint Wise → Belfius → Interactive Brokers → fun money).
-- **Three mixes (Safe / Moderate / Aggressive):** weighted returns (the sheet used a
-  plain AVERAGE), fund fees (TER), volatility with correlations, and a "1 in 20 bad year".
-- **Life plan:** money added per period, big moments (van life, house), places,
-  retirement spending, state pension, and the switch rule between mixes.
-- **Realism:** everything in today's euros with inflation, tax only on the profit part
-  (Finland, Belgium 2026, Japan or custom), buying costs, half-year timing for new money.
+- **My real results:** once a year, type what you added, took out, and either the
+  return % or the account value on 31 December (plus real inflation if you want).
+  The forecast then starts again from the real value. Real returns can also move the
+  future return guess slowly (credibility weighting: about 24% after 10 years).
+- **Three mixes (Safe / Moderate / Aggressive):** weighted returns, fund fees (TER),
+  volatility with correlations, and a "1 in 20 bad year".
+- **Lowering risk over time:** the mix slides a little each year from Aggressive through
+  Moderate to Safe (or jumps by age or savings size, like the spreadsheet).
+- **Life plan:** money added per period, big moments, retirement spending, state pension,
+  inflation, tax on profit only (Finland, Belgium 2026, Japan or custom), buying costs.
 - **Stress test:** 2,000 random futures with fat-tailed returns show the chance the money
   lasts, a good/middle/bad range, and the highest safe yearly spending.
-- **Check against the sheet:** the sheet's own rules are re-run side by side
-  (they give the same €689,836 at age 99 as the spreadsheet).
 
-Changes are saved in the browser (localStorage); "Save or move your plan" copies the plan as text.
+The plan is saved in the published page's own database (`plan/settings` and
+`plan/actuals`), with the browser as a fallback; "Backup and reset" saves a file or copies the plan as text.
