@@ -66,7 +66,16 @@ Aya's family, with strangers, and with Aya.
   `tools/make_audio.md`). The phone's own voice is only a backup, a searchable **phrasebook**,
   and a "show big" mode to show a sentence to someone.
 
-Progress is saved in the browser (localStorage). Use Settings → Backup to
+- **Reward shop 🏮:** spend XP on real-life rewards from Aya (chocolate,
+  massage, bouquet, dinner…). Buying gives a coupon; Aya taps *Given* when
+  it is done. Aya can add her own rewards. Spending never lowers the level.
+- **Collections 🎴:** letters, kanji and reward stickers stay hidden (？)
+  until collected. A kanji is collected when a card that uses it is
+  answered with *I know it*.
+- **Sakura theme** with emoji for every deck and tab, and a night-sky dark mode.
+
+Progress is saved in the browser (localStorage). The app asks the browser to
+keep it permanently and shows a warning if this browser cannot save. Use Settings → Backup to
 copy a backup code.
 
 To change the daily course, edit `LESSONS` (cards are linked as

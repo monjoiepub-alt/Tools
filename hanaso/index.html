@@ -1,39 +1,45 @@
 <title>Hanasō</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#2B4C8C">
+<meta name="theme-color" content="#E0475B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Klee+One:wght@600&family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
 :root{
-  --bg:#EDF0F5; --surface:#FFFFFF; --surface-2:#F4F6FA; --ink:#18202F; --muted:#525D71; --line:#D5DBE5;
-  --accent:#2B4C8C; --accent-ink:#FFFFFF; --accent-soft:#DCE4F3; --shu:#C8412A;
-  --again:#B3372B; --hard:#9A6208; --good:#2E7D4F; --easy:#2B4C8C;
+  --bg:#FFF4F5; --surface:#FFFFFF; --surface-2:#FFF0F3; --ink:#2A1E2C; --muted:#6E5A68; --line:#F1D7DE;
+  --accent:#3A4F9A; --accent-ink:#FFFFFF; --accent-soft:#E4E8F8; --shu:#E0475B;
+  --sakura:#F4A6B8; --sakura-soft:#FDE3EA; --matcha:#6F9A5A; --gold:#D9A032;
+  --again:#C23A48; --hard:#A8650A; --good:#3B8A55; --easy:#3A4F9A;
+  --wave:rgba(244,166,184,.22);
   --font-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --font-display:"Zen Maru Gothic", "Atkinson Hyperlegible", system-ui, sans-serif;
   --font-jp:"Klee One", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
-  --shadow:0 1px 2px rgba(24,32,47,.06), 0 6px 20px rgba(24,32,47,.07);
+  --shadow:0 1px 2px rgba(90,30,50,.06), 0 8px 22px rgba(224,71,91,.08);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#10141C; --surface:#181E29; --surface-2:#1F2633; --ink:#E6EAF2; --muted:#A3ADBF; --line:#2D3546;
-    --accent:#93B2EE; --accent-ink:#10141C; --accent-soft:#1F2C47; --shu:#E0674F;
-    --again:#F08A7E; --hard:#E3B45A; --good:#6FCF97; --easy:#93B2EE;
-    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    --bg:#16142A; --surface:#211E38; --surface-2:#2A2645; --ink:#F3EEF7; --muted:#B9AFCD; --line:#3A3558;
+    --accent:#AAB9F6; --accent-ink:#16142A; --accent-soft:#2D3263; --shu:#FF7A8A;
+    --sakura:#F4A6B8; --sakura-soft:#3A2440; --matcha:#9BC98A; --gold:#F0C45C;
+    --again:#FF8E97; --hard:#F0C45C; --good:#7FD69A; --easy:#AAB9F6;
+    --wave:rgba(170,185,246,.08);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 22px rgba(0,0,0,.3);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#10141C; --surface:#181E29; --surface-2:#1F2633; --ink:#E6EAF2; --muted:#A3ADBF; --line:#2D3546;
-  --accent:#93B2EE; --accent-ink:#10141C; --accent-soft:#1F2C47; --shu:#E0674F;
-  --again:#F08A7E; --hard:#E3B45A; --good:#6FCF97; --easy:#93B2EE;
-  --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  --bg:#16142A; --surface:#211E38; --surface-2:#2A2645; --ink:#F3EEF7; --muted:#B9AFCD; --line:#3A3558;
+  --accent:#AAB9F6; --accent-ink:#16142A; --accent-soft:#2D3263; --shu:#FF7A8A;
+  --sakura:#F4A6B8; --sakura-soft:#3A2440; --matcha:#9BC98A; --gold:#F0C45C;
+  --again:#FF8E97; --hard:#F0C45C; --good:#7FD69A; --easy:#AAB9F6;
+  --wave:rgba(170,185,246,.08);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 22px rgba(0,0,0,.3);
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55;-webkit-tap-highlight-color:transparent}
+body{background-color:var(--bg);background-image:radial-gradient(circle at 50% 100%, transparent 38%, var(--wave) 39%, var(--wave) 44%, transparent 45%, transparent 56%, var(--wave) 57%, var(--wave) 62%, transparent 63%);background-size:56px 28px;color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit}
 h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.2;text-wrap:balance;margin:0}
 p{margin:0}
@@ -94,9 +100,10 @@ rt{font-family:var(--font-jp);font-size:.48em;color:var(--muted);font-weight:600
 .switch:checked::after{transform:translateX(20px)}
 
 .tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
-.tabs-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabs-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
 .tab{background:none;border:0;padding:9px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer}
-.tab svg{width:24px;height:24px}
+.tab .te{font-size:22px;line-height:1.1;filter:grayscale(.6);opacity:.75;transition:transform .15s}
+.tab[aria-current="page"] .te{filter:none;opacity:1;transform:translateY(-2px) scale(1.12)}
 .tab[aria-current="page"]{color:var(--accent)}
 
 /* Study */
@@ -260,6 +267,48 @@ b.kn{font-weight:700}
 .kt.got{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .chip.retry{color:var(--hard);border-color:var(--hard)}
 .mix .kseg{font-family:var(--font-jp);font-weight:600;color:var(--accent)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill.coin{background:#FFF3D6;color:#8A5A00}
+.pill.streak{background:var(--sakura-soft);color:var(--shu)}
+:root[data-theme="dark"] .pill.coin{background:#3A3016;color:var(--gold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.coin{background:#3A3016;color:var(--gold)}}
+.demo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:21px;background:var(--surface-2);border:2px solid var(--c, var(--line));flex:none}
+.group-h span{font-size:18px}
+.panel.today{border:2px solid var(--sakura);background:linear-gradient(180deg, var(--sakura-soft), var(--surface) 55%)}
+.btn-go{min-height:62px;font-size:20px;background:linear-gradient(135deg, var(--shu), #E86A8A);color:#fff;box-shadow:0 6px 16px rgba(224,71,91,.3)}
+.warn{background:#FFF1D6;color:#6B4400;border:1.5px solid var(--gold);border-radius:14px;padding:12px 14px;font-size:15px}
+:root[data-theme="dark"] .warn{background:#3A3016;color:var(--gold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .warn{background:#3A3016;color:var(--gold)}}
+.save-status{font-size:15px;font-weight:700;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.save-status.ok{color:var(--good)} .save-status.bad{color:var(--again)}
+.coll{display:flex;flex-direction:column;gap:6px}
+.coll-top{display:flex;gap:8px;align-items:baseline;font-size:15px}
+.coll-pct{margin-left:auto;font-weight:700;color:var(--shu)}
+.kt small{display:block;font-family:var(--font-body);font-size:9px;line-height:1;opacity:.8}
+.kt{flex-direction:column}
+.kt.hidden-t{color:var(--muted);background:repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 4px, var(--surface) 4px, var(--surface) 8px);font-family:var(--font-display);font-size:16px}
+.kgrid.kanji .kt{cursor:pointer;font-size:22px}
+button.kt{padding:0}
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px}
+.sticker{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:28px;background:var(--surface);border:2px dashed var(--line);color:var(--muted)}
+.sticker.got{border:2px solid var(--gold);background:var(--surface-2);transform:rotate(-4deg)}
+.shop-head{display:flex;gap:14px;align-items:center;border:2px solid var(--gold)}
+.shop-lantern{font-size:48px}
+.coin-big{color:var(--hard);white-space:nowrap}
+.rewards{display:flex;flex-direction:column;gap:8px}
+.reward{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:10px 12px}
+.reward.locked .r-e{filter:grayscale(1);opacity:.5}
+.r-e{font-size:32px}
+.r-name{font-weight:700;line-height:1.3}
+.r-buy{min-height:44px;padding:8px 12px;font-size:15px;white-space:nowrap}
+.r-buy:disabled{opacity:.55;cursor:default}
+.got-tag{font-size:11px;font-weight:700;color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:1px 6px;vertical-align:2px}
+.coupons{display:flex;flex-direction:column;gap:8px}
+.coupon{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--sakura-soft);border:2px dashed var(--shu);border-radius:16px;padding:10px 12px}
+.c-e{font-size:30px}
+.c-acts{display:flex;flex-direction:column;gap:6px}
+.add-reward{display:flex;gap:8px}
+.coupon-big{display:flex;flex-direction:column;align-items:center;gap:10px;border:3px dashed var(--shu);border-radius:24px;padding:24px 20px;background:var(--sakura-soft)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:repeat(2,1fr)}.step + .step::before{display:none}}
 </style>
@@ -270,20 +319,21 @@ b.kn{font-weight:700}
       <span class="hanko" aria-hidden="true">話</span>
       <div>
         <div class="wordmark">Hanasō<small>話そう</small></div>
-        <div class="tagline">Japanese for family, strangers and Aya</div>
+        <div class="tagline">🌸 Japanese for family, strangers and Aya</div>
       </div>
     </div>
-    <span class="pill" id="streakPill"></span>
+    <div class="pills"><span class="pill streak" id="streakPill"></span><span class="pill coin" id="coinPill"></span></div>
   </header>
   <main id="view"></main>
 </div>
 
 <nav class="tabs" aria-label="Sections">
   <div class="tabs-in">
-    <button class="tab" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/></svg>Study</button>
-    <button class="tab" data-tab="phrases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Phrases</button>
-    <button class="tab" data-tab="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progress</button>
-    <button class="tab" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Settings</button>
+    <button class="tab" data-tab="home"><span class="te" aria-hidden="true">📚</span>Study</button>
+    <button class="tab" data-tab="phrases"><span class="te" aria-hidden="true">💬</span>Phrases</button>
+    <button class="tab" data-tab="shop"><span class="te" aria-hidden="true">🏮</span>Shop</button>
+    <button class="tab" data-tab="progress"><span class="te" aria-hidden="true">🎴</span>Collection</button>
+    <button class="tab" data-tab="settings"><span class="te" aria-hidden="true">⚙️</span>Settings</button>
   </div>
 </nav>
 
@@ -1252,7 +1302,7 @@ const DEFAULT_SETTINGS = {newPerDay: 15, script: 'auto', dirs: 'both', autoplay:
   decks: {grammar:true, basics:true, family:true, table:true, me:true, aya:true, out:true, kin:true, words:true, num:true, signs:true, menu:true, ski:true, fuji:false, henro:false, aomori:false, hira:true, kata:false,
     ...Object.fromEntries(CORE_ON.map(id => [id, true]))}};
 const blankCourse = () => ({day: 1, last: 0, pending: null, cur: null});
-function blankSave() { return {cards: {}, prio: {}, wlvl: {}, kana: {}, kanaPos: 0, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
+function blankSave() { return {cards: {}, prio: {}, wlvl: {}, kana: {}, kanaPos: 0, kanji: {}, spent: 0, coupons: [], myRewards: [], settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
 function fromSaved(s) {
   const cards = {};
   // Older saves had one card per phrase; they become the "understand" (JP → EN) card.
@@ -1261,7 +1311,7 @@ function fromSaved(s) {
   // Letters already studied as cards before the letter lessons existed count as known.
   const kana = s.kana || {};
   if (!s.kana) for (const k in cards) { const m = k.match(/^(hira|kata)\|(.)>/); if (m && cards[k].reps > 0) kana[m[2]] = 1; }
-  return {cards, prio: s.prio || {}, wlvl: s.wlvl || {}, kana, kanaPos: s.kanaPos || 0, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
+  return {cards, prio: s.prio || {}, wlvl: s.wlvl || {}, kana, kanaPos: s.kanaPos || 0, kanji: s.kanji || {}, spent: s.spent || 0, coupons: s.coupons || [], myRewards: s.myRewards || [], settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
           day: s.day || {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0, ...(s.streak || {})}, total: s.total || 0,
           xp: s.xp || 0, talks: s.talks || 0, log: s.log || {}, course: {...blankCourse(), ...(s.course || {})}};
 }
@@ -1270,7 +1320,16 @@ function load() {
   return blankSave();
 }
 let S = load();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+/* Saving. Progress lives in this browser. We check at startup that saving really works,
+   and ask the browser to keep the data permanently (so Android does not clear it). */
+let storageOK = false, lastSaved = null;
+try { localStorage.setItem(KEY + '.test', '1'); storageOK = localStorage.getItem(KEY + '.test') === '1'; localStorage.removeItem(KEY + '.test'); } catch (e) { storageOK = false; }
+let storagePersisted = null;
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(ok => { storagePersisted = ok; }).catch(() => {}); } catch (e) {}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); lastSaved = new Date(); storageOK = true; }
+  catch (e) { storageOK = false; }
+}
 function today() { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
 function freshDay() { const t = today(); if (S.day.n !== t) S.day = {n: t, newSeen: 0, reviews: 0}; }
 function streakNow() { const t = today(); return (S.streak.last === t || S.streak.last === t - 1) ? S.streak.count : 0; }
@@ -1508,6 +1567,48 @@ const BADGES = [
 ];
 
 /* ============================================================
+   CUTE BITS: deck emoji
+   ============================================================ */
+const DECK_EMOJI = {basics:'🌸', family:'👨‍👩‍👧', table:'🍙', me:'🙋', aya:'💕', out:'🚶', kin:'🏠', words:'📝', num:'🔢',
+  'v-time':'⏰', 'v-people':'🧑', 'v-food':'🍱', 'v-home':'🏡', 'v-places':'🗺️', 'v-nature':'🌿', 'v-verbs':'🏃', 'v-adj':'✨',
+  'v-colour':'🎨', 'v-small':'❓', 'v-work':'💴', signs:'🚗', menu:'🍜', ski:'🎿', fuji:'🗻', henro:'⛩️', aomori:'🍎', grammar:'📐', hira:'あ', kata:'ア'};
+const emo = d => DECK_EMOJI[d.id] || '🌸';
+
+/* ============================================================
+   COLLECTIONS: letters and kanji stay hidden (？) until you collect them
+   ============================================================ */
+const KANJI = new Map();  // kanji → first card that uses it
+DECKS.forEach(d => DECK_ITEMS[d.id].forEach(it => { if (it.parsed) flat(it.parsed).forEach(g => { if (g.r) for (const c of g.t) if (/[\u4e00-\u9fff]/.test(c) && !KANJI.has(c)) KANJI.set(c, it); }); }));
+const kanjiOf = it => it.parsed ? [...new Set(flat(it.parsed).filter(g => g.r).flatMap(g => [...g.t]).filter(c => /[\u4e00-\u9fff]/.test(c)))] : [];
+/* A kanji is collected the first time you answer a card that uses it with "I know it". */
+function collectKanji(it, quiet) {
+  const got = kanjiOf(it).filter(c => !S.kanji[c]);
+  got.forEach(c => { S.kanji[c] = today(); });
+  if (got.length && !quiet) { S.xp += 2 * got.length; toast(`🎴 New kanji collected: ${got.join(' ')}  (+${2 * got.length} XP)`); }
+}
+// Cards already known before collections existed count as collected.
+for (const k in S.cards) if (S.cards[k].reps > 0) { const it = itemOfKey(k); if (it) collectKanji(it, true); }
+
+/* ============================================================
+   REWARD SHOP: spend XP on real-life rewards from Aya
+   ============================================================ */
+const REWARDS = [
+  {id: 'choco', e: '🍫', name: 'Chocolate from Aya', price: 150},
+  {id: 'beer', e: '🍺', name: 'A Belgian beer, no questions asked', price: 200},
+  {id: 'movie', e: '🎬', name: 'Movie night, you choose the film', price: 300},
+  {id: 'chore', e: '🧺', name: 'Aya does one of your chores', price: 350},
+  {id: 'massage', e: '💆', name: 'A 15-minute massage', price: 400},
+  {id: 'dinner', e: '🍛', name: 'Aya cooks your favourite dinner', price: 500},
+  {id: 'breakfast', e: '🥞', name: 'Breakfast in bed', price: 600},
+  {id: 'bouquet', e: '💐', name: 'A bouquet of flowers', price: 700},
+  {id: 'onsen', e: '♨️', name: 'Sauna or onsen date', price: 900},
+  {id: 'gift', e: '🎁', name: 'A surprise gift', price: 1200},
+  {id: 'trip', e: '🗾', name: 'A day trip, you plan it together', price: 1500},
+];
+const allRewards = () => [...REWARDS, ...S.myRewards];
+const coins = () => Math.max(0, S.xp - (S.spent || 0));
+
+/* ============================================================
    AUDIO
    ============================================================ */
 let jaVoice = null;
@@ -1610,16 +1711,16 @@ function ladderCounts() {
   return c;
 }
 const GROUPS = [
-  ['talk', 'Everyday conversation', 'Sentences for Aya, her family and strangers.'],
-  ['core', 'Core vocabulary', 'The ~800 most useful words, in topics.'],
-  ['trip', 'Your trip', 'Driving, Aomori, Niseko, Fuji and the henro.'],
-  ['letters', 'Letters', 'Hiragana and katakana.'],
+  ['talk', '💬 Everyday conversation', 'Sentences for Aya, her family and strangers.'],
+  ['core', '🗂️ Core vocabulary', 'The ~800 most useful words, in topics.'],
+  ['trip', '🧳 Your trip', 'Driving, Aomori, Niseko, Fuji and the henro.'],
+  ['letters', '🔤 Letters', 'Hiragana and katakana.'],
 ];
 function deckRow(d) {
   const c = deckCounts(d);
   return `
         <div class="deck" style="--c:${d.color}">
-          <span class="dot"></span>
+          <span class="demo" aria-hidden="true">${emo(d)}</span>
           <div>
             <div class="deck-name">${esc(d.name)}<span class="jp">${d.jp}</span></div>
             <div class="deck-meta">${c.items} ${d.kana ? 'letters' : 'items'} · ${c.seen} of ${c.total} cards started${d.reg === 'polite' || d.reg === 'casual' ? ' · ' + d.reg : ''}</div>
@@ -1657,7 +1758,7 @@ function todayPanel() {
       <div><div class="eyebrow">Today · day ${L.n}${L.n <= LESSONS.length ? ' of ' + LESSONS.length : ''}</div>
       <h1 class="lesson-title">${esc(L.t)} <span class="jp">${esc(L.jp)}</span></h1></div>
       <div class="chips">${L.g ? `<span class="chip">grammar: <span class="jp">${esc(L.g.p)}</span></span>` : `<span class="chip">${L.review ? 'review day' : 'new words'}</span>`}${!L.review && kanaChunk().length ? `<span class="chip">letters: <span class="jp">${kanaChunk().map(u => esc(u.ch)).join(' ')}</span></span>` : ''}<span class="chip">about ${minutesFor(q, L)} min</span><span class="chip">${(L.cards || []).length} new · ${q.length - (L.cards || []).length} review</span></div>
-      <button class="btn btn-primary" data-act="lesson" style="min-height:60px;font-size:19px">Start today's lesson</button>
+      <button class="btn btn-primary btn-go" data-act="lesson">🌸 Start today's lesson</button>
       <p class="muted" style="font-size:14px">Letters of the day → topic and grammar → cards → tonight's conversation with Aya.</p>`;
   } else {
     main = `
@@ -1673,7 +1774,8 @@ function todayPanel() {
       <div><div class="eyebrow">Tonight's conversation · day ${P.n}</div><p>${esc(missionFor(P.n, P.deck).task)}</p></div>
       <div class="btn-row" style="grid-column:1 / -1"><button class="btn btn-line" data-act="mission">Open</button><button class="btn btn-primary" data-act="talked">We talked! +30</button></div>
     </div>` : '';
-  return `<section class="panel today">${main}${mission}
+  const warn = storageOK ? '' : `<div class="warn">⚠️ <b>This browser is not saving your progress.</b> Open the link in Chrome or Safari itself (not inside another app, not in a private tab). Until then, copy a backup code in Settings after each lesson.</div>`;
+  return `${warn}<section class="panel today">${main}${mission}
     <div class="week">${weekStrip()}</div>
     ${levelBar()}
   </section>`;
@@ -1715,7 +1817,7 @@ function phraseRows() {
     if (phraseDeck !== 'all' && phraseDeck !== d.id) return;
     const rows = DECK_ITEMS[d.id].filter(it => !q || it.en.toLowerCase().includes(q) || plain(it.romaji).includes(plain(q)) || it.kana.includes(q) || it.kanji.includes(q));
     if (!rows.length) return;
-    html += `<h3 class="group-h" style="--c:${d.color}"><span class="dot"></span>${esc(d.name)} <span class="jp muted" style="font-size:13px">${d.jp}</span></h3>`;
+    html += `<h3 class="group-h" style="--c:${d.color}"><span aria-hidden="true">${emo(d)}</span>${esc(d.name)} <span class="jp muted" style="font-size:13px">${d.jp}</span></h3>`;
     html += rows.map(it => `
       <div class="phrase">
         <div class="jp">${it.ruby}</div>
@@ -1776,9 +1878,21 @@ function viewProgress() {
     <div class="legend"><span><i class="light"></i>studied</span><span><i></i>lesson done</span><span><b class="stamp-mini">話</b> talked with Aya</span></div>
   </section>
   <section class="section">
-    <h2>Letters you can read</h2>
-    <p class="muted" style="font-size:15px">${KANA_UNITS.filter(u => S.kana[u.ch]).length} of ${KANA_UNITS.length} letters and reading rules. 3 new ones come with each lesson.</p>
-    ${['hira', 'mark', 'kata'].map(kind => `<div class="kgrid ${kind === 'mark' ? 'marks' : ''}">${KANA_UNITS.filter(u => u.kind === kind).map(u => `<span class="kt jp ${S.kana[u.ch] ? 'got' : ''}" title="${esc(u.rom)}">${esc(u.ch)}</span>`).join('')}</div>`).join('')}
+    <h2>🔤 Letter collection</h2>
+    ${collBar(KANA_UNITS.filter(u => S.kana[u.ch]).length, KANA_UNITS.length, 'letters and reading rules')}
+    ${[['hira', 'Hiragana'], ['mark', 'Reading rules'], ['kata', 'Katakana']].map(([kind, label]) => `<div class="eyebrow">${label}</div><div class="kgrid">${KANA_UNITS.filter(u => u.kind === kind).map(u => S.kana[u.ch] ? `<span class="kt jp got" title="${esc(u.rom)}">${esc(u.ch)}<small>${u.kind === 'mark' ? '' : esc(u.rom)}</small></span>` : `<span class="kt hidden-t" aria-label="not collected yet">？</span>`).join('')}</div>`).join('')}
+  </section>
+  <section class="section">
+    <h2>🎴 Kanji collection</h2>
+    ${collBar(Object.keys(S.kanji).length, KANJI.size, 'kanji')}
+    <p class="muted" style="font-size:14px">Answer a card with "I know it" to collect its kanji. Tap one to see where it comes from.</p>
+    <div class="kgrid kanji">${[...KANJI.keys()].filter(c => S.kanji[c]).map(c => `<button class="kt jp got" data-act="kanji" data-k="${c}">${c}</button>`).join('')}${'<span class="kt hidden-t">？</span>'.repeat(Math.min(12, KANJI.size - Object.keys(S.kanji).length))}</div>
+    ${KANJI.size - Object.keys(S.kanji).length > 12 ? `<p class="muted" style="font-size:14px">…and ${KANJI.size - Object.keys(S.kanji).length - 12} more hidden kanji waiting for you.</p>` : ''}
+  </section>
+  <section class="section">
+    <h2>🏮 Reward stickers</h2>
+    ${collBar(allRewards().filter(r => S.coupons.some(c => c.rid === r.id)).length, allRewards().length, 'rewards collected')}
+    <div class="stickers">${allRewards().map(r => S.coupons.some(c => c.rid === r.id) ? `<span class="sticker got" title="${esc(r.name)}">${r.e}</span>` : `<span class="sticker" aria-label="not collected yet">？</span>`).join('')}</div>
   </section>
   <section class="section">
     <h2>Badges</h2>
@@ -1804,7 +1918,7 @@ function viewProgress() {
     <div class="decks">
       ${ALL_DECKS.map(d => { const c = deckCounts(d); return `
       <div class="deck" style="--c:${d.color};grid-template-columns:auto 1fr">
-        <span class="dot"></span>
+        <span class="demo" aria-hidden="true">${emo(d)}</span>
         <div><div class="deck-name">${esc(d.name)}<span class="jp">${d.jp}</span></div>
         <div class="deck-meta">${c.strong} known well · ${c.seen - c.strong} learning · ${c.total - c.seen} new</div>
         <div class="bar"><i style="width:${c.strong / c.total * 100}%"></i><i style="width:${(c.seen - c.strong) / c.total * 100}%"></i></div></div>
@@ -1849,8 +1963,9 @@ function viewSettings() {
     </div>
   </section>
   <section class="section">
-    <h2>Backup</h2>
-    <p class="muted" style="font-size:15px">Progress is saved only in this browser. Copy a backup code now and then, and keep it in a note or send it to yourself.</p>
+    <h2>💾 Saving and backup</h2>
+    <p class="save-status ${storageOK ? 'ok' : 'bad'}">${storageOK ? `✅ Your progress is saved on this phone${lastSaved ? ' (last saved ' + lastSaved.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) + ')' : ''}.${storagePersisted ? ' The browser keeps it permanently.' : ''}` : '⚠️ This browser is not saving your progress. Open the link directly in Chrome or Safari, not inside another app or a private tab.'}</p>
+    <p class="muted" style="font-size:15px">Progress is saved only in this browser, on this phone. Copy a backup code now and then (for example once a week) and keep it in a note or a message to yourself. You can restore it on any phone.</p>
     <div class="btn-row"><button class="btn btn-soft" data-act="backup">Copy backup code</button></div>
     <textarea id="restoreBox" placeholder="Paste a backup code here to restore it"></textarea>
     <div class="btn-row"><button class="btn btn-line" data-act="restore">Restore from code</button></div>
@@ -1862,12 +1977,55 @@ function viewSettings() {
   </section>`;
 }
 
+function collBar(n, total, label) {
+  const pct = total ? Math.round(n / total * 100) : 0;
+  return `<div class="coll"><div class="coll-top"><b>${n} / ${total}</b> <span class="muted">${label}</span><span class="coll-pct">${pct}%${pct === 100 ? ' 🏆' : ''}</span></div><div class="bar" style="--c:var(--shu);height:10px"><i style="width:${pct}%"></i></div></div>`;
+}
+let shopArmed = null, couponArmed = null, shopMsg = '';
+function viewShop() {
+  const c = coins();
+  const open = S.coupons.filter(x => !x.used), used = S.coupons.filter(x => x.used);
+  return `
+  <section class="panel shop-head">
+    <div class="shop-lantern" aria-hidden="true">🏮</div>
+    <div><div class="eyebrow">Aya's reward shop · ご褒美屋</div>
+    <h1 class="lesson-title">You have <span class="coin-big">🪙 ${c}</span> XP to spend</h1>
+    <p class="muted" style="font-size:14.5px">Earn XP with cards (+1), lessons (+20), conversations (+30) and new kanji (+2). Spending XP never lowers your level.</p></div>
+  </section>
+  ${shopMsg ? `<p class="msg">${esc(shopMsg)}</p>` : ''}
+  ${open.length ? `<section class="section"><h2>🎟️ Your coupons</h2><p class="muted" style="font-size:14.5px">Show a coupon to Aya. Aya taps "Given" when you got it.</p>
+    <div class="coupons">${open.map(x => `<div class="coupon"><span class="c-e">${x.e}</span><div><b>${esc(x.name)}</b><div class="muted" style="font-size:13px">Bought ${dayDate(x.at).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', timeZone: 'UTC'})}</div></div>
+      <div class="c-acts"><button class="mini" data-act="showcoupon" data-id="${x.id}">Show</button><button class="mini" data-act="usecoupon" data-id="${x.id}">${couponArmed === x.id ? 'Tap again ✓' : 'Given'}</button></div></div>`).join('')}</div></section>` : ''}
+  <section class="section">
+    <h2>🎁 Rewards</h2>
+    <div class="rewards">${allRewards().map(r => { const can = c >= r.price; const owned = S.coupons.some(x => x.rid === r.id); return `
+      <div class="reward ${can ? '' : 'locked'}">
+        <span class="r-e">${r.e}</span>
+        <div class="r-name">${esc(r.name)}${owned ? ' <span class="got-tag">collected</span>' : ''}</div>
+        <button class="btn ${can ? 'btn-primary' : 'btn-line'} r-buy" data-act="buy" data-id="${r.id}" ${can ? '' : 'disabled'}>${shopArmed === r.id ? 'Tap again to buy' : `🪙 ${r.price}`}</button>
+      </div>`; }).join('')}</div>
+  </section>
+  <section class="section">
+    <h2>✏️ Aya's corner: add a reward</h2>
+    <p class="muted" style="font-size:14.5px">Aya, add your own rewards here. About 100 XP is one day of study.</p>
+    <div class="add-reward">
+      <input id="rwEmoji" class="search" maxlength="4" placeholder="🍡" aria-label="Emoji" style="max-width:70px;text-align:center">
+      <input id="rwName" class="search" maxlength="60" placeholder="A walk together to the lake" aria-label="Reward name">
+      <input id="rwPrice" class="search" type="number" min="10" max="10000" step="10" placeholder="300" aria-label="Price in XP" style="max-width:100px">
+    </div>
+    <button class="btn btn-soft" data-act="addreward">Add reward</button>
+    ${S.myRewards.length ? `<div class="decks">${S.myRewards.map(r => `<div class="deck" style="grid-template-columns:auto 1fr auto"><span class="demo">${r.e}</span><div><b>${esc(r.name)}</b><div class="muted" style="font-size:13px">🪙 ${r.price} XP</div></div><button class="mini" data-act="delreward" data-id="${r.id}">Remove</button></div>`).join('')}</div>` : ''}
+  </section>
+  ${used.length ? `<section class="section"><h2>📜 Rewards you enjoyed</h2><div class="stickers">${used.slice(-30).reverse().map(x => `<span class="sticker got" title="${esc(x.name)}">${x.e}</span>`).join('')}</div></section>` : ''}`;
+}
 function render() {
   const v = document.getElementById('view');
-  v.innerHTML = tab === 'phrases' ? viewPhrases() : tab === 'progress' ? viewProgress() : tab === 'settings' ? viewSettings() : viewHome();
+  v.innerHTML = tab === 'phrases' ? viewPhrases() : tab === 'shop' ? viewShop() : tab === 'progress' ? viewProgress() : tab === 'settings' ? viewSettings() : viewHome();
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false'));
   const s = streakNow();
-  document.getElementById('streakPill').textContent = s ? s + (s === 1 ? ' day' : ' days') + ' in a row' : 'Day 1';
+  document.getElementById('streakPill').textContent = '🔥 ' + (s || 0);
+  document.getElementById('streakPill').title = s + ' days in a row';
+  document.getElementById('coinPill').textContent = '🪙 ' + coins() + ' XP';
   if (tab === 'phrases') {
     preloadFor(DECKS.filter(d => phraseDeck === 'all' || d.id === phraseDeck).map(d => DECK_ITEMS[d.id][0]));
     const inp = document.getElementById('phraseSearch');
@@ -1927,7 +2085,7 @@ function showCard() {
   const lvl = Math.max(levelFor(it), entry.forceLvl || 0);
   const noRom = !!entry.noRomaji;
   sess.cur = {it, lvl, dir, k, noRom, revealed: false};
-  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${sess.queue[sess.pos].retry ? '<span class="chip retry">second try</span>' : st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${dir === 'jp' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${emo(it.deck)} ${esc(it.deck.name)}</span>${sess.queue[sess.pos].retry ? '<span class="chip retry">second try</span>' : st ? '' : '<span class="chip">new</span>'}${it.isKana ? '' : `<span class="chip">${dir === 'jp' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>`}${it.reg === 'polite' || it.reg === 'casual' ? `<span class="chip">${it.reg}</span>` : it.reg === 'read' ? '<span class="chip">sign / menu</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
   let front;
   if (dir === 'jp') {
     front = `<div class="ask">${it.isKana ? 'How do you read this?' : noRom ? 'Again, without romaji. Can you read it?' : 'What does this mean?'}</div><div class="front">${jpBlock(it, lvl, true)}${peekButtons(it, lvl, noRom)}</div>`;
@@ -1992,6 +2150,7 @@ function grade(g) {
     else st.due = t + 1;
   } else {
     st.ivl = r.ivl; st.due = t + r.ivl; st.reps++; delete st.lapsed; delete st.tried;
+    if (g === 2) collectKanji(it);
   }
   S.cards[k] = st;
   if (isNew) S.day.newSeen++;
@@ -2103,7 +2262,7 @@ function finishLetters() {
   });
   // Letters missed in the review quiz come back in today's cards.
   K.quiz.forEach(Q => { if (K.missed.has(Q.q) && !K.units.includes(Q.u)) { const it = unitItem(Q.u); if (it && S.cards[keyOf(it, 'jp')]) S.cards[keyOf(it, 'jp')].due = t; } });
-  if (K.units.length) S.kanaPos = KANA_UNITS.indexOf(K.units[K.units.length - 1]) + 1;
+  if (K.units.length) { S.kanaPos = KANA_UNITS.indexOf(K.units[K.units.length - 1]) + 1; toast('🔤 New letters collected: ' + K.units.map(u => u.ch).join(' ')); }
   save();
   afterLetters();
 }
@@ -2196,13 +2355,40 @@ function showBig(it) {
    ============================================================ */
 document.addEventListener('click', e => {
   const tb = e.target.closest('.tab');
-  if (tb) { tab = tb.dataset.tab; resetArmed = false; backupMsg = ''; try { localStorage.setItem(KEY + '.tab', tab); } catch (er) {} render(); window.scrollTo(0, 0); return; }
+  if (tb) { tab = tb.dataset.tab; resetArmed = false; backupMsg = ''; shopArmed = null; couponArmed = null; shopMsg = ''; try { localStorage.setItem(KEY + '.tab', tab); } catch (er) {} render(); window.scrollTo(0, 0); return; }
   if (e.target.closest('#big')) { document.getElementById('big').hidden = true; return; }
   const el = e.target.closest('[data-act]');
   if (!el) return;
   const act = el.dataset.act;
   if (act === 'start') startSession();
   else if (act === 'lesson') startLesson();
+  else if (act === 'buy') {
+    const r = allRewards().find(x => x.id === el.dataset.id); if (!r) return;
+    if (coins() < r.price) return;
+    if (shopArmed !== r.id) { shopArmed = r.id; shopMsg = ''; render(); return; }
+    shopArmed = null;
+    S.spent = (S.spent || 0) + r.price;
+    S.coupons.push({id: 'c' + Date.now(), rid: r.id, e: r.e, name: r.name, price: r.price, at: today(), used: false});
+    save(); shopMsg = `🎉 You bought "${r.name}"! Show your coupon to Aya.`; render(); window.scrollTo(0, 0);
+  }
+  else if (act === 'usecoupon') {
+    const x = S.coupons.find(c => c.id === el.dataset.id); if (!x) return;
+    if (couponArmed !== x.id) { couponArmed = x.id; render(); return; }
+    couponArmed = null; x.used = true; x.usedAt = today(); save(); shopMsg = `💝 Enjoy your ${x.name.toLowerCase()}!`; render();
+  }
+  else if (act === 'showcoupon') {
+    const x = S.coupons.find(c => c.id === el.dataset.id); if (!x) return;
+    const b = document.getElementById('big');
+    b.innerHTML = `<div class="coupon-big"><div class="eyebrow">🎟️ Coupon · ご褒美券</div><div style="font-size:90px">${x.e}</div><div class="jp" style="font-size:28px">${esc(x.name)}</div><div class="sub">For studying Japanese so well! 🌸</div></div><div class="close-hint">Tap anywhere to close</div>`;
+    b.hidden = false;
+  }
+  else if (act === 'addreward') {
+    const e = (document.getElementById('rwEmoji').value || '🎀').trim(), name = document.getElementById('rwName').value.trim(), price = Math.round(+document.getElementById('rwPrice').value);
+    if (!name || !(price >= 10)) { shopMsg = 'Please write a name and a price of at least 10 XP.'; render(); return; }
+    S.myRewards.push({id: 'my' + Date.now(), e: [...e].slice(0, 2).join(''), name, price}); save(); shopMsg = `✨ Added "${name}" to the shop.`; render();
+  }
+  else if (act === 'delreward') { S.myRewards = S.myRewards.filter(r => r.id !== el.dataset.id); save(); render(); }
+  else if (act === 'kanji') { const it = KANJI.get(el.dataset.k); if (it) toast(`${el.dataset.k} — in ${it.kanji} (${it.romaji}): ${it.en}`); }
   else if (act === 'nextletter') { sess.kana.i++; if (sess.kana.i < sess.kana.units.length) showLetter(); else startKanaQuiz(); }
   else if (act === 'kq') answerKana(el.dataset.v, el);
   else if (act === 'startcards') { if (sess.queue.length) showCard(); else finishLesson(); }
