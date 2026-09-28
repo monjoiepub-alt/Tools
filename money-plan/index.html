@@ -7,7 +7,8 @@
   --bg:#F2F5F3; --surface:#FFFFFF; --ink:#15221E; --muted:#4E5D57; --line:#D6DED9;
   --accent:#1C5D78; --accent-ink:#FFFFFF; --accent-soft:#DCEBF1; --marker:#E9B824;
   --ok:#23794A; --ok-soft:#DDF0E3; --mid:#8A5A0E; --mid-soft:#F6EACB; --no:#A63D33; --no-soft:#F5DEDA;
-  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+  --b1:#8A5A0E; --b1-soft:#F6EACB;
   --band:#1C5D78;
   --font-body:"Lexend", "Segoe UI", system-ui, sans-serif;
   --font-display:"Bricolage Grotesque", "Lexend", system-ui, sans-serif;
@@ -18,7 +19,8 @@
     --bg:#0F1715; --surface:#16211E; --ink:#E7EFEB; --muted:#A3B2AC; --line:#2A3833;
     --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
     --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
-    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+    --b1:#E3B45A; --b1-soft:#3A2E14;
     --band:#7CC0DB;
   }
 }
@@ -27,7 +29,8 @@
   --bg:#0F1715; --surface:#16211E; --ink:#E7EFEB; --muted:#A3B2AC; --line:#2A3833;
   --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
   --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
-  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  --b1:#E3B45A; --b1-soft:#3A2E14;
   --band:#7CC0DB;
 }
 *{box-sizing:border-box}
@@ -38,7 +41,8 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;marg
 h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-0.01em}
 h2{font-size:1.6rem;font-weight:800;display:flex;align-items:center;gap:12px}
 h3{font-size:1.2rem;font-weight:600}
-p{margin:0;max-width:68ch}
+h4{font-family:var(--font-display);font-size:1rem;font-weight:600;margin:0}
+p{margin:0;max-width:70ch}
 a{color:var(--accent)}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--marker);outline-offset:2px;border-radius:6px}
@@ -51,10 +55,12 @@ header.top{display:flex;flex-direction:column;gap:12px}
 section{display:flex;flex-direction:column;gap:18px}
 .sec-head{display:flex;flex-direction:column;gap:6px}
 .step{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:inline-grid;place-items:center;font-size:1.1rem;flex:none}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px;align-items:start}
-.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:14px}
-.stackf{display:flex;flex-direction:column;gap:10px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel.bk1{border-top:6px solid var(--b1)}
+.panel.bk2{border-top:6px solid var(--accent)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px;align-items:start}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:14px}
+.stackf{display:flex;flex-direction:column;gap:10px;min-width:0}
 .field{display:flex;flex-direction:column;gap:5px;min-width:0}
 .field label,.lbl{font-size:.88rem;color:var(--muted);font-weight:500}
 .field small{font-size:.8rem;color:var(--muted)}
@@ -75,8 +81,11 @@ input::placeholder{color:var(--muted);opacity:.75}
 .saved::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
 .saved.ok::before{background:var(--ok)}
 .saved.mid::before{background:var(--mid)}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;border-radius:999px;padding:2px 10px;width:fit-content}
+.tag.t1{background:var(--b1-soft);color:var(--b1)}
+.tag.t2{background:var(--accent-soft);color:var(--accent)}
 
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:14px}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
 .tile .k{font-size:.85rem;color:var(--muted)}
 .tile .v{font-family:var(--font-display);font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15}
@@ -90,49 +99,62 @@ input::placeholder{color:var(--muted);opacity:.75}
 .tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
 th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
-thead th{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0;white-space:nowrap}
+thead th{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500;background:var(--surface);white-space:nowrap}
+thead tr.grp th{font-size:.8rem;text-align:center;border-bottom:0;padding-bottom:0}
 td.n,th.n{text-align:right;white-space:nowrap}
 tr:last-child td{border-bottom:0}
-tr.cls td{font-family:var(--font-display);font-weight:600;color:var(--ink);padding-top:14px;background:var(--bg)}
 tr.retire td{background:var(--accent-soft)}
 tr.short td{background:var(--no-soft)}
 tr.isreal td{background:var(--ok-soft)}
-.holdings{min-width:700px}
-.holdings input{padding:4px 8px}
-.holdings td.num input{width:80px;text-align:right}
-.logtable{min-width:900px}
-.logtable td.num input{width:120px;text-align:right}
-.logtable td.pc input{width:86px;text-align:right}
-.or{color:var(--muted);font-size:.8rem;text-align:center}
-.yeartable{min-width:1000px;font-size:.92rem}
+tr.now td{background:var(--mid-soft)}
+tr.sum td{font-weight:600;background:var(--bg)}
+.assets{min-width:620px}
+.assets input{padding:4px 8px}
+.assets td.num input{width:78px;text-align:right}
+.logtable{min-width:1120px}
+.logtable td.num input{width:104px;text-align:right}
+.logtable td.pc input{width:78px;text-align:right}
+.logtable .g1{border-left:3px solid var(--b1)}
+.logtable .g2{border-left:3px solid var(--accent)}
+.or{color:var(--muted);font-size:.8rem;text-align:center;padding-inline:2px}
+.yeartable{min-width:1180px;font-size:.92rem}
+.yeartable td:nth-child(3){min-width:210px}
+.gltable{min-width:780px;font-size:.92rem}
+.rebal{min-width:600px}
+.rebal td.num input{width:116px;text-align:right}
 .swatch{width:12px;height:12px;border-radius:3px;display:inline-block;flex:none}
-.mixname{font-size:.82rem;white-space:nowrap}
+.mini{display:flex;width:110px;height:12px;border-radius:3px;overflow:hidden;gap:1px;background:var(--surface)}
+.mini i{display:block;height:100%}
+.buy{color:var(--ok);font-weight:600}
+.sell{color:var(--no);font-weight:600}
 
 .tabs{display:flex;flex-wrap:wrap;gap:8px}
-.tab{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-weight:500}
+.tab{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:500;font-size:.92rem}
 .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
-.scard{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.scard.on{border-color:var(--accent)}
-.scard dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-variant-numeric:tabular-nums}
-.scard dt{color:var(--muted);font-size:.92rem}
-.scard dd{margin:0;text-align:right;font-weight:600}
 .stack{display:flex;height:22px;border-radius:6px;overflow:hidden;gap:2px;background:var(--surface)}
 .stack i{display:block;height:100%;min-width:0}
 .legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9rem;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
+dl.stats{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-variant-numeric:tabular-nums}
+dl.stats dt{color:var(--muted);font-size:.92rem}
+dl.stats dd{margin:0;text-align:right;font-weight:600}
+.phase{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.phase .num{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:600}
+.phase .fields{grid-column:1 / -1;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:10px}
 
 .chartbox{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 8px 4px}
 .chartbox.flat{border:0;padding:0}
 .chartbox svg{display:block;width:100%;height:auto;touch-action:pan-y}
-.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:10px;padding:8px 10px;font-size:.85rem;line-height:1.45;font-variant-numeric:tabular-nums;min-width:190px;box-shadow:0 4px 14px rgb(0 0 0 / .18);z-index:2}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:10px;padding:8px 10px;font-size:.85rem;line-height:1.45;font-variant-numeric:tabular-nums;min-width:200px;box-shadow:0 4px 14px rgb(0 0 0 / .18);z-index:2}
 .tip .r{display:flex;justify-content:space-between;gap:12px;align-items:center}
 .tip .r span:first-child{display:inline-flex;align-items:center;gap:6px}
 .axis text{fill:var(--muted);font-size:12px;font-family:var(--font-body)}
 .axis line{stroke:var(--line)}
-.learn{background:var(--accent-soft);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.note{background:var(--accent-soft);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.note.warnbox{background:var(--no-soft)}
+.note.goodbox{background:var(--ok-soft)}
 ol.howto{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
-ol.howto li{max-width:78ch}
+ol.howto li{max-width:80ch}
 details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
 details summary{cursor:pointer;font-weight:600;font-family:var(--font-display);font-size:1.1rem}
 details[open]{display:flex;flex-direction:column;gap:10px}
@@ -144,9 +166,9 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
 
 <div class="wrap">
 <header class="top">
-  <div class="eyebrow">Investment forecast · update once a year</div>
+  <div class="eyebrow">Two buckets · one account · update each January</div>
   <h1>Aya &amp; Max Money Plan</h1>
-  <p class="lead">A forecast for your investments from age 25. Each January, type in what really happened last year. The forecast then starts again from your real numbers, so it gets more accurate every year. Euro amounts you type are in <b>today’s money</b>, except in “My real results”.</p>
+  <p class="lead">One investment account, two separate pots. <b>Bucket 1</b> safely grows the money for the van and the house. <b>Bucket 2</b> grows for retirement and lowers its risk step by step. Each January you type in the real results, and the forecast starts again from them. Euro amounts in the plan are in <b>today’s money</b>.</p>
   <div class="row"><span class="saved" id="saveState">Loading your saved plan…</span></div>
 </header>
 
@@ -156,6 +178,10 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
     <p class="hint">2,000 possible futures, each with its own good and bad market years. Amounts in today’s euros.</p>
   </div>
   <div class="tiles" id="tiles"></div>
+  <div class="row" style="justify-content:space-between">
+    <div class="tabs" role="tablist" id="viewTabs"></div>
+    <span class="hint" id="viewHint"></span>
+  </div>
   <div class="chartbox" id="fanBox">
     <svg id="fan" viewBox="0 0 900 380" role="img" aria-label="Range of possible savings by age"></svg>
     <div class="tip" id="fanTip" hidden></div>
@@ -166,138 +192,188 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
 <section id="real">
   <div class="sec-head">
     <h2><span class="step">1</span>My real results</h2>
-    <p class="hint">Once a year, in January. Fill in <b>either</b> the return % <b>or</b> the account value on 31 December. The tool works out the other one. Use the real euro numbers from your statement.</p>
+    <p class="hint">Once a year, in January. For each bucket, fill in <b>either</b> the return % <b>or</b> its value on 31 December. Use the real euro numbers from your statement.</p>
   </div>
   <div class="panel">
     <ol class="howto">
-      <li><b>Added</b> = all the money you put into the investment account that year.</li>
-      <li><b>Taken out</b> = all the money you took out that year (for example for the van).</li>
-      <li><b>Return %</b> = in Interactive Brokers, open PortfolioAnalyst and read the “time-weighted return” for the year. <b>Or</b> type the <b>value on 31 Dec</b> from your year-end statement.</li>
-      <li><b>Inflation %</b> is optional: how much prices really rose that year (Eurostat HICP or Statistics Finland). Leave it empty to use the plan’s guess.</li>
+      <li><b>Added</b> = money you put into that bucket during the year.</li>
+      <li><b>Out</b> = money you took out of that bucket (for example to pay for the van).</li>
+      <li><b>Return %</b> = time-weighted return from Interactive Brokers PortfolioAnalyst. <b>Or</b> add up the value of that bucket’s funds on 31 Dec.</li>
+      <li><b>Inflation %</b> is optional: how much prices really rose that year (Eurostat HICP or Statistics Finland).</li>
     </ol>
     <div class="tablebox"><table class="logtable" id="logTable"></table></div>
     <div class="row"><button class="btn small" type="button" id="addYear">+ Add next year</button></div>
-    <div class="learn" id="learnBox"></div>
-    <label class="check"><input type="checkbox" id="p_learn" data-b="plan.learn">Let my real returns adjust the future forecast (slowly, because one year says very little)</label>
+    <div class="note" id="learnBox"></div>
+    <label class="check"><input type="checkbox" id="p_learn" data-b="plan.learn">Let my real returns adjust the future forecast</label>
   </div>
 </section>
 
-<section id="portfolio">
+<section id="buckets">
   <div class="sec-head">
-    <h2><span class="step">2</span>Three investment mixes</h2>
-    <p class="hint">“Typical yearly growth” is after fund fees. “Ups and downs” (volatility) shows how wild a normal year can be.</p>
+    <h2><span class="step">2</span>The two buckets</h2>
+    <p class="hint">Every euro you invest is split between the buckets. Their risks never mix: the Project fund can only hold safe things.</p>
   </div>
-  <div class="compare" id="stratCards"></div>
   <div class="panel">
-    <div class="row" style="justify-content:space-between">
-      <h3>Edit a mix</h3>
-      <div class="tabs" role="tablist" id="stratTabs"></div>
+    <div class="fields">
+      <div class="field"><label for="p_split">Share of new money into Bucket 1</label><div class="unit"><input type="number" id="p_split" data-k="plan.split" step="5" min="0" max="100"><span>%</span></div><small id="splitNote"></small></div>
+      <div class="field"><label for="p_after">After the project</label>
+        <select id="p_after" data-s="plan.afterGoal">
+          <option value="b2">All new money goes to Retirement</option>
+          <option value="split">Keep the split (next project)</option>
+        </select>
+      </div>
     </div>
-    <div class="fields" id="classFields"></div>
-    <p class="warn" id="classWarn" hidden></p>
-    <div class="tablebox"><table class="holdings" id="holdTable"></table></div>
-    <p class="hint">“% of type” is the share inside that type (for example World is 45% of the stock part). Return and ups/downs are long-term yearly guesses in euros, before inflation.</p>
+    <label class="check"><input type="checkbox" id="p_move" data-b="plan.moveLeftover">After the last project payment, move what is left in Bucket 1 into Retirement</label>
   </div>
+  <div class="grid2">
+    <div class="panel bk1">
+      <span class="tag t1">Bucket 1</span>
+      <h3>The 5-year Project fund</h3>
+      <p class="hint">Van and house down payment. Safe money only: no stocks, no crypto. The aim is to keep up with inflation and never lose the money right before you need it.</p>
+      <h4>Goals</h4>
+      <div id="goals" class="stackf"></div>
+      <div class="row"><button class="btn small" type="button" id="addGoal">+ Add a goal</button></div>
+      <div class="note" id="goalBox"></div>
+      <h4>Mix</h4>
+      <div class="stack" id="b1Bar" aria-hidden="true"></div>
+      <div class="tablebox"><table class="assets" id="b1Table"></table></div>
+      <label class="check"><input type="checkbox" id="p_cash" data-b="plan.cashLastYear">In the last year before a goal, move the bonds into the money market fund</label>
+      <dl class="stats" id="b1Stats"></dl>
+    </div>
+    <div class="panel bk2">
+      <span class="tag t2">Bucket 2</span>
+      <h3>The Retirement fund</h3>
+      <p class="hint">Long-term wealth for 30+ years. Starts aggressive to beat inflation, then lowers risk in three phases before retirement (step 3).</p>
+      <h4>Starting mix</h4>
+      <div class="stack" id="b2Bar" aria-hidden="true"></div>
+      <div class="legend" id="b2Legend"></div>
+      <dl class="stats" id="b2Stats"></dl>
+      <div class="tablebox"><table class="assets" id="b2Table"></table></div>
+      <p class="hint">Return and ups/downs are long-term yearly guesses in euros, before inflation. Fee = the fund’s yearly cost (TER).</p>
+    </div>
+  </div>
+  <div class="note" id="splitMath"></div>
 </section>
 
 <section id="glide">
   <div class="sec-head">
-    <h2><span class="step">3</span>Lowering risk over time</h2>
-    <p class="hint">Instead of one big switch, the mix slides a little every year: from Aggressive, through Moderate, to Safe.</p>
+    <h2><span class="step">3</span>Retirement fund glide path</h2>
+    <p class="hint">The mix changes a little every January. Money that leaves crypto, stocks or gold goes into high-quality bonds. Part of the stocks moves into dividend-paying value stocks.</p>
   </div>
   <div class="grid2">
     <div class="panel">
-      <div class="field"><label for="p_switch">How to change mixes</label>
-        <select id="p_switch" data-s="plan.switchMode">
-          <option value="glide">Slide slowly, year by year (recommended)</option>
-          <option value="balance">Jump by size of savings</option>
-          <option value="age">Jump by age</option>
-          <option value="aggressive">Always Aggressive</option>
-          <option value="moderate">Always Moderate</option>
-          <option value="safe">Always Safe</option>
-        </select>
+      <h3>Starting mix (%)</h3>
+      <div class="fields">
+        <div class="field"><label for="gs_s">Global stocks</label><input type="number" id="gs_s" data-k="glide.start.eq" step="1"></div>
+        <div class="field"><label for="gc_s">Crypto</label><input type="number" id="gc_s" data-k="glide.start.cr" step="1"></div>
+        <div class="field"><label for="gg_s">Gold</label><input type="number" id="gg_s" data-k="glide.start.gd" step="1"></div>
       </div>
-      <div class="fields" id="switchGlide">
-        <div class="field"><label for="p_gA">Start lowering risk at age</label><input type="number" id="p_gA" data-k="plan.glideA"></div>
-        <div class="field"><label for="p_gB">Fully Safe at age</label><input type="number" id="p_gB" data-k="plan.glideB"></div>
+      <p class="hint" id="startBonds"></p>
+      <div class="phase">
+        <span class="num">1</span><b>Trim the crypto</b>
+        <div class="fields">
+          <div class="field"><label for="p1f">From age</label><input type="number" id="p1f" data-k="glide.p1.from"></div>
+          <div class="field"><label for="p1y">Over years</label><input type="number" id="p1y" data-k="glide.p1.years" min="1"></div>
+          <div class="field"><label for="p1e">Crypto down to %</label><input type="number" id="p1e" data-k="glide.end.cr" step="1"></div>
+        </div>
       </div>
-      <div class="fields" id="switchBalance">
-        <div class="field"><label for="p_t1">Moderate from</label><div class="unit"><input type="number" id="p_t1" data-k="plan.t1" step="10000"><span>€</span></div></div>
-        <div class="field"><label for="p_t2">Safe from</label><div class="unit"><input type="number" id="p_t2" data-k="plan.t2" step="10000"><span>€</span></div></div>
+      <div class="phase">
+        <span class="num">2</span><b>Scale down the stocks</b>
+        <div class="fields">
+          <div class="field"><label for="p2f">From age</label><input type="number" id="p2f" data-k="glide.p2.from"></div>
+          <div class="field"><label for="p2y">Over years</label><input type="number" id="p2y" data-k="glide.p2.years" min="1"></div>
+          <div class="field"><label for="p2e">All stocks down to %</label><input type="number" id="p2e" data-k="glide.end.eq" step="1"></div>
+          <div class="field"><label for="p2d">Of which dividend %</label><input type="number" id="p2d" data-k="glide.end.dvShare" step="5"></div>
+        </div>
       </div>
-      <div class="fields" id="switchAge">
-        <div class="field"><label for="p_ageA">Moderate from age</label><input type="number" id="p_ageA" data-k="plan.ageA"></div>
-        <div class="field"><label for="p_ageB">Safe from age</label><input type="number" id="p_ageB" data-k="plan.ageB"></div>
+      <div class="phase">
+        <span class="num">3</span><b>Re-evaluate the gold</b>
+        <div class="fields">
+          <div class="field"><label for="p3f">From age</label><input type="number" id="p3f" data-k="glide.p3.from"></div>
+          <div class="field"><label for="p3y">Over years</label><input type="number" id="p3y" data-k="glide.p3.years" min="1"></div>
+          <div class="field"><label for="p3e">Gold to %</label><input type="number" id="p3e" data-k="glide.end.gd" step="1"></div>
+        </div>
       </div>
+      <p class="warn" id="glideWarn" hidden></p>
       <p class="hint" id="glideNote"></p>
     </div>
     <div class="panel">
-      <h3>Your mix at each age</h3>
+      <h3>Retirement fund mix at each age</h3>
       <div class="chartbox flat" id="glideBox">
-        <svg id="glideSvg" viewBox="0 0 560 240" role="img" aria-label="Share of stocks, bonds, crypto and gold at each age"></svg>
+        <svg id="glideSvg" viewBox="0 0 560 250" role="img" aria-label="Share of each asset in the Retirement fund at each age"></svg>
         <div class="tip" id="glideTip" hidden></div>
       </div>
       <div class="legend" id="glideLegend"></div>
     </div>
   </div>
+  <div class="tablebox"><table class="gltable" id="glTable"></table></div>
+</section>
+
+<section id="rebalance">
+  <div class="sec-head">
+    <h2><span class="step">4</span>January rebalance helper</h2>
+    <p class="hint">Type what each fund is worth now. The tables show this year’s target and what to buy or sell. Use new money first: it often fixes the mix without selling (and without tax).</p>
+  </div>
+  <div class="panel">
+    <div class="row">
+      <div class="field" style="max-width:220px"><label for="rb_year">Rebalance for January</label><input type="number" id="rb_year" data-k="holdings.year"></div>
+      <span class="hint" id="rbAge"></span>
+    </div>
+    <div class="grid2">
+      <div class="stackf"><span class="tag t1">Bucket 1 · Project fund</span><div class="tablebox"><table class="rebal" id="rb1"></table></div></div>
+      <div class="stackf"><span class="tag t2">Bucket 2 · Retirement fund</span><div class="tablebox"><table class="rebal" id="rb2"></table></div></div>
+    </div>
+  </div>
 </section>
 
 <section id="plan">
-  <div class="sec-head">
-    <h2><span class="step">4</span>Life plan</h2>
-    <p class="hint">When you add money, when you take it out, and when you stop working.</p>
-  </div>
+  <div class="sec-head"><h2><span class="step">5</span>Plan settings</h2></div>
   <div class="grid2">
     <div class="panel">
       <h3>Start</h3>
       <div class="fields">
         <div class="field"><label for="p_startAge">Age at start</label><input type="number" id="p_startAge" data-k="plan.startAge"></div>
         <div class="field"><label for="p_startYear">Start year</label><input type="number" id="p_startYear" data-k="plan.startYear"></div>
-        <div class="field"><label for="p_start">First investment</label><div class="unit"><input type="number" id="p_start" data-k="plan.start" step="1000"><span>€</span></div></div>
+        <div class="field"><label for="p_b1s">Already in Bucket 1</label><div class="unit"><input type="number" id="p_b1s" data-k="plan.b1Start" step="100"><span>€</span></div></div>
+        <div class="field"><label for="p_b2s">Already in Bucket 2</label><div class="unit"><input type="number" id="p_b2s" data-k="plan.b2Start" step="100"><span>€</span></div></div>
       </div>
-      <h3>Money you add each year</h3>
+      <h3>Money you invest each year</h3>
       <div id="periods" class="stackf"></div>
       <div class="row"><button class="btn small" type="button" id="addPeriod">+ Add a period</button></div>
-      <label class="check"><input type="checkbox" id="p_grow" data-b="plan.grow">Raise what we add with inflation each year (pay usually goes up)</label>
+      <label class="check"><input type="checkbox" id="p_grow" data-b="plan.grow">Raise what we invest with inflation each year</label>
     </div>
     <div class="panel">
       <h3>Retirement</h3>
       <div class="fields">
-        <div class="field"><label for="p_retireAge">Start living from it at age</label><input type="number" id="p_retireAge" data-k="plan.retireAge"></div>
+        <div class="field"><label for="p_retireAge">Live from Bucket 2 from age</label><input type="number" id="p_retireAge" data-k="plan.retireAge"></div>
         <div class="field"><label for="p_spendOut">Take out each year</label><div class="unit"><input type="number" id="p_spendOut" data-k="plan.spend" step="1000"><span>€</span></div><small>After tax</small></div>
         <div class="field"><label for="p_endAge">Plan until age</label><input type="number" id="p_endAge" data-k="plan.endAge"></div>
         <div class="field"><label for="p_penAge">State / work pension from age</label><input type="number" id="p_penAge" data-k="plan.penAge"></div>
-        <div class="field"><label for="p_pen">Pension for both / year</label><div class="unit"><input type="number" id="p_pen" data-k="plan.pension" step="1000"><span>€</span></div><small>After tax. Check tyoelake.fi and mypension.be</small></div>
+        <div class="field"><label for="p_pen">Pension for both / year</label><div class="unit"><input type="number" id="p_pen" data-k="plan.pension" step="1000"><span>€</span></div><small>After tax. See tyoelake.fi, mypension.be</small></div>
       </div>
-      <h3>Big moments &amp; places</h3>
-      <p class="hint">Amount = money taken out that year. Use 0 for a note only. A minus number adds money (a gift, a sale).</p>
-      <div id="events" class="stackf"></div>
-      <div class="row"><button class="btn small" type="button" id="addEvent">+ Add a moment</button></div>
-    </div>
-  </div>
-  <div class="panel">
-    <h3>Inflation, tax and costs</h3>
-    <div class="fields">
-      <div class="field"><label for="p_infl">Inflation / year (guess)</label><div class="unit"><input type="number" id="p_infl" data-k="plan.infl" step="0.1"><span>%</span></div><small>ECB target is 2%</small></div>
-      <div class="field"><label for="p_buy">Cost when buying</label><div class="unit"><input type="number" id="p_buy" data-k="plan.buyCost" step="0.05"><span>%</span></div><small>Broker fee + Belgian TOB tax</small></div>
-      <div class="field"><label for="p_tax">Tax on profit (where you live when you sell)</label>
-        <select id="p_tax" data-s="plan.tax">
-          <option value="fi">Finland: 30% (34% above €30k)</option>
-          <option value="be">Belgium: 10% above €10k a year</option>
-          <option value="jp">Japan: 20.315% (outside NISA)</option>
-          <option value="custom">Custom % of profit</option>
-        </select>
+      <h3>Inflation, tax and costs</h3>
+      <div class="fields">
+        <div class="field"><label for="p_infl">Inflation / year (guess)</label><div class="unit"><input type="number" id="p_infl" data-k="plan.infl" step="0.1"><span>%</span></div><small>ECB target is 2%</small></div>
+        <div class="field"><label for="p_buy">Cost when buying</label><div class="unit"><input type="number" id="p_buy" data-k="plan.buyCost" step="0.05"><span>%</span></div><small>Broker fee + Belgian TOB tax</small></div>
+        <div class="field"><label for="p_tax">Tax on profit</label>
+          <select id="p_tax" data-s="plan.tax">
+            <option value="fi">Finland: 30% (34% above €30k)</option>
+            <option value="be">Belgium: 10% above €10k a year</option>
+            <option value="jp">Japan: 20.315% (outside NISA)</option>
+            <option value="custom">Custom % of profit</option>
+          </select>
+        </div>
+        <div class="field" id="customTaxBox"><label for="p_customTax">Custom tax on profit</label><div class="unit"><input type="number" id="p_customTax" data-k="plan.customTax" step="1"><span>%</span></div></div>
       </div>
-      <div class="field" id="customTaxBox"><label for="p_customTax">Custom tax on profit</label><div class="unit"><input type="number" id="p_customTax" data-k="plan.customTax" step="1"><span>%</span></div></div>
+      <p class="hint" id="taxNote"></p>
     </div>
-    <p class="hint" id="taxNote"></p>
   </div>
 </section>
 
 <section id="years">
   <div class="sec-head">
-    <h2><span class="step">5</span>Year by year</h2>
-    <p class="hint">Green rows are real results. After them comes the “middle” path, where every year grows at the typical rate. Real life will bounce around it.</p>
+    <h2><span class="step">6</span>Year by year</h2>
+    <p class="hint">Green rows are real results. After them comes the “middle” path, where each bucket grows at its typical rate. Real life will bounce around it.</p>
   </div>
   <label class="check"><input type="checkbox" id="showNominal">Show future euros (the number on your bank screen then) instead of today’s euros</label>
   <div class="tablebox"><table class="yeartable" id="yearTable"></table></div>
@@ -319,83 +395,68 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
 </section>
 
 <footer>
-  <p>This is a planning tool, not financial advice. Future returns are guesses based on long-term forecasts from large asset managers (stocks roughly 5–7.5% a year in euros, bonds about 3%). Random futures use “fat tails”, so big crashes show up about as often as in real markets. Tax rules change and depend on where you live when you sell: check with Vero (Finland), SPF Finances (Belgium) or the NTA (Japan) before big moves.</p>
+  <p>This is a planning tool, not financial advice. Future returns are guesses based on long-term forecasts from large asset managers (stocks roughly 5–7.5% a year in euros, bonds about 3%, cash about the ECB deposit rate). Random futures use “fat tails”, so big crashes show up about as often as in real markets. Tax rules change and depend on where you live when you sell: check with Vero (Finland), SPF Finances (Belgium) or the NTA (Japan) before big moves.</p>
 </footer>
 </div>
 
 <script>
 "use strict";
-/* ---------- defaults ---------- */
-const CLS = {
-  eq:{name:"Stocks (ETF)", role:"Main engine", color:"--s1"},
-  bd:{name:"Bonds", role:"Stability", color:"--s2"},
-  cr:{name:"Crypto", role:"Growth bet", color:"--s3"},
-  cm:{name:"Gold & raw materials", role:"Safety", color:"--s4"}
-};
-const CLS_KEYS = ["eq","bd","cr","cm"];
-const RHO = {eq:{eq:.85,bd:.1,cr:.35,cm:.25}, bd:{bd:.7,cr:0,cm:.1}, cr:{cr:.75,cm:.15}, cm:{cm:.5}};
-const rho = (a,b) => RHO[a]?.[b] ?? RHO[b][a];
-const STRATS = ["aggressive","moderate","safe"];
-const SNAME = {aggressive:"Aggressive", moderate:"Moderate", safe:"Safe"};
-const PRIOR_SD = 0.03;   // how unsure the long-term return guess is (±3% a year)
+/* ---------- assets ---------- */
+const B1K=["cash","mmf","stb"], B2K=["gs","dv","bd","gd","cr"];
+const ANAME={cash:"High-yield savings", mmf:"Money market fund", stb:"Short-term government bonds",
+  gs:"Global stocks (index)", dv:"Dividend value stocks", bd:"High-quality bonds", gd:"Gold", cr:"Crypto"};
+const ACOL={cash:"--s1", mmf:"--s2", stb:"--s3", gs:"--s1", dv:"--s2", bd:"--s3", gd:"--s4", cr:"--s5"};
+const CORR={"gs|dv":.85,"gs|bd":.1,"gs|cr":.35,"gs|gd":.1,"dv|bd":.15,"dv|cr":.3,"dv|gd":.1,"bd|cr":0,"bd|gd":.2,"cr|gd":.15,
+  "cash|mmf":.9,"cash|stb":.3,"mmf|stb":.4};
+const corr=(a,b)=>a===b?1:(CORR[a+"|"+b]??CORR[b+"|"+a]??0);
+const PRIOR={b1:0.01, b2:0.03};   // how unsure each long-term guess is (± a year)
 
-function items(eqW){
-  return [
-    {c:"eq", name:"World", tk:"VWCE / IWDA", w:eqW[0], ret:6.5, vol:15, ter:0.2},
-    {c:"eq", name:"Europe", tk:"IEUR / Amundi MSCI Europe", w:eqW[1], ret:6.5, vol:16, ter:0.12},
-    {c:"eq", name:"Emerging markets", tk:"EIMI / VFEM", w:eqW[2], ret:7, vol:19, ter:0.18},
-    {c:"eq", name:"US tech & AI", tk:"IUIT / XAIX", w:eqW[3], ret:7, vol:24, ter:0.3},
-    {c:"bd", name:"US treasuries", tk:"iShares USD Treasury UCITS", w:20, ret:3.5, vol:8, ter:0.07},
-    {c:"bd", name:"Euro company bonds", tk:"iShares Euro Corp (IEAC)", w:40, ret:3.5, vol:5, ter:0.2},
-    {c:"bd", name:"World government bonds", tk:"iShares Global Govt", w:30, ret:3, vol:5, ter:0.2},
-    {c:"bd", name:"Euro inflation-linked", tk:"IBCI / IEIL", w:10, ret:2.8, vol:6, ter:0.09},
-    {c:"cr", name:"Bitcoin", tk:"BTC (or ETP)", w:70, ret:8.5, vol:65, ter:0.4},
-    {c:"cr", name:"Ethereum", tk:"ETH (or ETP)", w:30, ret:9, vol:80, ter:0.4},
-    {c:"cm", name:"Gold", tk:"Xtrackers Physical Gold (XAD5)", w:60, ret:3.5, vol:15, ter:0.15},
-    {c:"cm", name:"Energy & metals", tk:"WisdomTree Energy", w:40, ret:3.5, vol:22, ter:0.4}
-  ];
-}
 function defaults(){
   return {
-    strategies:{
-      safe:{cls:{eq:40,bd:40,cr:10,cm:10}, items:items([45,12.5,25,17.5])},
-      moderate:{cls:{eq:60,bd:20,cr:12,cm:8}, items:items([45,20,20,15])},
-      aggressive:{cls:{eq:70,bd:0,cr:22,cm:8}, items:items([45,20,20,15])}
+    v:3,
+    plan:{startAge:25, startYear:2027, b1Start:5400, b2Start:3600,
+      periods:[{from:25,to:55,amt:10000}], grow:true, split:60, afterGoal:"b2", moveLeftover:true, cashLastYear:true,
+      retireAge:56, spend:30000, endAge:99, penAge:67, pension:0,
+      infl:2, buyCost:0.2, tax:"fi", customTax:30, learn:true},
+    goals:[{label:"New van",age:30,amt:15000},{label:"House down payment",age:30,amt:50000}],
+    b1:{cash:20, mmf:40, stb:40},
+    assets:{
+      cash:{tk:"Savings account", ret:1.75, vol:0.3, ter:0},
+      mmf:{tk:"XEON / Amundi Smart Overnight", ret:2.0, vol:0.5, ter:0.1},
+      stb:{tk:"iShares € Govt 1-3yr (IBGS)", ret:2.4, vol:1.8, ter:0.15},
+      gs:{tk:"VWCE / IWDA (+ EIMI)", ret:6.5, vol:16, ter:0.2},
+      dv:{tk:"VHYL / ZPRG", ret:6.0, vol:13, ter:0.29},
+      bd:{tk:"AGGH / IEAC / IEIL", ret:3.2, vol:5, ter:0.12},
+      gd:{tk:"XAD5 / 4GLD", ret:3.5, vol:15, ter:0.12},
+      cr:{tk:"BTC 70% / ETH 30% (or ETPs)", ret:8.5, vol:66, ter:0.4}
     },
-    plan:{
-      startAge:25, startYear:2027, start:30000,
-      periods:[{from:26,to:30,amt:2000},{from:31,to:55,amt:12000}],
-      grow:true, retireAge:56, spend:30000, endAge:99, penAge:67, pension:0,
-      events:[
-        {age:25,label:"Finland",amt:0},{age:26,label:"Japan",amt:0},{age:27,label:"Australia",amt:0},
-        {age:28,label:"New Zealand",amt:0},{age:29,label:"Canada",amt:0},{age:30,label:"Finland van",amt:0},
-        {age:31,label:"Van life",amt:15000},{age:35,label:"Buy a house, divide and rent",amt:50000}
-      ],
-      switchMode:"glide", glideA:35, glideB:56, t1:350000, t2:500000, ageA:40, ageB:50,
-      infl:2, buyCost:0.2, tax:"fi", customTax:30, learn:true
-    },
+    glide:{start:{eq:70, cr:22, gd:8}, end:{cr:3, eq:45, dvShare:50, gd:8},
+      p1:{from:51, years:2}, p2:{from:52, years:4}, p3:{from:55, years:1}},
+    holdings:{year:2027},
     actuals:{}
   };
 }
 function normalize(s){
   const d=defaults();
-  if(!s || typeof s!=="object") return d;
-  const out={strategies:s.strategies||d.strategies, plan:{...d.plan, ...(s.plan||{})}, actuals:s.actuals||{}};
-  for(const k of STRATS) if(!out.strategies[k]) out.strategies[k]=d.strategies[k];
-  if(!["fi","be","jp","custom"].includes(out.plan.tax)) out.plan.tax="fi";
-  if(!s.plan || s.plan.glideA==null) out.plan.switchMode = s.plan?.switchMode && s.plan.switchMode!=="balance" ? s.plan.switchMode : "glide";
-  return out;
+  if(!s || typeof s!=="object" || s.v!==3) return d;
+  const o={v:3, plan:{...d.plan,...(s.plan||{})}, goals:Array.isArray(s.goals)?s.goals:d.goals,
+    b1:{...d.b1,...(s.b1||{})}, assets:{}, glide:{}, holdings:{...d.holdings,...(s.holdings||{})}, actuals:s.actuals||{}};
+  for(const k of [...B1K,...B2K]) o.assets[k]={...d.assets[k],...(s.assets?.[k]||{})};
+  for(const k of ["start","end","p1","p2","p3"]) o.glide[k]={...d.glide[k],...(s.glide?.[k]||{})};
+  if(!["fi","be","jp","custom"].includes(o.plan.tax)) o.plan.tax="fi";
+  return o;
 }
-const LKEY="aya-max-money-plan-v2";
+const LKEY="aya-max-money-plan-v3";
 let S;
-try{ S=normalize(JSON.parse(localStorage.getItem(LKEY)) || JSON.parse(localStorage.getItem("aya-max-money-plan-v1"))); }catch(e){ S=defaults(); }
+try{ S=normalize(JSON.parse(localStorage.getItem(LKEY))); }catch(e){ S=defaults(); }
 
 /* ---------- helpers ---------- */
-const $ = id => document.getElementById(id);
-const eur0 = new Intl.NumberFormat("en-IE",{style:"currency",currency:"EUR",maximumFractionDigits:0});
-const eur = v => eur0.format(Math.round(v||0));
-const pct = (v,d=1) => (v<-0.00005?"−":"") + Math.abs(v*100).toFixed(d).replace(/\.0+$/,"") + "%";
-const spct = (v,d=1) => (v>0.00005?"+":"") + pct(v,d);
+const $=id=>document.getElementById(id);
+const eur0=new Intl.NumberFormat("en-IE",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+const eur=v=>eur0.format(Math.round(v||0));
+const pct=(v,d=1)=>(v<-0.00005?"−":"")+Math.abs(v*100).toFixed(d).replace(/\.0+$/,"")+"%";
+const spct=(v,d=1)=>(v>0.00005?"+":"")+pct(v,d);
+const p0=v=>Math.round(v)+"%";
 function short(v){
   const a=Math.abs(v), s=v<0?"−":"";
   if(a>=1e6) return s+"€"+(a/1e6).toFixed(a>=1e7?0:1).replace(/\.0$/,"")+"M";
@@ -403,100 +464,90 @@ function short(v){
   return s+"€"+Math.round(a);
 }
 function getPath(p){ return p.split(".").reduce((o,k)=>o?.[k], S); }
-function setPath(p,v){ const ks=p.split("."); let o=S; for(let i=0;i<ks.length-1;i++) o=o[ks[i]]; o[ks.at(-1)]=v; }
-const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const num = v => (v===""||v==null||isNaN(+v)) ? null : +v;
+function setPath(p,v){ const ks=p.split("."); let o=S; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null) o[ks[i]]={}; o=o[ks[i]]; } o[ks.at(-1)]=v; }
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const num=v=>(v===""||v==null||isNaN(+v))?null:+v;
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
 
 /* ---------- mixes ---------- */
-const statMemo=new Map();
-function mixStats(parts){
-  const key=JSON.stringify(parts);
-  if(statMemo.has(key)) return statMemo.get(key);
-  const funds=new Map(), cls={eq:0,bd:0,cr:0,cm:0};
-  for(const [k,wt] of parts){
-    const st=S.strategies[k];
-    const clsSum=CLS_KEYS.reduce((a,c)=>a+(+st.cls[c]||0),0)||1;
-    for(const c of CLS_KEYS){
-      const cw=(+st.cls[c]||0)/clsSum; cls[c]+=wt*cw;
-      const its=st.items.filter(i=>i.c===c), sumW=its.reduce((a,i)=>a+(+i.w||0),0)||1;
-      for(const i of its){
-        const W=wt*cw*(+i.w||0)/sumW; if(!W) continue;
-        const id=c+"|"+i.name, f=funds.get(id)||{c,W:0,r:0,v:0,t:0};
-        f.W+=W; f.r+=W*(+i.ret||0)/100; f.v+=W*(+i.vol||0)/100; f.t+=W*(+i.ter||0)/100; funds.set(id,f);
-      }
-    }
-  }
-  const list=[...funds.values()].map(f=>({c:f.c,W:f.W,vol:f.v/f.W}));
-  let ret=0, fee=0; for(const f of funds.values()){ ret+=f.r; fee+=f.t; }
-  let v=0; for(const a of list) for(const b of list) v+=a.W*b.W*a.vol*b.vol*(a===b?1:rho(a.c,b.c));
+const memo=new Map();
+function stats(w){   // w: {asset: percent}
+  const key=JSON.stringify(w); if(memo.has(key)) return memo.get(key);
+  const ks=Object.keys(w).filter(k=>w[k]>0), tot=ks.reduce((a,k)=>a+w[k],0)||1;
+  let ret=0, fee=0, v=0;
+  for(const a of ks){ const A=S.assets[a], W=w[a]/tot; ret+=W*(+A.ret||0)/100; fee+=W*(+A.ter||0)/100;
+    for(const b of ks){ const B=S.assets[b]; v+=W*(w[b]/tot)*(+A.vol||0)/100*(+B.vol||0)/100*corr(a,b); } }
   const vol=Math.sqrt(v), net=ret-fee;
   const s=Math.sqrt(Math.log(1+vol*vol/((1+net)*(1+net))));
   const bad=Math.exp(Math.log(1+net)-1.645*s)-1;
-  const res={ret,fee,net,vol,s,bad,cls,parts};
-  statMemo.set(key,res); return res;
+  const r={ret,fee,net,vol,s,bad,w}; memo.set(key,r); return r;
 }
-/* which mix at this age (glide = a little more each year) */
-function mixFor(age, realBal){
-  const p=S.plan, m=p.switchMode;
-  if(m==="glide"){
-    const A=+p.glideA, B=Math.max(+p.glideB, A+1);
-    const f=Math.min(1,Math.max(0,(age-A)/(B-A)));
-    const r=x=>Math.round(x*100)/100;
-    if(f<=0) return [["aggressive",1]];
-    if(f>=1) return [["safe",1]];
-    if(f<0.5){ const t=r(f*2); return t>=1?[["moderate",1]]:[["aggressive",r(1-t)],["moderate",t]]; }
-    const t=r(f*2-1); return t<=0?[["moderate",1]]:[["moderate",r(1-t)],["safe",t]];
-  }
-  if(m==="balance") return [[realBal>=p.t2?"safe":realBal>=p.t1?"moderate":"aggressive",1]];
-  if(m==="age") return [[age>=p.ageB?"safe":age>=p.ageA?"moderate":"aggressive",1]];
-  return [[m,1]];
+function lerp(ph,a,b,age){ const f=clamp((age-(+ph.from))/Math.max(1,+ph.years),0,1); return a+(b-a)*f; }
+/* the Retirement fund's target mix at a given age */
+function glideW(age){
+  const g=S.glide, st=g.start, en=g.end;
+  const cr=lerp(g.p1,+st.cr,+en.cr,age);
+  const eq=lerp(g.p2,+st.eq,+en.eq,age);
+  const dvs=lerp(g.p2,0,(+en.dvShare||0)/100,age);
+  const gd=lerp(g.p3,+st.gd,+en.gd,age);
+  const bd=Math.max(0,100-cr-eq-gd);
+  const r=x=>Math.round(x*10)/10;
+  return {gs:r(eq*(1-dvs)), dv:r(eq*dvs), bd:r(bd), gd:r(gd), cr:r(cr)};
 }
-function mixLabel(parts){
-  if(parts.length===1) return SNAME[parts[0][0]];
-  return parts.map(([k,w])=>`${SNAME[k]} ${Math.round(w*100)}%`).join(" · ");
+const goalAges=()=>S.goals.map(g=>+g.age).filter(a=>!isNaN(a));
+function b1W(age){
+  const w={cash:+S.b1.cash||0, mmf:+S.b1.mmf||0, stb:+S.b1.stb||0};
+  if(S.plan.cashLastYear && goalAges().some(a=>a===age+1)) return {cash:w.cash, mmf:w.mmf+w.stb, stb:0};
+  return w;
 }
-const clsSumOf = k => CLS_KEYS.reduce((a,c)=>a+(+S.strategies[k].cls[c]||0),0);
 
-/* ---------- plan: real years first, then the future ---------- */
+/* ---------- plan: real years, then the future ---------- */
+function bucketReal(start, added, taken, v, r){
+  if(v!=null){ const base=start+0.5*(added-taken); return {end:v, r:base>0?(v-start-added+taken)/base:0}; }
+  if(r!=null){ const rr=r/100; return {end:Math.max(0,start*(1+rr)+(added-taken)*Math.sqrt(Math.max(0,1+rr))), r:rr}; }
+  return null;
+}
 function prep(opts={}){
   const p=S.plan, years=Math.max(1,Math.min(90,p.endAge-p.startAge+1));
   const infl=(+p.infl||0)/100, buy=(+p.buyCost||0)/100;
-  const inflow=new Array(years).fill(0), out=new Array(years).fill(0), notes=new Array(years).fill("");
+  const inflow=new Array(years).fill(0), out=new Array(years).fill(0), goalOut=new Array(years).fill(0), notes=new Array(years).fill("");
   const pen=a=>a>=(+p.penAge||999)?(+p.pension||0):0;
   for(let i=0;i<years;i++){
     const age=p.startAge+i;
     for(const pr of p.periods) if(age>=pr.from && age<=pr.to) inflow[i]+= +pr.amt||0;
     if(age>=p.retireAge) out[i]+=Math.max(0,(+p.spend||0)-pen(age));
   }
-  for(const e of p.events){
-    const i=e.age-p.startAge; if(i<0||i>=years) continue;
-    if(e.label) notes[i]=notes[i]?notes[i]+" · "+e.label:e.label;
-    const a=+e.amt||0; if(a>=0) out[i]+=a; else inflow[i]+=-a;
-  }
-  const inf=[1]; let bal=(+p.start||0)*(1-buy), basis=bal, k=0; const realRows=[], diffs=[], vols=[];
+  for(const g of S.goals){ const i=g.age-p.startAge; if(i<0||i>=years) continue; goalOut[i]+= +g.amt||0; notes[i]=notes[i]?notes[i]+" · "+g.label:g.label; }
+  const ga=goalAges(), lastGoal=ga.length?Math.max(...ga):null;
+  const st1=[], st2=[], w2=[];
+  for(let i=0;i<years;i++){ const age=p.startAge+i; st1.push(stats(b1W(age))); const w=glideW(age); w2.push(w); st2.push(stats(w)); }
+  const inf=[1]; let b1=+p.b1Start||0, b2=+p.b2Start||0, bas1=b1, bas2=b2, k=0;
+  const realRows=[], d1=[], d2=[], v2=[];
   if(!opts.noActuals){
     for(let i=0;i<years;i++){
-      const a=S.actuals[p.startYear+i];
-      if(!a || (num(a.bal)==null && num(a.ret)==null)) break;
-      const age=p.startAge+i, added=num(a.added)||0, taken=num(a.out)||0, start=bal;
-      let end, r;
-      if(num(a.bal)!=null){ end=+a.bal; const base=start+0.5*(added-taken); r=base>0?(end-start-added+taken)/base:0; }
-      else { r=(+a.ret)/100; end=Math.max(0,start*(1+r)+(added-taken)*Math.sqrt(Math.max(0,1+r))); }
-      const mix=mixFor(age,start/inf[i]), st=mixStats(mix);
-      diffs.push(r-st.net); vols.push(st.vol);
-      basis+=added; if(taken>0 && start+added>0) basis-=basis*Math.min(1,taken/(start+added));
-      realRows.push({age, year:p.startYear+i, note:notes[i], start, add:added, growth:end-start-added+taken, gross:taken, tax:0, got:taken, end, mix, st, r, real:true, inf:inf[i]});
+      const a=S.actuals[p.startYear+i]; if(!a) break;
+      const add1=num(a.a1)||0, out1=num(a.o1)||0, add2=num(a.a2)||0, out2=num(a.o2)||0;
+      const R2=bucketReal(b2,add2,out2,num(a.v2),num(a.r2));
+      const need1=b1>0||add1>0;
+      const R1=bucketReal(b1,add1,out1,num(a.v1),num(a.r1));
+      if(!R2 || (need1 && !R1)) break;
+      const e1=R1?R1.end:0, r1=R1?R1.r:0;
+      if(R1&&need1) d1.push(r1-st1[i].net);
+      d2.push(R2.r-st2[i].net); v2.push(st2[i].vol);
+      bas1+=add1; if(out1>0&&b1+add1>0) bas1-=bas1*Math.min(1,out1/(b1+add1));
+      bas2+=add2; if(out2>0&&b2+add2>0) bas2-=bas2*Math.min(1,out2/(b2+add2));
+      realRows.push({age:p.startAge+i, year:p.startYear+i, note:notes[i], real:true, s1:b1, s2:b2, add1, add2, out1, out2, tax:0,
+        e1, e2:R2.end, r1, r2:R2.r, st1:st1[i], st2:st2[i], w2:w2[i], inf:inf[i]});
       const ai=num(a.infl); inf.push(inf[i]*(1+(ai!=null?ai/100:infl)));
-      bal=end; k++;
+      b1=e1; b2=R2.end; if(b1<=0) bas1=0; k++;
     }
   }
   for(let i=inf.length;i<=years;i++) inf.push(inf[i-1]*(1+infl));
-  const n=diffs.length, avgDiff=n?diffs.reduce((a,b)=>a+b,0)/n:0, avgVol=n?vols.reduce((a,b)=>a+b,0)/n:0.12;
-  // credibility: how much real years should move the long-term guess
-  const w=n? n/(n+Math.pow(avgVol/PRIOR_SD,2)) : 0;
-  const adj=(p.learn && n)? w*avgDiff : 0;
-  return {p, years, inflow, out, notes, inf, infl, buy, k, b0:bal, basis0:basis, realRows, n, w, adj,
-          avgReal: n? realRows.reduce((a,r)=>a+r.r,0)/n : 0, avgPlan: n? realRows.reduce((a,r)=>a+r.st.net,0)/n : 0};
+  // credibility: how much the real years move each long-term guess
+  const cred=(d,vol,prior)=>{ const n=d.length; if(!n) return {n:0,w:0,avg:0,adj:0}; const avg=d.reduce((a,b)=>a+b,0)/n; const w=n/(n+Math.pow(Math.max(vol,0.002)/prior,2)); return {n,w,avg,adj:p.learn?w*avg:0}; };
+  const L1=cred(d1, st1[0].vol, PRIOR.b1);
+  const L2=cred(d2, v2.length?v2.reduce((a,b)=>a+b,0)/v2.length:0.2, PRIOR.b2);
+  return {p, years, infl, buy, inflow, out, goalOut, notes, lastGoal, st1, st2, w2, inf, k, b1, b2, bas1, bas2, realRows, L1, L2};
 }
 function taxOn(P, gross, bal, basis, held, inf){
   const rule=P.p.tax, share=bal>0?Math.max(0,1-basis/bal):0;
@@ -506,62 +557,87 @@ function taxOn(P, gross, bal, basis, held, inf){
   if(rule==="jp") return 0.20315*gain;
   return (+P.p.customTax||0)/100*gain;
 }
-/* one future from the last real year. retFn(stats, yearIndex) gives that year's growth */
-function runPath(P, retFn, keep){
-  let bal=P.b0, basis=P.basis0, failAge=null;
-  const rows=keep?P.realRows.slice():null;
-  for(let i=P.k;i<P.years;i++){
-    const age=P.p.startAge+i, inf=P.inf[i], start=bal;
-    const want=P.out[i]*inf; let gross=0, tax=0, got=0, short=false;
-    if(want>0){
-      gross=want; for(let j=0;j<6;j++){ tax=taxOn(P,gross,bal,basis,i,inf); gross=want+tax; }
-      if(gross>bal+1e-6){ if(failAge===null) failAge=age; short=true; const f=bal>0?bal/gross:0; got=want*f; tax*=f; gross=bal; }
-      else got=want;
-      if(bal>0) basis-=basis*(gross/bal);
-      bal-=gross; if(bal<1e-6){bal=0;basis=0;}
-    }
-    const mix=mixFor(age, bal/inf), st=mixStats(mix);
-    const r=retFn(st,i);
-    const addRaw=P.inflow[i]*(P.p.grow?inf:1), add=addRaw*(1-P.buy);
-    const growth=bal*r + add*(Math.sqrt(1+r)-1);
-    bal=Math.max(0,bal+add+growth); basis+=add;
-    if(rows) rows.push({age, year:P.p.startYear+i, note:P.notes[i], start, add:addRaw, growth, gross, tax, got, end:bal, mix, st, r, inf, short});
-  }
-  return {end:bal, failAge, rows};
+function takeOut(P, want, bal, basis, i, inf){
+  if(want<=0) return {gross:0,tax:0,got:0,short:false};
+  let gross=want, tax=0;
+  for(let j=0;j<6;j++){ tax=taxOn(P,gross,bal,basis,i,inf); gross=want+tax; }
+  if(gross>bal+1e-6){ const f=bal>0?bal/gross:0; return {gross:bal, tax:tax*f, got:want*f, short:true}; }
+  return {gross, tax, got:want, short:false};
 }
-const detRet = P => st => st.net+P.adj;
+/* one future. f1/f2(stats, yearIndex) give each bucket's growth that year */
+function runPath(P, f1, f2, opt={}){
+  let b1=P.b1, b2=P.b2, bas1=P.bas1, bas2=P.bas2, failAge=null, goalShort=false;
+  const split=(opt.split??(+P.p.split||0))/100, extra1=opt.extra1||0;
+  const rows=opt.keep?P.realRows.slice():null;
+  for(let i=P.k;i<P.years;i++){
+    const age=P.p.startAge+i, inf=P.inf[i], s1=b1, s2=b2;
+    // project goals are paid from Bucket 1 only
+    const G=takeOut(P, P.goalOut[i]*inf, b1, bas1, i, inf);
+    if(G.short) goalShort=true;
+    if(G.gross>0){ if(b1>0) bas1-=bas1*(G.gross/b1); b1-=G.gross; if(b1<1e-6){b1=0;bas1=0;} }
+    let moved=0;
+    if(P.p.moveLeftover && P.lastGoal!==null && age===P.lastGoal && b1>0){ moved=b1; b2+=b1; bas2+=bas1; b1=0; bas1=0; }
+    // retirement spending is paid from Bucket 2 only
+    const R=takeOut(P, P.out[i]*inf, b2, bas2, i, inf);
+    if(R.short && failAge===null) failAge=age;
+    if(R.gross>0){ if(b2>0) bas2-=bas2*(R.gross/b2); b2-=R.gross; if(b2<1e-6){b2=0;bas2=0;} }
+    // new money, split between the buckets
+    const inProject=P.lastGoal!==null && age<P.lastGoal;
+    const sh=inProject?split:(P.p.afterGoal==="split"&&P.lastGoal!==null?split:0);
+    const add=P.inflow[i]*(P.p.grow?inf:1);
+    const add1=add*sh+(inProject?extra1*inf:0), add2=add*(1-sh);
+    const r1=f1(P.st1[i],i), r2=f2(P.st2[i],i), n1=add1*(1-P.buy), n2=add2*(1-P.buy);
+    const g1=b1*r1+n1*(Math.sqrt(1+r1)-1), g2=b2*r2+n2*(Math.sqrt(1+r2)-1);
+    b1=Math.max(0,b1+n1+g1); bas1+=n1;
+    b2=Math.max(0,b2+n2+g2); bas2+=n2;
+    if(rows) rows.push({age, year:P.p.startYear+i, note:P.notes[i], s1, s2, add1, add2, out1:G.got, out2:R.got, tax:G.tax+R.tax, moved,
+      e1:b1, e2:b2, r1, r2, st1:P.st1[i], st2:P.st2[i], w2:P.w2[i], inf, gShort:G.short, short:R.short});
+  }
+  return {b1, b2, failAge, goalShort, rows};
+}
+const det1=P=>st=>st.net+P.L1.adj, det2=P=>st=>st.net+P.L2.adj;
 
 /* random numbers: fixed seed so results stay steady */
 function rng(seed){ let a=seed>>>0; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 function normal(R){ let u=0; while(u===0) u=R(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*R()); }
 const DF=5, TSCALE=Math.sqrt((DF-2)/DF);
 function fatShock(R){ let c=0; for(let k=0;k<DF;k++){ const z=normal(R); c+=z*z; } return normal(R)/Math.sqrt(c/DF)*TSCALE; }
-function simulate(P, n, seed){
-  const R=rng(seed), Y=P.years, real=new Float64Array(n*Y), shocks=new Float64Array(Y); let ok=0; const fails=[];
-  const fn=(st,i)=>Math.exp(Math.log(1+st.net+P.adj)+st.s*shocks[i])-1;
+function simulate(P, n, seed, light){
+  const R=rng(seed), Y=P.years, z1=new Float64Array(Y), z2=new Float64Array(Y);
+  const T=light?null:new Float64Array(n*Y), A=light?null:new Float64Array(n*Y), B=light?null:new Float64Array(n*Y);
+  let ok=0, gok=0; const fails=[];
+  const f1=(st,i)=>Math.exp(Math.log(1+st.net+P.L1.adj)+st.s*z1[i])-1;
+  const f2=(st,i)=>Math.exp(Math.log(1+st.net+P.L2.adj)+st.s*z2[i])-1;
   for(let j=0;j<n;j++){
-    for(let i=P.k;i<Y;i++) shocks[i]=fatShock(R);
-    const res=runPath(P,fn,true);
-    for(let i=0;i<Y;i++) real[j*Y+i]=res.rows[i].end/res.rows[i].inf;
+    for(let i=P.k;i<Y;i++){ z1[i]=normal(R); z2[i]=fatShock(R); }
+    const res=runPath(P,f1,f2,{keep:!light});
+    if(!light) for(let i=0;i<Y;i++){ const r=res.rows[i]; A[j*Y+i]=r.e1/r.inf; B[j*Y+i]=r.e2/r.inf; T[j*Y+i]=(r.e1+r.e2)/r.inf; }
     if(res.failAge===null) ok++; else fails.push(res.failAge);
+    if(!res.goalShort) gok++;
   }
-  const Q=[.05,.25,.5,.75,.95], pc=Q.map(()=>new Float64Array(Y)), col=new Float64Array(n);
-  for(let i=0;i<Y;i++){
-    for(let j=0;j<n;j++) col[j]=real[j*Y+i];
-    col.sort();
-    Q.forEach((q,qi)=>pc[qi][i]=col[Math.min(n-1,Math.floor(q*(n-1)))]);
-  }
-  fails.sort((a,b)=>a-b);
-  return {success:ok/n, pc, fails};
+  const out={success:ok/n, goalSuccess:gok/n, fails:fails.sort((a,b)=>a-b)};
+  if(light) return out;
+  const Q=[.05,.25,.5,.75,.95], col=new Float64Array(n);
+  const pcs=arr=>{ const pc=Q.map(()=>new Float64Array(Y)); for(let i=0;i<Y;i++){ for(let j=0;j<n;j++) col[j]=arr[j*Y+i]; col.sort(); Q.forEach((q,qi)=>pc[qi][i]=col[Math.min(n-1,Math.floor(q*(n-1)))]); } return pc; };
+  out.pc={total:pcs(T), b1:pcs(A), b2:pcs(B)};
+  return out;
 }
 function safeSpend(P){
-  const orig=P.out.slice(), base=+P.p.spend||0;
-  const pen=a=>a>=(+P.p.penAge||999)?(+P.p.pension||0):0;
-  const test=sp=>{ for(let i=0;i<P.years;i++){ const a=P.p.startAge+i; P.out[i]=a>=P.p.retireAge ? orig[i]-Math.max(0,base-pen(a))+Math.max(0,sp-pen(a)) : orig[i]; } return simulate(P,500,7).success>=0.9; };
+  const orig=P.out.slice(), base=+P.p.spend||0, pen=a=>a>=(+P.p.penAge||999)?(+P.p.pension||0):0;
+  const test=sp=>{ for(let i=0;i<P.years;i++){ const a=P.p.startAge+i; P.out[i]=a>=P.p.retireAge?orig[i]-Math.max(0,base-pen(a))+Math.max(0,sp-pen(a)):orig[i]; } return simulate(P,400,7,true).success>=0.9; };
   let lo=0, hi=Math.max(base*3,60000);
   if(!test(0)){ P.out=orig; return 0; }
   for(let k=0;k<13;k++){ const mid=(lo+hi)/2; if(test(mid)) lo=mid; else hi=mid; }
   P.out=orig; return Math.floor(lo/100)*100;
+}
+/* what split (or extra money) fully pays the goals on the middle path */
+function goalNeed(P){
+  if(P.lastGoal===null) return null;
+  const ok=o=>!runPath(P,det1(P),det2(P),o).goalShort;
+  if(ok({split:0})) return {split:0};
+  if(ok({split:100})){ let lo=0,hi=100; for(let k=0;k<20;k++){ const m=(lo+hi)/2; if(ok({split:m})) hi=m; else lo=m; } return {split:Math.ceil(hi)}; }
+  let lo=0,hi=200000; for(let k=0;k<22;k++){ const m=(lo+hi)/2; if(ok({split:100,extra1:m})) hi=m; else lo=m; }
+  return {split:100, extra:Math.ceil(hi/100)*100};
 }
 
 /* ---------- inputs ---------- */
@@ -571,68 +647,53 @@ function fillInputs(){
   document.querySelectorAll("[data-b]").forEach(el=>{ el.checked=!!getPath(el.dataset.b); });
 }
 function renderPeriods(){
-  $("periods").innerHTML = S.plan.periods.map((p,i)=>`
+  $("periods").innerHTML=S.plan.periods.map((p,i)=>`
     <div class="row" style="flex-wrap:nowrap;align-items:flex-end">
       <div class="field" style="flex:1"><label for="per${i}f">From age</label><input type="number" id="per${i}f" data-k="plan.periods.${i}.from" value="${p.from}"></div>
       <div class="field" style="flex:1"><label for="per${i}t">To age</label><input type="number" id="per${i}t" data-k="plan.periods.${i}.to" value="${p.to}"></div>
       <div class="field" style="flex:1.4"><label for="per${i}a">€ / year</label><input type="number" id="per${i}a" step="500" data-k="plan.periods.${i}.amt" value="${p.amt}"></div>
       <button class="x" type="button" data-delp="${i}" aria-label="Remove this period">×</button>
-    </div>`).join("") || `<p class="hint">No money added yet.</p>`;
+    </div>`).join("")||`<p class="hint">No money added yet.</p>`;
 }
-function renderEvents(){
-  S.plan.events.sort((a,b)=>a.age-b.age);
-  $("events").innerHTML = S.plan.events.map((e,i)=>`
+function renderGoals(){
+  S.goals.sort((a,b)=>a.age-b.age);
+  $("goals").innerHTML=S.goals.map((g,i)=>`
     <div class="row" style="flex-wrap:nowrap;align-items:flex-end">
-      <div class="field" style="flex:0 0 72px"><label for="ev${i}a">Age</label><input type="number" id="ev${i}a" data-k="plan.events.${i}.age" value="${e.age}"></div>
-      <div class="field" style="flex:2"><label for="ev${i}l">What</label><input type="text" id="ev${i}l" data-t="plan.events.${i}.label" value="${esc(e.label)}"></div>
-      <div class="field" style="flex:1.2"><label for="ev${i}m">€ out</label><input type="number" id="ev${i}m" step="1000" data-k="plan.events.${i}.amt" value="${e.amt}"></div>
-      <button class="x" type="button" data-dele="${i}" aria-label="Remove ${esc(e.label)}">×</button>
-    </div>`).join("");
+      <div class="field" style="flex:2"><label for="go${i}l">What</label><input type="text" id="go${i}l" data-t="goals.${i}.label" value="${esc(g.label)}"></div>
+      <div class="field" style="flex:0 0 70px"><label for="go${i}a">At age</label><input type="number" id="go${i}a" data-k="goals.${i}.age" value="${g.age}"></div>
+      <div class="field" style="flex:1.3"><label for="go${i}m">Cost €</label><input type="number" id="go${i}m" step="1000" data-k="goals.${i}.amt" value="${g.amt}"></div>
+      <button class="x" type="button" data-delg="${i}" aria-label="Remove ${esc(g.label)}">×</button>
+    </div>`).join("")||`<p class="hint">No goals. Bucket 1 is not used.</p>`;
 }
-let tab="moderate";
-function renderTabs(){
-  $("stratTabs").innerHTML = STRATS.map(k=>`<button class="tab" role="tab" type="button" aria-selected="${k===tab}" data-tab="${k}">${SNAME[k]}</button>`).join("");
-  const st=S.strategies[tab];
-  $("classFields").innerHTML = CLS_KEYS.map(c=>`
-    <div class="field"><label for="cls_${c}"><span class="swatch" style="background:var(${CLS[c].color});margin-right:6px"></span>${CLS[c].name}</label>
-    <div class="unit"><input type="number" id="cls_${c}" step="1" data-k="strategies.${tab}.cls.${c}" value="${st.cls[c]}"><span>%</span></div><small>${CLS[c].role}</small></div>`).join("");
-  let h=`<thead><tr><th>Fund</th><th>Ticker / example</th><th class="n">% of type</th><th class="n">Return %</th><th class="n">Ups/downs %</th><th class="n">Fee (TER) %</th><th></th></tr></thead><tbody>`;
-  for(const c of CLS_KEYS){
-    h+=`<tr class="cls"><td colspan="7"><span class="swatch" style="background:var(${CLS[c].color});margin-right:8px"></span>${CLS[c].name} · ${st.cls[c]}% of the mix <button class="btn small" type="button" data-addi="${c}" style="margin-left:10px">+ fund</button></td></tr>`;
-    st.items.forEach((it,i)=>{ if(it.c!==c) return;
-      const b=`strategies.${tab}.items.${i}`;
-      h+=`<tr>
-        <td><input type="text" id="it${i}n" aria-label="Fund name" data-t="${b}.name" value="${esc(it.name)}"></td>
-        <td><input type="text" id="it${i}k" aria-label="Ticker" data-t="${b}.tk" value="${esc(it.tk)}"></td>
-        <td class="num n"><input type="number" id="it${i}w" aria-label="Percent of type" step="0.5" data-k="${b}.w" value="${it.w}"></td>
-        <td class="num n"><input type="number" id="it${i}r" aria-label="Expected return" step="0.1" data-k="${b}.ret" value="${it.ret}"></td>
-        <td class="num n"><input type="number" id="it${i}v" aria-label="Volatility" step="1" data-k="${b}.vol" value="${it.vol}"></td>
-        <td class="num n"><input type="number" id="it${i}f" aria-label="Fee" step="0.01" data-k="${b}.ter" value="${it.ter}"></td>
-        <td><button class="x" type="button" data-deli="${i}" aria-label="Remove ${esc(it.name)}">×</button></td></tr>`;
-    });
-  }
-  $("holdTable").innerHTML=h+"</tbody>";
+function assetRows(keys, mixPath){
+  return `<thead><tr><th>Asset</th><th>Example funds</th>${mixPath?`<th class="n">Mix %</th>`:""}<th class="n">Return %</th><th class="n">Ups/downs %</th><th class="n">Fee %</th></tr></thead><tbody>`+
+  keys.map(k=>{ const A=S.assets[k];
+    return `<tr><td style="white-space:nowrap"><span class="swatch" style="background:var(${ACOL[k]});margin-right:6px"></span>${ANAME[k]}</td>
+      <td><input type="text" id="as_${k}_tk" aria-label="${ANAME[k]} example funds" data-t="assets.${k}.tk" value="${esc(A.tk)}"></td>
+      ${mixPath?`<td class="num n"><input type="number" id="mx_${k}" aria-label="${ANAME[k]} share" step="5" data-k="${mixPath}.${k}" value="${getPath(mixPath+"."+k)}"></td>`:""}
+      <td class="num n"><input type="number" id="as_${k}_r" aria-label="${ANAME[k]} return" step="0.1" data-k="assets.${k}.ret" value="${A.ret}"></td>
+      <td class="num n"><input type="number" id="as_${k}_v" aria-label="${ANAME[k]} ups and downs" step="0.5" data-k="assets.${k}.vol" value="${A.vol}"></td>
+      <td class="num n"><input type="number" id="as_${k}_f" aria-label="${ANAME[k]} fee" step="0.01" data-k="assets.${k}.ter" value="${A.ter}"></td></tr>`; }).join("")+"</tbody>";
 }
+function renderAssets(){ $("b1Table").innerHTML=assetRows(B1K,"b1"); $("b2Table").innerHTML=assetRows(B2K,null); }
 function logYears(){
   const p=S.plan, ys=Object.keys(S.actuals).map(Number).filter(y=>y>=p.startYear);
-  const last=Math.max(p.startYear, ...ys);
+  const last=Math.max(p.startYear,...ys);
   return Array.from({length:Math.min(90,last-p.startYear+1)},(_,i)=>p.startYear+i);
 }
 function renderLog(){
   const p=S.plan, ys=logYears();
-  let h=`<thead><tr><th>Year</th><th class="n">Added €</th><th class="n">Taken out €</th><th class="n">Return %</th><th></th><th class="n">Value 31 Dec €</th><th class="n">Inflation %</th><th>Result</th><th></th></tr></thead><tbody>`;
+  let h=`<thead><tr class="grp"><th></th><th colspan="5" class="g1" style="color:var(--b1)">Bucket 1 · Project</th><th colspan="5" class="g2" style="color:var(--accent)">Bucket 2 · Retirement</th><th colspan="3"></th></tr>
+    <tr><th>Year</th><th class="n g1">Added €</th><th class="n">Out €</th><th class="n">Return %</th><th></th><th class="n">31 Dec €</th>
+    <th class="n g2">Added €</th><th class="n">Out €</th><th class="n">Return %</th><th></th><th class="n">31 Dec €</th><th class="n">Inflation %</th><th>Result</th><th></th></tr></thead><tbody>`;
+  const inp=(y,f,lbl,cls,step,ph)=>{ const v=S.actuals[y]?.[f]; return `<td class="${cls}"><input type="number" id="lg${y}${f}" aria-label="${lbl} ${y}" step="${step}" data-a="actuals.${y}.${f}" value="${v??""}"${ph!=null?` placeholder="${esc(ph)}"`:""}></td>`; };
   ys.forEach((y,i)=>{
-    const a=S.actuals[y]||{}, b=`actuals.${y}`;
-    h+=`<tr>
-      <td style="white-space:nowrap"><b>${y}</b> <span class="muted">· age ${p.startAge+(y-p.startYear)}</span></td>
-      <td class="num n"><input type="number" id="lg${y}a" aria-label="Added in ${y}" step="100" data-a="${b}.added" value="${a.added??""}" placeholder="0"></td>
-      <td class="num n"><input type="number" id="lg${y}o" aria-label="Taken out in ${y}" step="100" data-a="${b}.out" value="${a.out??""}" placeholder="0"></td>
-      <td class="pc n"><input type="number" id="lg${y}r" aria-label="Return in ${y}" step="0.1" data-a="${b}.ret" value="${a.ret??""}"></td>
-      <td class="or">or</td>
-      <td class="num n"><input type="number" id="lg${y}b" aria-label="Value on 31 December ${y}" step="100" data-a="${b}.bal" value="${a.bal??""}"></td>
-      <td class="pc n"><input type="number" id="lg${y}i" aria-label="Inflation in ${y}" step="0.1" data-a="${b}.infl" value="${a.infl??""}" placeholder="${esc(p.infl)}"></td>
-      <td id="lgres${y}" class="muted">–</td>
-      <td>${i===ys.length-1 && i>0?`<button class="x" type="button" data-dely="${y}" aria-label="Remove ${y}">×</button>`:""}</td></tr>`;
+    h+=`<tr><td style="white-space:nowrap"><b>${y}</b> <span class="muted">· ${p.startAge+(y-p.startYear)}</span></td>
+      ${inp(y,"a1","Bucket 1 added","num n g1",100,"0")}${inp(y,"o1","Bucket 1 taken out","num n",100,"0")}${inp(y,"r1","Bucket 1 return","pc n",0.1)}<td class="or">or</td>${inp(y,"v1","Bucket 1 value on 31 December","num n",100)}
+      ${inp(y,"a2","Bucket 2 added","num n g2",100,"0")}${inp(y,"o2","Bucket 2 taken out","num n",100,"0")}${inp(y,"r2","Bucket 2 return","pc n",0.1)}<td class="or">or</td>${inp(y,"v2","Bucket 2 value on 31 December","num n",100)}
+      ${inp(y,"infl","Inflation","pc n",0.1,p.infl)}
+      <td id="lgres${y}" style="min-width:220px"></td>
+      <td>${i===ys.length-1&&i>0?`<button class="x" type="button" data-dely="${y}" aria-label="Remove ${y}">×</button>`:""}</td></tr>`;
   });
   $("logTable").innerHTML=h+"</tbody>";
 }
@@ -641,295 +702,327 @@ function updateLogResults(P){
     const cell=$("lgres"+y); if(!cell) continue;
     const r=P.realRows.find(r=>r.year===y);
     if(r){
-      const ahead=r.r>=r.st.net;
-      cell.innerHTML=`<span class="pill ${ahead?"ok":"no"}">${pct(r.r)} · ${eur(r.end)}</span> <span class="muted">plan said ${pct(r.st.net)}</span>`;
+      const pl=(v,plan,tag)=>`<span class="pill ${v>=plan?"ok":"no"}">${tag} ${pct(v)}</span>`;
+      cell.innerHTML=`${r.s1>0||r.add1>0?pl(r.r1,r.st1.net,"B1"):""} ${pl(r.r2,r.st2.net,"B2")}<br><span class="muted" style="font-size:.82rem">Total ${eur(r.e1+r.e2)} · plan said ${pct(r.st1.net)} / ${pct(r.st2.net)}</span>`;
     } else {
-      const a=S.actuals[y], filled=a&&(num(a.added)!=null||num(a.out)!=null);
-      const gap=y>P.p.startYear+P.k;
-      cell.innerHTML=`<span class="muted">${gap?"Fill in the year before first":filled?"Add the return % or 31 Dec value":"Not filled in yet"}</span>`;
+      cell.innerHTML=`<span class="muted">${y>P.p.startYear+P.k?"Fill in the year before first":"Add return % or 31 Dec value for each bucket"}</span>`;
     }
   }
 }
 
 /* ---------- outputs ---------- */
-function renderStrats(){
-  const infl=(+S.plan.infl||0)/100;
-  $("stratCards").innerHTML = STRATS.map(k=>{
-    const s=mixStats([[k,1]]), cs=clsSumOf(k), st=S.strategies[k], on=CLS_KEYS.filter(c=>st.cls[c]>0);
-    return `<div class="scard${k===tab?" on":""}">
-      <h3>${SNAME[k]}</h3>
-      <div class="stack" role="img" aria-label="${CLS_KEYS.map(c=>CLS[c].name+" "+st.cls[c]+"%").join(", ")}">
-        ${on.map(c=>`<i style="flex:${st.cls[c]};background:var(${CLS[c].color})" title="${CLS[c].name} ${st.cls[c]}%"></i>`).join("")}
-      </div>
-      <div class="legend" style="font-size:.82rem">${on.map(c=>`<span><i class="swatch" style="background:var(${CLS[c].color})"></i>${CLS[c].name.split(" ")[0]} ${st.cls[c]}%</span>`).join("")}</div>
-      <dl>
-        <dt>Typical yearly growth</dt><dd>${pct(s.net)}</dd>
-        <dt>After inflation</dt><dd>${pct((1+s.net)/(1+infl)-1)}</dd>
-        <dt>Ups and downs</dt><dd>±${pct(s.vol,0)}</dd>
-        <dt>A bad year (1 in 20)</dt><dd style="color:var(--no)">${pct(s.bad,0)}</dd>
-        <dt>Fund fees / year</dt><dd>${pct(s.fee,2)}</dd>
-      </dl>
-      ${Math.abs(cs-100)>0.01?`<p class="warn">Types add up to ${cs}%, not 100%.</p>`:""}
-    </div>`;}).join("");
-  const cs=clsSumOf(tab); $("classWarn").hidden=Math.abs(cs-100)<0.01;
-  $("classWarn").textContent=`The four types add up to ${cs}%. Make them add up to 100%.`;
+function bar(el, w, keys){
+  const tot=keys.reduce((a,k)=>a+(+w[k]||0),0)||1;
+  el.innerHTML=keys.filter(k=>w[k]>0).map(k=>`<i style="flex:${w[k]/tot};background:var(${ACOL[k]})" title="${ANAME[k]} ${w[k]}%"></i>`).join("");
+}
+function statsDl(s, infl){
+  return `<dt>Typical yearly growth</dt><dd>${pct(s.net)}</dd>
+    <dt>After inflation</dt><dd>${pct((1+s.net)/(1+infl)-1)}</dd>
+    <dt>Ups and downs</dt><dd>±${pct(s.vol,s.vol<.05?1:0)}</dd>
+    <dt>A bad year (1 in 20)</dt><dd style="color:var(--no)">${pct(s.bad,s.bad>-.05?1:0)}</dd>
+    <dt>Fund fees / year</dt><dd>${pct(s.fee,2)}</dd>`;
+}
+function renderBuckets(P, det, need){
+  bar($("b1Bar"), S.b1, B1K);
+  const b1sum=B1K.reduce((a,k)=>a+(+S.b1[k]||0),0);
+  $("b1Stats").innerHTML=statsDl(P.st1[0],P.infl)+(Math.abs(b1sum-100)>0.01?`<dt class="warn">Mix adds up to ${b1sum}%</dt><dd></dd>`:"");
+  const w0=glideW(S.plan.startAge);
+  bar($("b2Bar"), w0, B2K);
+  $("b2Legend").innerHTML=B2K.filter(k=>w0[k]>0).map(k=>`<span><i class="swatch" style="background:var(${ACOL[k]})"></i>${ANAME[k]} ${p0(w0[k])}</span>`).join("");
+  $("b2Stats").innerHTML=statsDl(P.st2[0],P.infl);
+  const sp=+S.plan.split||0;
+  $("splitNote").textContent=`Bucket 2 gets ${100-sp}%.`;
+  const box=$("goalBox");
+  if(P.lastGoal===null){ box.className="note"; box.innerHTML=`<span class="hint">Add a goal to use Bucket 1.</span>`; return; }
+  const firstAge=Math.min(...goalAges()), first=det.rows[clamp(firstAge-S.plan.startAge,0,P.years-1)];
+  const allGoal=S.goals.reduce((a,g)=>a+(+g.amt||0),0), short=det.rows.some(r=>r.gShort);
+  let msg=`<b>${short?"Not enough yet":"On track"}: about ${eur(first.s1/first.inf)} in Bucket 1 at age ${firstAge}. The goals cost ${eur(allGoal)}.</b>`;
+  if(need){
+    if(need.extra) msg+=`<span>Even 100% of new money isn’t enough. You would need about ${eur(need.extra)} more per year into Bucket 1, or smaller goals, or a later date.</span>`;
+    else msg+=`<span>To fully pay the goals (tax on the small profit included), put at least <b>${need.split}%</b> of new money into Bucket 1. Now: ${sp}%.</span>`;
+  }
+  box.className="note "+(short?"warnbox":"goodbox"); box.innerHTML=msg;
+}
+function renderSplitMath(P){
+  const box=$("splitMath");
+  if(P.lastGoal===null){ box.hidden=true; return; } box.hidden=false;
+  const a=runPath(P,det1(P),det2(P),{keep:true});
+  const alt=runPath(P,(st,i)=>P.st2[i].net+P.L2.adj,det2(P),{keep:true});   // same money, grown like the Retirement fund
+  const gi=clamp(Math.min(...goalAges())-S.plan.startAge,0,P.years-1);
+  const safe=a.rows[gi].s1/a.rows[gi].inf, risky=alt.rows[gi].s1/alt.rows[gi].inf, bad=risky*(1+P.st2[Math.max(0,gi-1)].bad);
+  const r=P.st1[0].net, yrs=Math.max(1,gi);
+  box.innerHTML=`<b>Why two buckets don’t cost compound growth</b>
+    <span>Compound growth works the same in one pot or two: €1,000 at ${pct(r)} for ${yrs} years becomes ${eur(1000*Math.pow(1+r,yrs))} whether it sits alone or next to other money. Splitting only decides which growth rate each euro gets.</span>
+    <span>The price of safety: if Bucket 1’s money were invested like the Retirement fund, the middle future would have about <b>${eur(risky)}</b> at the goal instead of <b>${eur(safe)}</b>. But one bad year (1 in 20) right before buying could cut it to about <b>${eur(bad)}</b>. That timing risk is what Bucket 1 removes.</span>`;
+}
+function glideAges(){ const ph=[S.glide.p1,S.glide.p2,S.glide.p3]; return [Math.min(...ph.map(p=>+p.from))-1, Math.max(...ph.map(p=>+p.from+Math.max(1,+p.years)))]; }
+function renderGlideInfo(P){
+  const s=S.glide.start, sb=100-(+s.eq)-(+s.cr)-(+s.gd);
+  $("startBonds").textContent=sb>0.01?`The other ${p0(sb)} starts in bonds.`:sb<-0.01?`The starting mix adds up to ${p0(100-sb)}, more than 100%.`:"No bonds at the start.";
+  const e=S.glide.end, eb=100-(+e.eq)-(+e.cr)-(+e.gd);
+  const w=$("glideWarn"); w.hidden=eb>=-0.01&&sb>=-0.01; w.textContent="Stocks, crypto and gold add up to more than 100%. Lower one of them.";
+  const [a0,a1]=glideAges();
+  $("glideNote").textContent=`End mix at ${a1}: ${p0(+e.eq)} stocks (${p0(e.eq*(+e.dvShare||0)/100)} of it in dividend value stocks), ${p0(Math.max(0,eb))} bonds, ${p0(+e.gd)} gold, ${p0(+e.cr)} crypto. Each January, move money in small steps and send new money to the parts that are below target first.`;
+  const nowAge=S.plan.startAge+P.k;
+  let h=`<thead><tr><th>Age</th><th>Year</th>${B2K.map(k=>`<th class="n"><span class="swatch" style="background:var(${ACOL[k]});margin-right:4px"></span>${ANAME[k].replace(" (index)","")}</th>`).join("")}<th class="n">Typical growth</th><th class="n">Ups/downs</th><th class="n">Bad year</th></tr></thead><tbody>`;
+  for(let age=a0; age<=a1; age++){
+    const w2=glideW(age), st=stats(w2), y=S.plan.startYear+(age-S.plan.startAge);
+    h+=`<tr class="${age===nowAge?"now":""}"><td>${age}</td><td>${y}</td>${B2K.map(k=>`<td class="n">${p0(w2[k])}</td>`).join("")}<td class="n">${pct(st.net)}</td><td class="n">±${pct(st.vol,0)}</td><td class="n" style="color:var(--no)">${pct(st.bad,0)}</td></tr>`;
+  }
+  $("glTable").innerHTML=h+"</tbody>";
+}
+function renderRebalance(P){
+  const h=S.holdings, year=+h.year||S.plan.startYear, age=S.plan.startAge+(year-S.plan.startYear), i=clamp(year-S.plan.startYear,0,P.years-1);
+  $("rbAge").textContent=`Age ${age}. The targets are for this year.`;
+  const add=P.inflow[i]*(S.plan.grow?P.inf[i]:1);
+  const inProject=P.lastGoal!==null && age<P.lastGoal, sh=(inProject||(S.plan.afterGoal==="split"&&P.lastGoal!==null))?(+S.plan.split||0)/100:0;
+  const table=(keys, w, nk, plannedNew, id)=>{
+    const tot=keys.reduce((a,k)=>a+(num(h[k])||0),0), nm=num(h[nk])??plannedNew, T=tot+nm, wt=keys.reduce((a,k)=>a+(+w[k]||0),0)||1;
+    const gaps=keys.map(k=>Math.max(0,T*(w[k]||0)/wt-(num(h[k])||0))), gapSum=gaps.reduce((a,b)=>a+b,0)||1;
+    let rows=`<thead><tr><th>Asset</th><th class="n">Now €</th><th class="n">Now</th><th class="n">Target</th><th class="n">Full rebalance</th><th class="n">New money only</th></tr></thead><tbody>`;
+    keys.forEach((k,j)=>{
+      const now=num(h[k])||0, tgt=T*(w[k]||0)/wt, diff=tgt-now, nmOnly=Math.min(gaps[j], nm*gaps[j]/gapSum);
+      const act=Math.abs(diff)<Math.max(20,T*0.005)?`<span class="muted">OK</span>`:diff>0?`<span class="buy">Buy ${eur(diff)}</span>`:`<span class="sell">Sell ${eur(-diff)}</span>`;
+      rows+=`<tr><td style="white-space:nowrap"><span class="swatch" style="background:var(${ACOL[k]});margin-right:6px"></span>${ANAME[k]}</td>
+        <td class="num n"><input type="number" id="hd_${k}" aria-label="${ANAME[k]} value now" step="100" data-h="${k}" value="${h[k]??""}" placeholder="0"></td>
+        <td class="n">${tot>0?p0(now/tot*100):"–"}</td><td class="n"><b>${p0((w[k]||0)/wt*100)}</b></td><td class="n">${T>0?act:"–"}</td>
+        <td class="n">${nmOnly>=1?`<span class="buy">Buy ${eur(nmOnly)}</span>`:`<span class="muted">–</span>`}</td></tr>`;
+    });
+    rows+=`<tr class="sum"><td>New money this year</td><td class="num n"><input type="number" id="hd_${nk}" aria-label="New money this year" step="100" data-h="${nk}" value="${h[nk]??""}" placeholder="${Math.round(plannedNew)}"></td><td colspan="4" class="muted" style="font-weight:400">Empty = the plan’s amount (${eur(plannedNew)}). Total after: ${eur(T)}</td></tr>`;
+    $(id).innerHTML=rows+"</tbody>";
+  };
+  table(B1K, b1W(age), "new1", add*sh, "rb1");
+  table(B2K, glideW(age), "new2", add*(1-sh), "rb2");
 }
 function renderLearn(P){
   const box=$("learnBox");
-  if(!P.n){ box.innerHTML=`<b>No real results yet.</b><span class="hint">When you add your first year, the forecast starts from your real account value.</span>`; return; }
-  box.innerHTML=`<b>${P.n} real year${P.n>1?"s":""}: your average return was ${pct(P.avgReal)}. The plan expected ${pct(P.avgPlan)} (${spct(P.avgReal-P.avgPlan)}).</b>
-    <span class="hint">${S.plan.learn
-      ? `Your real results count for ${pct(P.w,0)} of the future guess, so future typical growth moves by ${spct(P.adj,2)} a year. This share grows a little each year you add. Markets are noisy, so a few years can’t prove the long-term guess wrong.`
-      : `The future forecast uses only the long-term guesses. Tick the box below to let real results move it.`}</span>`;
+  if(!P.k){ box.innerHTML=`<b>No real results yet.</b><span class="hint">When you add your first year, the forecast starts from your real bucket values.</span>`; return; }
+  const line=(name,L)=>L.n?`${name}: on average your real return was ${spct(L.avg)} compared with the plan. ${S.plan.learn?`It counts for ${pct(L.w,0)} of the future guess, so future growth moves by ${spct(L.adj,2)} a year.`:""}`:"";
+  box.innerHTML=`<b>${P.k} real year${P.k>1?"s":""} added.</b><span>${line("Bucket 1",P.L1)}</span><span>${line("Bucket 2",P.L2)}</span>
+    <span class="hint">${S.plan.learn?"Cash returns are easy to predict, so Bucket 1 learns fast. Stock returns are noisy, so Bucket 2 learns slowly (about 24% after 10 years).":"Tick the box below to let real results move the future guess."}</span>`;
 }
+const miniBar=w=>`<span class="mini" role="img" aria-label="${B2K.map(k=>ANAME[k]+" "+p0(w[k])).join(", ")}">${B2K.filter(k=>w[k]>0).map(k=>`<i style="flex:${w[k]};background:var(${ACOL[k]})"></i>`).join("")}</span>`;
 function renderTable(det){
   const nom=$("showNominal").checked, f=(v,r)=>eur(nom?v:v/r.inf);
-  let h=`<thead><tr><th>Age</th><th>Year</th><th>Note</th><th class="n">Start</th><th class="n">Added</th><th class="n">Growth</th><th class="n">Taken out</th><th class="n">Tax</th><th class="n">End</th><th class="n">Return</th><th>Mix</th></tr></thead><tbody>`;
+  let h=`<thead><tr><th>Age</th><th>Year</th><th>Note</th><th class="n">Added → B1</th><th class="n">Added → B2</th><th class="n">Bucket 1 end</th><th class="n">Bucket 2 end</th><th class="n">Taken out</th><th class="n">Tax</th><th class="n">Total</th><th class="n">B2 return</th><th>B2 mix</th></tr></thead><tbody>`;
   for(const r of det.rows){
-    const cls=r.real?"isreal":r.short?"short":(r.age===S.plan.retireAge?"retire":"");
-    const note=[r.real?`<span class="pill real">Real</span>`:"", esc(r.note), r.age===S.plan.retireAge?"Retire":"", r.short?"Money runs short":""].filter(Boolean).join(" ");
+    const cls=r.real?"isreal":(r.short||r.gShort)?"short":(r.age===S.plan.retireAge?"retire":"");
+    const note=[r.real?`<span class="pill real">Real</span>`:"", esc(r.note), r.moved?"Leftover → B2":"", r.age===S.plan.retireAge?"Retire":"", r.gShort?"Goal not fully paid":"", r.short?"Money runs short":""].filter(Boolean).join(" ");
+    const out=(r.out1||0)+(r.out2||0);
     h+=`<tr class="${cls}"><td>${r.age}</td><td>${r.year}</td><td>${note}</td>
-      <td class="n">${f(r.start,r)}</td><td class="n">${r.add?f(r.add,r):"–"}</td><td class="n">${f(r.growth,r)}</td>
-      <td class="n">${r.got?f(r.got,r):"–"}</td><td class="n">${r.tax?f(r.tax,r):"–"}</td><td class="n"><b>${f(r.end,r)}</b></td>
-      <td class="n">${pct(r.r)}</td><td class="mixname">${mixLabel(r.mix)}</td></tr>`;
+      <td class="n">${r.add1?f(r.add1,r):"–"}</td><td class="n">${r.add2?f(r.add2,r):"–"}</td>
+      <td class="n">${f(r.e1,r)}</td><td class="n">${f(r.e2,r)}</td><td class="n">${out?f(out,r):"–"}</td><td class="n">${r.tax?f(r.tax,r):"–"}</td>
+      <td class="n"><b>${f(r.e1+r.e2,r)}</b></td><td class="n">${pct(r.r2)}</td><td>${miniBar(r.w2)}</td></tr>`;
   }
   $("yearTable").innerHTML=h+"</tbody>";
 }
 const tile=(k,v,s,pill)=>`<div class="tile"><span class="k">${k}</span><span class="v">${v}</span>${pill||""}<span class="s">${s}</span></div>`;
+const level=x=>x>=.9?["ok","✓ Strong"]:x>=.75?["mid","! Some risk"]:["no","✕ Risky"];
 function renderTiles(P, mc, safe, orig){
-  const ri=Math.min(P.years-1, Math.max(0,S.plan.retireAge-S.plan.startAge-1));
-  const sr=mc.success, lvl=sr>=.9?"ok":sr>=.75?"mid":"no";
-  const lbl=sr>=.9?"✓ Strong":sr>=.75?"! Some risk":"✕ Risky";
-  const failTxt=mc.fails.length?`In the futures that fail, money runs out around age ${mc.fails[Math.floor(mc.fails.length/2)]}.`:`Money lasted in every future.`;
-  let now;
+  const ri=clamp(S.plan.retireAge-S.plan.startAge-1,0,P.years-1);
+  const [l1,t1]=level(mc.goalSuccess), [l2,t2]=level(mc.success);
+  let html="";
+  if(P.lastGoal!==null) html+=tile("Chance Bucket 1 pays the goals", pct(mc.goalSuccess,0), `Van + house at age ${Math.min(...goalAges())}. Safe money, so this barely depends on markets.`, `<span class="pill ${l1}">${t1}</span>`);
+  html+=tile(`Chance money lasts to ${S.plan.endAge}`, pct(mc.success,0), mc.fails.length?`In the futures that fail, money runs out around age ${mc.fails[Math.floor(mc.fails.length/2)]}.`:"Money lasted in every future.", `<span class="pill ${l2}">${t2}</span>`);
+  html+=tile(`Retirement fund at ${S.plan.retireAge}`, short(mc.pc.b2[2][ri]), `Middle future. Bad case (1 in 20): ${short(mc.pc.b2[0][ri])} · Good: ${short(mc.pc.b2[4][ri])}`);
+  html+=tile(`Safe yearly spending from ${S.plan.retireAge}`, eur(safe), `Lasts in 9 of 10 futures. You planned ${eur(S.plan.spend)}.`);
   if(P.k){
-    const last=P.realRows[P.k-1], o=orig.rows[P.k-1], d=(last.end-o.end)/last.inf;
-    now=tile(`Real value, end of ${last.year}`, short(last.end/last.inf), `${d>=0?"Ahead of":"Behind"} the original plan by ${eur(Math.abs(d))} (today’s €).`, `<span class="pill ${d>=0?"ok":"no"}">${d>=0?"▲ Ahead":"▼ Behind"}</span>`);
-  } else now=tile("Real results", "None yet", "Add your first year in step 1. The forecast will start from your real numbers.");
-  $("tiles").innerHTML =
-    tile(`Chance money lasts to ${S.plan.endAge}`, pct(sr,0), failTxt, `<span class="pill ${lvl}">${lbl}</span>`)+
-    tile(`Savings at ${S.plan.retireAge} (middle future)`, short(mc.pc[2][ri]), `Bad case (1 in 20): ${short(mc.pc[0][ri])} · Good case: ${short(mc.pc[4][ri])}`)+
-    tile(`Safe yearly spending from ${S.plan.retireAge}`, eur(safe), `Highest amount that lasts in 9 of 10 futures. You planned ${eur(S.plan.spend)}.`)+
-    now;
+    const last=P.realRows[P.k-1], o=orig.rows[P.k-1], d=((last.e1+last.e2)-(o.e1+o.e2))/last.inf;
+    html+=tile(`Real total, end of ${last.year}`, short((last.e1+last.e2)/last.inf), `${d>=0?"Ahead of":"Behind"} the original plan by ${eur(Math.abs(d))} (today’s €).`, `<span class="pill ${d>=0?"ok":"no"}">${d>=0?"▲ Ahead":"▼ Behind"}</span>`);
+  }
+  $("tiles").innerHTML=html;
 }
 
 /* ---------- fan chart ---------- */
-let fan=null;
+let view="total", fan=null, lastMC=null;
+const VIEWS={total:"Total wealth", b2:"Bucket 2 · Retirement", b1:"Bucket 1 · Project"};
 function niceMax(v){ const p=Math.pow(10,Math.floor(Math.log10(v))); for(const k of [1,1.5,2,2.5,3,4,5,6,8,10]) if(k*p>=v) return k*p; return 10*p; }
-function renderFan(P, mc, orig){
+function renderFan(){
+  if(!lastMC) return;
+  const {P,mc,orig}=lastMC, pc=mc.pc[view];
+  $("viewTabs").innerHTML=Object.keys(VIEWS).map(k=>`<button class="tab" role="tab" type="button" aria-selected="${k===view}" data-view="${k}">${VIEWS[k]}</button>`).join("");
+  $("viewHint").textContent=view==="b1"?"A narrow band: safe money barely moves.":view==="b2"?"A wide band: stocks and crypto swing a lot.":"Both buckets together.";
   const svg=$("fan"), W=900, H=380, m={l:62,r:18,t:16,b:34};
-  const ages=Array.from({length:P.years},(_,i)=>S.plan.startAge+i);
-  const origReal=orig.rows.map(r=>r.end/r.inf);
-  let maxY=0; for(let i=0;i<P.years;i++) maxY=Math.max(maxY, mc.pc[3][i]*1.25, mc.pc[2][i], P.k?Math.min(origReal[i],mc.pc[4][i]):0);
+  const pick=r=>view==="b1"?r.e1:view==="b2"?r.e2:r.e1+r.e2;
+  const lastI=view==="b1"&&P.lastGoal!==null?Math.min(P.years-1,P.lastGoal-S.plan.startAge+2):P.years-1;
+  const A=Array.from({length:lastI+1},(_,i)=>S.plan.startAge+i);
+  const origReal=orig.rows.map(r=>pick(r)/r.inf), real=P.realRows.map(r=>pick(r)/r.inf);
+  let maxY=0;
+  for(let i=0;i<=lastI;i++) maxY=Math.max(maxY,pc[3][i]*1.25,pc[2][i],view==="b1"?pc[4][i]:0,P.k?Math.min(origReal[i],pc[4][i]):0);
+  for(const v of real) maxY=Math.max(maxY,v);
   maxY=niceMax(maxY||1);
-  const x=a=>m.l+(a-ages[0])/Math.max(1,ages.at(-1)-ages[0])*(W-m.l-m.r);
-  const y=v=>m.t+(1-Math.min(Math.max(v,0),maxY)/maxY)*(H-m.t-m.b);
-  const from=Math.max(0,P.k-1), fa=ages.slice(from);
+  const x=a=>m.l+(a-A[0])/Math.max(1,A.at(-1)-A[0])*(W-m.l-m.r);
+  const y=v=>m.t+(1-clamp(v,0,maxY)/maxY)*(H-m.t-m.b);
+  const from=Math.min(Math.max(0,P.k-1),lastI), fa=A.slice(from);
   const area=(lo,hi)=>"M"+fa.map((a,j)=>x(a)+","+y(hi[from+j])).join("L")+"L"+fa.map((a,j)=>x(a)+","+y(lo[from+j])).reverse().join("L")+"Z";
-  const line=(arr,a0=0)=>"M"+ages.slice(a0).map((a,j)=>x(a)+","+y(arr[a0+j])).join("L");
+  const line=(arr,a0=0)=>"M"+A.slice(a0).map((a,j)=>x(a)+","+y(arr[a0+j])).join("L");
   let g=`<g class="axis">`;
   for(let k=0;k<=4;k++){ const v=maxY*k/4; g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke-dasharray="${k?"2 4":""}"/><text x="${m.l-8}" y="${y(v)+4}" text-anchor="end">${short(v)}</text>`; }
-  const step=ages.length>50?10:5;
-  for(const a of ages) if(a%step===0) g+=`<text x="${x(a)}" y="${H-10}" text-anchor="middle">${a}</text>`;
+  const step=A.length>50?10:A.length>20?5:1;
+  for(const a of A) if(a%step===0) g+=`<text x="${x(a)}" y="${H-10}" text-anchor="middle">${a}</text>`;
   g+=`</g>`;
-  const ra=S.plan.retireAge;
-  if(ra>=ages[0]&&ra<=ages.at(-1)) g+=`<line x1="${x(ra)}" x2="${x(ra)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${x(ra)+6}" y="${m.t+12}" fill="var(--muted)" font-size="12" font-family="var(--font-body)">Retire at ${ra}</text>`;
-  g+=`<path d="${area(mc.pc[0],mc.pc[4])}" fill="var(--band)" fill-opacity=".16"/>`;
-  g+=`<path d="${area(mc.pc[1],mc.pc[3])}" fill="var(--band)" fill-opacity=".30"/>`;
+  const marks=[]; if(P.lastGoal!==null) marks.push([Math.min(...goalAges()),"Van + house"]); marks.push([S.plan.retireAge,"Retire"]);
+  marks.forEach(([a,l],j)=>{ if(a>=A[0]&&a<=A.at(-1)) g+=`<line x1="${x(a)}" x2="${x(a)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${x(a)+6}" y="${m.t+12+j*16}" fill="var(--muted)" font-size="12" font-family="var(--font-body)">${l} at ${a}</text>`; });
+  g+=`<path d="${area(pc[0],pc[4])}" fill="var(--band)" fill-opacity=".16"/><path d="${area(pc[1],pc[3])}" fill="var(--band)" fill-opacity=".30"/>`;
   if(P.k) g+=`<path d="${line(origReal)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>`;
-  g+=`<path d="${line(mc.pc[2],from)}" fill="none" stroke="var(--band)" stroke-width="2.5"/>`;
-  if(P.k){
-    const pts=P.realRows.map(r=>[x(r.age),y(r.end/r.inf)]);
-    if(pts.length>1) g+=`<path d="M${pts.map(p=>p.join(",")).join("L")}" fill="none" stroke="var(--ink)" stroke-width="2"/>`;
-    for(const [px,py] of pts) g+=`<circle cx="${px}" cy="${py}" r="5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>`;
-  }
-  const li=ages.length-1;
-  g+=`<circle cx="${x(ages[li])}" cy="${y(mc.pc[2][li])}" r="4.5" fill="var(--band)" stroke="var(--surface)" stroke-width="2"/>`;
-  g+=`<line id="cross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-opacity=".5" visibility="hidden"/>`;
-  g+=`<rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
+  g+=`<path d="${line(pc[2],from)}" fill="none" stroke="var(--band)" stroke-width="2.5"/>`;
+  if(P.k){ const pts=P.realRows.filter(r=>r.age<=A.at(-1)).map((r,i)=>[x(r.age),y(real[i])]); if(pts.length>1) g+=`<path d="M${pts.map(p=>p.join(",")).join("L")}" fill="none" stroke="var(--ink)" stroke-width="2"/>`; for(const [px,py] of pts) g+=`<circle cx="${px}" cy="${py}" r="5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>`; }
+  g+=`<circle cx="${x(A.at(-1))}" cy="${y(pc[2][lastI])}" r="4.5" fill="var(--band)" stroke="var(--surface)" stroke-width="2"/>`;
+  g+=`<line id="cross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-opacity=".5" visibility="hidden"/><rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
   svg.innerHTML=g;
-  fan={ages,x,W,mc,origReal,P};
+  fan={A,x,W,pc,origReal,real,P};
   const hit=$("hit");
   hit.addEventListener("pointermove",fanHover); hit.addEventListener("pointerdown",fanHover);
   hit.addEventListener("pointerleave",()=>{$("fanTip").hidden=true;$("cross").setAttribute("visibility","hidden");});
-  $("fanLegend").innerHTML=`
-    <span><i class="swatch" style="background:var(--band);opacity:.25"></i>9 in 10 futures land in here</span>
+  $("fanLegend").innerHTML=`<span><i class="swatch" style="background:var(--band);opacity:.25"></i>9 in 10 futures land in here</span>
     <span><i class="swatch" style="background:var(--band);opacity:.5"></i>Half of futures land in here</span>
     <span><i class="swatch" style="background:var(--band);height:3px"></i>Middle future</span>
-    ${P.k?`<span><i class="swatch" style="background:var(--ink);border-radius:50%"></i>Your real results</span>
-    <span><i class="swatch" style="background:var(--muted);height:3px"></i>Original plan (before real results)</span>`:""}`;
+    ${P.k?`<span><i class="swatch" style="background:var(--ink);border-radius:50%"></i>Your real results</span><span><i class="swatch" style="background:var(--muted);height:3px"></i>Original plan (before real results)</span>`:""}`;
 }
 function placeTip(tip, box, svgRect, cx, W){
   tip.hidden=false;
   const b=box.getBoundingClientRect(), px=cx/W*svgRect.width+(svgRect.left-b.left), tw=tip.offsetWidth;
-  tip.style.left=Math.min(Math.max(8,px+12+tw>b.width?px-tw-12:px+12),b.width-tw-8)+"px";
-  tip.style.top="14px";
+  tip.style.left=Math.min(Math.max(8,px+12+tw>b.width?px-tw-12:px+12),b.width-tw-8)+"px"; tip.style.top="14px";
 }
 function nearest(ages,x,sx){ let i=0,best=1e9; ages.forEach((a,k)=>{const d=Math.abs(x(a)-sx); if(d<best){best=d;i=k;}}); return i; }
 function fanHover(ev){
-  const {ages,x,W,mc,origReal,P}=fan, rect=$("fan").getBoundingClientRect();
-  const i=nearest(ages,x,(ev.clientX-rect.left)/rect.width*W), cx=x(ages[i]), c=$("cross");
+  const {A,x,W,pc,origReal,real,P}=fan, rect=$("fan").getBoundingClientRect();
+  const i=nearest(A,x,(ev.clientX-rect.left)/rect.width*W), cx=x(A[i]), c=$("cross");
   c.setAttribute("x1",cx); c.setAttribute("x2",cx); c.setAttribute("visibility","visible");
-  const tip=$("fanTip");
-  if(i<P.k){
-    const r=P.realRows[i];
-    tip.innerHTML=`<b>Age ${ages[i]} · ${r.year} · Real</b><div class="r"><span>Value</span><b>${eur(r.end/r.inf)}</b></div><div class="r"><span>Return</span><span>${pct(r.r)}</span></div><div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`;
-  } else {
-    tip.innerHTML=`<b>Age ${ages[i]} · ${S.plan.startYear+i}</b>
-      <div class="r"><span>Good case</span><span>${eur(mc.pc[4][i])}</span></div>
-      <div class="r"><span>Middle</span><b>${eur(mc.pc[2][i])}</b></div>
-      <div class="r"><span>Bad case</span><span>${eur(mc.pc[0][i])}</span></div>
-      ${P.k?`<div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`:""}`;
-  }
-  placeTip(tip,$("fanBox"),rect,cx,W);
+  $("fanTip").innerHTML=i<P.k
+    ? `<b>Age ${A[i]} · ${S.plan.startYear+i} · Real</b><div class="r"><span>Value</span><b>${eur(real[i])}</b></div><div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`
+    : `<b>Age ${A[i]} · ${S.plan.startYear+i}</b><div class="r"><span>Good case</span><span>${eur(pc[4][i])}</span></div><div class="r"><span>Middle</span><b>${eur(pc[2][i])}</b></div><div class="r"><span>Bad case</span><span>${eur(pc[0][i])}</span></div>${P.k?`<div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`:""}`;
+  placeTip($("fanTip"),$("fanBox"),rect,cx,W);
 }
 
 /* ---------- glide chart ---------- */
 let glide=null;
-function renderGlide(det){
-  const svg=$("glideSvg"), W=560, H=240, m={l:44,r:10,t:10,b:30};
-  const rows=det.rows, ages=rows.map(r=>r.age);
+function renderGlide(P){
+  const svg=$("glideSvg"), W=560, H=250, m={l:44,r:10,t:10,b:30};
+  const maxAge=Math.min(S.plan.startAge+P.years-1, Math.max(S.plan.retireAge+5, glideAges()[1]+3));
+  const ages=[]; for(let a=S.plan.startAge;a<=maxAge;a++) ages.push(a);
+  const ws=ages.map(a=>glideW(a));
   const x=a=>m.l+(a-ages[0])/Math.max(1,ages.at(-1)-ages[0])*(W-m.l-m.r);
-  const y=v=>m.t+(1-v)*(H-m.t-m.b);
-  let g="";
-  const cum=rows.map(()=>0);
-  for(const c of CLS_KEYS){
-    const lo=cum.slice(); rows.forEach((r,i)=>cum[i]+=r.st.cls[c]);
-    const top=ages.map((a,i)=>x(a)+","+y(cum[i])), bot=ages.map((a,i)=>x(a)+","+y(lo[i])).reverse();
-    g+=`<path d="M${top.join("L")}L${bot.join("L")}Z" fill="var(${CLS[c].color})" stroke="var(--surface)" stroke-width="1.5"/>`;
+  const y=v=>m.t+(1-v/100)*(H-m.t-m.b);
+  let g=""; const cum=ages.map(()=>0);
+  for(const k of B2K){
+    const lo=cum.slice(); ws.forEach((w,i)=>cum[i]+=w[k]);
+    g+=`<path d="M${ages.map((a,i)=>x(a)+","+y(cum[i])).join("L")}L${ages.map((a,i)=>x(a)+","+y(lo[i])).reverse().join("L")}Z" fill="var(${ACOL[k]})" stroke="var(--surface)" stroke-width="1.5"/>`;
   }
   g+=`<g class="axis">`;
-  for(const v of [0,.25,.5,.75,1]) g+=`<text x="${m.l-6}" y="${y(v)+4}" text-anchor="end">${v*100}%</text>`;
-  const step=ages.length>50?10:5;
+  for(const v of [0,25,50,75,100]) g+=`<text x="${m.l-6}" y="${y(v)+4}" text-anchor="end">${v}%</text>`;
+  const step=ages.length>40?10:5;
   for(const a of ages) if(a%step===0) g+=`<text x="${x(a)}" y="${H-8}" text-anchor="middle">${a}</text>`;
-  g+=`</g>`;
-  g+=`<line id="gcross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-width="1.5" visibility="hidden"/>`;
-  g+=`<rect id="ghit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
-  svg.innerHTML=g; glide={rows,ages,x,W};
+  g+=`</g><line id="gcross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-width="1.5" visibility="hidden"/><rect id="ghit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
+  svg.innerHTML=g; glide={ages,ws,x,W};
   const hit=$("ghit");
   hit.addEventListener("pointermove",glideHover); hit.addEventListener("pointerdown",glideHover);
   hit.addEventListener("pointerleave",()=>{$("glideTip").hidden=true;$("gcross").setAttribute("visibility","hidden");});
-  $("glideLegend").innerHTML=CLS_KEYS.map(c=>`<span><i class="swatch" style="background:var(${CLS[c].color})"></i>${CLS[c].name}</span>`).join("");
+  $("glideLegend").innerHTML=B2K.map(k=>`<span><i class="swatch" style="background:var(${ACOL[k]})"></i>${ANAME[k]}</span>`).join("");
 }
 function glideHover(ev){
-  const {rows,ages,x,W}=glide, rect=$("glideSvg").getBoundingClientRect();
+  const {ages,ws,x,W}=glide, rect=$("glideSvg").getBoundingClientRect();
   const i=nearest(ages,x,(ev.clientX-rect.left)/rect.width*W), cx=x(ages[i]), c=$("gcross");
   c.setAttribute("x1",cx); c.setAttribute("x2",cx); c.setAttribute("visibility","visible");
-  const r=rows[i], tip=$("glideTip");
-  tip.innerHTML=`<b>Age ${r.age}</b><div style="opacity:.8">${mixLabel(r.mix)}</div>`+
-    CLS_KEYS.slice().reverse().map(c=>`<div class="r"><span><i class="swatch" style="background:var(${CLS[c].color})"></i>${CLS[c].name}</span><span>${Math.round(r.st.cls[c]*100)}%</span></div>`).join("")+
-    `<div class="r"><span>Typical growth</span><span>${pct(r.st.net)}</span></div>`;
-  placeTip(tip,$("glideBox"),rect,cx,W);
+  const w=ws[i], s=stats(w);
+  $("glideTip").innerHTML=`<b>Age ${ages[i]}</b>`+B2K.slice().reverse().map(k=>`<div class="r"><span><i class="swatch" style="background:var(${ACOL[k]})"></i>${ANAME[k]}</span><span>${p0(w[k])}</span></div>`).join("")+`<div class="r"><span>Typical growth</span><span>${pct(s.net)}</span></div><div class="r"><span>Bad year</span><span>${pct(s.bad,0)}</span></div>`;
+  placeTip($("glideTip"),$("glideBox"),rect,cx,W);
 }
 
 /* ---------- main update ---------- */
 let mcTimer=null;
 function update(full){
-  statMemo.clear();
+  memo.clear();
   const P=prep();
-  renderStrats(); renderLearn(P); updateLogResults(P);
-  const m=S.plan.switchMode;
-  $("switchGlide").hidden=m!=="glide"; $("switchBalance").hidden=m!=="balance"; $("switchAge").hidden=m!=="age";
-  $("glideNote").textContent = {
-    glide:`Aggressive until ${S.plan.glideA}. Then each year a little more moves to Moderate (fully Moderate at about ${Math.round((+S.plan.glideA + +S.plan.glideB)/2)}) and on to Safe at ${S.plan.glideB}. In real life: put new money into the safer funds first, and rebalance once a year in January.`,
-    balance:"Below the first amount the plan uses Aggressive. Amounts are in today’s money.",
-    age:"Before the first age the plan uses Aggressive.",
-    aggressive:"", moderate:"", safe:""
-  }[m]||"";
+  const det=runPath(P,det1(P),det2(P),{keep:true});
+  renderLearn(P); updateLogResults(P); renderBuckets(P,det,goalNeed(P)); renderSplitMath(P);
+  renderGlideInfo(P); renderGlide(P); renderRebalance(P); renderTable(det);
   $("customTaxBox").hidden=S.plan.tax!=="custom";
   $("taxNote").textContent={
-    fi:"Finland: the first €30,000 of profit in a year is taxed 30%, above that 34%. If you held for 10+ years, at most 60% of what you sell counts as profit (deemed acquisition cost).",
-    be:"Belgium: 10% tax on profits from 2026. The first €10,000 of profit per person per year is free (the tool uses one exemption; as a couple you may have two).",
-    jp:"Japan: 20.315% on profit. Inside a NISA account it’s 0%, but only while you live in Japan.",
-    custom:"Your own % of profit."
-  }[S.plan.tax];
-  const det=runPath(P,detRet(P),true);
-  renderTable(det); renderGlide(det);
+    fi:"Finland: the first €30,000 of profit a year is taxed 30%, above that 34%. After 10+ years, at most 60% of what you sell counts as profit.",
+    be:"Belgium: 10% on profits from 2026. The first €10,000 of profit per person per year is free (the tool uses one exemption).",
+    jp:"Japan: 20.315% on profit. Inside NISA it’s 0%, but only while you live in Japan.",
+    custom:"Your own % of profit."}[S.plan.tax];
   $("planText").value=JSON.stringify(S);
   clearTimeout(mcTimer);
   mcTimer=setTimeout(()=>{
     const P2=prep(), mc=simulate(P2,2000,42);
-    const P0=prep({noActuals:true}), orig=runPath(P0,detRet(P0),true);
+    const P0=prep({noActuals:true}), orig=runPath(P0,det1(P0),det2(P0),{keep:true});
     const safe=safeSpend(P2);
-    renderTiles(P2,mc,safe,orig); renderFan(P2,mc,orig);
+    lastMC={P:P2,mc,orig}; renderTiles(P2,mc,safe,orig); renderFan();
   }, full?0:250);
 }
 
 /* ---------- saving: the page's own database, this browser as backup ---------- */
 let db=null, readOnly=false, saveTimer=null, saving=false, again=false;
 const last={settings:"", actuals:""};
-function setStatus(txt,lvl){ const el=$("saveState"); el.textContent=txt; el.className="saved "+(lvl||""); }
-function bodies(){ return {settings:{v:2, strategies:S.strategies, plan:S.plan}, actuals:{v:2, years:S.actuals}}; }
-function saveLocal(){ try{ localStorage.setItem(LKEY, JSON.stringify(S)); return true; }catch(e){ return false; } }
+function setStatus(t,l){ const el=$("saveState"); el.textContent=t; el.className="saved "+(l||""); }
+function bodies(){ const {actuals,...rest}=S; return {settings:rest, actuals:{v:3, years:actuals}}; }
+function saveLocal(){ try{ localStorage.setItem(LKEY,JSON.stringify(S)); return true; }catch(e){ return false; } }
 function save(){
-  const okLocal=saveLocal();
-  if(!db){ setStatus(okLocal?"Saved in this browser only. Keep a backup (bottom of page).":"Not saved: use Backup at the bottom", "mid"); return; }
+  const ok=saveLocal();
+  if(!db){ setStatus(ok?"Saved in this browser only. Keep a backup (bottom of page).":"Not saved: use Backup at the bottom","mid"); return; }
   if(readOnly){ setStatus("View only: your changes are not saved","mid"); return; }
   setStatus("Saving…","mid");
   clearTimeout(saveTimer); saveTimer=setTimeout(()=>{ saveTimer=null; flush(); },900);
 }
-async function writeDoc(k, body){
-  try{ await db.doc("plan/"+k).set(body); }
-  catch(e){ if(e?.code!=="unavailable") throw e; await new Promise(r=>setTimeout(r,600+Math.random()*600)); await db.doc("plan/"+k).set(body); }
+async function writeDoc(k,body){
+  try{ await db.doc("plan3/"+k).set(body); }
+  catch(e){ if(e?.code!=="unavailable") throw e; await new Promise(r=>setTimeout(r,600+Math.random()*600)); await db.doc("plan3/"+k).set(body); }
 }
 async function flush(){
   if(saving){ again=true; return; }
   saving=true;
   try{
     const b=bodies();
-    for(const k of ["settings","actuals"]){
-      const j=JSON.stringify(b[k]); if(j===last[k]) continue;
-      await writeDoc(k,b[k]); last[k]=j;
-    }
+    for(const k of ["settings","actuals"]){ const j=JSON.stringify(b[k]); if(j===last[k]) continue; await writeDoc(k,b[k]); last[k]=j; }
     setStatus("Saved to your plan ✓","ok");
   }catch(e){
     if(["invalid_argument","not_granted","revoked"].includes(e?.code)){ readOnly=true; setStatus("View only: your changes are not saved","mid"); }
-    else setStatus("Couldn’t save just now. Changes are kept in this browser; they will save with your next change.","mid");
+    else setStatus("Couldn’t save just now. Changes are kept in this browser and will save with your next change.","mid");
   }
-  saving=false;
-  if(again){ again=false; flush(); }
+  saving=false; if(again){ again=false; flush(); }
 }
-function rerenderAll(){ fillInputs(); renderPeriods(); renderEvents(); renderTabs(); renderLog(); update(true); }
+function rerenderAll(){ fillInputs(); renderPeriods(); renderGoals(); renderAssets(); renderLog(); update(true); }
 async function connect(){
   let d=null;
-  try{ d = window.claude?.use ? await window.claude.use("db") : null; }catch(e){ d=null; }
+  try{ d=window.claude?.use?await window.claude.use("db"):null; }catch(e){ d=null; }
   if(!d){ save(); return; }
   db=d;
-  const seeded={settings:false, actuals:false};
+  const seeded={settings:false,actuals:false};
   for(const k of ["settings","actuals"]){
-    db.doc("plan/"+k).onSnapshot(snap=>{
+    db.doc("plan3/"+k).onSnapshot(snap=>{
       if(snap.metadata.hasPendingWrites) return;
-      if(!snap.exists){
-        // first visit: store what this browser has (or the starting numbers)
-        if(!snap.metadata.fromCache && !seeded[k]){ seeded[k]=true; last[k]=""; save(); }
-        return;
-      }
+      if(!snap.exists){ if(!snap.metadata.fromCache&&!seeded[k]){ seeded[k]=true; last[k]=""; save(); } return; }
       const data=snap.data(), j=JSON.stringify(data);
-      if(j===last[k]) { setStatus("Saved to your plan ✓","ok"); return; }
-      if(saveTimer || saving) return;   // a local change is on its way; it wins
+      if(j===last[k]){ setStatus("Saved to your plan ✓","ok"); return; }
+      if(saveTimer||saving) return;   // a local change is on its way; it wins
       last[k]=j;
-      if(k==="settings"){ const n=normalize({strategies:data.strategies, plan:data.plan}); S.strategies=n.strategies; S.plan=n.plan; }
-      else S.actuals=data.years&&typeof data.years==="object"?JSON.parse(JSON.stringify(data.years)):{};
-      if(k==="settings") S.strategies=JSON.parse(JSON.stringify(S.strategies));
-      saveLocal(); rerenderAll();
-      setStatus("Saved to your plan ✓","ok");
-    }, ()=>{ setStatus("Lost the connection to the saved plan. Reload the page to reconnect.","mid"); });
+      const copy=JSON.parse(j);
+      if(k==="settings") S=normalize({...copy, actuals:S.actuals});
+      else S.actuals=copy.years&&typeof copy.years==="object"?copy.years:{};
+      saveLocal(); rerenderAll(); setStatus("Saved to your plan ✓","ok");
+    },()=>setStatus("Lost the connection to the saved plan. Reload the page to reconnect.","mid"));
   }
 }
 
 /* ---------- events ---------- */
+let rbT=null;
+function refreshRebalance(){ const el=document.activeElement, id=el?.id; renderRebalance(prep()); if(id&&$(id)&&$(id)!==el){ $(id).focus(); } }
 document.addEventListener("input",e=>{
   const el=e.target;
   if(el.dataset.k){ const v=parseFloat(el.value); if(isNaN(v)) return; setPath(el.dataset.k,v); }
   else if(el.dataset.t){ setPath(el.dataset.t,el.value); }
   else if(el.dataset.s){ setPath(el.dataset.s,el.value); }
   else if(el.dataset.b){ setPath(el.dataset.b,el.checked); }
+  else if(el.dataset.h){ const v=el.value===""?null:parseFloat(el.value); if(v==null||isNaN(v)) delete S.holdings[el.dataset.h]; else S.holdings[el.dataset.h]=v;
+    save(); clearTimeout(rbT); rbT=setTimeout(refreshRebalance,500); return; }
   else if(el.dataset.a){
     const [,y,f]=el.dataset.a.split("."), v=el.value===""?null:parseFloat(el.value);
     const row=S.actuals[y]||(S.actuals[y]={});
     if(v==null||isNaN(v)) delete row[f]; else row[f]=v;
-    if(f==="ret" && v!=null){ delete row.bal; $("lg"+y+"b").value=""; }
-    if(f==="bal" && v!=null){ delete row.ret; $("lg"+y+"r").value=""; }
+    const pair={r1:"v1",v1:"r1",r2:"v2",v2:"r2"}[f];
+    if(pair && v!=null){ delete row[pair]; const o=$("lg"+y+pair); if(o) o.value=""; }
   }
   else if(el.id==="showNominal"){ update(); return; }
   else return;
@@ -937,22 +1030,19 @@ document.addEventListener("input",e=>{
 });
 document.addEventListener("change",e=>{
   const k=e.target.dataset.k||"";
-  if(k.startsWith("plan.events")) renderEvents();
-  if(k.includes(".cls.")) renderTabs();
-  if(k==="plan.startYear"||k==="plan.startAge"||k==="plan.infl") renderLog(), update(true);
+  if(k.startsWith("goals.")) renderGoals();
+  if(k==="plan.startYear"||k==="plan.startAge"||k==="plan.infl"){ renderLog(); update(true); }
 });
 document.addEventListener("click",async e=>{
   const t=e.target.closest("button"); if(!t) return;
   const d=t.dataset;
-  if(d.tab){ tab=d.tab; renderTabs(); update(); return; }
+  if(d.view){ view=d.view; renderFan(); return; }
   if(d.delp!=null){ S.plan.periods.splice(+d.delp,1); renderPeriods(); }
-  else if(d.dele!=null){ S.plan.events.splice(+d.dele,1); renderEvents(); }
-  else if(d.deli!=null){ S.strategies[tab].items.splice(+d.deli,1); renderTabs(); }
+  else if(d.delg!=null){ S.goals.splice(+d.delg,1); renderGoals(); }
   else if(d.dely){ delete S.actuals[d.dely]; renderLog(); }
-  else if(d.addi){ S.strategies[tab].items.push({c:d.addi,name:"New fund",tk:"",w:0,ret:5,vol:15,ter:0.2}); renderTabs(); }
   else if(t.id==="addYear"){ const ny=logYears().at(-1)+1; S.actuals[ny]=S.actuals[ny]||{}; renderLog(); }
-  else if(t.id==="addPeriod"){ const l=S.plan.periods.at(-1), f=l?l.to+1:S.plan.startAge+1; S.plan.periods.push({from:f,to:Math.max(f,S.plan.retireAge-1),amt:5000}); renderPeriods(); }
-  else if(t.id==="addEvent"){ S.plan.events.push({age:S.plan.startAge+5,label:"New moment",amt:0}); renderEvents(); }
+  else if(t.id==="addPeriod"){ const l=S.plan.periods.at(-1), f=l?l.to+1:S.plan.startAge; S.plan.periods.push({from:f,to:Math.max(f,S.plan.retireAge-1),amt:10000}); renderPeriods(); }
+  else if(t.id==="addGoal"){ S.goals.push({label:"New goal",age:S.plan.startAge+5,amt:10000}); renderGoals(); }
   else if(t.id==="resetBtn"){
     if(!t.dataset.armed){ t.dataset.armed="1"; t.textContent="Press again: this also deletes your real results"; setTimeout(()=>{delete t.dataset.armed; t.textContent="Reset everything";},5000); return; }
     delete t.dataset.armed; t.textContent="Reset everything"; S=defaults(); rerenderAll(); $("planMsg").textContent="Reset done.";
@@ -971,15 +1061,15 @@ document.addEventListener("click",async e=>{
     return;
   }
   else if(t.id==="loadPlan"){
-    try{ const n=JSON.parse($("planText").value); if(!n.plan||!n.strategies) throw 0; S=normalize(n); rerenderAll(); $("planMsg").textContent="Plan loaded."; }
-    catch(err){ $("planMsg").textContent="That text isn’t a saved plan. Copy the whole text again and retry."; return; }
+    try{ const n=JSON.parse($("planText").value); if(n.v!==3) throw 0; S=normalize(n); rerenderAll(); $("planMsg").textContent="Plan loaded."; }
+    catch(err){ $("planMsg").textContent="That text isn’t a saved plan from this version. Copy the whole text again and retry."; return; }
   }
   else return;
   save(); update();
 });
-async function getDownloads(){ try{ return window.claude?.use ? await window.claude.use("downloads") : null; }catch(e){ return null; } }
+async function getDownloads(){ try{ return window.claude?.use?await window.claude.use("downloads"):null; }catch(e){ return null; } }
 
-fillInputs(); renderPeriods(); renderEvents(); renderTabs(); renderLog(); update(true);
+rerenderAll();
 connect();
 getDownloads().then(dl=>{ if(dl) $("dlPlan").hidden=false; });
 </script>

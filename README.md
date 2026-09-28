@@ -25,21 +25,24 @@ To edit the job data, change the `DATA` object inside the `<script>` in
 
 ## Aya & Max Money Plan (`money-plan/index.html`)
 
-An investment forecast from age 25, built from the "Plan investment" spreadsheet,
-that gets more accurate every year as real results are added.
+An investment forecast for one account split into two "mental buckets",
+updated each January with real results so it gets more accurate every year.
 
-- **My real results:** once a year, type what you added, took out, and either the
-  return % or the account value on 31 December (plus real inflation if you want).
-  The forecast then starts again from the real value. Real returns can also move the
-  future return guess slowly (credibility weighting: about 24% after 10 years).
-- **Three mixes (Safe / Moderate / Aggressive):** weighted returns, fund fees (TER),
-  volatility with correlations, and a "1 in 20 bad year".
-- **Lowering risk over time:** the mix slides a little each year from Aggressive through
-  Moderate to Safe (or jumps by age or savings size, like the spreadsheet).
-- **Life plan:** money added per period, big moments, retirement spending, state pension,
-  inflation, tax on profit only (Finland, Belgium 2026, Japan or custom), buying costs.
-- **Stress test:** 2,000 random futures with fat-tailed returns show the chance the money
-  lasts, a good/middle/bad range, and the highest safe yearly spending.
+- **Bucket 1 · Project fund:** van and house down payment in 5 years. Only safe assets
+  (high-yield savings, money market fund, short-term government bonds). Shows whether the
+  goals are funded and the minimum split (or extra money) needed to fund them.
+- **Bucket 2 · Retirement fund:** starts at 70% global stocks / 22% crypto / 8% gold, then
+  follows a glide path in three phases: trim crypto, scale stocks down (part into dividend
+  value stocks), then re-evaluate gold. Everything sold moves into high-quality bonds.
+- **Split:** new money goes 60/40 into the buckets (editable); after the project, all new
+  money (and optionally the leftover) goes to retirement.
+- **My real results:** per bucket, what was added / taken out and the return % or 31 Dec value.
+  The forecast restarts from the real values; real returns adjust future guesses by
+  credibility (fast for cash, slow for stocks).
+- **January rebalance helper:** current value per fund → this year's target, full-rebalance
+  buy/sell amounts and a "new money only" plan.
+- **Stress test:** 2,000 random futures (fat tails) for each bucket and the total: chance the
+  goals are paid, chance the money lasts, and the highest safe yearly spending.
 
-The plan is saved in the published page's own database (`plan/settings` and
-`plan/actuals`), with the browser as a fallback; "Backup and reset" saves a file or copies the plan as text.
+The plan is saved in the published page's own database (`plan3/settings` and
+`plan3/actuals`), with the browser as a fallback; "Backup and reset" saves a file or copies the plan as text.
