@@ -94,6 +94,24 @@ tr:last-child td,tr:last-child th{border-bottom:0}
 .fit{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .fit:hover{border-color:var(--accent)}
 .muted{color:var(--muted)}
+.goals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:12px}
+.goal{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 16px}
+.goal:hover{border-color:var(--accent)}
+.goal[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.goal[aria-pressed="true"] .goal-sub{color:var(--accent-ink);opacity:.85}
+.goal-name{font-family:var(--font-display);font-weight:800;font-size:1.15rem}
+.goal-sub{font-size:.85rem;color:var(--muted);line-height:1.35}
+.goal-result{display:flex;flex-direction:column;gap:12px}
+.goal-result:empty{display:none}
+.best{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.best-item{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.best-item:first-child{border:2px solid var(--marker)}
+.rank{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:800;background:var(--accent-soft);color:var(--accent)}
+.best-item:first-child .rank{background:var(--marker);color:#241c00}
+.best-title{font-weight:600;font-size:1.05rem}
+.best-why{font-size:.88rem;color:var(--muted);margin-top:4px}
+.dots{letter-spacing:2px;color:var(--accent)}
+@media (max-width:520px){ .best-item{grid-template-columns:auto 1fr} .best-item .pick{grid-column:2;justify-self:start} }
 .switchbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:6px}
 .switchbar .pick{display:inline-flex;align-items:center;gap:6px}
 .allswitch{display:inline-flex;align-items:center;gap:8px;font-size:.95rem;color:var(--muted);cursor:pointer}
@@ -187,9 +205,18 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
     <div class="people" id="people"></div>
   </section>
 
+  <section id="best">
+    <div class="sec-head">
+      <h2>2. Find my best option</h2>
+      <p class="hint">What matters most to you right now? Tap one.</p>
+    </div>
+    <div class="goals" id="goalPick" role="group" aria-label="Best option for"></div>
+    <div class="goal-result" id="goalResult"></div>
+  </section>
+
   <section id="overview">
     <div class="sec-head">
-      <h2>2. How close are you?</h2>
+      <h2>3. Compare all jobs</h2>
       <p class="hint" id="metricHint"></p>
     </div>
     <div class="controls">
@@ -206,7 +233,7 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
 
   <section id="detail">
     <div class="sec-head">
-      <h2>3. What you need</h2>
+      <h2>4. What you need</h2>
       <p class="hint">Tap a status pill to mark a step as done. ✓ = have it, ~ = partly or in progress, ✗ = still needed, + = optional extra.</p>
     </div>
     <div class="picker">
@@ -1323,6 +1350,96 @@ function renderFits(){
   });
 }
 
+/* ---------- best option finder ----------
+   FREEDOM: can you freelance, run your own thing, choose where and when? (1–5)
+   STABILITY: year-round work, permanent contracts, public sector (1–5) */
+var FREEDOM = {ski:4, guide:4, paddle:4, canyon:4, ferrata:4, winter:4, mountain:5, parkbuild:3, parkmgr:2,
+  parkown:5, arborist:4, rope:4, rescue:1, heli:3, kinder:1, youth:2, tour:4, hotel:2, cafe:1, cafeown:5, life:2, patrol:2};
+var STABILITY = {ski:2, guide:2, paddle:1, canyon:1, ferrata:1, winter:2, mountain:2, parkbuild:3, parkmgr:4,
+  parkown:2, arborist:4, rope:3, rescue:5, heli:4, kinder:5, youth:4, tour:2, hotel:3, cafe:3, cafeown:2, life:3, patrol:2};
+var GOALS = [
+  ["freedom","Freedom","Freelance or own business, flexible, easy to move"],
+  ["money","Money","Most take-home pay in the next 5 years"],
+  ["stability","Stability","Year-round work and steady contracts"],
+  ["invest","Lower investment","Least training money still to pay"],
+  ["quick","Quickest start","You can start working soonest"],
+  ["balanced","Balanced","A good mix of all of the above"]
+];
+function dots(n){ return "●●●●●".slice(0,n) + "○○○○○".slice(0,5-n); }
+function candidates(){
+  var p = state.view, cs = state.countries.length ? state.countries : ORDER, out = [];
+  visibleJobs().forEach(function(j){ cs.forEach(function(c){
+    var m = money(j.id, c, p);
+    if(m.blocked || !m.pay) return; /* skip what is not possible or unpaid */
+    out.push({j:j, c:c, m:m, v:value5(j.id, c, p), free:FREEDOM[j.id], stab:STABILITY[j.id], ready:score(j.id, c, p).pct});
+  }); });
+  return out;
+}
+function rankFor(goal){
+  var list = candidates();
+  var v = function(x){ return x.v === null ? -1e9 : x.v; };
+  var sorters = {
+    freedom:  function(a,b){ return b.free - a.free || v(b) - v(a); },
+    money:    function(a,b){ return v(b) - v(a); },
+    stability:function(a,b){ return b.stab - a.stab || v(b) - v(a); },
+    invest:   function(a,b){ return a.m.cost - b.m.cost || v(b) - v(a); },
+    quick:    function(a,b){ return a.m.ready - b.m.ready || v(b) - v(a); }
+  };
+  if(goal === "balanced"){
+    var vals = list.map(v).filter(function(n){ return n > -1e9; });
+    var vMin = Math.min.apply(null, vals), vMax = Math.max.apply(null, vals);
+    var cMax = Math.max.apply(null, list.map(function(x){ return x.m.cost; })) || 1;
+    var rMax = Math.max.apply(null, list.map(function(x){ return x.m.ready; })) || 1;
+    list.forEach(function(x){
+      var money01 = x.v === null ? 0 : (x.v - vMin) / ((vMax - vMin) || 1);
+      /* log scale so €500 vs €5k matters as much as €5k vs €50k */
+      var cost01 = 1 - Math.log(1 + x.m.cost) / Math.log(1 + cMax);
+      x.bal = (money01 + x.free/5 + x.stab/5 + cost01 + (1 - x.m.ready/rMax)) / 5;
+    });
+    list.sort(function(a,b){ return b.bal - a.bal; });
+  } else {
+    list.sort(sorters[goal]);
+  }
+  return list;
+}
+function renderGoals(){
+  var gp = document.getElementById("goalPick"); gp.textContent = "";
+  GOALS.forEach(function(g){
+    gp.appendChild(el("button",{type:"button",class:"goal","aria-pressed":String(state.goal===g[0]),
+      onclick:function(){ state.goal = state.goal === g[0] ? null : g[0]; save(); renderGoals(); }},
+      [el("span",{class:"goal-name",text:g[1]}), el("span",{class:"goal-sub",text:g[2]})]));
+  });
+  var box = document.getElementById("goalResult"); box.textContent = "";
+  if(!state.goal) return;
+  var g = GOALS.filter(function(x){ return x[0] === state.goal; })[0];
+  /* 3 different jobs, each in its best country, plus where else it ranks well */
+  var top = [], seen = {};
+  rankFor(state.goal).forEach(function(x){
+    if(seen[x.j.id]){ seen[x.j.id].also.push(COUNTRIES[x.c].name); return; }
+    if(top.length < 3){ x.also = []; seen[x.j.id] = x; top.push(x); }
+  });
+  if(!top.length){ box.appendChild(el("p",{class:"note",text:"No jobs to compare. Pick at least one country in part 4."})); return; }
+  box.appendChild(el("h3",{text:"Best for " + g[1].toLowerCase() + ": " + pname(state.view) + "'s top 3"}));
+  var ol = el("ol",{class:"best"});
+  top.forEach(function(x, i){
+    var why = [
+      "Freedom " + dots(x.free), "Stability " + dots(x.stab),
+      x.m.cost ? eur(x.m.cost) + " still to pay" : "nothing left to pay",
+      x.m.ready ? "ready in " + (x.m.ready < 1 ? "under 1 month" : "about " + dur(x.m.ready)) : "ready now",
+      x.v === null ? "no regular salary" : "5-year value " + signed(x.v)
+    ];
+    ol.appendChild(el("li",{class:"best-item"},[
+      el("span",{class:"rank",text:String(i+1)}),
+      el("div",{class:"best-body"},[
+        el("div",{class:"best-title"},[x.j.name + " ", el("span",{class:"muted",text:"· " + COUNTRIES[x.c].name})]),
+        el("div",{class:"best-why",text:why.join("  ·  ")}),
+        x.also.length ? el("div",{class:"best-why",text:"Next best countries: " + x.also.slice(0,2).join(", ")}) : null]),
+      el("button",{type:"button",class:"pick",text:"Open",onclick:function(){ openJob(x.j.id, x.c); }})]));
+  });
+  box.appendChild(ol);
+  box.appendChild(el("p",{class:"hint",text:"Uses " + pname(state.view) + "'s toolbox, the countries picked in part 4, and the jobs shown now. Unpaid (volunteer) and not-possible options are left out. Tap the button again to close."}));
+}
+
 /* ---------- what the table shows ---------- */
 var METRICS = [["ready","Readiness"],["cost","Cost left"],["even","Break-even time"],["pay","Yearly pay"],["value","5-year value"]];
 /* pay for a full year, counting only the months the job runs */
@@ -1523,7 +1640,9 @@ function renderCards(){
       el("div",{class:"label",text:"Checklist"}),
       steps,
       moneyBox,
-      el("dl",{class:"facts"},[el("dt",{text:"Time"}),el("dd",{text:d.time}),el("dt",{text:"Right to work"}),work]),
+      el("dl",{class:"facts"},[el("dt",{text:"Freedom"}),el("dd",{class:"dots",text:dots(FREEDOM[state.job])}),
+        el("dt",{text:"Stability"}),el("dd",{class:"dots",text:dots(STABILITY[state.job])}),
+        el("dt",{text:"Time"}),el("dd",{text:d.time}),el("dt",{text:"Right to work"}),work]),
       d.links.length ? el("div",{class:"label",text:"Official info"}) : null,
       d.links.length ? links : null
     ]);
@@ -1531,12 +1650,12 @@ function renderCards(){
   });
 }
 
-function renderAll(){ renderViewPick(); if(!state.view) return; renderToolbox(); renderMetricPick(); renderLegend(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
+function renderAll(){ renderViewPick(); if(!state.view) return; renderToolbox(); renderGoals(); renderMetricPick(); renderLegend(); renderFits(); renderMatrix(); renderPickers(); renderCards(); }
 
 document.getElementById("save").addEventListener("input", function(e){
   state.save = +e.target.value; save();
   document.getElementById("saveOut").textContent = state.save + "%";
-  renderFits(); renderMatrix(); renderCards();
+  renderGoals(); renderFits(); renderMatrix(); renderCards();
 });
 
 document.getElementById("reset").addEventListener("click", function(){

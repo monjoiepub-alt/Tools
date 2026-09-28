@@ -9,6 +9,8 @@ with the certificates two people (Aya and Max) already have.
 - **Start screen:** pick Aya or Max; the whole tool then shows only that person's
   toolbox, jobs and numbers ("Show all jobs" shows the other person's jobs too).
 - **Toolbox:** tap certificates and languages to mark them as have / in progress.
+- **Find my best option:** buttons for freedom, money, stability, lower investment,
+  quickest start and balanced; shows the top 3 different jobs with their best country.
 - **Who fits best:** the top job + country matches for each person.
 - **Overview table:** readiness, cost left, break-even time, yearly pay or 5-year value
   (take-home pay over 5 years minus training fees) for each job in each country.
