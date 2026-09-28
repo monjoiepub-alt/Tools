@@ -1180,7 +1180,7 @@ var PAY = {
   parkbuild:{FI:[3200,10],SE:[3300,10],NO:[4000,10],FR:[2300,10],JP:[1800,10]},
   parkmgr:  {FI:[3500,12],SE:[3700,12],NO:[4500,12],FR:[2800,12],JP:[2200,12]},
   parkown:  {FI:[3500,12],SE:[3700,12],NO:[4500,12],FR:[3000,12],JP:[2500,12]},
-  kinder:   {FI:[3000,12],SE:[3300,12],NO:[4400,12],FR:[2300,12],JP:[1500,12]},
+  kinder:   {FI:[2950,12],SE:[3300,12],NO:[4400,12],FR:[2300,12],JP:[1500,12]},
   youth:    {FI:[2900,12],SE:[2800,12],NO:[3800,12],FR:[1900,12],JP:[1500,12]},
   tour:     {FI:[2400,8], SE:[2500,8], NO:[3000,8], FR:[2200,8], JP:[1600,8]},
   hotel:    {FI:[2200,12],SE:[2400,12],NO:[3000,12],FR:[1900,12],JP:[1400,12]},
@@ -1189,9 +1189,9 @@ var PAY = {
   life:     {FI:[2400,12],SE:[2500,12],NO:[3300,12],FR:[2000,3], JP:[1300,2]},
   patrol:   {FI:[2400,5], SE:[2600,5], NO:[3000,5], FR:[2400,5], JP:[1400,4]},
   arborist: {FI:[3000,12],SE:[3100,12],NO:[4000,12],FR:[2200,12],JP:[1800,12]},
-  rope:     {FI:[3500,10],SE:[3600,10],NO:[4800,10],FR:[2600,10],JP:[1900,10]},
+  rope:     {FI:[3500,10],SE:[3600,10],NO:[4800,10],FR:[2500,10],JP:[1900,10]},
   rescue:   {FI:[3200,12],SE:null,    NO:null,     FR:[2300,12],JP:[1900,12]},
-  heli:     {FI:[5000,12],SE:[5200,12],NO:[6500,12],FR:[4500,12],JP:[3000,12]}
+  heli:     {FI:[5000,12],SE:[5500,12],NO:[7000,12],FR:[4500,12],JP:[3000,12]}
 };
 var BUSINESS = {cafeown:1, parkown:1};
 /* rough share of gross pay you take home after tax */
@@ -1318,13 +1318,28 @@ function renderFits(){
          el("span",null,[x.j.name+" ", el("span",{class:"muted",text:"· "+COUNTRIES[x.c].name})])])]));
     });
     box.appendChild(el("div",{class:"fitcol"},[
-      el("div",{class:"person-head"},[el("span",{class:"avatar av-"+p,text:initial(p)}), el("h3",{text:pname(p)+": "+{ready:"closest jobs",cost:"cheapest to start",even:"fastest to pay back"}[state.metric]})]),
+      el("div",{class:"person-head"},[el("span",{class:"avatar av-"+p,text:initial(p)}), el("h3",{text:pname(p)+": "+{ready:"closest jobs",cost:"cheapest to start",even:"fastest to pay back",pay:"best paid",value:"most worth it"}[state.metric]})]),
       ol]));
   });
 }
 
 /* ---------- what the table shows ---------- */
-var METRICS = [["ready","Readiness"],["cost","Cost left"],["even","Break-even time"]];
+var METRICS = [["ready","Readiness"],["cost","Cost left"],["even","Break-even time"],["pay","Yearly pay"],["value","5-year value"]];
+/* pay for a full year, counting only the months the job runs */
+function yearly(job, c){
+  var pay = PAY[job] && PAY[job][c];
+  if(!pay) return null;
+  return BUSINESS[job] ? pay[0]*12 : pay[0]*pay[1];
+}
+/* take-home money earned in the next 5 years, minus fees still to pay */
+function value5(job, c, p){
+  var m = money(job, c, p), y = yearly(job, c);
+  if(m.blocked || y === null) return null;
+  var takeHome = BUSINESS[job] ? y : y*NET[c];
+  var workYears = Math.max(0, 5 - m.ready/12);
+  return takeHome*workYears - m.cost;
+}
+function signed(n){ return (n < 0 ? "−" : "") + eur(Math.abs(n)); }
 function short(m){ return m < 12 ? Math.max(1, Math.round(m)) + " mo" : (Math.round(m/6)/2) + " y"; }
 function metricVal(job, c, p){
   if(state.metric === "ready"){
@@ -1335,6 +1350,16 @@ function metricVal(job, c, p){
   if(state.metric === "cost"){
     if(m.blocked) return {txt:"—", lv:"lo", sort:1e9, note:"not possible"};
     return {txt:eur(m.cost), lv: m.cost < 2000 ? "hi" : (m.cost < 15000 ? "md" : "lo"), sort:m.cost};
+  }
+  if(state.metric === "pay"){
+    var y = yearly(job, c);
+    if(y === null) return {txt:"—", lv:"lo", sort:1e9, note:"volunteer"};
+    return {txt:eur(y), lv: y >= 35000 ? "hi" : (y >= 20000 ? "md" : "lo"), sort:-y};
+  }
+  if(state.metric === "value"){
+    var v = value5(job, c, p);
+    if(v === null) return {txt:"—", lv:"lo", sort:1e9, note: m.blocked ? "not possible" : "volunteer"};
+    return {txt:signed(v), lv: v >= 80000 ? "hi" : (v >= 30000 ? "md" : "lo"), sort:-v};
   }
   if(m.breakEven === null) return {txt:"—", lv:"lo", sort:1e9, note: m.blocked ? "not possible" : "volunteer"};
   return {txt:short(m.breakEven), lv: m.breakEven < 12 ? "hi" : (m.breakEven < 36 ? "md" : "lo"), sort:m.breakEven};
@@ -1352,7 +1377,9 @@ function renderMetricPick(){
 function renderLegend(){
   var L = {ready:[["60%+","close"],["30–59%","some steps"],["0–29%","new path"]],
            cost:[["under €2k",""],["€2k–15k",""],["€15k+",""]],
-           even:[["under 1 year",""],["1–3 years",""],["3+ years",""]]}[state.metric];
+           even:[["under 1 year",""],["1–3 years",""],["3+ years",""]],
+           pay:[["€35k+ a year",""],["€20k–35k",""],["under €20k",""]],
+           value:[["€80k+",""],["€30k–80k",""],["under €30k",""]]}[state.metric];
   var lg = document.getElementById("legend"); lg.textContent = "";
   ["have","part","need"].forEach(function(k,i){
     lg.appendChild(el("span",null,[el("span",{class:"st "+k,text:L[i][0]}), L[i][1] ? " "+L[i][1] : ""]));
@@ -1360,7 +1387,9 @@ function renderLegend(){
   document.getElementById("metricHint").textContent = {
     ready:"Each box shows how much of the required list you already have. Tap a box to open that job below.",
     cost:"Each box shows the course fees still left to pay (rough estimate, fees only). Tap a box to open that job below.",
-    even:"Each box shows the time to get ready plus the time until the pay has paid back the training. Tap a box to open that job below."
+    even:"Each box shows the time to get ready plus the time until the pay has paid back the training. Tap a box to open that job below.",
+    pay:"Each box shows pay for one year before tax. Seasonal jobs only count the months they run, so a winter job and a summer job can be added together. Tap a box to open that job below.",
+    value:"Each box shows how much take-home pay you would earn in the next 5 years, minus the training still to pay. Time spent getting ready counts as time without this pay. Higher is more worth it. Tap a box to open that job below."
   }[state.metric];
 }
 
@@ -1463,6 +1492,12 @@ function renderCards(){
       rows.push(el("dt",{text:"Still to pay"}), el("dd",{text: m.blocked ? "Not possible: " + m.blocked : eur(m.cost) + (c === "JP" && m.cost ? " (≈ " + yen(m.cost) + ")" : "")}));
       rows.push(el("dt",{text:"Time to get ready"}), el("dd",{text: m.blocked ? "—" : (!m.ready ? "ready now" : (m.ready < 1 ? "less than 1 month" : "about " + dur(m.ready)))}));
       rows.push(el("dt",{text:"Pay"}), el("dd",{text:payTxt}));
+      var y = yearly(state.job, c), v5 = value5(state.job, c, p);
+      if(y !== null){
+        var home = m.biz ? y : y*NET[c];
+        rows.push(el("dt",{text:"Per year"}), el("dd",{text: eur(y) + (m.biz ? " profit" : " before tax, about " + eur(home) + " take-home") + (c === "JP" ? " (≈ " + yen(y) + ")" : "")}));
+      }
+      if(v5 !== null) rows.push(el("dt",{text:"5-year value"}), el("dd",{class:"even",text: signed(v5) + " (take-home in 5 years minus fees)"}));
       var evenTxt = m.breakEven === null ? "—" :
         (m.cost === 0 ? "Nothing to pay back" :
          (m.biz ? "Investment paid back after about " + dur(m.calMonths) + " of profit"
