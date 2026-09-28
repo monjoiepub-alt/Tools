@@ -8,7 +8,8 @@
   --accent:#1C5D78; --accent-ink:#FFFFFF; --accent-soft:#DCEBF1; --marker:#E9B824;
   --ok:#23794A; --ok-soft:#DDF0E3; --mid:#8A5A0E; --mid-soft:#F6EACB; --no:#A63D33; --no-soft:#F5DEDA;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
-  --b1:#8A5A0E; --b1-soft:#F6EACB;
+  --b1:#8A5A0E; --b1-soft:#F6EACB; --b1-fill:#E0A33A;
+  --st1:#F8E0AE; --st2:#D6E9F4; --st3:#E0D5F7; --st4:#CFEBD8; --b2-fill:#2a78d6;
   --band:#1C5D78;
   --font-body:"Lexend", "Segoe UI", system-ui, sans-serif;
   --font-display:"Bricolage Grotesque", "Lexend", system-ui, sans-serif;
@@ -20,7 +21,8 @@
     --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
     --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
     --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
-    --b1:#E3B45A; --b1-soft:#3A2E14;
+    --b1:#E3B45A; --b1-soft:#3A2E14; --b1-fill:#C98A2A;
+    --st1:#3B2F14; --st2:#172F3A; --st3:#2D2550; --st4:#183526; --b2-fill:#3987e5;
     --band:#7CC0DB;
   }
 }
@@ -30,7 +32,8 @@
   --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
   --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
   --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
-  --b1:#E3B45A; --b1-soft:#3A2E14;
+  --b1:#E3B45A; --b1-soft:#3A2E14; --b1-fill:#C98A2A;
+  --st1:#3B2F14; --st2:#172F3A; --st3:#2D2550; --st4:#183526; --b2-fill:#3987e5;
   --band:#7CC0DB;
 }
 *{box-sizing:border-box}
@@ -183,7 +186,7 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
     <span class="hint" id="viewHint"></span>
   </div>
   <div class="chartbox" id="fanBox">
-    <svg id="fan" viewBox="0 0 900 380" role="img" aria-label="Range of possible savings by age"></svg>
+    <svg id="fan" viewBox="0 0 900 400" role="img" aria-label="Range of possible savings by age"></svg>
     <div class="tip" id="fanTip" hidden></div>
   </div>
   <div class="legend" id="fanLegend"></div>
@@ -214,8 +217,14 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
     <p class="hint">Every euro you invest is split between the buckets. Their risks never mix: the Project fund can only hold safe things.</p>
   </div>
   <div class="panel">
+    <h3>Money you invest each year</h3>
+    <div id="periods" class="stackf"></div>
+    <div class="row"><button class="btn small" type="button" id="addPeriod">+ Add a period</button></div>
+    <label class="check"><input type="checkbox" id="p_grow" data-b="plan.grow">Raise what we invest with inflation each year</label>
+    <h3>How it is split</h3>
     <div class="fields">
       <div class="field"><label for="p_split">Share of new money into Bucket 1</label><div class="unit"><input type="number" id="p_split" data-k="plan.split" step="5" min="0" max="100"><span>%</span></div><small id="splitNote"></small></div>
+      <div class="field"><label for="p_extra">Extra per year into Bucket 1</label><div class="unit"><input type="number" id="p_extra" data-k="plan.extra1" step="500" min="0"><span>€</span></div><small>On top of the split, until the project</small></div>
       <div class="field"><label for="p_after">After the project</label>
         <select id="p_after" data-s="plan.afterGoal">
           <option value="b2">All new money goes to Retirement</option>
@@ -337,10 +346,7 @@ footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap
         <div class="field"><label for="p_b1s">Already in Bucket 1</label><div class="unit"><input type="number" id="p_b1s" data-k="plan.b1Start" step="100"><span>€</span></div></div>
         <div class="field"><label for="p_b2s">Already in Bucket 2</label><div class="unit"><input type="number" id="p_b2s" data-k="plan.b2Start" step="100"><span>€</span></div></div>
       </div>
-      <h3>Money you invest each year</h3>
-      <div id="periods" class="stackf"></div>
-      <div class="row"><button class="btn small" type="button" id="addPeriod">+ Add a period</button></div>
-      <label class="check"><input type="checkbox" id="p_grow" data-b="plan.grow">Raise what we invest with inflation each year</label>
+      <p class="hint">How much you invest each year is set in step 2.</p>
     </div>
     <div class="panel">
       <h3>Retirement</h3>
@@ -415,7 +421,7 @@ function defaults(){
   return {
     v:3,
     plan:{startAge:25, startYear:2027, b1Start:5400, b2Start:3600,
-      periods:[{from:25,to:55,amt:10000}], grow:true, split:60, afterGoal:"b2", moveLeftover:true, cashLastYear:true,
+      periods:[{from:25,to:55,amt:10000}], grow:true, split:60, extra1:0, afterGoal:"b2", moveLeftover:true, cashLastYear:true,
       retireAge:56, spend:30000, endAge:99, penAge:67, pension:0,
       infl:2, buyCost:0.2, tax:"fi", customTax:30, learn:true},
     goals:[{label:"New van",age:30,amt:15000},{label:"House down payment",age:30,amt:50000}],
@@ -567,7 +573,7 @@ function takeOut(P, want, bal, basis, i, inf){
 /* one future. f1/f2(stats, yearIndex) give each bucket's growth that year */
 function runPath(P, f1, f2, opt={}){
   let b1=P.b1, b2=P.b2, bas1=P.bas1, bas2=P.bas2, failAge=null, goalShort=false;
-  const split=(opt.split??(+P.p.split||0))/100, extra1=opt.extra1||0;
+  const split=(opt.split??(+P.p.split||0))/100, extra1=Math.max(0,opt.extra1??(+P.p.extra1||0));
   const rows=opt.keep?P.realRows.slice():null;
   for(let i=P.k;i<P.years;i++){
     const age=P.p.startAge+i, inf=P.inf[i], s1=b1, s2=b2;
@@ -602,7 +608,7 @@ function rng(seed){ let a=seed>>>0; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=M
 function normal(R){ let u=0; while(u===0) u=R(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*R()); }
 const DF=5, TSCALE=Math.sqrt((DF-2)/DF);
 function fatShock(R){ let c=0; for(let k=0;k<DF;k++){ const z=normal(R); c+=z*z; } return normal(R)/Math.sqrt(c/DF)*TSCALE; }
-function simulate(P, n, seed, light){
+function simulate(P, n, seed, light, opt={}){
   const R=rng(seed), Y=P.years, z1=new Float64Array(Y), z2=new Float64Array(Y);
   const T=light?null:new Float64Array(n*Y), A=light?null:new Float64Array(n*Y), B=light?null:new Float64Array(n*Y);
   let ok=0, gok=0; const fails=[];
@@ -610,7 +616,7 @@ function simulate(P, n, seed, light){
   const f2=(st,i)=>Math.exp(Math.log(1+st.net+P.L2.adj)+st.s*z2[i])-1;
   for(let j=0;j<n;j++){
     for(let i=P.k;i<Y;i++){ z1[i]=normal(R); z2[i]=fatShock(R); }
-    const res=runPath(P,f1,f2,{keep:!light});
+    const res=runPath(P,f1,f2,{...opt,keep:!light});
     if(!light) for(let i=0;i<Y;i++){ const r=res.rows[i]; A[j*Y+i]=r.e1/r.inf; B[j*Y+i]=r.e2/r.inf; T[j*Y+i]=(r.e1+r.e2)/r.inf; }
     if(res.failAge===null) ok++; else fails.push(res.failAge);
     if(!res.goalShort) gok++;
@@ -630,14 +636,20 @@ function safeSpend(P){
   for(let k=0;k<13;k++){ const mid=(lo+hi)/2; if(test(mid)) lo=mid; else hi=mid; }
   P.out=orig; return Math.floor(lo/100)*100;
 }
-/* what split (or extra money) fully pays the goals on the middle path */
+/* extra money per year (or the split) that pays the goals in 9 of 10 futures */
 function goalNeed(P){
   if(P.lastGoal===null) return null;
-  const ok=o=>!runPath(P,det1(P),det2(P),o).goalShort;
-  if(ok({split:0})) return {split:0};
-  if(ok({split:100})){ let lo=0,hi=100; for(let k=0;k<20;k++){ const m=(lo+hi)/2; if(ok({split:m})) hi=m; else lo=m; } return {split:Math.ceil(hi)}; }
-  let lo=0,hi=200000; for(let k=0;k<22;k++){ const m=(lo+hi)/2; if(ok({split:100,extra1:m})) hi=m; else lo=m; }
-  return {split:100, extra:Math.ceil(hi/100)*100};
+  const ok=o=>simulate(P,200,11,true,o).goalSuccess>=0.9;   // pays the goals in 9 of 10 futures
+  const sp=+P.p.split||0, res={};
+  // extra € per year needed on top of the current split
+  if(ok({extra1:0})) res.extra=0;
+  else { let lo=0,hi=200000; for(let k=0;k<18;k++){ const m=(lo+hi)/2; if(ok({extra1:m})) hi=m; else lo=m; } res.extra=Math.ceil(hi/50)*50; }
+  // or: the split that works with no extra money
+  if(ok({split:0,extra1:0})) res.split=0;
+  else if(ok({split:100,extra1:0})){ let lo=0,hi=100; for(let k=0;k<8;k++){ const m=(lo+hi)/2; if(ok({split:m,extra1:0})) hi=m; else lo=m; } res.split=Math.ceil(hi); }
+  else res.split=null;
+  res.now=+P.p.extra1||0; res.sp=sp;
+  return res;
 }
 
 /* ---------- inputs ---------- */
@@ -731,17 +743,28 @@ function renderBuckets(P, det, need){
   $("b2Legend").innerHTML=B2K.filter(k=>w0[k]>0).map(k=>`<span><i class="swatch" style="background:var(${ACOL[k]})"></i>${ANAME[k]} ${p0(w0[k])}</span>`).join("");
   $("b2Stats").innerHTML=statsDl(P.st2[0],P.infl);
   const sp=+S.plan.split||0;
-  $("splitNote").textContent=`Bucket 2 gets ${100-sp}%.`;
-  const box=$("goalBox");
+  const yr=P.inflow[0], ex=+S.plan.extra1||0;
+  $("splitNote").textContent=`Bucket 2 gets ${100-sp}%. This year: ${eur(yr*sp/100+ex)} → Bucket 1, ${eur(yr*(100-sp)/100)} → Bucket 2.`;
+  renderGoalBox(P,det,need);
+}
+function renderGoalBox(P,det,need){
+  const box=$("goalBox"), sp=+S.plan.split||0;
   if(P.lastGoal===null){ box.className="note"; box.innerHTML=`<span class="hint">Add a goal to use Bucket 1.</span>`; return; }
   const firstAge=Math.min(...goalAges()), first=det.rows[clamp(firstAge-S.plan.startAge,0,P.years-1)];
   const allGoal=S.goals.reduce((a,g)=>a+(+g.amt||0),0), short=det.rows.some(r=>r.gShort);
-  let msg=`<b>${short?"Not enough yet":"On track"}: about ${eur(first.s1/first.inf)} in Bucket 1 at age ${firstAge}. The goals cost ${eur(allGoal)}.</b>`;
+  let msg=`<b>${short?"Not enough yet":need&&need.extra>need.now?"Close, but not safe yet":"On track"}: about ${eur(first.s1/first.inf)} in Bucket 1 at age ${firstAge}. The goals cost ${eur(allGoal)}.</b>`;
   if(need){
-    if(need.extra) msg+=`<span>Even 100% of new money isn’t enough. You would need about ${eur(need.extra)} more per year into Bucket 1, or smaller goals, or a later date.</span>`;
-    else msg+=`<span>To fully pay the goals (tax on the small profit included), put at least <b>${need.split}%</b> of new money into Bucket 1. Now: ${sp}%.</span>`;
+    const more=Math.max(0,need.extra-need.now);
+    if(more>0){
+      msg+=`<span style="font-size:1.05rem">To pay the goals in 9 of 10 futures, you need <b>${eur(more)} more per year</b> into Bucket 1 (about ${eur(more/12)} a month) on top of your ${sp}% split.</span>
+        <div class="row"><button class="btn small" type="button" id="applyExtra" data-extra="${need.extra}">Add ${eur(more)} per year to Bucket 1</button></div>`;
+      msg+=need.split!=null?`<span class="hint">Or, with no extra money: put at least ${need.split}% of new money into Bucket 1.</span>`:`<span class="hint">Even 100% of your current yearly amount isn’t enough without extra money. Other options: smaller goals or a later date.</span>`;
+    } else {
+      msg+=`<span>Tax on the small profit is included.${need.now>0?` Your extra ${eur(need.now)} a year is in the plan.`:""}${need.split!=null&&need.split<sp&&!need.now?` The split could go down to ${need.split}%.`:""}</span>`;
+    }
   }
-  box.className="note "+(short?"warnbox":"goodbox"); box.innerHTML=msg;
+  if(!need) msg+=`<span class="hint">Working out how much you need…</span>`;
+  box.className="note "+(short||(need&&need.extra>need.now)?"warnbox":"goodbox"); box.innerHTML=msg;
 }
 function renderSplitMath(P){
   const box=$("splitMath");
@@ -791,7 +814,7 @@ function renderRebalance(P){
     rows+=`<tr class="sum"><td>New money this year</td><td class="num n"><input type="number" id="hd_${nk}" aria-label="New money this year" step="100" data-h="${nk}" value="${h[nk]??""}" placeholder="${Math.round(plannedNew)}"></td><td colspan="4" class="muted" style="font-weight:400">Empty = the plan’s amount (${eur(plannedNew)}). Total after: ${eur(T)}</td></tr>`;
     $(id).innerHTML=rows+"</tbody>";
   };
-  table(B1K, b1W(age), "new1", add*sh, "rb1");
+  table(B1K, b1W(age), "new1", add*sh+(inProject?(+S.plan.extra1||0)*(S.plan.grow?P.inf[i]:1):0), "rb1");
   table(B2K, glideW(age), "new2", add*(1-sh), "rb2");
 }
 function renderLearn(P){
@@ -841,43 +864,75 @@ function renderFan(){
   if(!lastMC) return;
   const {P,mc,orig}=lastMC, pc=mc.pc[view];
   $("viewTabs").innerHTML=Object.keys(VIEWS).map(k=>`<button class="tab" role="tab" type="button" aria-selected="${k===view}" data-view="${k}">${VIEWS[k]}</button>`).join("");
-  $("viewHint").textContent=view==="b1"?"A narrow band: safe money barely moves.":view==="b2"?"A wide band: stocks and crypto swing a lot.":"Both buckets together.";
-  const svg=$("fan"), W=900, H=380, m={l:62,r:18,t:16,b:34};
+  $("viewHint").textContent=view==="b1"?"A narrow band: safe money barely moves.":view==="b2"?"A wide band: stocks and crypto swing a lot.":"Both buckets together, split by colour.";
+  const svg=$("fan"), W=900, H=400, m={l:62,r:18,t:30,b:34}, ph=H-m.t-m.b;
   const pick=r=>view==="b1"?r.e1:view==="b2"?r.e2:r.e1+r.e2;
   const lastI=view==="b1"&&P.lastGoal!==null?Math.min(P.years-1,P.lastGoal-S.plan.startAge+2):P.years-1;
   const A=Array.from({length:lastI+1},(_,i)=>S.plan.startAge+i);
   const origReal=orig.rows.map(r=>pick(r)/r.inf), real=P.realRows.map(r=>pick(r)/r.inf);
+  const goalTot=S.goals.reduce((a,g)=>a+(+g.amt||0),0);
   let maxY=0;
-  for(let i=0;i<=lastI;i++) maxY=Math.max(maxY,pc[3][i]*1.25,pc[2][i],view==="b1"?pc[4][i]:0,P.k?Math.min(origReal[i],pc[4][i]):0);
+  for(let i=0;i<=lastI;i++) maxY=Math.max(maxY,pc[3][i]*1.35,pc[2][i],view==="b1"?pc[4][i]:0,P.k?Math.min(origReal[i],pc[4][i]):0);
   for(const v of real) maxY=Math.max(maxY,v);
+  if(view==="b1") maxY=Math.max(maxY,goalTot*1.1);
   maxY=niceMax(maxY||1);
   const x=a=>m.l+(a-A[0])/Math.max(1,A.at(-1)-A[0])*(W-m.l-m.r);
-  const y=v=>m.t+(1-clamp(v,0,maxY)/maxY)*(H-m.t-m.b);
-  const from=Math.min(Math.max(0,P.k-1),lastI), fa=A.slice(from);
-  const area=(lo,hi)=>"M"+fa.map((a,j)=>x(a)+","+y(hi[from+j])).join("L")+"L"+fa.map((a,j)=>x(a)+","+y(lo[from+j])).reverse().join("L")+"Z";
-  const line=(arr,a0=0)=>"M"+A.slice(a0).map((a,j)=>x(a)+","+y(arr[a0+j])).join("L");
-  let g=`<g class="axis">`;
+  const y=v=>m.t+(1-Math.max(v,0)/maxY)*ph;
+  const from=Math.min(Math.max(0,P.k-1),lastI);
+  const pts=(arr,i0=0)=>A.slice(i0).map((a,j)=>x(a)+","+y(arr[i0+j]));
+  const area=(lo,hi,i0=from)=>"M"+pts(hi,i0).join("L")+"L"+pts(lo,i0).reverse().join("L")+"Z";
+  const line=(arr,i0=0)=>"M"+pts(arr,i0).join("L");
+  // life stages as coloured backgrounds
+  const ga=goalAges(), g0=ga.length?Math.min(...ga):null, [gA]=glideAges(), ret=+S.plan.retireAge, end=A.at(-1);
+  const st=[];
+  if(g0!==null) st.push([A[0],g0,"Saving for van + house","Project","--st1"]);
+  st.push([g0??A[0],gA+1,"Growing","Growing","--st2"]);
+  st.push([gA+1,ret,"Lowering risk","Lower risk","--st3"]);
+  st.push([ret,end,"Retired","Retired","--st4"]);
+  let g=`<defs><clipPath id="plotClip"><rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${ph}"/></clipPath></defs>`;
+  for(const [a0,a1,full,sh,col] of st){
+    const s0=Math.max(a0,A[0]), s1=Math.min(a1,end); if(s1<=s0) continue;
+    const w=x(s1)-x(s0), lbl=w>full.length*7.2+10?full:w>sh.length*7.2+10?sh:"";
+    g+=`<rect x="${x(s0)}" y="${m.t-6}" width="${w}" height="${ph+6}" fill="var(${col})"/>`;
+    if(lbl) g+=`<text x="${x(s0)+6}" y="${m.t-12}" fill="var(--ink)" font-size="12.5" font-weight="600" font-family="var(--font-body)">${lbl}</text>`;
+  }
+  g+=`<g class="axis">`;
   for(let k=0;k<=4;k++){ const v=maxY*k/4; g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke-dasharray="${k?"2 4":""}"/><text x="${m.l-8}" y="${y(v)+4}" text-anchor="end">${short(v)}</text>`; }
   const step=A.length>50?10:A.length>20?5:1;
   for(const a of A) if(a%step===0) g+=`<text x="${x(a)}" y="${H-10}" text-anchor="middle">${a}</text>`;
-  g+=`</g>`;
-  const marks=[]; if(P.lastGoal!==null) marks.push([Math.min(...goalAges()),"Van + house"]); marks.push([S.plan.retireAge,"Retire"]);
-  marks.forEach(([a,l],j)=>{ if(a>=A[0]&&a<=A.at(-1)) g+=`<line x1="${x(a)}" x2="${x(a)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${x(a)+6}" y="${m.t+12+j*16}" fill="var(--muted)" font-size="12" font-family="var(--font-body)">${l} at ${a}</text>`; });
-  g+=`<path d="${area(pc[0],pc[4])}" fill="var(--band)" fill-opacity=".16"/><path d="${area(pc[1],pc[3])}" fill="var(--band)" fill-opacity=".30"/>`;
-  if(P.k) g+=`<path d="${line(origReal)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>`;
-  g+=`<path d="${line(pc[2],from)}" fill="none" stroke="var(--band)" stroke-width="2.5"/>`;
-  if(P.k){ const pts=P.realRows.filter(r=>r.age<=A.at(-1)).map((r,i)=>[x(r.age),y(real[i])]); if(pts.length>1) g+=`<path d="M${pts.map(p=>p.join(",")).join("L")}" fill="none" stroke="var(--ink)" stroke-width="2"/>`; for(const [px,py] of pts) g+=`<circle cx="${px}" cy="${py}" r="5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>`; }
-  g+=`<circle cx="${x(A.at(-1))}" cy="${y(pc[2][lastI])}" r="4.5" fill="var(--band)" stroke="var(--surface)" stroke-width="2"/>`;
-  g+=`<line id="cross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-opacity=".5" visibility="hidden"/><rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
+  g+=`</g><g clip-path="url(#plotClip)">`;
+  const fillC=view==="b1"?"--b1-fill":"--b2-fill";
+  if(view==="total"){
+    const m1=mc.pc.b1[2], m2=mc.pc.b2[2];
+    const split=pc[2].map((t,i)=>{ const s=m1[i]+m2[i]; return s>0?t*m1[i]/s:0; });
+    g+=`<path d="${area(pc[0],pc[4])}" fill="var(--band)" fill-opacity=".10"/>`;
+    g+=`<path d="${area(split,pc[2],0)}" fill="var(--b2-fill)" fill-opacity=".8" stroke="var(--surface)" stroke-width="1.5"/>`;
+    g+=`<path d="${area(new Array(pc[2].length).fill(0),split,0)}" fill="var(--b1-fill)" fill-opacity=".9" stroke="var(--surface)" stroke-width="1.5"/>`;
+  } else {
+    g+=`<path d="${area(pc[0],pc[4])}" fill="var(${fillC})" fill-opacity=".16"/><path d="${area(pc[1],pc[3])}" fill="var(${fillC})" fill-opacity=".32"/>`;
+    g+=`<path d="${line(pc[2],from)}" fill="none" stroke="var(${fillC})" stroke-width="3"/>`;
+  }
+  g+=`<path d="${line(pc[4],from)}" fill="none" stroke="var(--ok)" stroke-width="2" stroke-dasharray="7 5"/>`;
+  g+=`<path d="${line(pc[0],from)}" fill="none" stroke="var(--no)" stroke-width="2" stroke-dasharray="7 5"/>`;
+  if(view==="b1" && goalTot>0){ g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(goalTot)}" y2="${y(goalTot)}" stroke="var(--no)" stroke-width="2"/><text x="${W-m.r-6}" y="${y(goalTot)-7}" text-anchor="end" fill="var(--no)" font-size="13" font-weight="600" font-family="var(--font-body)">Goals: ${eur(goalTot)}</text>`; }
+  if(P.k) g+=`<path d="${line(origReal)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="3 4"/>`;
+  if(P.k){ const rp=P.realRows.filter(r=>r.age<=end).map((r,i)=>[x(r.age),y(real[i])]); if(rp.length>1) g+=`<path d="M${rp.map(p=>p.join(",")).join("L")}" fill="none" stroke="var(--ink)" stroke-width="2"/>`; for(const [px,py] of rp) g+=`<circle cx="${px}" cy="${py}" r="5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>`; }
+  g+=`</g><circle cx="${x(end)}" cy="${y(pc[2][lastI])}" r="5" fill="var(${view==="total"?"--b2-fill":fillC})" stroke="var(--surface)" stroke-width="2"/>`;
+  g+=`<line id="cross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-opacity=".6" visibility="hidden"/><rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${ph}" fill="transparent"/>`;
   svg.innerHTML=g;
-  fan={A,x,W,pc,origReal,real,P};
+  fan={A,x,W,pc,mc,origReal,real,P};
   const hit=$("hit");
   hit.addEventListener("pointermove",fanHover); hit.addEventListener("pointerdown",fanHover);
   hit.addEventListener("pointerleave",()=>{$("fanTip").hidden=true;$("cross").setAttribute("visibility","hidden");});
-  $("fanLegend").innerHTML=`<span><i class="swatch" style="background:var(--band);opacity:.25"></i>9 in 10 futures land in here</span>
-    <span><i class="swatch" style="background:var(--band);opacity:.5"></i>Half of futures land in here</span>
-    <span><i class="swatch" style="background:var(--band);height:3px"></i>Middle future</span>
-    ${P.k?`<span><i class="swatch" style="background:var(--ink);border-radius:50%"></i>Your real results</span><span><i class="swatch" style="background:var(--muted);height:3px"></i>Original plan (before real results)</span>`:""}`;
+  const sw=(c,o,extra="")=>`<i class="swatch" style="background:var(${c});opacity:${o};${extra}"></i>`;
+  const dash=c=>`<i class="swatch" style="height:0;border-top:3px dashed var(${c});border-radius:0;width:18px"></i>`;
+  $("fanLegend").innerHTML=(view==="total"
+      ? `<span>${sw("--b1-fill",.9)}Bucket 1 · Project (middle future)</span><span>${sw("--b2-fill",.8)}Bucket 2 · Retirement (middle future)</span><span>${sw("--band",.2)}9 in 10 futures</span>`
+      : `<span>${sw(fillC,.25)}9 in 10 futures</span><span>${sw(fillC,.5)}Half of futures</span><span>${sw(fillC,1,"height:3px")}Middle future</span>`)+
+    `<span>${dash("--ok")}Good case (1 in 20)</span><span>${dash("--no")}Bad case (1 in 20)</span>`+
+    (view==="b1"&&goalTot>0?`<span>${sw("--no",1,"height:3px")}Goal amount</span>`:"")+
+    (P.k?`<span>${sw("--ink",1,"border-radius:50%")}Your real results</span><span>${dash("--muted")}Original plan</span>`:"")+
+    st.filter(([a0,a1])=>Math.min(a1,end)>Math.max(a0,A[0])).map(([a0,a1,full,,col])=>`<span>${sw(col,1,"outline:1px solid var(--line)")}${full} (${Math.max(a0,A[0])}–${Math.min(a1,end)})</span>`).join("");
 }
 function placeTip(tip, box, svgRect, cx, W){
   tip.hidden=false;
@@ -886,12 +941,12 @@ function placeTip(tip, box, svgRect, cx, W){
 }
 function nearest(ages,x,sx){ let i=0,best=1e9; ages.forEach((a,k)=>{const d=Math.abs(x(a)-sx); if(d<best){best=d;i=k;}}); return i; }
 function fanHover(ev){
-  const {A,x,W,pc,origReal,real,P}=fan, rect=$("fan").getBoundingClientRect();
+  const {A,x,W,pc,mc,origReal,real,P}=fan, rect=$("fan").getBoundingClientRect();
   const i=nearest(A,x,(ev.clientX-rect.left)/rect.width*W), cx=x(A[i]), c=$("cross");
   c.setAttribute("x1",cx); c.setAttribute("x2",cx); c.setAttribute("visibility","visible");
   $("fanTip").innerHTML=i<P.k
     ? `<b>Age ${A[i]} · ${S.plan.startYear+i} · Real</b><div class="r"><span>Value</span><b>${eur(real[i])}</b></div><div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`
-    : `<b>Age ${A[i]} · ${S.plan.startYear+i}</b><div class="r"><span>Good case</span><span>${eur(pc[4][i])}</span></div><div class="r"><span>Middle</span><b>${eur(pc[2][i])}</b></div><div class="r"><span>Bad case</span><span>${eur(pc[0][i])}</span></div>${P.k?`<div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`:""}`;
+    : `<b>Age ${A[i]} · ${S.plan.startYear+i}</b><div class="r"><span>Good case</span><span>${eur(pc[4][i])}</span></div><div class="r"><span>Middle</span><b>${eur(pc[2][i])}</b></div><div class="r"><span>Bad case</span><span>${eur(pc[0][i])}</span></div>${view==="total"?`<div class="r"><span><i class="swatch" style="background:var(--b1-fill)"></i>Bucket 1 middle</span><span>${eur(mc.pc.b1[2][i])}</span></div><div class="r"><span><i class="swatch" style="background:var(--b2-fill)"></i>Bucket 2 middle</span><span>${eur(mc.pc.b2[2][i])}</span></div>`:""}${P.k?`<div class="r"><span>Original plan</span><span>${eur(origReal[i])}</span></div>`:""}`;
   placeTip($("fanTip"),$("fanBox"),rect,cx,W);
 }
 
@@ -935,7 +990,7 @@ function update(full){
   memo.clear();
   const P=prep();
   const det=runPath(P,det1(P),det2(P),{keep:true});
-  renderLearn(P); updateLogResults(P); renderBuckets(P,det,goalNeed(P)); renderSplitMath(P);
+  renderLearn(P); updateLogResults(P); renderBuckets(P,det,null); renderSplitMath(P);
   renderGlideInfo(P); renderGlide(P); renderRebalance(P); renderTable(det);
   $("customTaxBox").hidden=S.plan.tax!=="custom";
   $("taxNote").textContent={
@@ -950,6 +1005,7 @@ function update(full){
     const P0=prep({noActuals:true}), orig=runPath(P0,det1(P0),det2(P0),{keep:true});
     const safe=safeSpend(P2);
     lastMC={P:P2,mc,orig}; renderTiles(P2,mc,safe,orig); renderFan();
+    renderGoalBox(P2, runPath(P2,det1(P2),det2(P2),{keep:true}), goalNeed(P2));
   }, full?0:250);
 }
 
@@ -1037,6 +1093,7 @@ document.addEventListener("click",async e=>{
   const t=e.target.closest("button"); if(!t) return;
   const d=t.dataset;
   if(d.view){ view=d.view; renderFan(); return; }
+  if(t.id==="applyExtra"){ S.plan.extra1=+d.extra; $("p_extra").value=S.plan.extra1; save(); update(); return; }
   if(d.delp!=null){ S.plan.periods.splice(+d.delp,1); renderPeriods(); }
   else if(d.delg!=null){ S.goals.splice(+d.delg,1); renderGoals(); }
   else if(d.dely){ delete S.actuals[d.dely]; renderLog(); }
