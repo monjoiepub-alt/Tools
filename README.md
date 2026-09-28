@@ -38,4 +38,7 @@ husband, his family in Wallonia and strangers. Built like Hanasō.
   spaced repetition. An easy pronunciation help fades once you know all the sounds in a card.
 - **Audio:** recorded offline for every card (SVOX Pico), phone voice only as a backup.
   See `parlons/tools/README.md` to rebuild it.
-- Progress is saved in the browser; Settings has a backup code.
+- **Progress** is saved privately in your Claude account (db capability) and on the phone; the newer
+  save wins when the app opens. Settings shows where it is saved and has a backup code.
+- **Game:** XP and levels, sound stickers (hidden until collected), badges, a card album, a bonus chest
+  after each lesson, and a reward shop where XP buys real rewards from Max (plus your own rewards).

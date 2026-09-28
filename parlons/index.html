@@ -5,32 +5,38 @@
 <meta name="theme-color" content="#1E6470">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600&display=swap">
 <style>
 :root{
-  --bg:#EEF1EE; --surface:#FFFFFF; --surface-2:#F3F6F4; --ink:#1B2426; --muted:#4F5E60; --line:#D3DCD9;
-  --accent:#1E6470; --accent-ink:#FFFFFF; --accent-soft:#D5E9EC; --stamp:#D0662F; --be:#D9A300; --be-soft:#FBF1D2;
-  --again:#B3372B; --hard:#9A6208; --good:#2E7D4F;
+  --bg:#FBF7FF; --surface:#FFFFFF; --surface-2:#F6F1FF; --ink:#2E2A3B; --muted:#675F7E; --line:#E8DFF7;
+  --accent:#6F58D2; --accent-ink:#FFFFFF; --accent-soft:#EEE8FF; --stamp:#F28DB2; --be:#E3B21A; --be-soft:#FFF6D6;
+  --again:#BE3D69; --hard:#9A6500; --good:#2A8560;
+  --pink:#FFE3EE; --mint:#DCF5E9; --peach:#FFE9D7; --sky:#DEEEFF; --butter:#FFF4C9; --lav:#EFE9FF;
+  --grad:linear-gradient(135deg,#CDBDFF 0%,#FFC6DC 100%); --grad-ink:#2E2A3B;
   --font-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  --font-display:"Lexend", "Atkinson Hyperlegible", system-ui, sans-serif;
-  --shadow:0 1px 2px rgba(27,36,38,.06), 0 6px 20px rgba(27,36,38,.07);
+  --font-display:"Fredoka", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --shadow:0 1px 2px rgba(111,88,210,.07), 0 8px 24px rgba(111,88,210,.10);
   --fs:18px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#0F1618; --surface:#172124; --surface-2:#1D292C; --ink:#E4ECEC; --muted:#A3B3B5; --line:#2A3A3D;
-    --accent:#7CC4CF; --accent-ink:#0F1618; --accent-soft:#16363C; --stamp:#F08A5D; --be:#E8C04A; --be-soft:#2E2A18;
-    --again:#F08A7E; --hard:#E3B45A; --good:#6FCF97;
-    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    --bg:#1C1926; --surface:#262233; --surface-2:#2F2A40; --ink:#EFEAFB; --muted:#B5ACCB; --line:#3B3550;
+    --accent:#BBAAFF; --accent-ink:#1C1926; --accent-soft:#352D55; --stamp:#F59BBE; --be:#F0CB55; --be-soft:#3A3320;
+    --again:#FF9DB9; --hard:#F2C66B; --good:#7FDDB2;
+    --pink:#4A2A3A; --mint:#1F3F33; --peach:#45321F; --sky:#20344A; --butter:#403A1E; --lav:#332B52;
+    --grad:linear-gradient(135deg,#5B4BB5 0%,#9C4F75 100%); --grad-ink:#FFFFFF;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#0F1618; --surface:#172124; --surface-2:#1D292C; --ink:#E4ECEC; --muted:#A3B3B5; --line:#2A3A3D;
-  --accent:#7CC4CF; --accent-ink:#0F1618; --accent-soft:#16363C; --stamp:#F08A5D; --be:#E8C04A; --be-soft:#2E2A18;
-  --again:#F08A7E; --hard:#E3B45A; --good:#6FCF97;
-  --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  --bg:#1C1926; --surface:#262233; --surface-2:#2F2A40; --ink:#EFEAFB; --muted:#B5ACCB; --line:#3B3550;
+  --accent:#BBAAFF; --accent-ink:#1C1926; --accent-soft:#352D55; --stamp:#F59BBE; --be:#F0CB55; --be-soft:#3A3320;
+  --again:#FF9DB9; --hard:#F2C66B; --good:#7FDDB2;
+  --pink:#4A2A3A; --mint:#1F3F33; --peach:#45321F; --sky:#20344A; --butter:#403A1E; --lav:#332B52;
+  --grad:linear-gradient(135deg,#5B4BB5 0%,#9C4F75 100%); --grad-ink:#FFFFFF;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
 }
 :root.big-text{--fs:20px}
 *{box-sizing:border-box}
@@ -266,14 +272,81 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 .mix .ks{color:var(--accent);font-weight:700}
 .mix .hp{color:var(--muted);font-weight:400}
 .mix .hp .nas{opacity:.55}
-@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+/* ---- Cute pastel layer ---- */
+.panel{border-radius:26px}
+.card{border-radius:28px}
+.btn{border-radius:18px}
+.btn-primary{background:var(--grad);color:var(--grad-ink)}
+.btn-soft{background:var(--lav);color:var(--accent)}
+.mark{background:var(--grad);color:var(--grad-ink);font-size:24px;border-radius:16px 16px 16px 5px;width:46px;height:42px}
+.big-mark,.mission-mini .mark{background:var(--pink);color:var(--ink)}
+.pill{background:var(--peach);color:var(--ink)}
+.tabs-in{grid-template-columns:repeat(5,1fr)}
+.tab .ti{font-size:22px;line-height:1;width:44px;height:30px;display:grid;place-items:center;border-radius:99px;transition:background .15s}
+.tab[aria-current="page"] .ti{background:var(--lav)}
+.emo{flex:none;width:46px;height:46px;border-radius:15px;background:color-mix(in srgb, var(--c) 28%, var(--surface));display:grid;place-items:center;font-size:25px;line-height:1}
+.group-h .gemo{font-size:20px}
+.chip.deckchip::before{display:none}
+.chip.deckchip{background:color-mix(in srgb, var(--c) 22%, var(--surface));border-color:transparent}
+.pron-bubble{display:inline-flex;align-items:baseline;gap:8px;background:var(--lav);border-radius:18px;padding:8px 16px;font-size:21px;color:var(--ink);max-width:100%;flex-wrap:wrap;justify-content:center}
+.pron .st{font-weight:700;color:var(--accent)}
+.pron .dot{opacity:.45;margin-inline:.14em}
+.pron .nas{opacity:.5;font-size:.8em;vertical-align:.25em}
+.kn{background:var(--mint);color:var(--good);border-radius:5px;box-shadow:0 0 0 2px var(--mint)}
+.grade{border:0;box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--g) 35%, transparent)}
+.grade[data-g="0"]{background:var(--pink)} .grade[data-g="1"]{background:var(--butter)} .grade[data-g="2"]{background:var(--mint)}
+.wd i.talk,.stamp,.stamp-mini{color:var(--ink)}
+.won{background:var(--mint);color:var(--good)}
+.chest{background:var(--butter);border-radius:16px;padding:10px 14px;font-size:17px;display:flex;gap:10px;align-items:center}
+.chest .ce{font-size:30px;animation:pop .6s ease-out}
+@keyframes pop{0%{transform:scale(.3) rotate(-20deg)}70%{transform:scale(1.2) rotate(8deg)}100%{transform:scale(1)}}
+.sticker-new{font-size:64px;line-height:1;animation:pop .6s ease-out}
+.sgrid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.st-tile{border-radius:18px;padding:10px 6px;background:var(--surface);border:1px solid var(--line);color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:16px}
+.st-tile .se{font-size:30px;line-height:1.1}
+.st-tile.got{background:var(--lav);border-color:transparent;color:var(--ink)}
+.st-tile.locked{background:var(--surface-2);color:var(--muted);border-style:dashed}
+.st-tile.locked .se{filter:grayscale(1);opacity:.6}
+.badge > .bi{font-size:24px;background:var(--surface-2)}
+.badge.got{border-color:transparent;background:var(--butter)}
+.badge.got > .bi{background:var(--surface)}
+.shop-head{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;background:var(--grad);color:var(--grad-ink);border:0}
+.shop-head .muted{color:inherit;opacity:.8}
+.wallet{background:var(--surface);color:var(--ink);border-radius:18px;padding:8px 14px;text-align:center;display:flex;flex-direction:column}
+.wallet b{font-family:var(--font-display);font-size:26px;font-variant-numeric:tabular-nums;line-height:1.1}
+.wallet span{font-size:13px;color:var(--muted)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.reward{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 12px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;position:relative}
+.reward.can{border-color:transparent;background:color-mix(in srgb, var(--mint) 70%, var(--surface))}
+.reward .r-emo{font-size:40px;line-height:1.1}
+.reward b{font-size:16px;line-height:1.3}
+.reward .price{font-family:var(--font-display);font-weight:600;color:var(--accent)}
+.reward .need{font-size:13.5px;color:var(--muted)}
+.reward .btn{min-height:44px;padding:8px 14px;font-size:16px;width:100%}
+.reward .rm{position:absolute;top:6px;right:6px;border:0;background:none;font-size:15px;cursor:pointer;color:var(--muted);padding:4px}
+.rbar{width:100%;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.rbar i{display:block;height:100%;background:var(--grad)}
+.coupons{display:flex;flex-direction:column;gap:8px}
+.coupon-row{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;background:var(--surface);border:2px dashed var(--stamp);border-radius:20px;padding:12px 14px}
+.coupon-row .ce{font-size:34px;grid-row:span 2}
+.coupon-row .btn-row{grid-column:1 / -1}
+.coupon-row .btn{min-height:44px;font-size:16px;padding:8px 12px}
+.coupon{background:var(--grad);color:var(--grad-ink);border-radius:30px;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:10px;max-width:420px;width:100%;border:3px dashed rgba(255,255,255,.7)}
+.coupon .c-emo{font-size:84px;line-height:1}
+.coupon .c-title{font-family:var(--font-display);font-size:18px;letter-spacing:.12em;text-transform:uppercase}
+.coupon .c-name{font-family:var(--font-display);font-size:30px;font-weight:600;line-height:1.2}
+.field{display:flex;flex-direction:column;gap:6px}
+.field input{font:inherit;padding:10px 12px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+.sync{display:flex;gap:10px;align-items:flex-start;font-size:16px}
+.sync .se{font-size:26px;line-height:1.2}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 @media (max-width:380px){.ladder{grid-template-columns:1fr}.grade{font-size:14px}}
 </style>
 
 <div class="app">
   <header class="top">
     <div class="brand">
-      <span class="mark" aria-hidden="true">P</span>
+      <span class="mark" aria-hidden="true">🧇</span>
       <div>
         <div class="wordmark">Parlons</div>
         <div class="tagline">French for Max, his family and everyone else</div>
@@ -286,10 +359,11 @@ textarea{width:100%;min-height:90px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 
 <nav class="tabs" aria-label="Sections">
   <div class="tabs-in">
-    <button class="tab" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/></svg>Study</button>
-    <button class="tab" data-tab="phrases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Phrases</button>
-    <button class="tab" data-tab="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progress</button>
-    <button class="tab" data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Settings</button>
+    <button class="tab" data-tab="home"><span class="ti" aria-hidden="true">📚</span>Study</button>
+    <button class="tab" data-tab="phrases"><span class="ti" aria-hidden="true">💬</span>Phrases</button>
+    <button class="tab" data-tab="shop"><span class="ti" aria-hidden="true">🎁</span>Shop</button>
+    <button class="tab" data-tab="progress"><span class="ti" aria-hidden="true">🏆</span>Album</button>
+    <button class="tab" data-tab="settings"><span class="ti" aria-hidden="true">⚙️</span>Settings</button>
   </div>
 </nav>
 
@@ -1196,7 +1270,7 @@ const SOUNDS = [
    CAPS = the stressed (slightly longer) syllable · ⁿ = nasal (say it through the nose, no real n)
    ü = Finnish y · ö = Finnish ö · zh = the s in "measure" · r = throat r
    ============================================================ */
-const PRON = /*PRON*/{"Bonjour !":"bohⁿ-ZHOOR!","Bonsoir !":"bohⁿ-SWAR!","Salut !":"sa-LÜ!","Merci !":"mehr-SEE!","Merci beaucoup !":"mehr-see boh-KOO!","De rien.":"duh RYEHⁿ","S'il vous plaît.":"seel voo PLEH","Oui.":"WEE","Non.":"NOHⁿ","Pardon !":"par-DOHⁿ!","Excusez-moi.":"ehks-kü-zay-MWA","Je suis désolée.":"zhuh swee day-zoh-LAY","Je ne comprends pas.":"zhuh nuh kohⁿ-prahⁿ PA","Je comprends.":"zhuh kohⁿ-PRAHⁿ","Vous pouvez répéter, s'il vous plaît ?":"voo poo-vay ray-pay-TAY, seel voo PLEH?","Plus lentement, s'il vous plaît.":"plü lahⁿt-MAHⁿ, seel voo PLEH","Comment on dit en français ?":"ko-mahⁿ ohⁿ dee tahⁿ frahⁿ-SEH?","Qu'est-ce que ça veut dire ?":"kehs-kuh sa vö DEER?","Je parle un peu français.":"zhuh par luhⁿ pö frahⁿ-SEH","Vous parlez anglais ?":"voo par-lay zahⁿ-GLEH?","Au revoir !":"oh ruh-VWAR!","Bonne journée !":"bon zhoor-NAY!","Bonne soirée !":"bon swa-RAY!","À bientôt !":"a byehⁿ-TOH!","D'accord.":"da-KOR","Bonjour, mon cœur.":"bohⁿ-ZHOOR, mohⁿ KÖR","Bonne nuit.":"bon NWEE","Je t'aime.":"zhuh TEHM","Je t'aime, Max.":"zhuh TEHM, MAKS","Moi aussi, je t'aime.":"mwa oh-SEE, zhuh TEHM","Max, tu viens ?":"MAKS, tü VYEHⁿ?","Bonne nuit, Max. Dors bien.":"bon NWEE, MAKS dor BYEHⁿ","Tu me manques.":"tü muh MAHⁿK","Ça va ?":"sa VA?","Ça va, et toi ?":"sa VA, ay TWA?","Tu as bien dormi ?":"tü a byehⁿ dor-MEE?","Tu as faim ?":"tü a FEHⁿ?","J'ai faim.":"zhay FEHⁿ","Qu'est-ce qu'on mange ?":"kehs kohⁿ MAHⁿZH?","Je suis fatiguée.":"zhuh swee fa-tee-GAY","Tu veux un café ?":"tü vö zuhⁿ ka-FAY?","Qu'est-ce que tu fais ?":"kehs-kuh tü FEH?","Tu viens avec ?":"tü vyehⁿ za-VEHK?","On y va ?":"ohⁿ nee VA?","Attends !":"a-TAHⁿ!","J'arrive !":"zha-REEV!","Tu peux m'aider ?":"tü pö meh-DAY?","Comment on dit ça en français ?":"ko-mahⁿ ohⁿ dee sa ahⁿ frahⁿ-SEH?","Corrige-moi, s'il te plaît.":"koh-reezh-MWA, seel tuh PLEH","Parle plus lentement, s'il te plaît.":"parl plü lahⁿt-MAHⁿ, seel tuh PLEH","Je rentre à six heures.":"zhuh rahⁿ tra see ZÖR","Tu rentres quand ?":"tü rahⁿtr KAHⁿ?","C'était comment, ta journée ?":"say-teh ko-MAHⁿ, ta zhoor-NAY?","Ce n'est pas grave.":"suh neh pa GRAV","Pardon, je me suis trompée.":"par-DOHⁿ, zhuh muh swee trohⁿ-PAY","Tu es trop mignon.":"tü eh troh mee-NYOHⁿ","Bisous !":"bee-ZOO!","À tantôt !":"a tahⁿ-TOH!","Salut, ça va ?":"sa-LÜ, sa VA?","Ça va bien, merci.":"sa va BYEHⁿ, mehr-SEE","Enchantée !":"ahⁿ-shahⁿ-TAY!","Ça fait plaisir de te voir !":"sa feh pleh-zeer duh tuh VWAR!","Ça fait longtemps !":"sa feh lohⁿ-TAHⁿ!","Merci pour l'invitation.":"mehr-see poor lehⁿ-vee-ta-SYOHⁿ","C'est pour toi.":"seh poor TWA","C'est un petit cadeau du Japon.":"seh tuhⁿ puh-tee ka-doh dü zha-POHⁿ","Je peux aider ?":"zhuh pö zeh-DAY?","Tu as besoin d'aide ?":"tü a buh-zwehⁿ DEHD?","Ta maison est très jolie.":"ta meh-zohⁿ eh treh zhoh-LEE","J'apprends le français.":"zha-prahⁿ luh frahⁿ-SEH","Je fais des fautes, désolée.":"zhuh feh day FOHT, day-zoh-LAY","Tu peux répéter, s'il te plaît ?":"tü pö ray-pay-TAY, seel tuh PLEH?","Tu peux parler un peu plus lentement ?":"tü pö par-lay uhⁿ pö plü lahⁿt-MAHⁿ?","Je n'ai pas compris.":"zhuh nay pa kohⁿ-PREE","Qu'est-ce que tu as dit ?":"kehs-kuh tü a DEE?","Comment ça va, le travail ?":"ko-mahⁿ sa VA, luh tra-VAHY?","Et les enfants, ça va ?":"ay lay zahⁿ-FAHⁿ, sa VA?","On est très contents d'être ici.":"ohⁿ neh treh kohⁿ-tahⁿ deh tree-SEE","Tu viens nous voir en Finlande ?":"tü vyehⁿ noo vwa rahⁿ fehⁿ-LAHⁿD?","Il fait moins froid qu'en Finlande !":"eel feh mwehⁿ frwa kahⁿ fehⁿ-LAHⁿD!","On fait une photo ?":"ohⁿ feh tün foh-TOH?","C'était super, merci pour tout !":"say-teh sü-PEHR, mehr-see poor TOO!","Bonne continuation !":"bon kohⁿ-tee-nwa-SYOHⁿ!","Allez, à la prochaine !":"a-LAY, a la proh-SHEHN!","Bonne nuit, dors bien !":"bon NWEE, dor BYEHⁿ!","Christelle, c'est ma belle-mère.":"krees-TEHL, seh ma behl-MEHR","Bonjour Christelle ! Ça va ?":"bohⁿ-zhoor krees-TEHL! sa VA?","Christelle, c'est délicieux !":"krees-TEHL, seh day-lee-SYÖ!","Merci pour tout, Christelle.":"mehr-see poor TOO, krees-TEHL","Quentin, c'est le frère de mon mari.":"kahⁿ-TEHⁿ, seh luh frehr duh mohⁿ ma-REE","Salut Quentin ! Tu viens avec ?":"sa-lü kahⁿ-TEHⁿ! tü vyehⁿ za-VEHK?","Sol, c'est la grand-mère de mon mari.":"SOL, seh la grahⁿ-mehr duh mohⁿ ma-REE","Sol, tu veux un café ?":"SOL, tü vö zuhⁿ ka-FAY?","Tu as appelé Mamy ?":"tü a za-play ma-MEE?","Mamy va bien ?":"ma-mee va BYEHⁿ?","Christian, c'est le grand-père de mon mari.":"krees-TYAHⁿ, seh luh grahⁿ-pehr duh mohⁿ ma-REE","Christian, tu me racontes une histoire ?":"krees-TYAHⁿ, tü muh ra-kohⁿt zü nees-TWAR?","Chantal, c'est la marraine de mon mari.":"shahⁿ-TAL, seh la ma-rehn duh mohⁿ ma-REE","Merci, Chantal, c'est très gentil.":"mehr-SEE, shahⁿ-TAL, seh treh zhahⁿ-TEE","Conrad, c'est le meilleur ami de mon mari.":"kohⁿ-RAD, seh luh meh-yö ra-mee duh mohⁿ ma-REE","Salut Conrad ! Ça fait longtemps !":"sa-lü kohⁿ-RAD! sa feh lohⁿ-TAHⁿ!","Sandrine, c'est la meilleure amie de mon mari.":"sahⁿ-DREEN, seh la meh-yö ra-mee duh mohⁿ ma-REE","Salut Sandrine, ça me fait plaisir de te voir !":"sa-lü sahⁿ-DREEN, sa muh feh pleh-zeer duh tuh VWAR!","Claudio est un ami de la famille.":"kloh-dyoh eh tuhⁿ na-mee duh la fa-MEEY","Matteo, c'est le fils de Claudio.":"ma-tay-OH, seh luh fees duh kloh-DYOH","Claudio, tu veux une bière ?":"kloh-DYOH, tü vö zün BYEHR?","Salut Matteo, quoi de neuf ?":"sa-lü ma-tay-OH, kwa duh NÖF?","Tu connais Conrad depuis quand ?":"tü ko-neh kohⁿ-rad duh-pwee KAHⁿ?","On invite Sandrine et Conrad samedi ?":"ohⁿ nehⁿ-veet sahⁿ-dree nay kohⁿ-rad sam-DEE?","Dis bonjour à Quentin de ma part !":"dee bohⁿ-zhoo ra kahⁿ-tehⁿ duh ma PAR!","Tu diras merci à ta maman pour moi ?":"tü dee-ra mehr-see a ta ma-mahⁿ poor MWA?","Bon anniversaire, Quentin !":"bohⁿ na-nee-vehr-SEHR, kahⁿ-TEHⁿ!","Joyeux Noël, Chantal !":"zhwa-yö no-EHL, shahⁿ-TAL!","Sol et Christian, merci pour l'accueil !":"so lay krees-TYAHⁿ, mehr-see poor la-KÖY!","On appelle Christelle ce soir ?":"ohⁿ na-pehl krees-tehl suh SWAR?","Tu me manques, Christelle !":"tü muh MAHⁿK, krees-TEHL!","Bisous à tout le monde !":"bee-zoo za tool-MOHⁿD!","Bon appétit !":"bohⁿ na-pay-TEE!","Santé !":"sahⁿ-TAY!","À la tienne !":"a la TYEHN!","C'est délicieux !":"seh day-lee-SYÖ!","C'est très bon !":"seh treh BOHⁿ!","Ça me goûte !":"sa muh GOOT!","Qu'est-ce que c'est ?":"kehs-kuh SEH?","C'est toi qui as cuisiné ?":"seh twa kee a kwee-zee-NAY?","Tu sais me passer le sel, s'il te plaît ?":"tü seh muh pa-say luh SEHL, seel tuh PLEH?","Je peux en reprendre ?":"zhuh pö zahⁿ ruh-PRAHⁿDR?","Juste un peu, s'il te plaît.":"zhüs tuhⁿ PÖ, seel tuh PLEH","J'ai assez mangé, merci.":"zhay a-say mahⁿ-ZHAY, mehr-SEE","Je n'ai plus faim.":"zhuh nay plü FEHⁿ","Je ne mange pas de viande.":"zhuh nuh mahⁿzh pa duh VYAHⁿD","Je n'aime pas trop ça.":"zhuh nehm pa troh SA","Tu me donnes la recette ?":"tü muh don la ruh-SEHT?","Encore un peu de vin ?":"ahⁿ-ko ruhⁿ pö duh VEHⁿ?","Non merci, ça va.":"nohⁿ mehr-SEE, sa VA","On mange à quelle heure ?":"ohⁿ mahⁿ zha keh LÖR?","Je fais la vaisselle.":"zhuh feh la veh-SEHL","Il y a encore des frites ?":"ee lee a ahⁿ-kor day FREET?","Je m'appelle Aya.":"zhuh ma-peh la-YA","Je suis japonaise.":"zhuh swee zha-poh-NEHZ","J'ai aussi des racines taïwanaises.":"zhay oh-see day ra-seen tahy-wa-NEHZ","J'habite en Finlande.":"zha-bee tahⁿ fehⁿ-LAHⁿD","Je suis étudiante.":"zhuh swee zay-tü-DYAHⁿT","Mon mari s'appelle Max.":"mohⁿ ma-ree sa-pehl MAKS","Mon mari est belge.":"mohⁿ ma-ree eh BEHLZH","Je suis mariée.":"zhuh swee ma-RYAY","J'apprends le français pour parler avec sa famille.":"zha-prahⁿ luh frahⁿ-seh poor par-lay a-vehk sa fa-MEEY","Je parle japonais, anglais et un peu finnois.":"zhuh parl zha-poh-NEH, ahⁿ-gleh zay uhⁿ pö fee-NWA","J'ai vingt-cinq ans.":"zhay vehⁿt-sehⁿ KAHⁿ","J'aime la nature et la montagne.":"zhehm la na-tü ray la mohⁿ-TANY","C'est ma première fois en Belgique.":"seh ma pruh-myehr fwa zahⁿ behl-ZHEEK","J'adore la Belgique !":"zha-dor la behl-ZHEEK!","Et vous, vous êtes d'où ?":"ay VOO, voo zeht DOO?","Excusez-moi, madame.":"ehks-kü-zay-MWA, ma-DAM","Où sont les toilettes, s'il vous plaît ?":"oo sohⁿ lay twa-LEHT, seel voo PLEH?","Où est la gare ?":"oo eh la GAR?","C'est loin ?":"seh LWEHⁿ?","C'est à gauche ou à droite ?":"seh ta goh shoo a DRWAT?","Je suis perdue.":"zhuh swee pehr-DÜ","Un aller simple pour Liège, s'il vous plaît.":"uhⁿ na-lay sehⁿpl poor LYEHZH, seel voo PLEH","Le train part de quel quai ?":"luh trehⁿ par duh kehl KAY?","C'est combien ?":"seh kohⁿ-BYEHⁿ?","Je voudrais ça, s'il vous plaît.":"zhuh voo-dreh SA, seel voo PLEH","Je regarde seulement, merci.":"zhuh ruh-gard söl-MAHⁿ, mehr-SEE","Je peux payer par carte ?":"zhuh pö peh-yay par KART?","Je n'ai pas besoin de sac.":"zhuh nay pa buh-zwehⁿ duh SAK","Une table pour deux, s'il vous plaît.":"ün tabl poor DÖ, seel voo PLEH","La carte, s'il vous plaît.":"la KART, seel voo PLEH","Qu'est-ce que vous me conseillez ?":"kehs-kuh voo muh kohⁿ-seh-YAY?","Je vais prendre ça.":"zhuh veh prahⁿdr SA","Pour moi, un café, s'il vous plaît.":"poor MWA, uhⁿ ka-FAY, seel voo PLEH","Une eau plate, s'il vous plaît.":"ü noh PLAT, seel voo PLEH","Je suis allergique aux noix.":"zhuh swee za-lehr-zhee koh NWA","L'addition, s'il vous plaît.":"la-dee-SYOHⁿ, seel voo PLEH","Merci, bonne journée !":"mehr-SEE, bon zhoor-NAY!","Vous avez une chambre pour ce soir ?":"voo za-vay zün shahⁿbr poor suh SWAR?","À quelle heure ouvre le magasin ?":"a keh lö roovr luh ma-ga-ZEHⁿ?","Il y a une pharmacie près d'ici ?":"ee lee a ün far-ma-see preh dee-SEE?","Pouvez-vous m'aider, s'il vous plaît ?":"poo-vay-voo meh-DAY, seel voo PLEH?","Vous pouvez prendre une photo de nous ?":"voo poo-vay prahⁿ drün foh-toh duh NOO?","Je ne suis pas d'ici.":"zhuh nuh swee pa dee-SEE","Pardon, je n'ai pas compris.":"par-DOHⁿ, zhuh nay pa kohⁿ-PREE","Appelez une ambulance !":"a-play zü nahⁿ-bü-LAHⁿS!","septante":"sehp-TAHⁿT","nonante":"noh-NAHⁿT","le déjeuner":"luh day-zhö-NAY","le dîner":"luh dee-NAY","le souper":"luh soo-PAY","Viens une fois ici !":"vyehⁿ zün fwa zee-SEE!","Tu sais venir demain ?":"tü seh vuh-neer duh-MEHⁿ?","le GSM":"luh zhay-eh-SEHM","Il drache !":"eel DRASH!","Il fait caillant.":"eel feh ka-YAHⁿ","Non, peut-être !":"NOHⁿ, pö-TEHTR!","Dis, tu as le temps ?":"DEE, tü a luh TAHⁿ?","Qu'est-ce que c'est pour un truc ?":"kehs-kuh seh poo ruhⁿ TRÜK?","J'ai bon !":"zhay BOHⁿ!","un essuie":"uhⁿ nay-SWEE","une drache":"ün DRASH","un pistolet":"uhⁿ pees-toh-LEH","un chicon":"uhⁿ shee-KOHⁿ","une praline":"ün pra-LEEN","une friterie":"ün free-TREE","un kot":"uhⁿ KOH","C'est bon, hein !":"seh BOHⁿ, EHⁿ!","Ça va aller.":"sa va a-LAY","On fait une pause ici.":"ohⁿ feh tün poh zee-SEE","Tout le monde va bien ?":"tool-mohⁿd va BYEHⁿ?","Restez ensemble, s'il vous plaît.":"rehs-tay zahⁿ-SAHⁿBL, seel voo PLEH","Buvez de l'eau.":"bü-vay duh LOH","Mettez votre casque.":"meh-tay vohtr KASK","Mettez votre gilet de sauvetage.":"meh-tay vohtr zhee-leh duh sohv-TAZH","Attention, ça glisse !":"a-tahⁿ-SYOHⁿ, sa GLEES!","Vous avez froid ?":"voo za-vay FRWA?","On repart dans cinq minutes.":"ohⁿ ruh-par dahⁿ sehⁿk mee-NÜT","Suivez-moi.":"swee-vay-MWA","la randonnée":"la rahⁿ-do-NAY","le sentier":"luh sahⁿ-TYAY","la montagne":"la mohⁿ-TANY","le lac":"luh LAK","la forêt":"la foh-REH","la tente":"la TAHⁿT","le sac de couchage":"luh sak duh koo-SHAZH","le sac à dos":"luh sa ka DOH","le kayak":"luh ka-YAK","la pagaie":"la pa-GEH","le canoë":"luh ka-no-AY","le ski":"luh SKEE","la piste":"la PEEST","Je suis monitrice de ski.":"zhuh swee moh-nee-trees duh SKEE","J'ai un brevet de premiers secours.":"zhay uhⁿ bruh-veh duh pruh-myay suh-KOOR","le feu de camp":"luh fö duh KAHⁿ","la carte":"la KART","la boussole":"la boo-SOL","la lampe frontale":"la lahⁿp frohⁿ-TAL","la météo":"la may-tay-OH","la rivière":"la ree-VYEHR","le sommet":"luh so-MEH","la remontée mécanique":"la ruh-mohⁿ-tay may-ka-NEEK","les premiers secours":"lay pruh-myay suh-KOOR","une entorse":"ü nahⁿ-TORS","une ampoule":"ü nahⁿ-POOL","l'hypothermie":"lee-poh-tehr-MEE","Où est-ce que ça fait mal ?":"oo ehs kuh sa feh MAL?","Ne bougez pas.":"nuh boo-zhay PA","On va rentrer.":"ohⁿ va rahⁿ-TRAY","La météo annonce de l'orage.":"la may-tay-oh a-nohⁿs duh loh-RAZH","pagayer":"pa-geh-YAY","chavirer":"sha-vee-RAY","la frontale":"la frohⁿ-TAL","les Ardennes":"lay zar-DEHN","le dénivelé":"luh day-nee-VLAY","Je suis née au Japon.":"zhuh swee nay oh zha-POHⁿ","Ma famille est en partie taïwanaise.":"ma fa-mee yeh tahⁿ par-tee tahy-wa-NEHZ","Maintenant, j'habite en Finlande.":"mehⁿt-NAHⁿ, zha-bee tahⁿ fehⁿ-LAHⁿD","J'étudie l'éducation en plein air.":"zhay-tü-dee lay-dü-ka-syohⁿ ahⁿ plehⁿ NEHR","Je suis en deuxième année.":"zhuh swee zahⁿ dö-zyeh ma-NAY","Mon école s'appelle Humak.":"mohⁿ nay-kol sa-peh lü-MAK","Plus tard, je voudrais être guide.":"plü TAR, zhuh voo-dreh zehtr GEED","On s'est rencontrés en Finlande.":"ohⁿ seh rahⁿ-kohⁿ-tray zahⁿ fehⁿ-LAHⁿD","Je suis peut-être dyslexique.":"zhuh swee pö-tehtr dees-lehk-SEEK","Lire, c'est difficile pour moi.":"LEER, seh dee-fee-seel poor MWA","Tu peux me le dire à l'oral ?":"tü pö muh luh dee ra loh-RAL?","Tu peux écrire plus grand ?":"tü pö zay-kreer plü GRAHⁿ?","Au Japon, on dit itadakimasu avant de manger.":"oh zha-POHⁿ, ohⁿ dee tee-ta-da-kee-ma-zü a-vahⁿ duh mahⁿ-ZHAY","En Finlande, on va au sauna tout le temps.":"ahⁿ fehⁿ-LAHⁿD, ohⁿ va oh soh-na tool-TAHⁿ","L'hiver est très long et très sombre.":"lee-veh reh treh lohⁿ ay treh SOHⁿBR","En été, il fait jour toute la nuit.":"ahⁿ nay-TAY, eel feh zhoor too tla NWEE","J'ai grandi à la campagne.":"zhay grahⁿ-dee a la kahⁿ-PANY","Mes parents habitent au Japon.":"may pa-rahⁿ za-beet toh zha-POHⁿ","J'ai un permis de conduire.":"zhay uhⁿ pehr-mee duh kohⁿ-DWEER","Je sais faire du kayak.":"zhuh seh fehr dü ka-YAK","J'ai appris les bonnes manières japonaises.":"zhay a-pree lay bon ma-nyehr zha-poh-NEHZ","le Japon":"luh zha-POHⁿ","Taïwan":"tahy-WAN","la Finlande":"la fehⁿ-LAHⁿD","la Belgique":"la behl-ZHEEK","l'université":"lü-nee-vehr-see-TAY","le mémoire":"luh may-MWAR","le stage":"luh STAZH","Je me sens chez moi en Finlande.":"zhuh muh sahⁿ shay mwa ahⁿ fehⁿ-LAHⁿD","Parfois, le Japon me manque.":"par-FWA, luh zha-pohⁿ muh MAHⁿK","le finnois":"luh fee-NWA","le japonais":"luh zha-poh-NEH","On cuisine ensemble ce soir ?":"ohⁿ kwee-zee nahⁿ-sahⁿbl suh SWAR?","Tu coupes les oignons ?":"tü koo play zoh-NYOHⁿ?","Qu'est-ce qui manque dans le frigo ?":"kehs kee mahⁿk dahⁿ luh free-GOH?","Je vais faire les courses.":"zhuh veh fehr lay KOORS","Tu as besoin de quelque chose ?":"tü a buh-zwehⁿ duh kehl-kuh SHOZ?","C'est ton tour de faire la vaisselle !":"seh tohⁿ toor duh fehr la veh-SEHL!","Tu peux sortir les poubelles ?":"tü pö sor-teer lay poo-BEHL?","On regarde un film ?":"ohⁿ ruh-gar duhⁿ FEELM?","Qu'est-ce qu'on fait ce week-end ?":"kehs kohⁿ feh suh wee-KEHND?","J'ai une idée !":"zhay ü nee-DAY!","Tu es où ?":"tü eh ZOO?","Je suis contente.":"zhuh swee kohⁿ-TAHⁿT","Je suis stressée.":"zhuh swee streh-SAY","Je suis fière de toi.":"zhuh swee fyehr duh TWA","Merci d'être là.":"mehr-see dehtr LA","Tu m'as manqué !":"tü ma mahⁿ-KAY!","Viens, on fait un câlin.":"VYEHⁿ, ohⁿ feh tuhⁿ ka-LEHⁿ","mon amour":"mohⁿ na-MOOR","mon chéri":"mohⁿ shay-REE","On se fait un petit café ?":"ohⁿ suh feh tuhⁿ puh-tee ka-FAY?","Ça sent bon !":"sa sahⁿ BOHⁿ!","J'ai oublié les clés !":"zhay oo-blee-ay lay KLAY!","Je suis désolée pour tout à l'heure.":"zhuh swee day-zoh-lay poor too ta LÖR","On en parle ?":"ohⁿ nahⁿ PARL?","Tu as raison.":"tü a reh-ZOHⁿ","Je ne suis pas d'accord.":"zhuh nuh swee pa da-KOR","Ce n'est pas ce que je voulais dire.":"suh neh pa suh kuh zhuh voo-leh DEER","On appelle ta mère ce soir ?":"ohⁿ na-pehl ta mehr suh SWAR?","Je suis heureuse avec toi.":"zhuh swee zö-rö za-vehk TWA","On part en vacances où ?":"ohⁿ pa rahⁿ va-kahⁿs ZOO?","le frigo":"luh free-GOH","les courses":"lay KOORS","la vaisselle":"la veh-SEHL","le linge":"luh LEHⁿZH","Tu ronfles !":"tü ROHⁿFL!","Fais de beaux rêves.":"feh duh boh REHV","mon lapin":"mohⁿ la-PEHⁿ","la famille":"la fa-MEEY","le mari":"luh ma-REE","la femme":"la FAM","les parents":"lay pa-RAHⁿ","la mère":"la MEHR","le père":"luh PEHR","maman":"ma-MAHⁿ","papa":"pa-PA","la belle-mère":"la behl-MEHR","le beau-père":"luh boh-PEHR","les beaux-parents":"lay boh-pa-RAHⁿ","le frère":"luh FREHR","la sœur":"la SÖR","le fils":"luh FEES","la fille":"la FEEY","les enfants":"lay zahⁿ-FAHⁿ","le bébé":"luh bay-BAY","la grand-mère":"la grahⁿ-MEHR","le grand-père":"luh grahⁿ-PEHR","mamy":"ma-MEE","papy":"pa-PEE","le beau-frère":"luh boh-FREHR","la belle-sœur":"la behl-SÖR","l'oncle":"LOHⁿKL","la tante":"la TAHⁿT","le cousin":"luh koo-ZEHⁿ","la cousine":"la koo-ZEEN","le neveu":"luh nuh-VÖ","la nièce":"la NYEHS","le parrain":"luh pa-REHⁿ","la marraine":"la ma-REHN","les petits-enfants":"lay puh-tee-zahⁿ-FAHⁿ","le petit ami":"luh puh-tee ta-MEE","la petite amie":"la puh-tee ta-MEE","un":"UHⁿ","deux":"DÖ","trois":"TRWA","quatre":"KATR","cinq":"SEHⁿK","six":"SEES","sept":"SEHT","huit":"WEET","neuf":"NÖF","dix":"DEES","onze":"OHⁿZ","douze":"DOOZ","treize":"TREHZ","quatorze":"ka-TORZ","quinze":"KEHⁿZ","seize":"SEHZ","dix-sept":"dee-SEHT","dix-huit":"dee-ZWEET","dix-neuf":"deez-NÖF","vingt":"VEHⁿ","vingt et un":"vehⁿ tay UHⁿ","vingt-deux":"vehⁿt-DÖ","trente":"TRAHⁿT","quarante":"ka-RAHⁿT","cinquante":"sehⁿ-KAHⁿT","soixante":"swa-SAHⁿT","quatre-vingts":"katr-VEHⁿ","cent":"SAHⁿ","septante-cinq":"sehp-tahⁿt-SEHⁿK","nonante-neuf":"noh-nahⁿt-NÖF","deux cents":"dö SAHⁿ","mille":"MEEL","deux mille vingt-six":"dö meel vehⁿt-SEES","premier":"pruh-MYAY","deuxième":"dö-ZYEHM","troisième":"trwa-ZYEHM","la moitié":"la mwa-TYAY","un quart":"uhⁿ KAR","un euro":"uhⁿ nö-ROH","deux euros":"dö zö-ROH","dix euros":"dee zö-ROH","vingt euros":"vehⁿ tö-ROH","un euro cinquante":"uhⁿ nö-roh sehⁿ-KAHⁿT","le numéro":"luh nü-may-ROH","un million":"uhⁿ mee-LYOHⁿ","zéro":"zay-ROH","une douzaine":"ün doo-ZEHN","le chiffre":"luh SHEEFR","aujourd'hui":"oh-zhoor-DWEE","demain":"duh-MEHⁿ","hier":"YEHR","maintenant":"mehⁿt-NAHⁿ","tout de suite":"too duh SWEET","le matin":"luh ma-TEHⁿ","le midi":"luh mee-DEE","l'après-midi":"la-preh-mee-DEE","le soir":"luh SWAR","la nuit":"la NWEE","le jour":"luh ZHOOR","la semaine":"la suh-MEHN","le mois":"luh MWA","l'an":"LAHⁿ","l'année":"la-NAY","lundi":"luhⁿ-DEE","mardi":"mar-DEE","mercredi":"mehr-kruh-DEE","jeudi":"zhö-DEE","vendredi":"vahⁿ-druh-DEE","samedi":"sam-DEE","dimanche":"dee-MAHⁿSH","le week-end":"luh wee-KEHND","l'heure":"LÖR","Quelle heure est-il ?":"keh lö reh-TEEL?","Il est huit heures.":"ee leh wee TÖR","tôt":"TOH","tard":"TAR","en retard":"ahⁿ ruh-TAR","ce matin":"suh ma-TEHⁿ","ce soir":"suh SWAR","après-demain":"a-preh-duh-MEHⁿ","avant-hier":"a-vahⁿ-YEHR","la semaine prochaine":"la suh-mehn proh-SHEHN","la semaine dernière":"la suh-mehn dehr-NYEHR","le mois prochain":"luh mwa proh-SHEHⁿ","l'année dernière":"la-nay dehr-NYEHR","la minute":"la mee-NÜT","la seconde":"la suh-GOHⁿD","et demie":"ay duh-MEE","et quart":"ay KAR","moins le quart":"mwehⁿ luh KAR","janvier":"zhahⁿ-VYAY","février":"fay-vree-AY","mars":"MARS","avril":"a-VREEL","mai":"MEH","juin":"ZHWEHⁿ","juillet":"zhwee-YEH","août":"OOT","septembre":"sehp-TAHⁿBR","octobre":"ok-TOBR","novembre":"noh-VAHⁿBR","décembre":"day-SAHⁿBR","le printemps":"luh prehⁿ-TAHⁿ","l'été":"lay-TAY","l'automne":"loh-TON","l'hiver":"lee-VEHR","l'anniversaire":"la-nee-vehr-SEHR","les vacances":"lay va-KAHⁿS","Noël":"no-EHL","bientôt":"byehⁿ-TOH","déjà":"day-ZHA","pas encore":"pa zahⁿ-KOR","toujours":"too-ZHOOR","jamais":"zha-MEH","souvent":"soo-VAHⁿ","parfois":"par-FWA","le calendrier":"luh ka-lahⁿ-dree-AY","le rendez-vous":"luh rahⁿ-day-VOO","la Saint-Nicolas":"la sehⁿ-nee-koh-LA","la personne":"la pehr-SON","les gens":"lay ZHAHⁿ","l'homme":"LOM","l'enfant":"lahⁿ-FAHⁿ","l'ami":"la-MEE","l'amie":"la-MEE","le nom":"luh NOHⁿ","le prénom":"luh pray-NOHⁿ","la tête":"la TEHT","les yeux":"lay ZYÖ","l'oreille":"loh-REHY","la bouche":"la BOOSH","le nez":"luh NAY","la dent":"la DAHⁿ","la main":"la MEHⁿ","le bras":"luh BRA","la jambe":"la ZHAHⁿB","le pied":"luh PYAY","le dos":"luh DOH","le ventre":"luh VAHⁿTR","le corps":"luh KOR","malade":"ma-LAD","le médecin":"luh may-duh-SEHⁿ","l'hôpital":"loh-pee-TAL","le médicament":"luh may-dee-ka-MAHⁿ","la fièvre":"la FYEHVR","J'ai mal ici.":"zhay ma lee-SEE","le visage":"luh vee-ZAZH","les cheveux":"lay shuh-VÖ","le cou":"luh KOO","l'épaule":"lay-POHL","le genou":"luh zhuh-NOO","le doigt":"luh DWA","le cœur":"luh KÖR","la peau":"la POH","le sang":"luh SAHⁿ","l'os":"LOS","la gorge":"la GORZH","la voix":"la VWA","le rhume":"luh RÜM","la grippe":"la GREEP","la toux":"la TOO","la blessure":"la bleh-SÜR","la pharmacie":"la far-ma-SEE","l'infirmière":"lehⁿ-feer-MYEHR","le dentiste":"luh dahⁿ-TEEST","l'urgence":"lür-ZHAHⁿS","les urgences":"lay zür-ZHAHⁿS","le rendez-vous chez le médecin":"luh rahⁿ-day-voo shay luh may-duh-SEHⁿ","le garçon":"luh gar-SOHⁿ","l'adulte":"la-DÜLT","le voisin":"luh vwa-ZEHⁿ","la voisine":"la vwa-ZEEN","le client":"luh klee-AHⁿ","l'étranger":"lay-trahⁿ-ZHAY","le poumon":"luh poo-MOHⁿ","l'estomac":"lehs-toh-MA","la cheville":"la shuh-VEEL","le poignet":"luh pwa-NYEH","l'ordonnance":"lor-do-NAHⁿS","la mutuelle":"la mü-TWEHL","enceinte":"ahⁿ-SEHⁿT","l'allergie":"la-lehr-ZHEE","la nourriture":"la noo-ree-TÜR","la boisson":"la bwa-SOHⁿ","l'eau":"LOH","le café":"luh ka-FAY","le thé":"luh TAY","le lait":"luh LEH","la bière":"la BYEHR","le vin":"luh VEHⁿ","le jus":"luh ZHÜ","le pain":"luh PEHⁿ","le beurre":"luh BÖR","le fromage":"luh froh-MAZH","l'œuf":"LÖF","la viande":"la VYAHⁿD","le poisson":"luh pwa-SOHⁿ","le poulet":"luh poo-LEH","les légumes":"lay lay-GÜM","les fruits":"lay FRWEE","la pomme":"la POM","la pomme de terre":"la pom duh TEHR","les frites":"lay FREET","le riz":"luh REE","les pâtes":"lay PAT","la soupe":"la SOOP","le sucre":"luh SÜKR","le sel":"luh SEHL","le chocolat":"luh shoh-koh-LA","la gaufre":"la GOHFR","le petit-déjeuner":"luh puh-tee-day-zhö-NAY","le repas":"luh ruh-PA","le porc":"luh PORK","le bœuf":"luh BÖF","le jambon":"luh zhahⁿ-BOHⁿ","la saucisse":"la soh-SEES","les moules":"lay MOOL","la tomate":"la toh-MAT","la carotte":"la ka-ROT","l'oignon":"loh-NYOHⁿ","la salade":"la sa-LAD","le champignon":"luh shahⁿ-pee-NYOHⁿ","le chou":"luh SHOO","les chicons":"lay shee-KOHⁿ","la banane":"la ba-NAN","l'orange":"loh-RAHⁿZH","la fraise":"la FREHZ","le citron":"luh see-TROHⁿ","la poire":"la PWAR","le gâteau":"luh ga-TOH","la tarte":"la TART","le biscuit":"luh bees-KWEE","la glace":"la GLAS","la confiture":"la kohⁿ-fee-TÜR","le miel":"luh MYEHL","l'huile":"LWEEL","le poivre":"luh PWAVR","la sauce":"la SOHS","la mayonnaise":"la meh-yo-NEHZ","la moutarde":"la moo-TARD","la cuillère":"la kwee-YEHR","la fourchette":"la foor-SHEHT","le couteau":"luh koo-TOH","l'assiette":"la-SYEHT","le verre":"luh VEHR","la tasse":"la TAS","le bol":"luh BOL","sucré":"sü-KRAY","salé":"sa-LAY","épicé":"ay-pee-SAY","chaud":"SHOH","froid":"FRWA","la farine":"la fa-REEN","la crème":"la KREHM","le yaourt":"luh ya-OORT","les noix":"lay NWA","l'ail":"LAHY","le poireau":"luh pwa-ROH","le speculoos":"luh spay-kü-LOS","le cramique":"luh kra-MEEK","la fricadelle":"la free-ka-DEHL","le pèkèt":"luh peh-KEH","les boulets à la liégeoise":"lay boo-leh za la lyay-ZHWAZ","la tartine":"la tar-TEEN","la maison":"la meh-ZOHⁿ","l'appartement":"la-par-tuh-MAHⁿ","la chambre":"la SHAHⁿBR","la cuisine":"la kwee-ZEEN","la salle de bain":"la sal duh BEHⁿ","le salon":"luh sa-LOHⁿ","les toilettes":"lay twa-LEHT","la porte":"la PORT","la fenêtre":"la fuh-NEHTR","la clé":"la KLAY","la table":"la TABL","la chaise":"la SHEHZ","le lit":"luh LEE","la lumière":"la lü-MYEHR","le téléphone":"luh tay-lay-FON","le portable":"luh por-TABL","les vêtements":"lay veht-MAHⁿ","les chaussures":"lay shoh-SÜR","la voiture":"la vwa-TÜR","le vélo":"luh vay-LOH","le sac":"luh SAK","l'argent":"lar-ZHAHⁿ","le travail":"luh tra-VAHY","le ménage":"luh may-NAZH","la douche":"la DOOSH","le jardin":"luh zhar-DEHⁿ","l'escalier":"lehs-ka-LYAY","le mur":"luh MÜR","le toit":"luh TWA","le four":"luh FOOR","le micro-ondes":"luh mee-kroh-OHⁿD","le lave-vaisselle":"luh lav-veh-SEHL","la machine à laver":"la ma-shee na la-VAY","le chauffage":"luh shoh-FAZH","la poubelle":"la poo-BEHL","le canapé":"luh ka-na-PAY","l'armoire":"lar-MWAR","le miroir":"luh mee-RWAR","la télé":"la tay-LAY","l'ordinateur":"lor-dee-na-TÖR","le chargeur":"luh shar-ZHÖR","le manteau":"luh mahⁿ-TOH","la veste":"la VEHST","le pull":"luh PÜL","le pantalon":"luh pahⁿ-ta-LOHⁿ","la robe":"la ROB","la chemise":"la shuh-MEEZ","les chaussettes":"lay shoh-SEHT","le bonnet":"luh bo-NEH","les gants":"lay GAHⁿ","le parapluie":"luh pa-ra-PLWEE","les lunettes":"lay lü-NEHT","le portefeuille":"luh por-tuh-FÖY","la brosse à dents":"la bro sa DAHⁿ","le savon":"luh sa-VOHⁿ","la serviette":"la sehr-VYEHT","le torchon":"luh tor-SHOHⁿ","le livre":"luh LEEVR","le stylo":"luh stee-LOH","le bic":"luh BEEK","le papier":"luh pa-PYAY","la cave":"la KAV","le grenier":"luh gruh-NYAY","la boîte":"la BWAT","l'étagère":"lay-ta-ZHEHR","le sol":"luh SOL","la lampe":"la LAHⁿP","le loyer":"luh lwa-YAY","la facture":"la fak-TÜR","la farde":"la FARD","le sèche-cheveux":"luh sehsh-shuh-VÖ","la ville":"la VEEL","le village":"luh vee-LAZH","la rue":"la RÜ","le magasin":"luh ma-ga-ZEHⁿ","le supermarché":"luh sü-pehr-mar-SHAY","la boulangerie":"la boo-lahⁿzh-REE","la banque":"la BAHⁿK","la poste":"la POST","l'école":"lay-KOL","le restaurant":"luh rehs-toh-RAHⁿ","l'hôtel":"loh-TEHL","la gare":"la GAR","le train":"luh TREHⁿ","le bus":"luh BÜS","le tram":"luh TRAM","le taxi":"luh tak-SEE","l'avion":"la-VYOHⁿ","l'aéroport":"la-ay-roh-POR","le billet":"luh bee-YEH","à gauche":"a GOHSH","à droite":"a DRWAT","tout droit":"too DRWA","ici":"ee-SEE","là":"LA","là-bas":"la-BA","près":"PREH","loin":"LWEHⁿ","devant":"duh-VAHⁿ","derrière":"deh-RYEHR","à côté de":"a koh-tay DUH","le centre-ville":"luh sahⁿtr-VEEL","la place":"la PLAS","le marché":"luh mar-SHAY","l'église":"lay-GLEEZ","le musée":"luh mü-ZAY","le parc":"luh PARK","la bibliothèque":"la bee-blee-oh-TEHK","la mairie":"la meh-REE","la maison communale":"la meh-zohⁿ ko-mü-NAL","le commissariat":"luh ko-mee-sa-RYA","la police":"la poh-LEES","le pont":"luh POHⁿ","le carrefour":"luh kar-FOOR","le feu":"luh FÖ","le quai":"luh KAY","l'arrêt de bus":"la-reh duh BÜS","la sortie":"la sor-TEE","l'entrée":"lahⁿ-TRAY","la station-service":"la sta-syohⁿ-sehr-VEES","l'autoroute":"loh-toh-ROOT","le parking":"luh par-KEENG","le plan":"luh PLAHⁿ","en haut":"ahⁿ OH","en bas":"ahⁿ BA","dedans":"duh-DAHⁿ","dehors":"duh-OR","sur":"SÜR","sous":"SOO","dans":"DAHⁿ","entre":"AHⁿTR","la friterie":"la free-TREE","la librairie":"la lee-breh-REE","le port":"luh POR","la frontière":"la frohⁿ-TYEHR","le rond-point":"luh rohⁿ-PWEHⁿ","le péage":"luh pay-AZH","la correspondance":"la koh-rehs-pohⁿ-DAHⁿS","le temps":"luh TAHⁿ","le soleil":"luh soh-LEHY","la pluie":"la PLWEE","la neige":"la NEHZH","le vent":"luh VAHⁿ","le nuage":"luh NWAZH","Il fait beau.":"eel feh BOH","Il fait froid.":"eel feh FRWA","Il fait chaud.":"eel feh SHOH","Il pleut.":"eel PLÖ","Il neige.":"eel NEHZH","la mer":"la MEHR","l'arbre":"LARBR","la fleur":"la FLÖR","le chien":"luh SHYEHⁿ","le chat":"luh SHA","l'oiseau":"lwa-ZOH","l'orage":"loh-RAZH","le brouillard":"luh broo-YAR","la température":"la tahⁿ-pay-ra-TÜR","moins dix degrés":"mwehⁿ dee duh-GRAY","le ciel":"luh SYEHL","la lune":"la LÜN","l'étoile":"lay-TWAL","la plage":"la PLAZH","l'île":"LEEL","la colline":"la ko-LEEN","le champ":"luh SHAHⁿ","la terre":"la TEHR","la pierre":"la PYEHR","le rocher":"luh roh-SHAY","l'herbe":"LEHRB","la feuille":"la FÖY","le cheval":"luh shuh-VAL","la vache":"la VASH","le mouton":"luh moo-TOHⁿ","l'ours":"LOORS","le loup":"luh LOO","le renard":"luh ruh-NAR","l'élan":"lay-LAHⁿ","le renne":"luh REHN","l'aurore boréale":"loh-ror boh-ray-AL","la tempête":"la tahⁿ-PEHT","la cascade":"la kas-KAD","la grotte":"la GROT","le marais":"luh ma-REH","le moustique":"luh moos-TEEK","la tique":"la TEEK","être":"EHTR","avoir":"a-VWAR","aller":"a-LAY","faire":"FEHR","venir":"vuh-NEER","vouloir":"voo-LWAR","pouvoir":"poo-VWAR","savoir":"sa-VWAR","dire":"DEER","parler":"par-LAY","manger":"mahⁿ-ZHAY","boire":"BWAR","dormir":"dor-MEER","aimer":"eh-MAY","habiter":"a-bee-TAY","travailler":"tra-va-YAY","comprendre":"kohⁿ-PRAHⁿDR","apprendre":"a-PRAHⁿDR","prendre":"PRAHⁿDR","donner":"do-NAY","voir":"VWAR","regarder":"ruh-gar-DAY","écouter":"ay-koo-TAY","attendre":"a-TAHⁿDR","aider":"eh-DAY","acheter":"ash-TAY","payer":"peh-YAY","rentrer":"rahⁿ-TRAY","penser":"pahⁿ-SAY","croire":"KRWAR","connaître":"ko-NEHTR","chercher":"shehr-SHAY","trouver":"troo-VAY","perdre":"PEHRDR","ouvrir":"oo-VREER","fermer":"fehr-MAY","commencer":"ko-mahⁿ-SAY","finir":"fee-NEER","arriver":"a-ree-VAY","partir":"par-TEER","sortir":"sor-TEER","entrer":"ahⁿ-TRAY","rester":"rehs-TAY","marcher":"mar-SHAY","courir":"koo-REER","nager":"na-ZHAY","conduire":"kohⁿ-DWEER","cuisiner":"kwee-zee-NAY","laver":"la-VAY","nettoyer":"neh-twa-YAY","lire":"LEER","écrire":"ay-KREER","appeler":"a-PLAY","demander":"duh-mahⁿ-DAY","répondre":"ray-POHⁿDR","expliquer":"ehks-plee-KAY","montrer":"mohⁿ-TRAY","jouer":"ZHWAY","chanter":"shahⁿ-TAY","danser":"dahⁿ-SAY","rire":"REER","pleurer":"plö-RAY","se lever":"suh luh-VAY","se coucher":"suh koo-SHAY","s'habiller":"sa-bee-YAY","se reposer":"suh ruh-poh-ZAY","oublier":"oo-blee-AY","se souvenir":"suh soov-NEER","essayer":"ay-seh-YAY","utiliser":"ü-tee-lee-ZAY","mettre":"MEHTR","porter":"por-TAY","envoyer":"ahⁿ-vwa-YAY","devoir":"duh-VWAR","falloir":"fa-LWAR","vivre":"VEEVR","visiter":"vee-zee-TAY","rencontrer":"rahⁿ-kohⁿ-TRAY","changer":"shahⁿ-ZHAY","gagner":"ga-NYAY","tomber":"tohⁿ-BAY","monter":"mohⁿ-TAY","descendre":"deh-SAHⁿDR","tourner":"toor-NAY","s'asseoir":"sa-SWAR","goûter":"goo-TAY","se dépêcher":"suh day-peh-SHAY","s'amuser":"sa-mü-ZAY","réfléchir":"ray-flay-SHEER","bon":"BOHⁿ","mauvais":"moh-VEH","grand":"GRAHⁿ","petit":"puh-TEE","beau":"BOH","joli":"zhoh-LEE","nouveau":"noo-VOH","vieux":"VYÖ","jeune":"ZHÖN","cher":"SHEHR","pas cher":"pa SHEHR","facile":"fa-SEEL","difficile":"dee-fee-SEEL","content":"kohⁿ-TAHⁿ","triste":"TREEST","fatigué":"fa-tee-GAY","gentil":"zhahⁿ-TEE","sympa":"sehⁿ-PA","drôle":"DROHL","important":"ehⁿ-por-TAHⁿ","long":"LOHⁿ","court":"KOOR","plein":"PLEHⁿ","vide":"VEED","ouvert":"oo-VEHR","fermé":"fehr-MAY","heureux":"ö-RÖ","calme":"KALM","bruyant":"brwee-YAHⁿ","propre":"PROPR","sale":"SAL","rapide":"ra-PEED","lent":"LAHⁿ","fort":"FOR","faible":"FEHBL","lourd":"LOOR","léger":"lay-ZHAY","haut":"OH","bas":"BA","large":"LARZH","étroit":"ay-TRWA","doux":"DOO","dur":"DÜR","mouillé":"moo-YAY","sec":"SEHK","prêt":"PREH","libre":"LEEBR","occupé":"o-kü-PAY","gratuit":"gra-TWEE","intéressant":"ehⁿ-tay-reh-SAHⁿ","ennuyeux":"ahⁿ-nwee-YÖ","génial":"zhay-NYAL","nul":"NÜL","timide":"tee-MEED","nerveux":"nehr-VÖ","fier":"FYEHR","seul":"SÖL","ensemble":"ahⁿ-SAHⁿBL","vrai":"VREH","faux":"FOH","possible":"po-SEEBL","dangereux":"dahⁿzh-RÖ","sûr":"SÜR","célèbre":"say-LEHBR","étrange":"ay-TRAHⁿZH","mignon":"mee-NYOHⁿ","poli":"poh-LEE","malin":"ma-LEHⁿ","rouge":"ROOZH","bleu":"BLÖ","vert":"VEHR","jaune":"ZHOHN","noir":"NWAR","blanc":"BLAHⁿ","orange":"oh-RAHⁿZH","rose":"ROZ","violet":"vyoh-LEH","gris":"GREE","marron":"ma-ROHⁿ","beige":"BEHZH","clair":"KLEHR","foncé":"fohⁿ-SAY","la couleur":"la koo-LÖR","je":"ZHUH","tu":"TÜ","il":"EEL","elle":"EHL","on":"OHⁿ","nous":"NOO","vous":"VOO","ils":"EEL","elles":"EHL","moi":"MWA","toi":"TWA","et":"AY","ou":"OO","mais":"MEH","parce que":"pars-KUH","avec":"a-VEHK","sans":"SAHⁿ","pour":"POOR","de":"DUH","à":"A","très":"TREH","beaucoup":"boh-KOO","un peu":"uhⁿ PÖ","trop":"TROH","assez":"a-SAY","aussi":"oh-SEE","encore":"ahⁿ-KOR","oui":"WEE","non":"NOHⁿ","peut-être":"pö-TEHTR","bien sûr":"byehⁿ SÜR","voilà":"vwa-LA","qui":"KEE","quoi":"KWA","où":"OO","quand":"KAHⁿ","comment":"ko-MAHⁿ","pourquoi":"poor-KWA","combien":"kohⁿ-BYEHⁿ","ce":"SUH","ça":"SA","tout":"TOO","rien":"ree-EHⁿ","quelque chose":"kehl-kuh SHOZ","quelqu'un":"kehl-KUHⁿ","mon":"MOHⁿ","ma":"MA","mes":"MAY","ton":"TOHⁿ","ta":"TA","son":"SOHⁿ","sa":"SA","notre":"NOHTR","votre":"VOHTR","leur":"LÖR","si":"SEE","donc":"DOHⁿK","alors":"a-LOR","puis":"PWEE","ensuite":"ahⁿ-SWEET","avant":"a-VAHⁿ","après":"a-PREH","pendant":"pahⁿ-DAHⁿ","depuis":"duh-PWEE","chez":"SHAY","vers":"VEHR","comme":"KOM","plus":"PLÜ","moins":"MWEHⁿ","seulement":"söl-MAHⁿ","presque":"prehs-KUH","vraiment":"vreh-MAHⁿ","bien":"BYEHⁿ","mal":"MAL","hein":"EHⁿ","allez":"a-LAY","une fois":"ün FWA","ben":"BEHN","chaque":"SHAK","quelques":"kehl-KUH","plusieurs":"plü-ZYÖR","même":"MEHM","autre":"OHTR","n'importe quoi":"nehⁿ-port KWA","d'ailleurs":"da-YÖR","le boulot":"luh boo-LOH","le bureau":"luh bü-ROH","le collègue":"luh ko-LEHG","le patron":"luh pa-TROHⁿ","les études":"lay zay-TÜD","l'étudiant":"lay-tü-DYAHⁿ","l'étudiante":"lay-tü-DYAHⁿT","le cours":"luh KOOR","l'examen":"lehg-za-MEHⁿ","le prix":"luh PREE","la carte bancaire":"la kart bahⁿ-KEHR","en espèces":"ahⁿ nehs-PEHS","la monnaie":"la mo-NEH","le salaire":"luh sa-LEHR","le métier":"luh may-TYAY","l'entreprise":"lahⁿ-truh-PREEZ","la réunion":"la ray-ü-NYOHⁿ","le CV":"luh say-VAY","le devoir":"luh duh-VWAR","la note":"la NOT","le diplôme":"luh dee-PLOHM","le professeur":"luh proh-feh-SÖR","le guide":"luh GEED","le moniteur":"luh moh-nee-TÖR","la monitrice":"la moh-nee-TREES","la réservation":"la ray-zehr-va-SYOHⁿ","le compte":"luh KOHⁿT","la réduction":"la ray-dük-SYOHⁿ","les soldes":"lay SOLD","le reçu":"luh ruh-SÜ","le chômage":"luh shoh-MAZH","le contrat":"luh kohⁿ-TRA","l'impôt":"lehⁿ-POH","la pause":"la POHZ","le congé":"luh kohⁿ-ZHAY","l'horaire":"loh-REHR","le temps plein":"luh tahⁿ PLEHⁿ","le mi-temps":"luh mee-TAHⁿ","Tu viens ce soir ?":"tü vyehⁿ suh SWAR?","Vous venez ce soir ?":"voo vuh-nay suh SWAR?","Tu es belge.":"tü eh BEHLZH","C'est ma belle-mère.":"seh ma behl-MEHR","Mes beaux-parents habitent en Wallonie.":"may boh-pa-rahⁿ za-beet tahⁿ nwa-loh-NEE","Mamy a septante-huit ans.":"ma-mee a sehp-tahⁿ-twee TAHⁿ","Je voudrais un peu d'eau, s'il te plaît.":"zhuh voo-dreh zuhⁿ pö DOH, seel tuh PLEH","Tu veux encore des frites ?":"tü vö zahⁿ-kor day FREET?","J'aime le fromage.":"zhehm luh froh-MAZH","Je n'aime pas le café.":"zhuh nehm pa luh ka-FAY","Je travaille le matin.":"zhuh tra-vahy luh ma-TEHⁿ","On mange à midi.":"ohⁿ mahⁿ zha mee-DEE","Est-ce que tu as faim ?":"ehs kuh tü a FEHⁿ?","Tu habites où ?":"tü a-beet ZOO?","On est fatigués.":"ohⁿ neh fa-tee-GAY","Je vais travailler demain.":"zhuh veh tra-va-yay duh-MEHⁿ","On va voir ta famille samedi.":"ohⁿ va vwar ta fa-meey sam-DEE","Il y a une boulangerie près d'ici ?":"ee lee a ün boo-lahⁿzh-ree preh dee-SEE?","Les clés sont sur la table.":"lay klay sohⁿ sür la TABL","Bonjour madame, vous avez du pain ?":"bohⁿ-zhoor ma-DAM, voo za-vay dü PEHⁿ?","Excusez-moi, monsieur, où est la gare ?":"ehks-kü-zay-MWA, muh-SYÖ, oo eh la GAR?","Il fait froid aujourd'hui.":"eel feh frwa oh-zhoor-DWEE","Il pleut encore !":"eel plö tahⁿ-KOR!","Tourne à droite au feu.":"toor na drwa toh FÖ","Continuez tout droit.":"kohⁿ-tee-nway too DRWA","Tu sais m'aider une fois ?":"tü seh meh-day ün FWA?","Je ne sais pas venir demain.":"zhuh nuh seh pa vuh-neer duh-MEHⁿ","Tu veux du café ?":"tü vö dü ka-FAY?","J'ai mal à la tête.":"zhay ma la la TEHT","Tu as mal au genou ?":"tü a ma loh zhuh-NOO?","Il est content.":"ee leh kohⁿ-TAHⁿ","Hier, j'ai mangé des moules.":"YEHR, zhay mahⁿ-zhay day MOOL","Je suis allée à Liège.":"zhuh swee za-lay a LYEHZH","On est partis tôt.":"ohⁿ neh par-tee TOH","Vous devez mettre votre casque.":"voo duh-vay mehtr vohtr KASK","On peut faire une pause ?":"ohⁿ pö feh rün POHZ?","J'habite en Finlande depuis trois ans.":"zha-bee tahⁿ fehⁿ-lahⁿd duh-pwee trwa ZAHⁿ","J'apprends le français depuis un an.":"zha-prahⁿ luh frahⁿ-seh duh-pwee zuhⁿ NAHⁿ","J'aimerais visiter les Ardennes.":"zhehm-reh vee-zee-tay lay zar-DEHN","Je voudrais travailler comme guide.":"zhuh voo-dreh tra-va-yay kom GEED","C'est une voiture rouge.":"seh tün vwa-tür ROOZH","On a un petit jardin.":"ohⁿ na uhⁿ puh-tee zhar-DEHⁿ","Je trouve que la Belgique est très jolie.":"zhuh troov kuh la behl-zhee keh treh zhoh-LEE","J'aime la Finlande parce que c'est calme.":"zhehm la fehⁿ-lahⁿd pars-kuh seh KALM","Je la vois demain.":"zhuh la vwa duh-MEHⁿ","Bonjour, mon cœur !":"bohⁿ-ZHOOR, mohⁿ KÖR!","Bonne nuit !":"bon NWEE!","Je suis japonaise, mais j'habite en Finlande.":"zhuh swee zha-poh-NEHZ, meh zha-bee tahⁿ fehⁿ-LAHⁿD","C'est qui ?":"seh KEE?","C'est Quentin ?":"seh kahⁿ-TEHⁿ?","C'est ta marraine, Chantal ?":"seh ta ma-REHN, shahⁿ-TAL?","Septante-deux !":"sehp-tahⁿt-DÖ!","Encore une fois !":"ahⁿ-ko rün FWA!","Tu veux encore du pain ?":"tü vö zahⁿ-kor dü PEHⁿ?","J'adore le chocolat belge !":"zha-dor luh shoh-koh-la BEHLZH!","Je n'aime pas trop la bière.":"zhuh nehm pa troh la BYEHR","Et toi, tu aimes quoi ?":"ay TWA, tü ehm KWA?","Je me lève à sept heures.":"zhuh muh leh va seh TÖR","Je travaille l'après-midi.":"zhuh tra-vahy la-preh-mee-DEE","Je rentre le soir.":"zhuh rahⁿtr luh SWAR","Tu habitais où ?":"tü a-bee-teh ZOO?","C'était comment ?":"say-teh ko-MAHⁿ?","Pourquoi ?":"poor-KWA?","On fait quoi ce soir ?":"ohⁿ feh kwa suh SWAR?","Tu es fatigué ?":"tü eh fa-tee-GAY?","On y va !":"ohⁿ nee VA!","Lundi, je vais à l'école.":"luhⁿ-DEE, zhuh veh za lay-KOL","On va chez Christelle dimanche ?":"ohⁿ va shay krees-tehl dee-MAHⁿSH?","Bonne idée !":"bo nee-DAY!","Où sont les clés ?":"oo sohⁿ lay KLAY?","Sous la table ?":"soo la TABL?","Je l'ai trouvé !":"zhuh lay troo-VAY!","Bonjour monsieur !":"bohⁿ-zhoor muh-SYÖ!","Je voudrais un pistolet, s'il vous plaît.":"zhuh voo-dreh zuhⁿ pees-toh-LEH, seel voo PLEH","Il fait beau aujourd'hui !":"eel feh boh oh-zhoor-DWEE!","Il fait moins cinq.":"eel feh mwehⁿ SEHⁿK","Tourne à gauche !":"toor na GOHSH!","Tout droit !":"too DRWA!","On est arrivés !":"ohⁿ neh ta-ree-VAY!","C'est belge, ça ?":"seh BEHLZH, SA?","Ta famille dit quoi pour ?":"ta fa-meey dee kwa POOR?","Ça, c'est la cuisine.":"SA, seh la kwee-ZEEN","Où est mon GSM ?":"oo eh mohⁿ zhay-eh-SEHM?","C'est ton tour !":"seh tohⁿ TOOR!","Ça va ? Ne bougez pas.":"sa VA? nuh boo-zhay PA","J'appelle le 112.":"zha-pehl luh sahⁿ DOOZ","Aujourd'hui, j'étais contente parce que":"oh-zhoor-DWEE, zhay-teh kohⁿ-tahⁿt pars-KUH","J'étais un peu stressée.":"zhay-teh zuhⁿ pö streh-SAY","Et toi, ça va ?":"ay TWA, sa VA?","Hier, j'ai travaillé.":"YEHR, zhay tra-va-YAY","J'ai mangé une gaufre !":"zhay mahⁿ-zhay ün GOHFR!","Et toi, tu as fait quoi ?":"ay TWA, tü a feh KWA?","Je suis allée en Laponie.":"zhuh swee za-lay ahⁿ la-poh-NEE","On est partis en voiture.":"ohⁿ neh par-tee ahⁿ vwa-TÜR","C'était génial !":"say-teh zhay-NYAL!","Bonjour à tous ! Je suis votre guide.":"bohⁿ-zhoo ra TOOS! zhuh swee vohtr GEED","Vous devez rester ensemble.":"voo duh-vay rehs-tay ahⁿ-SAHⁿBL","Des questions ?":"day kehs-TYOHⁿ?","C'était en":"say-teh TAHⁿ","Et voilà !":"ay vwa-LA!","J'aimerais faire du kayak dans les Ardennes.":"zhehm-reh fehr dü ka-yak dahⁿ lay zar-DEHN","J'aimerais parler longtemps avec Sol.":"zhehm-reh par-lay lohⁿ-tahⁿ a-vehk SOL","Et toi ?":"ay TWA?","C'est petit et rouge":"seh puh-tee tay ROOZH","C'est dans la cuisine.":"seh dahⁿ la kwee-ZEEN","Oui, bravo !":"WEE, bra-VOH!","Je trouve que la Finlande est plus calme.":"zhuh troov kuh la fehⁿ-lahⁿ deh plü KALM","Oui, mais en Belgique, il y a les frites !":"WEE, meh zahⁿ behl-ZHEEK, ee lee a lay FREET!","J'apprends le français pour ta famille.":"zha-prahⁿ luh frahⁿ-seh poor ta fa-MEEY","Merci de m'aider tous les jours.":"mehr-see duh meh-day too lay ZHOOR","Je suis fière de moi !":"zhuh swee fyehr duh MWA!","Attends, je réfléchis.":"a-TAHⁿ, zhuh ray-flay-SHEE","Je sais !":"zhuh SEH!","Salut ! Ça va ?":"sa-LÜ! sa VA?","Qu'est-ce que tu fais aujourd'hui ?":"kehs-kuh tü feh zoh-zhoor-DWEE?","Bisous, à bientôt !":"bee-ZOO, a byehⁿ-TOH!","Aujourd'hui, j'ai appris":"oh-zhoor-DWEE, zhay a-PREE","C'est correct ?":"seh koh-REHKT?","Salut ! C'est Aya.":"sa-LÜ! seh ta-YA","Qu'est-ce qu'on prend ?":"kehs kohⁿ PRAHⁿ?","On fait du kayak sur la Lesse ?":"ohⁿ feh dü ka-yak sür la LEHS?","Ici, c'est chez mes parents.":"ee-SEE, seh shay may pa-RAHⁿ","C'était en hiver.":"say-teh tahⁿ nee-VEHR","Tu me passes le couteau ?":"tü muh pas luh koo-TOH?","Bonjour ! Deux cafés, s'il vous plaît.":"bohⁿ-ZHOOR! dö ka-FAY, seel voo PLEH","Tu sais me passer le pain ?":"tü seh muh pa-say luh PEHⁿ?","bonjour":"bohⁿ-ZHOOR","vu":"VÜ","salut":"sa-LÜ","une":"ÜN","dessus":"duh-SÜ","dessous":"duh-SOO","sac":"SAK","sel":"SEHL","c'est":"SEH","merci":"mehr-SEE","Paris":"pa-REE","rue":"RÜ","roue":"ROO","café":"ka-FAY","parlé":"par-LAY","les":"LAY","le":"LUH","des":"DAY","maison":"meh-ZOHⁿ","bonne":"BON","enfant":"ahⁿ-FAHⁿ","temps":"TAHⁿ","an":"AHⁿ","vent":"VAHⁿ","vont":"VOHⁿ","vin":"VEHⁿ","pain":"PEHⁿ","pont":"POHⁿ","mère":"MEHR","fête":"FEHT","soir":"SWAR","mois":"MWA","chat":"SHA","chocolat":"shoh-koh-LA","Belgique":"behl-ZHEEK","gare":"GAR","genou":"zhuh-NOO","sœur":"SÖR","peu":"PÖ","pou":"POO","guide":"GEED","cul":"KÜ","hôtel":"oh-TEHL","homme":"OM","photo":"foh-TOH","eau":"OH","français":"frahⁿ-SEH","car":"KAR","cuisine":"kwee-ZEEN","poisson":"pwa-SOHⁿ","poison":"pwa-ZOHⁿ","dessert":"deh-SEHR","désert":"day-ZEHR","fille":"FEEY","famille":"fa-MEEY","soleil":"soh-LEHY","ville":"VEEL","montagne":"mohⁿ-TANY","champignon":"shahⁿ-pee-NYOHⁿ","Espagne":"ehs-PANY","attention":"a-tahⁿ-SYOHⁿ","station":"sta-SYOHⁿ","solution":"soh-lü-SYOHⁿ","nuit":"NWEE","suis":"SWEE","noix":"NWA","les amis":"lay za-MEE","vous avez":"voo za-VAY","les copains":"lay koh-PEHⁿ","ils parlent":"eel PARL","elles mangent":"ehl MAHⁿZH","ils aiment":"eel ZEHM","il parle":"eel PARL"}/*END PRON*/;
+const PRON = /*PRON*/{"Bonjour !":"bohⁿ-ZHOOR!","Bonsoir !":"bohⁿ-SWAR!","Salut !":"sa-LÜ!","Merci !":"mehr-SEE!","Merci beaucoup !":"mehr-see boh-KOO!","De rien.":"duh RYEHⁿ","S'il vous plaît.":"seel voo PLEH","Oui.":"WEE","Non.":"NOHⁿ","Pardon !":"par-DOHⁿ!","Excusez-moi.":"ehks-kü-zay-MWA","Je suis désolée.":"zhuh swee day-zoh-LAY","Je ne comprends pas.":"zhuh nuh kohⁿ-prahⁿ PA","Je comprends.":"zhuh kohⁿ-PRAHⁿ","Vous pouvez répéter, s'il vous plaît ?":"voo poo-vay ray-pay-TAY, seel voo PLEH?","Plus lentement, s'il vous plaît.":"plü lahⁿt-MAHⁿ, seel voo PLEH","Comment on dit en français ?":"ko-mahⁿ ohⁿ dee tahⁿ frahⁿ-SEH?","Qu'est-ce que ça veut dire ?":"kehs-kuh sa vö DEER?","Je parle un peu français.":"zhuh par luhⁿ pö frahⁿ-SEH","Vous parlez anglais ?":"voo par-lay zahⁿ-GLEH?","Au revoir !":"oh ruh-VWAR!","Bonne journée !":"bon zhoor-NAY!","Bonne soirée !":"bon swa-RAY!","À bientôt !":"a byehⁿ-TOH!","D'accord.":"da-KOR","Bonjour, mon cœur.":"bohⁿ-ZHOOR, mohⁿ KÖR","Bonne nuit.":"bon NWEE","Je t'aime.":"zhuh TEHM","Je t'aime, Max.":"zhuh TEHM, MAKS","Moi aussi, je t'aime.":"mwa oh-SEE, zhuh TEHM","Max, tu viens ?":"MAKS, tü VYEHⁿ?","Bonne nuit, Max. Dors bien.":"bon NWEE, MAKS dor BYEHⁿ","Tu me manques.":"tü muh MAHⁿK","Ça va ?":"sa VA?","Ça va, et toi ?":"sa VA, ay TWA?","Tu as bien dormi ?":"tü a byehⁿ dor-MEE?","Tu as faim ?":"tü a FEHⁿ?","J'ai faim.":"zhay FEHⁿ","Qu'est-ce qu'on mange ?":"kehs kohⁿ MAHⁿZH?","Je suis fatiguée.":"zhuh swee fa-tee-GAY","Tu veux un café ?":"tü vö zuhⁿ ka-FAY?","Qu'est-ce que tu fais ?":"kehs-kuh tü FEH?","Tu viens avec ?":"tü vyehⁿ za-VEHK?","On y va ?":"ohⁿ nee VA?","Attends !":"a-TAHⁿ!","J'arrive !":"zha-REEV!","Tu peux m'aider ?":"tü pö meh-DAY?","Comment on dit ça en français ?":"ko-mahⁿ ohⁿ dee sa ahⁿ frahⁿ-SEH?","Corrige-moi, s'il te plaît.":"koh-reezh-MWA, seel tuh PLEH","Parle plus lentement, s'il te plaît.":"parl plü lahⁿt-MAHⁿ, seel tuh PLEH","Je rentre à six heures.":"zhuh rahⁿ tra see ZÖR","Tu rentres quand ?":"tü rahⁿtr KAHⁿ?","C'était comment, ta journée ?":"say-teh ko-MAHⁿ, ta zhoor-NAY?","Ce n'est pas grave.":"suh neh pa GRAV","Pardon, je me suis trompée.":"par-DOHⁿ, zhuh muh swee trohⁿ-PAY","Tu es trop mignon.":"tü eh troh mee-NYOHⁿ","Bisous !":"bee-ZOO!","À tantôt !":"a tahⁿ-TOH!","Salut, ça va ?":"sa-LÜ, sa VA?","Ça va bien, merci.":"sa va BYEHⁿ, mehr-SEE","Enchantée !":"ahⁿ-shahⁿ-TAY!","Ça fait plaisir de te voir !":"sa feh pleh-zeer duh tuh VWAR!","Ça fait longtemps !":"sa feh lohⁿ-TAHⁿ!","Merci pour l'invitation.":"mehr-see poor lehⁿ-vee-ta-SYOHⁿ","C'est pour toi.":"seh poor TWA","C'est un petit cadeau du Japon.":"seh tuhⁿ puh-tee ka-doh dü zha-POHⁿ","Je peux aider ?":"zhuh pö zeh-DAY?","Tu as besoin d'aide ?":"tü a buh-zwehⁿ DEHD?","Ta maison est très jolie.":"ta meh-zohⁿ eh treh zhoh-LEE","J'apprends le français.":"zha-prahⁿ luh frahⁿ-SEH","Je fais des fautes, désolée.":"zhuh feh day FOHT, day-zoh-LAY","Tu peux répéter, s'il te plaît ?":"tü pö ray-pay-TAY, seel tuh PLEH?","Tu peux parler un peu plus lentement ?":"tü pö par-lay uhⁿ pö plü lahⁿt-MAHⁿ?","Je n'ai pas compris.":"zhuh nay pa kohⁿ-PREE","Qu'est-ce que tu as dit ?":"kehs-kuh tü a DEE?","Comment ça va, le travail ?":"ko-mahⁿ sa VA, luh tra-VAHY?","Et les enfants, ça va ?":"ay lay zahⁿ-FAHⁿ, sa VA?","On est très contents d'être ici.":"ohⁿ neh treh kohⁿ-tahⁿ deh tree-SEE","Tu viens nous voir en Finlande ?":"tü vyehⁿ noo vwa rahⁿ fehⁿ-LAHⁿD?","Il fait moins froid qu'en Finlande !":"eel feh mwehⁿ frwa kahⁿ fehⁿ-LAHⁿD!","On fait une photo ?":"ohⁿ feh tün foh-TOH?","C'était super, merci pour tout !":"say-teh sü-PEHR, mehr-see poor TOO!","Bonne continuation !":"bon kohⁿ-tee-nwa-SYOHⁿ!","Allez, à la prochaine !":"a-LAY, a la proh-SHEHN!","Bonne nuit, dors bien !":"bon NWEE, dor BYEHⁿ!","Christelle, c'est ma belle-mère.":"krees-TEHL, seh ma behl-MEHR","Bonjour Christelle ! Ça va ?":"bohⁿ-zhoor krees-TEHL! sa VA?","Christelle, c'est délicieux !":"krees-TEHL, seh day-lee-SYÖ!","Merci pour tout, Christelle.":"mehr-see poor TOO, krees-TEHL","Quentin, c'est le frère de mon mari.":"kahⁿ-TEHⁿ, seh luh frehr duh mohⁿ ma-REE","Salut Quentin ! Tu viens avec ?":"sa-lü kahⁿ-TEHⁿ! tü vyehⁿ za-VEHK?","Sol, c'est la grand-mère de mon mari.":"SOL, seh la grahⁿ-mehr duh mohⁿ ma-REE","Sol, tu veux un café ?":"SOL, tü vö zuhⁿ ka-FAY?","Tu as appelé Mamy ?":"tü a za-play ma-MEE?","Mamy va bien ?":"ma-mee va BYEHⁿ?","Christian, c'est le grand-père de mon mari.":"krees-TYAHⁿ, seh luh grahⁿ-pehr duh mohⁿ ma-REE","Christian, tu me racontes une histoire ?":"krees-TYAHⁿ, tü muh ra-kohⁿt zü nees-TWAR?","Chantal, c'est la marraine de mon mari.":"shahⁿ-TAL, seh la ma-rehn duh mohⁿ ma-REE","Merci, Chantal, c'est très gentil.":"mehr-SEE, shahⁿ-TAL, seh treh zhahⁿ-TEE","Conrad, c'est le meilleur ami de mon mari.":"kohⁿ-RAD, seh luh meh-yö ra-mee duh mohⁿ ma-REE","Salut Conrad ! Ça fait longtemps !":"sa-lü kohⁿ-RAD! sa feh lohⁿ-TAHⁿ!","Sandrine, c'est la meilleure amie de mon mari.":"sahⁿ-DREEN, seh la meh-yö ra-mee duh mohⁿ ma-REE","Salut Sandrine, ça me fait plaisir de te voir !":"sa-lü sahⁿ-DREEN, sa muh feh pleh-zeer duh tuh VWAR!","Claudio est un ami de la famille.":"kloh-dyoh eh tuhⁿ na-mee duh la fa-MEEY","Matteo, c'est le fils de Claudio.":"ma-tay-OH, seh luh fees duh kloh-DYOH","Claudio, tu veux une bière ?":"kloh-DYOH, tü vö zün BYEHR?","Salut Matteo, quoi de neuf ?":"sa-lü ma-tay-OH, kwa duh NÖF?","Tu connais Conrad depuis quand ?":"tü ko-neh kohⁿ-rad duh-pwee KAHⁿ?","On invite Sandrine et Conrad samedi ?":"ohⁿ nehⁿ-veet sahⁿ-dree nay kohⁿ-rad sam-DEE?","Dis bonjour à Quentin de ma part !":"dee bohⁿ-zhoo ra kahⁿ-tehⁿ duh ma PAR!","Tu diras merci à ta maman pour moi ?":"tü dee-ra mehr-see a ta ma-mahⁿ poor MWA?","Bon anniversaire, Quentin !":"bohⁿ na-nee-vehr-SEHR, kahⁿ-TEHⁿ!","Joyeux Noël, Chantal !":"zhwa-yö no-EHL, shahⁿ-TAL!","Sol et Christian, merci pour l'accueil !":"so lay krees-TYAHⁿ, mehr-see poor la-KÖY!","On appelle Christelle ce soir ?":"ohⁿ na-pehl krees-tehl suh SWAR?","Tu me manques, Christelle !":"tü muh MAHⁿK, krees-TEHL!","Bisous à tout le monde !":"bee-zoo za tool-MOHⁿD!","Bon appétit !":"bohⁿ na-pay-TEE!","Santé !":"sahⁿ-TAY!","À la tienne !":"a la TYEHN!","C'est délicieux !":"seh day-lee-SYÖ!","C'est très bon !":"seh treh BOHⁿ!","Ça me goûte !":"sa muh GOOT!","Qu'est-ce que c'est ?":"kehs-kuh SEH?","C'est toi qui as cuisiné ?":"seh twa kee a kwee-zee-NAY?","Tu sais me passer le sel, s'il te plaît ?":"tü seh muh pa-say luh SEHL, seel tuh PLEH?","Je peux en reprendre ?":"zhuh pö zahⁿ ruh-PRAHⁿDR?","Juste un peu, s'il te plaît.":"zhüs tuhⁿ PÖ, seel tuh PLEH","J'ai assez mangé, merci.":"zhay a-say mahⁿ-ZHAY, mehr-SEE","Je n'ai plus faim.":"zhuh nay plü FEHⁿ","Je ne mange pas de viande.":"zhuh nuh mahⁿzh pa duh VYAHⁿD","Je n'aime pas trop ça.":"zhuh nehm pa troh SA","Tu me donnes la recette ?":"tü muh don la ruh-SEHT?","Encore un peu de vin ?":"ahⁿ-ko ruhⁿ pö duh VEHⁿ?","Non merci, ça va.":"nohⁿ mehr-SEE, sa VA","On mange à quelle heure ?":"ohⁿ mahⁿ zha keh LÖR?","Je fais la vaisselle.":"zhuh feh la veh-SEHL","Il y a encore des frites ?":"ee lee a ahⁿ-kor day FREET?","Je m'appelle Aya.":"zhuh ma-peh la-YA","Je suis japonaise.":"zhuh swee zha-poh-NEHZ","J'ai aussi des racines taïwanaises.":"zhay oh-see day ra-seen tahy-wa-NEHZ","J'habite en Finlande.":"zha-bee tahⁿ fehⁿ-LAHⁿD","Je suis étudiante.":"zhuh swee zay-tü-DYAHⁿT","Mon mari s'appelle Max.":"mohⁿ ma-ree sa-pehl MAKS","Mon mari est belge.":"mohⁿ ma-ree eh BEHLZH","Je suis mariée.":"zhuh swee ma-RYAY","J'apprends le français pour parler avec sa famille.":"zha-prahⁿ luh frahⁿ-seh poor par-lay a-vehk sa fa-MEEY","Je parle japonais, anglais et un peu finnois.":"zhuh parl zha-poh-NEH, ahⁿ-gleh zay uhⁿ pö fee-NWA","J'ai vingt-cinq ans.":"zhay vehⁿt-sehⁿ KAHⁿ","J'aime la nature et la montagne.":"zhehm la na-tü ray la mohⁿ-TANY","C'est ma première fois en Belgique.":"seh ma pruh-myehr fwa zahⁿ behl-ZHEEK","J'adore la Belgique !":"zha-dor la behl-ZHEEK!","Et vous, vous êtes d'où ?":"ay VOO, voo zeht DOO?","Excusez-moi, madame.":"ehks-kü-zay-MWA, ma-DAM","Où sont les toilettes, s'il vous plaît ?":"oo sohⁿ lay twa-LEHT, seel voo PLEH?","Où est la gare ?":"oo eh la GAR?","C'est loin ?":"seh LWEHⁿ?","C'est à gauche ou à droite ?":"seh ta goh shoo a DRWAT?","Je suis perdue.":"zhuh swee pehr-DÜ","Un aller simple pour Liège, s'il vous plaît.":"uhⁿ na-lay sehⁿpl poor LYEHZH, seel voo PLEH","Le train part de quel quai ?":"luh trehⁿ par duh kehl KAY?","C'est combien ?":"seh kohⁿ-BYEHⁿ?","Je voudrais ça, s'il vous plaît.":"zhuh voo-dreh SA, seel voo PLEH","Je regarde seulement, merci.":"zhuh ruh-gard söl-MAHⁿ, mehr-SEE","Je peux payer par carte ?":"zhuh pö peh-yay par KART?","Je n'ai pas besoin de sac.":"zhuh nay pa buh-zwehⁿ duh SAK","Une table pour deux, s'il vous plaît.":"ün tabl poor DÖ, seel voo PLEH","La carte, s'il vous plaît.":"la KART, seel voo PLEH","Qu'est-ce que vous me conseillez ?":"kehs-kuh voo muh kohⁿ-seh-YAY?","Je vais prendre ça.":"zhuh veh prahⁿdr SA","Pour moi, un café, s'il vous plaît.":"poor MWA, uhⁿ ka-FAY, seel voo PLEH","Une eau plate, s'il vous plaît.":"ü noh PLAT, seel voo PLEH","Je suis allergique aux noix.":"zhuh swee za-lehr-zhee koh NWA","L'addition, s'il vous plaît.":"la-dee-SYOHⁿ, seel voo PLEH","Merci, bonne journée !":"mehr-SEE, bon zhoor-NAY!","Vous avez une chambre pour ce soir ?":"voo za-vay zün shahⁿbr poor suh SWAR?","À quelle heure ouvre le magasin ?":"a keh lö roovr luh ma-ga-ZEHⁿ?","Il y a une pharmacie près d'ici ?":"ee lee a ün far-ma-see preh dee-SEE?","Pouvez-vous m'aider, s'il vous plaît ?":"poo-vay-voo meh-DAY, seel voo PLEH?","Vous pouvez prendre une photo de nous ?":"voo poo-vay prahⁿ drün foh-toh duh NOO?","Je ne suis pas d'ici.":"zhuh nuh swee pa dee-SEE","Pardon, je n'ai pas compris.":"par-DOHⁿ, zhuh nay pa kohⁿ-PREE","Appelez une ambulance !":"a-play zü nahⁿ-bü-LAHⁿS!","septante":"sehp-TAHⁿT","nonante":"noh-NAHⁿT","le déjeuner":"luh day-zhö-NAY","le dîner":"luh dee-NAY","le souper":"luh soo-PAY","Viens une fois ici !":"vyehⁿ zün fwa zee-SEE!","Tu sais venir demain ?":"tü seh vuh-neer duh-MEHⁿ?","le GSM":"luh zhay-eh-SEHM","Il drache !":"eel DRASH!","Il fait caillant.":"eel feh ka-YAHⁿ","Non, peut-être !":"NOHⁿ, pö-TEHTR!","Dis, tu as le temps ?":"DEE, tü a luh TAHⁿ?","Qu'est-ce que c'est pour un truc ?":"kehs-kuh seh poo ruhⁿ TRÜK?","J'ai bon !":"zhay BOHⁿ!","un essuie":"uhⁿ nay-SWEE","une drache":"ün DRASH","un pistolet":"uhⁿ pees-toh-LEH","un chicon":"uhⁿ shee-KOHⁿ","une praline":"ün pra-LEEN","une friterie":"ün free-TREE","un kot":"uhⁿ KOH","C'est bon, hein !":"seh BOHⁿ, EHⁿ!","Ça va aller.":"sa va a-LAY","On fait une pause ici.":"ohⁿ feh tün poh zee-SEE","Tout le monde va bien ?":"tool-mohⁿd va BYEHⁿ?","Restez ensemble, s'il vous plaît.":"rehs-tay zahⁿ-SAHⁿBL, seel voo PLEH","Buvez de l'eau.":"bü-vay duh LOH","Mettez votre casque.":"meh-tay vohtr KASK","Mettez votre gilet de sauvetage.":"meh-tay vohtr zhee-leh duh sohv-TAZH","Attention, ça glisse !":"a-tahⁿ-SYOHⁿ, sa GLEES!","Vous avez froid ?":"voo za-vay FRWA?","On repart dans cinq minutes.":"ohⁿ ruh-par dahⁿ sehⁿk mee-NÜT","Suivez-moi.":"swee-vay-MWA","la randonnée":"la rahⁿ-do-NAY","le sentier":"luh sahⁿ-TYAY","la montagne":"la mohⁿ-TANY","le lac":"luh LAK","la forêt":"la foh-REH","la tente":"la TAHⁿT","le sac de couchage":"luh sak duh koo-SHAZH","le sac à dos":"luh sa ka DOH","le kayak":"luh ka-YAK","la pagaie":"la pa-GEH","le canoë":"luh ka-no-AY","le ski":"luh SKEE","la piste":"la PEEST","Je suis monitrice de ski.":"zhuh swee moh-nee-trees duh SKEE","J'ai un brevet de premiers secours.":"zhay uhⁿ bruh-veh duh pruh-myay suh-KOOR","le feu de camp":"luh fö duh KAHⁿ","la carte":"la KART","la boussole":"la boo-SOL","la lampe frontale":"la lahⁿp frohⁿ-TAL","la météo":"la may-tay-OH","la rivière":"la ree-VYEHR","le sommet":"luh so-MEH","la remontée mécanique":"la ruh-mohⁿ-tay may-ka-NEEK","les premiers secours":"lay pruh-myay suh-KOOR","une entorse":"ü nahⁿ-TORS","une ampoule":"ü nahⁿ-POOL","l'hypothermie":"lee-poh-tehr-MEE","Où est-ce que ça fait mal ?":"oo ehs kuh sa feh MAL?","Ne bougez pas.":"nuh boo-zhay PA","On va rentrer.":"ohⁿ va rahⁿ-TRAY","La météo annonce de l'orage.":"la may-tay-oh a-nohⁿs duh loh-RAZH","pagayer":"pa-geh-YAY","chavirer":"sha-vee-RAY","la frontale":"la frohⁿ-TAL","les Ardennes":"lay zar-DEHN","le dénivelé":"luh day-nee-VLAY","Je suis née au Japon.":"zhuh swee nay oh zha-POHⁿ","Ma famille est en partie taïwanaise.":"ma fa-mee yeh tahⁿ par-tee tahy-wa-NEHZ","Maintenant, j'habite en Finlande.":"mehⁿt-NAHⁿ, zha-bee tahⁿ fehⁿ-LAHⁿD","J'étudie l'éducation en plein air.":"zhay-tü-dee lay-dü-ka-syohⁿ ahⁿ plehⁿ NEHR","Je suis en deuxième année.":"zhuh swee zahⁿ dö-zyeh ma-NAY","Mon école s'appelle Humak.":"mohⁿ nay-kol sa-peh lü-MAK","Plus tard, je voudrais être guide.":"plü TAR, zhuh voo-dreh zehtr GEED","On s'est rencontrés en Finlande.":"ohⁿ seh rahⁿ-kohⁿ-tray zahⁿ fehⁿ-LAHⁿD","Je suis peut-être dyslexique.":"zhuh swee pö-tehtr dees-lehk-SEEK","Lire, c'est difficile pour moi.":"LEER, seh dee-fee-seel poor MWA","Tu peux me le dire à l'oral ?":"tü pö muh luh dee ra loh-RAL?","Tu peux écrire plus grand ?":"tü pö zay-kreer plü GRAHⁿ?","Au Japon, on dit itadakimasu avant de manger.":"oh zha-POHⁿ, ohⁿ dee tee-ta-da-kee-ma-zü a-vahⁿ duh mahⁿ-ZHAY","En Finlande, on va au sauna tout le temps.":"ahⁿ fehⁿ-LAHⁿD, ohⁿ va oh soh-na tool-TAHⁿ","L'hiver est très long et très sombre.":"lee-veh reh treh lohⁿ ay treh SOHⁿBR","En été, il fait jour toute la nuit.":"ahⁿ nay-TAY, eel feh zhoor too tla NWEE","J'ai grandi à la campagne.":"zhay grahⁿ-dee a la kahⁿ-PANY","Mes parents habitent au Japon.":"may pa-rahⁿ za-beet toh zha-POHⁿ","J'ai un permis de conduire.":"zhay uhⁿ pehr-mee duh kohⁿ-DWEER","Je sais faire du kayak.":"zhuh seh fehr dü ka-YAK","J'ai appris les bonnes manières japonaises.":"zhay a-pree lay bon ma-nyehr zha-poh-NEHZ","le Japon":"luh zha-POHⁿ","Taïwan":"tahy-WAN","la Finlande":"la fehⁿ-LAHⁿD","la Belgique":"la behl-ZHEEK","l'université":"lü-nee-vehr-see-TAY","le mémoire":"luh may-MWAR","le stage":"luh STAZH","Je me sens chez moi en Finlande.":"zhuh muh sahⁿ shay mwa ahⁿ fehⁿ-LAHⁿD","Parfois, le Japon me manque.":"par-FWA, luh zha-pohⁿ muh MAHⁿK","le finnois":"luh fee-NWA","le japonais":"luh zha-poh-NEH","On cuisine ensemble ce soir ?":"ohⁿ kwee-zee nahⁿ-sahⁿbl suh SWAR?","Tu coupes les oignons ?":"tü koo play zoh-NYOHⁿ?","Qu'est-ce qui manque dans le frigo ?":"kehs kee mahⁿk dahⁿ luh free-GOH?","Je vais faire les courses.":"zhuh veh fehr lay KOORS","Tu as besoin de quelque chose ?":"tü a buh-zwehⁿ duh kehl-kuh SHOZ?","C'est ton tour de faire la vaisselle !":"seh tohⁿ toor duh fehr la veh-SEHL!","Tu peux sortir les poubelles ?":"tü pö sor-teer lay poo-BEHL?","On regarde un film ?":"ohⁿ ruh-gar duhⁿ FEELM?","Qu'est-ce qu'on fait ce week-end ?":"kehs kohⁿ feh suh wee-KEHND?","J'ai une idée !":"zhay ü nee-DAY!","Tu es où ?":"tü eh ZOO?","Je suis contente.":"zhuh swee kohⁿ-TAHⁿT","Je suis stressée.":"zhuh swee streh-SAY","Je suis fière de toi.":"zhuh swee fyehr duh TWA","Merci d'être là.":"mehr-see dehtr LA","Tu m'as manqué !":"tü ma mahⁿ-KAY!","Viens, on fait un câlin.":"VYEHⁿ, ohⁿ feh tuhⁿ ka-LEHⁿ","mon amour":"mohⁿ na-MOOR","mon chéri":"mohⁿ shay-REE","On se fait un petit café ?":"ohⁿ suh feh tuhⁿ puh-tee ka-FAY?","Ça sent bon !":"sa sahⁿ BOHⁿ!","J'ai oublié les clés !":"zhay oo-blee-ay lay KLAY!","Je suis désolée pour tout à l'heure.":"zhuh swee day-zoh-lay poor too ta LÖR","On en parle ?":"ohⁿ nahⁿ PARL?","Tu as raison.":"tü a reh-ZOHⁿ","Je ne suis pas d'accord.":"zhuh nuh swee pa da-KOR","Ce n'est pas ce que je voulais dire.":"suh neh pa suh kuh zhuh voo-leh DEER","On appelle ta mère ce soir ?":"ohⁿ na-pehl ta mehr suh SWAR?","Je suis heureuse avec toi.":"zhuh swee zö-rö za-vehk TWA","On part en vacances où ?":"ohⁿ pa rahⁿ va-kahⁿs ZOO?","le frigo":"luh free-GOH","les courses":"lay KOORS","la vaisselle":"la veh-SEHL","le linge":"luh LEHⁿZH","Tu ronfles !":"tü ROHⁿFL!","Fais de beaux rêves.":"feh duh boh REHV","mon lapin":"mohⁿ la-PEHⁿ","la famille":"la fa-MEEY","le mari":"luh ma-REE","la femme":"la FAM","les parents":"lay pa-RAHⁿ","la mère":"la MEHR","le père":"luh PEHR","maman":"ma-MAHⁿ","papa":"pa-PA","la belle-mère":"la behl-MEHR","le beau-père":"luh boh-PEHR","les beaux-parents":"lay boh-pa-RAHⁿ","le frère":"luh FREHR","la sœur":"la SÖR","le fils":"luh FEES","la fille":"la FEEY","les enfants":"lay zahⁿ-FAHⁿ","le bébé":"luh bay-BAY","la grand-mère":"la grahⁿ-MEHR","le grand-père":"luh grahⁿ-PEHR","mamy":"ma-MEE","papy":"pa-PEE","le beau-frère":"luh boh-FREHR","la belle-sœur":"la behl-SÖR","l'oncle":"LOHⁿKL","la tante":"la TAHⁿT","le cousin":"luh koo-ZEHⁿ","la cousine":"la koo-ZEEN","le neveu":"luh nuh-VÖ","la nièce":"la NYEHS","le parrain":"luh pa-REHⁿ","la marraine":"la ma-REHN","les petits-enfants":"lay puh-tee-zahⁿ-FAHⁿ","le petit ami":"luh puh-tee ta-MEE","la petite amie":"la puh-tee ta-MEE","un":"UHⁿ","deux":"DÖ","trois":"TRWA","quatre":"KATR","cinq":"SEHⁿK","six":"SEES","sept":"SEHT","huit":"WEET","neuf":"NÖF","dix":"DEES","onze":"OHⁿZ","douze":"DOOZ","treize":"TREHZ","quatorze":"ka-TORZ","quinze":"KEHⁿZ","seize":"SEHZ","dix-sept":"dee-SEHT","dix-huit":"dee-ZWEET","dix-neuf":"deez-NÖF","vingt":"VEHⁿ","vingt et un":"vehⁿ tay UHⁿ","vingt-deux":"vehⁿt-DÖ","trente":"TRAHⁿT","quarante":"ka-RAHⁿT","cinquante":"sehⁿ-KAHⁿT","soixante":"swa-SAHⁿT","quatre-vingts":"katr-VEHⁿ","cent":"SAHⁿ","septante-cinq":"sehp-tahⁿt-SEHⁿK","nonante-neuf":"noh-nahⁿt-NÖF","deux cents":"dö SAHⁿ","mille":"MEEL","deux mille vingt-six":"dö meel vehⁿt-SEES","premier":"pruh-MYAY","deuxième":"dö-ZYEHM","troisième":"trwa-ZYEHM","la moitié":"la mwa-TYAY","un quart":"uhⁿ KAR","un euro":"uhⁿ nö-ROH","deux euros":"dö zö-ROH","dix euros":"dee zö-ROH","vingt euros":"vehⁿ tö-ROH","un euro cinquante":"uhⁿ nö-roh sehⁿ-KAHⁿT","le numéro":"luh nü-may-ROH","un million":"uhⁿ mee-LYOHⁿ","zéro":"zay-ROH","une douzaine":"ün doo-ZEHN","le chiffre":"luh SHEEFR","aujourd'hui":"oh-zhoor-DWEE","demain":"duh-MEHⁿ","hier":"YEHR","maintenant":"mehⁿt-NAHⁿ","tout de suite":"too duh SWEET","le matin":"luh ma-TEHⁿ","le midi":"luh mee-DEE","l'après-midi":"la-preh-mee-DEE","le soir":"luh SWAR","la nuit":"la NWEE","le jour":"luh ZHOOR","la semaine":"la suh-MEHN","le mois":"luh MWA","l'an":"LAHⁿ","l'année":"la-NAY","lundi":"luhⁿ-DEE","mardi":"mar-DEE","mercredi":"mehr-kruh-DEE","jeudi":"zhö-DEE","vendredi":"vahⁿ-druh-DEE","samedi":"sam-DEE","dimanche":"dee-MAHⁿSH","le week-end":"luh wee-KEHND","l'heure":"LÖR","Quelle heure est-il ?":"keh lö reh-TEEL?","Il est huit heures.":"ee leh wee TÖR","tôt":"TOH","tard":"TAR","en retard":"ahⁿ ruh-TAR","ce matin":"suh ma-TEHⁿ","ce soir":"suh SWAR","après-demain":"a-preh-duh-MEHⁿ","avant-hier":"a-vahⁿ-YEHR","la semaine prochaine":"la suh-mehn proh-SHEHN","la semaine dernière":"la suh-mehn dehr-NYEHR","le mois prochain":"luh mwa proh-SHEHⁿ","l'année dernière":"la-nay dehr-NYEHR","la minute":"la mee-NÜT","la seconde":"la suh-GOHⁿD","et demie":"ay duh-MEE","et quart":"ay KAR","moins le quart":"mwehⁿ luh KAR","janvier":"zhahⁿ-VYAY","février":"fay-vree-AY","mars":"MARS","avril":"a-VREEL","mai":"MEH","juin":"ZHWEHⁿ","juillet":"zhwee-YEH","août":"OOT","septembre":"sehp-TAHⁿBR","octobre":"ok-TOBR","novembre":"noh-VAHⁿBR","décembre":"day-SAHⁿBR","le printemps":"luh prehⁿ-TAHⁿ","l'été":"lay-TAY","l'automne":"loh-TON","l'hiver":"lee-VEHR","l'anniversaire":"la-nee-vehr-SEHR","les vacances":"lay va-KAHⁿS","Noël":"no-EHL","bientôt":"byehⁿ-TOH","déjà":"day-ZHA","pas encore":"pa zahⁿ-KOR","toujours":"too-ZHOOR","jamais":"zha-MEH","souvent":"soo-VAHⁿ","parfois":"par-FWA","le calendrier":"luh ka-lahⁿ-dree-AY","le rendez-vous":"luh rahⁿ-day-VOO","la Saint-Nicolas":"la sehⁿ-nee-koh-LA","la personne":"la pehr-SON","les gens":"lay ZHAHⁿ","l'homme":"LOM","l'enfant":"lahⁿ-FAHⁿ","l'ami":"la-MEE","l'amie":"la-MEE","le nom":"luh NOHⁿ","le prénom":"luh pray-NOHⁿ","la tête":"la TEHT","les yeux":"lay ZYÖ","l'oreille":"loh-REHY","la bouche":"la BOOSH","le nez":"luh NAY","la dent":"la DAHⁿ","la main":"la MEHⁿ","le bras":"luh BRA","la jambe":"la ZHAHⁿB","le pied":"luh PYAY","le dos":"luh DOH","le ventre":"luh VAHⁿTR","le corps":"luh KOR","malade":"ma-LAD","le médecin":"luh may-duh-SEHⁿ","l'hôpital":"loh-pee-TAL","le médicament":"luh may-dee-ka-MAHⁿ","la fièvre":"la FYEHVR","J'ai mal ici.":"zhay ma lee-SEE","le visage":"luh vee-ZAZH","les cheveux":"lay shuh-VÖ","le cou":"luh KOO","l'épaule":"lay-POHL","le genou":"luh zhuh-NOO","le doigt":"luh DWA","le cœur":"luh KÖR","la peau":"la POH","le sang":"luh SAHⁿ","l'os":"LOS","la gorge":"la GORZH","la voix":"la VWA","le rhume":"luh RÜM","la grippe":"la GREEP","la toux":"la TOO","la blessure":"la bleh-SÜR","la pharmacie":"la far-ma-SEE","l'infirmière":"lehⁿ-feer-MYEHR","le dentiste":"luh dahⁿ-TEEST","l'urgence":"lür-ZHAHⁿS","les urgences":"lay zür-ZHAHⁿS","le rendez-vous chez le médecin":"luh rahⁿ-day-voo shay luh may-duh-SEHⁿ","le garçon":"luh gar-SOHⁿ","l'adulte":"la-DÜLT","le voisin":"luh vwa-ZEHⁿ","la voisine":"la vwa-ZEEN","le client":"luh klee-AHⁿ","l'étranger":"lay-trahⁿ-ZHAY","le poumon":"luh poo-MOHⁿ","l'estomac":"lehs-toh-MA","la cheville":"la shuh-VEEL","le poignet":"luh pwa-NYEH","l'ordonnance":"lor-do-NAHⁿS","la mutuelle":"la mü-TWEHL","enceinte":"ahⁿ-SEHⁿT","l'allergie":"la-lehr-ZHEE","la nourriture":"la noo-ree-TÜR","la boisson":"la bwa-SOHⁿ","l'eau":"LOH","le café":"luh ka-FAY","le thé":"luh TAY","le lait":"luh LEH","la bière":"la BYEHR","le vin":"luh VEHⁿ","le jus":"luh ZHÜ","le pain":"luh PEHⁿ","le beurre":"luh BÖR","le fromage":"luh froh-MAZH","l'œuf":"LÖF","la viande":"la VYAHⁿD","le poisson":"luh pwa-SOHⁿ","le poulet":"luh poo-LEH","les légumes":"lay lay-GÜM","les fruits":"lay FRWEE","la pomme":"la POM","la pomme de terre":"la pom duh TEHR","les frites":"lay FREET","le riz":"luh REE","les pâtes":"lay PAT","la soupe":"la SOOP","le sucre":"luh SÜKR","le sel":"luh SEHL","le chocolat":"luh shoh-koh-LA","la gaufre":"la GOHFR","le petit-déjeuner":"luh puh-tee-day-zhö-NAY","le repas":"luh ruh-PA","le porc":"luh PORK","le bœuf":"luh BÖF","le jambon":"luh zhahⁿ-BOHⁿ","la saucisse":"la soh-SEES","les moules":"lay MOOL","la tomate":"la toh-MAT","la carotte":"la ka-ROT","l'oignon":"loh-NYOHⁿ","la salade":"la sa-LAD","le champignon":"luh shahⁿ-pee-NYOHⁿ","le chou":"luh SHOO","les chicons":"lay shee-KOHⁿ","la banane":"la ba-NAN","l'orange":"loh-RAHⁿZH","la fraise":"la FREHZ","le citron":"luh see-TROHⁿ","la poire":"la PWAR","le gâteau":"luh ga-TOH","la tarte":"la TART","le biscuit":"luh bees-KWEE","la glace":"la GLAS","la confiture":"la kohⁿ-fee-TÜR","le miel":"luh MYEHL","l'huile":"LWEEL","le poivre":"luh PWAVR","la sauce":"la SOHS","la mayonnaise":"la meh-yo-NEHZ","la moutarde":"la moo-TARD","la cuillère":"la kwee-YEHR","la fourchette":"la foor-SHEHT","le couteau":"luh koo-TOH","l'assiette":"la-SYEHT","le verre":"luh VEHR","la tasse":"la TAS","le bol":"luh BOL","sucré":"sü-KRAY","salé":"sa-LAY","épicé":"ay-pee-SAY","chaud":"SHOH","froid":"FRWA","la farine":"la fa-REEN","la crème":"la KREHM","le yaourt":"luh ya-OORT","les noix":"lay NWA","l'ail":"LAHY","le poireau":"luh pwa-ROH","le speculoos":"luh spay-kü-LOS","le cramique":"luh kra-MEEK","la fricadelle":"la free-ka-DEHL","le pèkèt":"luh peh-KEH","les boulets à la liégeoise":"lay boo-leh za la lyay-ZHWAZ","la tartine":"la tar-TEEN","la maison":"la meh-ZOHⁿ","l'appartement":"la-par-tuh-MAHⁿ","la chambre":"la SHAHⁿBR","la cuisine":"la kwee-ZEEN","la salle de bain":"la sal duh BEHⁿ","le salon":"luh sa-LOHⁿ","les toilettes":"lay twa-LEHT","la porte":"la PORT","la fenêtre":"la fuh-NEHTR","la clé":"la KLAY","la table":"la TABL","la chaise":"la SHEHZ","le lit":"luh LEE","la lumière":"la lü-MYEHR","le téléphone":"luh tay-lay-FON","le portable":"luh por-TABL","les vêtements":"lay veht-MAHⁿ","les chaussures":"lay shoh-SÜR","la voiture":"la vwa-TÜR","le vélo":"luh vay-LOH","le sac":"luh SAK","l'argent":"lar-ZHAHⁿ","le travail":"luh tra-VAHY","le ménage":"luh may-NAZH","la douche":"la DOOSH","le jardin":"luh zhar-DEHⁿ","l'escalier":"lehs-ka-LYAY","le mur":"luh MÜR","le toit":"luh TWA","le four":"luh FOOR","le micro-ondes":"luh mee-kroh-OHⁿD","le lave-vaisselle":"luh lav-veh-SEHL","la machine à laver":"la ma-shee na la-VAY","le chauffage":"luh shoh-FAZH","la poubelle":"la poo-BEHL","le canapé":"luh ka-na-PAY","l'armoire":"lar-MWAR","le miroir":"luh mee-RWAR","la télé":"la tay-LAY","l'ordinateur":"lor-dee-na-TÖR","le chargeur":"luh shar-ZHÖR","le manteau":"luh mahⁿ-TOH","la veste":"la VEHST","le pull":"luh PÜL","le pantalon":"luh pahⁿ-ta-LOHⁿ","la robe":"la ROB","la chemise":"la shuh-MEEZ","les chaussettes":"lay shoh-SEHT","le bonnet":"luh bo-NEH","les gants":"lay GAHⁿ","le parapluie":"luh pa-ra-PLWEE","les lunettes":"lay lü-NEHT","le portefeuille":"luh por-tuh-FÖY","la brosse à dents":"la bro sa DAHⁿ","le savon":"luh sa-VOHⁿ","la serviette":"la sehr-VYEHT","le torchon":"luh tor-SHOHⁿ","le livre":"luh LEEVR","le stylo":"luh stee-LOH","le bic":"luh BEEK","le papier":"luh pa-PYAY","la cave":"la KAV","le grenier":"luh gruh-NYAY","la boîte":"la BWAT","l'étagère":"lay-ta-ZHEHR","le sol":"luh SOL","la lampe":"la LAHⁿP","le loyer":"luh lwa-YAY","la facture":"la fak-TÜR","la farde":"la FARD","le sèche-cheveux":"luh sehsh-shuh-VÖ","la ville":"la VEEL","le village":"luh vee-LAZH","la rue":"la RÜ","le magasin":"luh ma-ga-ZEHⁿ","le supermarché":"luh sü-pehr-mar-SHAY","la boulangerie":"la boo-lahⁿzh-REE","la banque":"la BAHⁿK","la poste":"la POST","l'école":"lay-KOL","le restaurant":"luh rehs-toh-RAHⁿ","l'hôtel":"loh-TEHL","la gare":"la GAR","le train":"luh TREHⁿ","le bus":"luh BÜS","le tram":"luh TRAM","le taxi":"luh tak-SEE","l'avion":"la-VYOHⁿ","l'aéroport":"la-ay-roh-POR","le billet":"luh bee-YEH","à gauche":"a GOHSH","à droite":"a DRWAT","tout droit":"too DRWA","ici":"ee-SEE","là":"LA","là-bas":"la-BA","près":"PREH","loin":"LWEHⁿ","devant":"duh-VAHⁿ","derrière":"deh-RYEHR","à côté de":"a koh-tay DUH","le centre-ville":"luh sahⁿtr-VEEL","la place":"la PLAS","le marché":"luh mar-SHAY","l'église":"lay-GLEEZ","le musée":"luh mü-ZAY","le parc":"luh PARK","la bibliothèque":"la bee-blee-oh-TEHK","la mairie":"la meh-REE","la maison communale":"la meh-zohⁿ ko-mü-NAL","le commissariat":"luh ko-mee-sa-RYA","la police":"la poh-LEES","le pont":"luh POHⁿ","le carrefour":"luh kar-FOOR","le feu":"luh FÖ","le quai":"luh KAY","l'arrêt de bus":"la-reh duh BÜS","la sortie":"la sor-TEE","l'entrée":"lahⁿ-TRAY","la station-service":"la sta-syohⁿ-sehr-VEES","l'autoroute":"loh-toh-ROOT","le parking":"luh par-KEENG","le plan":"luh PLAHⁿ","en haut":"ahⁿ OH","en bas":"ahⁿ BA","dedans":"duh-DAHⁿ","dehors":"duh-OR","sur":"SÜR","sous":"SOO","dans":"DAHⁿ","entre":"AHⁿTR","la friterie":"la free-TREE","la librairie":"la lee-breh-REE","le port":"luh POR","la frontière":"la frohⁿ-TYEHR","le rond-point":"luh rohⁿ-PWEHⁿ","le péage":"luh pay-AZH","la correspondance":"la koh-rehs-pohⁿ-DAHⁿS","le temps":"luh TAHⁿ","le soleil":"luh soh-LEHY","la pluie":"la PLWEE","la neige":"la NEHZH","le vent":"luh VAHⁿ","le nuage":"luh NWAZH","Il fait beau.":"eel feh BOH","Il fait froid.":"eel feh FRWA","Il fait chaud.":"eel feh SHOH","Il pleut.":"eel PLÖ","Il neige.":"eel NEHZH","la mer":"la MEHR","l'arbre":"LARBR","la fleur":"la FLÖR","le chien":"luh SHYEHⁿ","le chat":"luh SHA","l'oiseau":"lwa-ZOH","l'orage":"loh-RAZH","le brouillard":"luh broo-YAR","la température":"la tahⁿ-pay-ra-TÜR","moins dix degrés":"mwehⁿ dee duh-GRAY","le ciel":"luh SYEHL","la lune":"la LÜN","l'étoile":"lay-TWAL","la plage":"la PLAZH","l'île":"LEEL","la colline":"la ko-LEEN","le champ":"luh SHAHⁿ","la terre":"la TEHR","la pierre":"la PYEHR","le rocher":"luh roh-SHAY","l'herbe":"LEHRB","la feuille":"la FÖY","le cheval":"luh shuh-VAL","la vache":"la VASH","le mouton":"luh moo-TOHⁿ","l'ours":"LOORS","le loup":"luh LOO","le renard":"luh ruh-NAR","l'élan":"lay-LAHⁿ","le renne":"luh REHN","l'aurore boréale":"loh-ror boh-ray-AL","la tempête":"la tahⁿ-PEHT","la cascade":"la kas-KAD","la grotte":"la GROT","le marais":"luh ma-REH","le moustique":"luh moos-TEEK","la tique":"la TEEK","être":"EHTR","avoir":"a-VWAR","aller":"a-LAY","faire":"FEHR","venir":"vuh-NEER","vouloir":"voo-LWAR","pouvoir":"poo-VWAR","savoir":"sa-VWAR","dire":"DEER","parler":"par-LAY","manger":"mahⁿ-ZHAY","boire":"BWAR","dormir":"dor-MEER","aimer":"eh-MAY","habiter":"a-bee-TAY","travailler":"tra-va-YAY","comprendre":"kohⁿ-PRAHⁿDR","apprendre":"a-PRAHⁿDR","prendre":"PRAHⁿDR","donner":"do-NAY","voir":"VWAR","regarder":"ruh-gar-DAY","écouter":"ay-koo-TAY","attendre":"a-TAHⁿDR","aider":"eh-DAY","acheter":"ash-TAY","payer":"peh-YAY","rentrer":"rahⁿ-TRAY","penser":"pahⁿ-SAY","croire":"KRWAR","connaître":"ko-NEHTR","chercher":"shehr-SHAY","trouver":"troo-VAY","perdre":"PEHRDR","ouvrir":"oo-VREER","fermer":"fehr-MAY","commencer":"ko-mahⁿ-SAY","finir":"fee-NEER","arriver":"a-ree-VAY","partir":"par-TEER","sortir":"sor-TEER","entrer":"ahⁿ-TRAY","rester":"rehs-TAY","marcher":"mar-SHAY","courir":"koo-REER","nager":"na-ZHAY","conduire":"kohⁿ-DWEER","cuisiner":"kwee-zee-NAY","laver":"la-VAY","nettoyer":"neh-twa-YAY","lire":"LEER","écrire":"ay-KREER","appeler":"a-PLAY","demander":"duh-mahⁿ-DAY","répondre":"ray-POHⁿDR","expliquer":"ehks-plee-KAY","montrer":"mohⁿ-TRAY","jouer":"ZHWAY","chanter":"shahⁿ-TAY","danser":"dahⁿ-SAY","rire":"REER","pleurer":"plö-RAY","se lever":"suh luh-VAY","se coucher":"suh koo-SHAY","s'habiller":"sa-bee-YAY","se reposer":"suh ruh-poh-ZAY","oublier":"oo-blee-AY","se souvenir":"suh soov-NEER","essayer":"ay-seh-YAY","utiliser":"ü-tee-lee-ZAY","mettre":"MEHTR","porter":"por-TAY","envoyer":"ahⁿ-vwa-YAY","devoir":"duh-VWAR","falloir":"fa-LWAR","vivre":"VEEVR","visiter":"vee-zee-TAY","rencontrer":"rahⁿ-kohⁿ-TRAY","changer":"shahⁿ-ZHAY","gagner":"ga-NYAY","tomber":"tohⁿ-BAY","monter":"mohⁿ-TAY","descendre":"deh-SAHⁿDR","tourner":"toor-NAY","s'asseoir":"sa-SWAR","goûter":"goo-TAY","se dépêcher":"suh day-peh-SHAY","s'amuser":"sa-mü-ZAY","réfléchir":"ray-flay-SHEER","bon":"BOHⁿ","mauvais":"moh-VEH","grand":"GRAHⁿ","petit":"puh-TEE","beau":"BOH","joli":"zhoh-LEE","nouveau":"noo-VOH","vieux":"VYÖ","jeune":"ZHÖN","cher":"SHEHR","pas cher":"pa SHEHR","facile":"fa-SEEL","difficile":"dee-fee-SEEL","content":"kohⁿ-TAHⁿ","triste":"TREEST","fatigué":"fa-tee-GAY","gentil":"zhahⁿ-TEE","sympa":"sehⁿ-PA","drôle":"DROHL","important":"ehⁿ-por-TAHⁿ","long":"LOHⁿ","court":"KOOR","plein":"PLEHⁿ","vide":"VEED","ouvert":"oo-VEHR","fermé":"fehr-MAY","heureux":"ö-RÖ","calme":"KALM","bruyant":"brwee-YAHⁿ","propre":"PROPR","sale":"SAL","rapide":"ra-PEED","lent":"LAHⁿ","fort":"FOR","faible":"FEHBL","lourd":"LOOR","léger":"lay-ZHAY","haut":"OH","bas":"BA","large":"LARZH","étroit":"ay-TRWA","doux":"DOO","dur":"DÜR","mouillé":"moo-YAY","sec":"SEHK","prêt":"PREH","libre":"LEEBR","occupé":"o-kü-PAY","gratuit":"gra-TWEE","intéressant":"ehⁿ-tay-reh-SAHⁿ","ennuyeux":"ahⁿ-nwee-YÖ","génial":"zhay-NYAL","nul":"NÜL","timide":"tee-MEED","nerveux":"nehr-VÖ","fier":"FYEHR","seul":"SÖL","ensemble":"ahⁿ-SAHⁿBL","vrai":"VREH","faux":"FOH","possible":"po-SEEBL","dangereux":"dahⁿzh-RÖ","sûr":"SÜR","célèbre":"say-LEHBR","étrange":"ay-TRAHⁿZH","mignon":"mee-NYOHⁿ","poli":"poh-LEE","malin":"ma-LEHⁿ","rouge":"ROOZH","bleu":"BLÖ","vert":"VEHR","jaune":"ZHOHN","noir":"NWAR","blanc":"BLAHⁿ","orange":"oh-RAHⁿZH","rose":"ROZ","violet":"vyoh-LEH","gris":"GREE","marron":"ma-ROHⁿ","beige":"BEHZH","clair":"KLEHR","foncé":"fohⁿ-SAY","la couleur":"la koo-LÖR","je":"ZHUH","tu":"TÜ","il":"EEL","elle":"EHL","on":"OHⁿ","nous":"NOO","vous":"VOO","ils":"EEL","elles":"EHL","moi":"MWA","toi":"TWA","et":"AY","ou":"OO","mais":"MEH","parce que":"pars-KUH","avec":"a-VEHK","sans":"SAHⁿ","pour":"POOR","de":"DUH","à":"A","très":"TREH","beaucoup":"boh-KOO","un peu":"uhⁿ PÖ","trop":"TROH","assez":"a-SAY","aussi":"oh-SEE","encore":"ahⁿ-KOR","oui":"WEE","non":"NOHⁿ","peut-être":"pö-TEHTR","bien sûr":"byehⁿ SÜR","voilà":"vwa-LA","qui":"KEE","quoi":"KWA","où":"OO","quand":"KAHⁿ","comment":"ko-MAHⁿ","pourquoi":"poor-KWA","combien":"kohⁿ-BYEHⁿ","ce":"SUH","ça":"SA","tout":"TOO","rien":"ree-EHⁿ","quelque chose":"kehl-kuh SHOZ","quelqu'un":"kehl-KUHⁿ","mon":"MOHⁿ","ma":"MA","mes":"MAY","ton":"TOHⁿ","ta":"TA","son":"SOHⁿ","sa":"SA","notre":"NOHTR","votre":"VOHTR","leur":"LÖR","si":"SEE","donc":"DOHⁿK","alors":"a-LOR","puis":"PWEE","ensuite":"ahⁿ-SWEET","avant":"a-VAHⁿ","après":"a-PREH","pendant":"pahⁿ-DAHⁿ","depuis":"duh-PWEE","chez":"SHAY","vers":"VEHR","comme":"KOM","plus":"PLÜ","moins":"MWEHⁿ","seulement":"söl-MAHⁿ","presque":"prehs-KUH","vraiment":"vreh-MAHⁿ","bien":"BYEHⁿ","mal":"MAL","hein":"EHⁿ","allez":"a-LAY","une fois":"ün FWA","ben":"BEHN","chaque":"SHAK","quelques":"kehl-KUH","plusieurs":"plü-ZYÖR","même":"MEHM","autre":"OHTR","n'importe quoi":"nehⁿ-port KWA","d'ailleurs":"da-YÖR","le boulot":"luh boo-LOH","le bureau":"luh bü-ROH","le collègue":"luh ko-LEHG","le patron":"luh pa-TROHⁿ","les études":"lay zay-TÜD","l'étudiant":"lay-tü-DYAHⁿ","l'étudiante":"lay-tü-DYAHⁿT","le cours":"luh KOOR","l'examen":"lehg-za-MEHⁿ","le prix":"luh PREE","la carte bancaire":"la kart bahⁿ-KEHR","en espèces":"ahⁿ nehs-PEHS","la monnaie":"la mo-NEH","le salaire":"luh sa-LEHR","le métier":"luh may-TYAY","l'entreprise":"lahⁿ-truh-PREEZ","la réunion":"la ray-ü-NYOHⁿ","le CV":"luh say-VAY","le devoir":"luh duh-VWAR","la note":"la NOT","le diplôme":"luh dee-PLOHM","le professeur":"luh proh-feh-SÖR","le guide":"luh GEED","le moniteur":"luh moh-nee-TÖR","la monitrice":"la moh-nee-TREES","la réservation":"la ray-zehr-va-SYOHⁿ","le compte":"luh KOHⁿT","la réduction":"la ray-dük-SYOHⁿ","les soldes":"lay SOLD","le reçu":"luh ruh-SÜ","le chômage":"luh shoh-MAZH","le contrat":"luh kohⁿ-TRA","l'impôt":"lehⁿ-POH","la pause":"la POHZ","le congé":"luh kohⁿ-ZHAY","l'horaire":"loh-REHR","le temps plein":"luh tahⁿ PLEHⁿ","le mi-temps":"luh mee-TAHⁿ","Tu viens ce soir ?":"tü vyehⁿ suh SWAR?","Vous venez ce soir ?":"voo vuh-nay suh SWAR?","Tu es belge.":"tü eh BEHLZH","C'est ma belle-mère.":"seh ma behl-MEHR","Mes beaux-parents habitent en Wallonie.":"may boh-pa-rahⁿ za-beet tahⁿ nwa-loh-NEE","Mamy a septante-huit ans.":"ma-mee a sehp-tahⁿ-twee TAHⁿ","Je voudrais un peu d'eau, s'il te plaît.":"zhuh voo-dreh zuhⁿ pö DOH, seel tuh PLEH","Tu veux encore des frites ?":"tü vö zahⁿ-kor day FREET?","J'aime le fromage.":"zhehm luh froh-MAZH","Je n'aime pas le café.":"zhuh nehm pa luh ka-FAY","Je travaille le matin.":"zhuh tra-vahy luh ma-TEHⁿ","On mange à midi.":"ohⁿ mahⁿ zha mee-DEE","Est-ce que tu as faim ?":"ehs kuh tü a FEHⁿ?","Tu habites où ?":"tü a-beet ZOO?","On est fatigués.":"ohⁿ neh fa-tee-GAY","Je vais travailler demain.":"zhuh veh tra-va-yay duh-MEHⁿ","On va voir ta famille samedi.":"ohⁿ va vwar ta fa-meey sam-DEE","Il y a une boulangerie près d'ici ?":"ee lee a ün boo-lahⁿzh-ree preh dee-SEE?","Les clés sont sur la table.":"lay klay sohⁿ sür la TABL","Bonjour madame, vous avez du pain ?":"bohⁿ-zhoor ma-DAM, voo za-vay dü PEHⁿ?","Excusez-moi, monsieur, où est la gare ?":"ehks-kü-zay-MWA, muh-SYÖ, oo eh la GAR?","Il fait froid aujourd'hui.":"eel feh frwa oh-zhoor-DWEE","Il pleut encore !":"eel plö tahⁿ-KOR!","Tourne à droite au feu.":"toor na drwa toh FÖ","Continuez tout droit.":"kohⁿ-tee-nway too DRWA","Tu sais m'aider une fois ?":"tü seh meh-day ün FWA?","Je ne sais pas venir demain.":"zhuh nuh seh pa vuh-neer duh-MEHⁿ","Tu veux du café ?":"tü vö dü ka-FAY?","J'ai mal à la tête.":"zhay ma la la TEHT","Tu as mal au genou ?":"tü a ma loh zhuh-NOO?","Il est content.":"ee leh kohⁿ-TAHⁿ","Hier, j'ai mangé des moules.":"YEHR, zhay mahⁿ-zhay day MOOL","Je suis allée à Liège.":"zhuh swee za-lay a LYEHZH","On est partis tôt.":"ohⁿ neh par-tee TOH","Vous devez mettre votre casque.":"voo duh-vay mehtr vohtr KASK","On peut faire une pause ?":"ohⁿ pö feh rün POHZ?","J'habite en Finlande depuis trois ans.":"zha-bee tahⁿ fehⁿ-lahⁿd duh-pwee trwa ZAHⁿ","J'apprends le français depuis un an.":"zha-prahⁿ luh frahⁿ-seh duh-pwee zuhⁿ NAHⁿ","J'aimerais visiter les Ardennes.":"zhehm-reh vee-zee-tay lay zar-DEHN","Je voudrais travailler comme guide.":"zhuh voo-dreh tra-va-yay kom GEED","C'est une voiture rouge.":"seh tün vwa-tür ROOZH","On a un petit jardin.":"ohⁿ na uhⁿ puh-tee zhar-DEHⁿ","Je trouve que la Belgique est très jolie.":"zhuh troov kuh la behl-zhee keh treh zhoh-LEE","J'aime la Finlande parce que c'est calme.":"zhehm la fehⁿ-lahⁿd pars-kuh seh KALM","Je la vois demain.":"zhuh la vwa duh-MEHⁿ","Bonjour, mon cœur !":"bohⁿ-ZHOOR, mohⁿ KÖR!","Bonne nuit !":"bon NWEE!","Je suis japonaise, mais j'habite en Finlande.":"zhuh swee zha-poh-NEHZ, meh zha-bee tahⁿ fehⁿ-LAHⁿD","C'est qui ?":"seh KEE?","C'est Quentin ?":"seh kahⁿ-TEHⁿ?","C'est ta marraine, Chantal ?":"seh ta ma-REHN, shahⁿ-TAL?","Septante-deux !":"sehp-tahⁿt-DÖ!","Encore une fois !":"ahⁿ-ko rün FWA!","Tu veux encore du pain ?":"tü vö zahⁿ-kor dü PEHⁿ?","J'adore le chocolat belge !":"zha-dor luh shoh-koh-la BEHLZH!","Je n'aime pas trop la bière.":"zhuh nehm pa troh la BYEHR","Et toi, tu aimes quoi ?":"ay TWA, tü ehm KWA?","Je me lève à sept heures.":"zhuh muh leh va seh TÖR","Je travaille l'après-midi.":"zhuh tra-vahy la-preh-mee-DEE","Je rentre le soir.":"zhuh rahⁿtr luh SWAR","Tu habitais où ?":"tü a-bee-teh ZOO?","C'était comment ?":"say-teh ko-MAHⁿ?","Pourquoi ?":"poor-KWA?","On fait quoi ce soir ?":"ohⁿ feh kwa suh SWAR?","Tu es fatigué ?":"tü eh fa-tee-GAY?","On y va !":"ohⁿ nee VA!","Lundi, je vais à l'école.":"luhⁿ-DEE, zhuh veh za lay-KOL","On va chez Christelle dimanche ?":"ohⁿ va shay krees-tehl dee-MAHⁿSH?","Bonne idée !":"bo nee-DAY!","Où sont les clés ?":"oo sohⁿ lay KLAY?","Sous la table ?":"soo la TABL?","Je l'ai trouvé !":"zhuh lay troo-VAY!","Bonjour monsieur !":"bohⁿ-zhoor muh-SYÖ!","Je voudrais un pistolet, s'il vous plaît.":"zhuh voo-dreh zuhⁿ pees-toh-LEH, seel voo PLEH","Il fait beau aujourd'hui !":"eel feh boh oh-zhoor-DWEE!","Il fait moins cinq.":"eel feh mwehⁿ SEHⁿK","Tourne à gauche !":"toor na GOHSH!","Tout droit !":"too DRWA!","On est arrivés !":"ohⁿ neh ta-ree-VAY!","C'est belge, ça ?":"seh BEHLZH, SA?","Ta famille dit quoi pour ?":"ta fa-meey dee kwa POOR?","Ça, c'est la cuisine.":"SA, seh la kwee-ZEEN","Où est mon GSM ?":"oo eh mohⁿ zhay-eh-SEHM?","C'est ton tour !":"seh tohⁿ TOOR!","Ça va ? Ne bougez pas.":"sa VA? nuh boo-zhay PA","J'appelle le 112.":"zha-pehl luh sahⁿ DOOZ","Aujourd'hui, j'étais contente parce que":"oh-zhoor-DWEE, zhay-teh kohⁿ-tahⁿt pars-KUH","J'étais un peu stressée.":"zhay-teh zuhⁿ pö streh-SAY","Et toi, ça va ?":"ay TWA, sa VA?","Hier, j'ai travaillé.":"YEHR, zhay tra-va-YAY","J'ai mangé une gaufre !":"zhay mahⁿ-zhay ün GOHFR!","Et toi, tu as fait quoi ?":"ay TWA, tü a feh KWA?","Je suis allée en Laponie.":"zhuh swee za-lay ahⁿ la-poh-NEE","On est partis en voiture.":"ohⁿ neh par-tee ahⁿ vwa-TÜR","C'était génial !":"say-teh zhay-NYAL!","Bonjour à tous ! Je suis votre guide.":"bohⁿ-zhoo ra TOOS! zhuh swee vohtr GEED","Vous devez rester ensemble.":"voo duh-vay rehs-tay ahⁿ-SAHⁿBL","Des questions ?":"day kehs-TYOHⁿ?","C'était en":"say-teh TAHⁿ","Et voilà !":"ay vwa-LA!","J'aimerais faire du kayak dans les Ardennes.":"zhehm-reh fehr dü ka-yak dahⁿ lay zar-DEHN","J'aimerais parler longtemps avec Sol.":"zhehm-reh par-lay lohⁿ-tahⁿ a-vehk SOL","Et toi ?":"ay TWA?","C'est petit et rouge":"seh puh-tee tay ROOZH","C'est dans la cuisine.":"seh dahⁿ la kwee-ZEEN","Oui, bravo !":"WEE, bra-VOH!","Je trouve que la Finlande est plus calme.":"zhuh troov kuh la fehⁿ-lahⁿ deh plü KALM","Oui, mais en Belgique, il y a les frites !":"WEE, meh zahⁿ behl-ZHEEK, ee lee a lay FREET!","J'apprends le français pour ta famille.":"zha-prahⁿ luh frahⁿ-seh poor ta fa-MEEY","Merci de m'aider tous les jours.":"mehr-see duh meh-day too lay ZHOOR","Je suis fière de moi !":"zhuh swee fyehr duh MWA!","Attends, je réfléchis.":"a-TAHⁿ, zhuh ray-flay-SHEE","Je sais !":"zhuh SEH!","Salut ! Ça va ?":"sa-LÜ! sa VA?","Qu'est-ce que tu fais aujourd'hui ?":"kehs-kuh tü feh zoh-zhoor-DWEE?","Bisous, à bientôt !":"bee-ZOO, a byehⁿ-TOH!","Aujourd'hui, j'ai appris":"oh-zhoor-DWEE, zhay a-PREE","C'est correct ?":"seh koh-REHKT?","Salut ! C'est Aya.":"sa-LÜ! seh ta-YA","Qu'est-ce qu'on prend ?":"kehs kohⁿ PRAHⁿ?","On fait du kayak sur la Lesse ?":"ohⁿ feh dü ka-yak sür la LEHS?","Ici, c'est chez mes parents.":"ee-SEE, seh shay may pa-RAHⁿ","C'était en hiver.":"say-teh tahⁿ nee-VEHR","Tu me passes le couteau ?":"tü muh pas luh koo-TOH?","Bonjour ! Deux cafés, s'il vous plaît.":"bohⁿ-ZHOOR! dö ka-FAY, seel voo PLEH","Tu sais me passer le pain ?":"tü seh muh pa-say luh PEHⁿ?","bonjour":"bohⁿ-ZHOOR","vu":"VÜ","loup":"LOO","salut":"sa-LÜ","une":"ÜN","dessus":"duh-SÜ","dessous":"duh-SOO","lune":"LÜN","sac":"SAK","sel":"SEHL","c'est":"SEH","merci":"mehr-SEE","Paris":"pa-REE","rue":"RÜ","roue":"ROO","café":"ka-FAY","parlé":"par-LAY","les":"LAY","le":"LUH","des":"DAY","maison":"meh-ZOHⁿ","bonne":"BON","bonbon":"bohⁿ-BOHⁿ","enfant":"ahⁿ-FAHⁿ","temps":"TAHⁿ","an":"AHⁿ","vent":"VAHⁿ","vont":"VOHⁿ","éléphant":"ay-lay-FAHⁿ","vin":"VEHⁿ","pain":"PEHⁿ","pont":"POHⁿ","mère":"MEHR","fête":"FEHT","eau":"OH","soir":"SWAR","mois":"MWA","roi":"RWA","chat":"SHA","chocolat":"shoh-koh-LA","Belgique":"behl-ZHEEK","gare":"GAR","genou":"zhuh-NOO","jeu":"ZHÖ","sœur":"SÖR","peu":"PÖ","pou":"POO","guide":"GEED","cul":"KÜ","quatre canards":"katr ka-NAR","hôtel":"oh-TEHL","homme":"OM","photo":"foh-TOH","français":"frahⁿ-SEH","car":"KAR","garçon":"gar-SOHⁿ","cuisine":"kwee-ZEEN","poisson":"pwa-SOHⁿ","poison":"pwa-ZOHⁿ","dessert":"deh-SEHR","désert":"day-ZEHR","fille":"FEEY","famille":"fa-MEEY","soleil":"soh-LEHY","ville":"VEEL","montagne":"mohⁿ-TANY","champignon":"shahⁿ-pee-NYOHⁿ","Espagne":"ehs-PANY","attention":"a-tahⁿ-SYOHⁿ","station":"sta-SYOHⁿ","solution":"soh-lü-SYOHⁿ","nuit":"NWEE","suis":"SWEE","noix":"NWA","les amis":"lay za-MEE","vous avez":"voo za-VAY","les copains":"lay koh-PEHⁿ","ils parlent":"eel PARL","elles mangent":"ehl MAHⁿZH","ils aiment":"eel ZEHM","il parle":"eel PARL"}/*END PRON*/;
 
 /* ============================================================
    BUILDING THE ITEMS
@@ -1209,6 +1283,11 @@ const spoken = s => s.replace(/[…«»]/g, '').replace(/\s+/g, ' ').trim();
 const plain = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 /* Sound hunt: find the sounds of the day inside a French text. */
+/* Every sound is a sticker to collect. Stickers you haven't collected stay hidden (❓). */
+const STICKERS = {ou: ['🐺', 'loup'], u: ['🌙', 'lune'], end: ['🤫', 'petit'], r: ['🌹', 'rose'], e1: ['☕', 'café'], uh: ['🌅', 'demain'],
+  on: ['🍬', 'bonbon'], an: ['🐘', 'éléphant'], in: ['🍞', 'pain'], e2: ['🎉', 'fête'], o: ['💧', 'eau'], oi: ['👑', 'roi'], ch: ['🐱', 'chat'],
+  zh: ['🎮', 'jeu'], eu: ['💙', 'bleu'], qu: ['🦆', 'quatre canards'], h: ['🏨', 'hôtel'], s: ['👦', 'garçon'], z: ['🏠', 'maison'], ill: ['👧', 'fille'],
+  gn: ['⛰️', 'montagne'], tion: ['🚉', 'station'], ui: ['🌃', 'nuit'], liaison: ['🔗', 'les amis'], ent: ['🤐', 'ils parlent']};
 const SOUND_BY = {};
 SOUNDS.forEach(u => { SOUND_BY[u.id] = u; u.rx = new RegExp(u.re, 'gu'); });
 const MATCH_ORDER = [...SOUNDS].sort((a, b) => a.order - b.order);
@@ -1243,6 +1322,13 @@ function markUp(text, spans, test, cls) {
   return h + frText(text.slice(i));
 }
 
+/* Each deck's emoji and pastel colour */
+const DECK_LOOK = {basics: ['👋', '#B9A8FF'], him: ['💕', '#F59BBE'], people: ['💐', '#F7B58A'], family: ['🏠', '#F4C27A'], table: ['🍽️', '#8FD3AE'],
+  me: ['🙋‍♀️', '#C7A8F0'], out: ['🛍️', '#8CCBE8'], belgian: ['🇧🇪', '#F0CB55'], outdoor: ['🏕️', '#8FD19E'], story: ['📖', '#D2A8E8'], couple: ['🏡', '#F7A8C4'],
+  kin: ['🌳', '#E8B98F'], num: ['🔢', '#9DB8F2'], 'v-time': ['⏰', '#A8B5F7'], 'v-people': ['🩺', '#F2A7B8'], 'v-food': ['🥐', '#F5C48A'], 'v-home': ['🛋️', '#B7A6E8'],
+  'v-places': ['🗺️', '#8ED1CF'], 'v-nature': ['🌿', '#9CD79A'], 'v-verbs': ['🏃‍♀️', '#B3A3F0'], 'v-adj': ['🎨', '#F2A98F'], 'v-colour': ['🌈', '#F2D06B'],
+  'v-small': ['🧩', '#A9C1D4'], 'v-work': ['💼', '#C4C98A'], grammar: ['🧠', '#A5B4F5']};
+DECKS.forEach(d => { const l = DECK_LOOK[d.id]; if (l) { d.emoji = l[0]; d.color = l[1]; } });
 const ITEMS = {}, DECK_ITEMS = {};
 function makeItem(id, fr, en, extra) {
   let gen = '';
@@ -1260,12 +1346,12 @@ DECKS.forEach(d => {
 /* Link lessons to their cards, and make mission phrases and sound examples playable */
 const BY_REF = {};
 DECKS.forEach(d => DECK_ITEMS[d.id].forEach(it => { BY_REF[d.id + ':' + it.fr] = it; }));
-const SAY_DECK = {id: 'say', name: 'Conversation', color: '#D0662F', who: 'In conversation'};
-const SND_DECK = {id: 'sounds', name: 'Sounds', color: '#1E6470', who: 'Sound'};
+const SAY_DECK = {id: 'say', name: 'Conversation', emoji: '💬', color: '#F59BBE', who: 'In conversation'};
+const SND_DECK = {id: 'sounds', name: 'Sounds', emoji: '🎵', color: '#B9A8FF', who: 'Sound'};
 function looseItem(fr, en) { return ITEMS['say|' + fr] || makeItem('say|' + fr, fr, en, {deck: SAY_DECK, loose: true}); }
 function soundItem(fr) { return ITEMS['snd|' + fr] || makeItem('snd|' + fr, fr, '', {deck: SND_DECK, loose: true, snd: true}); }
 [...LESSONS.filter(l => l.m).map(l => l.m), ...REVIEW_MISSIONS, ...Object.values(AUTO_MISSIONS)].forEach(m => { m.sayItems = m.say.map(([f, en]) => looseItem(f, en)); });
-SOUNDS.forEach(u => { u.exItems = u.ex.map(soundItem); u.vsItems = u.vs.map(p => p.map(soundItem)); });
+SOUNDS.forEach(u => { u.exItems = u.ex.map(soundItem); u.vsItems = u.vs.map(p => p.map(soundItem)); u.stItem = soundItem(STICKERS[u.id][1]); });
 LESSONS.forEach(l => { if (!l.review) l.cards = [...l.items.map(r => BY_REF[r]), ...l.g.ex.map(([f]) => ITEMS['grammar|' + f])]; });
 
 /* ============================================================
@@ -1275,7 +1361,7 @@ const KEY = 'parlons.v1';
 const DEFAULT_SETTINGS = {newPerDay: 15, help: 'auto', dirs: 'both', autoplay: false, soundsPerDay: 3, rate: 1, textSize: 'normal', theme: 'auto',
   decks: Object.fromEntries(DECKS.map(d => [d.id, true]))};
 const blankCourse = () => ({day: 1, last: 0, pending: null, cur: null});
-function blankSave() { return {cards: {}, prio: {}, nohelp: {}, snd: {}, sndPos: 0, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse()}; }
+function blankSave() { return {cards: {}, prio: {}, nohelp: {}, snd: {}, sndPos: 0, settings: structuredClone(DEFAULT_SETTINGS), day: {n: 0, newSeen: 0, reviews: 0}, streak: {last: 0, count: 0, best: 0}, total: 0, xp: 0, talks: 0, log: {}, course: blankCourse(), spent: 0, owned: [], custom: [], updatedAt: 0}; }
 function fromSaved(s) {
   const b = blankSave();
   return {...b, ...s, settings: {...DEFAULT_SETTINGS, ...(s.settings || {}), decks: {...DEFAULT_SETTINGS.decks, ...((s.settings || {}).decks || {})}},
@@ -1286,7 +1372,72 @@ function load() {
   return blankSave();
 }
 let S = load();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+/* Progress is saved on this phone AND, privately, in your Claude account (the db capability),
+   so it stays even when the phone clears its storage. One document holds the main state and one per deck
+   holds the cards (each document must stay under 256 KB). When the app opens, the newer save wins. */
+const cloud = {col: null, status: 'loading', last: {}, busy: false, again: false, timer: null, pending: null};
+function saveDocs(st) {
+  const main = {...st}; delete main.cards;
+  const docs = {main: JSON.stringify(main)}, byDeck = {};
+  for (const k in st.cards) { const d = k.slice(0, k.indexOf('|')); (byDeck[d] || (byDeck[d] = {}))[k] = st.cards[k]; }
+  for (const d in byDeck) docs['cards-' + d] = JSON.stringify(byDeck[d]);
+  for (const id in cloud.last) if (!(id in docs)) docs[id] = '{}';   // a deck emptied by "erase" is written empty
+  return docs;
+}
+function save() {
+  S.updatedAt = Date.now();
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+  if (cloud.col) { clearTimeout(cloud.timer); cloud.timer = setTimeout(cloudPush, 1200); }
+}
+async function cloudPush() {
+  if (!cloud.col) return;
+  if (cloud.busy) { cloud.again = true; return; }
+  cloud.busy = true; clearTimeout(cloud.timer);
+  try {
+    const docs = saveDocs(S);
+    for (const id in docs) {   // one write at a time, only the documents that changed
+      if (docs[id] === cloud.last[id]) continue;
+      await cloud.col.doc(id).set({json: docs[id]});
+      cloud.last[id] = docs[id];
+    }
+    cloud.status = 'on';
+  } catch (e) {
+    const code = e && e.code;
+    if (code === 'revoked' || code === 'not_granted' || code === 'capability_disabled' || code === 'capability_removed' || code === 'invalid_argument') { cloud.col = null; cloud.status = 'local'; }
+    else { cloud.status = 'error'; setTimeout(cloudPush, 5000 + Math.random() * 5000); }
+  } finally {
+    cloud.busy = false;
+    if (cloud.again) { cloud.again = false; cloudPush(); }
+    if (tab === 'settings' && !sess) render();
+  }
+}
+async function cloudInit() {
+  try {
+    if (!window.claude || typeof window.claude.use !== 'function') throw new Error('no account here');
+    const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    const uid = user ? await user.id() : null;
+    if (!db || !uid) throw new Error('no account here');
+    const col = db.collection('data/users/' + uid);
+    const snap = await col.get();
+    const docs = {};
+    snap.docs.forEach(d => { const b = d.data(); if (b && typeof b.json === 'string') docs[d.id] = b.json; });
+    cloud.col = col; cloud.last = {...docs}; cloud.status = 'on';
+    const main = docs.main ? JSON.parse(docs.main) : null;
+    if (main && (main.updatedAt || 0) > (S.updatedAt || 0)) {
+      main.cards = {};
+      for (const id in docs) if (id.startsWith('cards-')) Object.assign(main.cards, JSON.parse(docs[id]));
+      if (sess) cloud.pending = main; else applyCloud(main);
+    } else if (!main || (main.updatedAt || 0) < (S.updatedAt || 0)) cloudPush();   // this phone is newer: upload it
+  } catch (e) { if (!cloud.col) cloud.status = 'local'; }
+  if (tab === 'settings' && !sess) render();
+}
+function applyCloud(main) {
+  S = fromSaved(main); cloud.pending = null;
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+  render();
+  toast('☁️ Your progress was loaded from your account.');
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && cloud.col) cloudPush(); });
 function today() { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
 function freshDay() { const t = today(); if (S.day.n !== t) S.day = {n: t, newSeen: 0, reviews: 0}; }
 function streakNow() { const t = today(); return (S.streak.last === t || S.streak.last === t - 1) ? S.streak.count : 0; }
@@ -1308,7 +1459,7 @@ const clampEase = e => Math.min(3.0, Math.max(1.3, e));
 const PRIO_MULT = {3: 0.8, 2: 1, 1: 1.3};
 const PRIO_TEXT = {3: '★★★', 2: '★★☆', 1: '★☆☆'};
 const prioOf = it => S.prio[it.id] || it.prio || 2;
-const GRADES = ['See again', 'I know the meaning', 'I know it'];
+const GRADES = ['🔁 See again', '🤔 I know the meaning', '✅ I know it'];
 function nextOf(st, g, it) {
   const m = PRIO_MULT[prioOf(it)];
   if (g === 0) return {again: true, ivl: st.ivl >= 3 ? Math.max(1, Math.round(st.ivl * 0.3)) : 0, ease: clampEase(st.ease - 0.2), lapsed: st.ivl > 0};
@@ -1373,7 +1524,8 @@ function buildQueue(extraNew = 0) {
 
 /* Pronunciation ladder: 0 = French + help, 1 = all its sounds known (help hidden), 2 = known well (3+ weeks). */
 const knowsAll = it => it.units.every(u => S.snd[u]);
-const LEVELS = ['Pronunciation + your sounds', 'French', 'Known well'];
+const LEVELS = ['French + pronunciation', 'French', 'Known well'];
+const levelLabel = lvl => lvl === 0 && S.settings.help === 'mix' ? 'Pronunciation + your sounds' : LEVELS[lvl];
 function levelFor(it) {
   const h = S.settings.help;
   if (h === 'always') return 0;
@@ -1416,11 +1568,21 @@ function mixHTML(it) {
   }
   return h + frText(it.fr.slice(i));
 }
+/* The easy pronunciation, made clearer to read: syllables split with a soft dot, the strong syllable in bold
+   (instead of CAPS), and the nasal n small and light (say it through the nose). */
 function pronHTML(it) {
   const p = PRON[spoken(it.fr)];
   if (!p) return '';
-  return esc(p).replace(/ⁿ/g, '<span class="nas">n</span>');
+  return p.split(/(\s+|[,?!])/).map(tok => {
+    if (!tok || /^\s+$/.test(tok) || /^[,?!]$/.test(tok)) return esc(tok);
+    return tok.split('-').map(syl => {
+      const strong = /[A-ZÜÖ]/.test(syl) && syl === syl.toUpperCase();
+      const h = esc(strong ? syl.toLowerCase() : syl).replace(/ⁿ/g, '<span class="nas">n</span>');
+      return strong ? `<b class="st">${h}</b>` : h;
+    }).join('<span class="dot">·</span>');
+  }).join('');
 }
+const pronBubble = (it, attrs = '') => PRON[spoken(it.fr)] ? `<div class="pron pron-bubble fr-help"${attrs}><span aria-hidden="true">🗣️</span><span>${pronHTML(it)}</span></div>` : '';
 
 /* ============================================================
    DAILY COURSE, XP AND BADGES
@@ -1490,24 +1652,37 @@ function knownCount() {
   for (const k in S.cards) if (S.cards[k].reps > 0) { const it = itemOfKey(k); if (it) ids.add(it.id); }
   return ids.size;
 }
-const LEVEL_NAMES = [['Graine', 'Seed'], ['Pousse', 'Sprout'], ['Fleur', 'Flower'], ['Frite', 'Belgian fry'], ['Gaufre', 'Waffle'], ['Praline', 'Praline'], ['Ardennes', 'Ardennes'], ['Meuse', 'River Meuse'], ['Bavarde', 'Chatterbox']];
+const LEVEL_NAMES = [['🌱 Graine', 'Seed'], ['🌿 Pousse', 'Sprout'], ['🌸 Fleur', 'Flower'], ['🍟 Frite', 'Belgian fry'], ['🧇 Gaufre', 'Waffle'], ['🍫 Praline', 'Praline'], ['🌲 Ardennes', 'Ardennes'], ['🏞️ Meuse', 'River Meuse'], ['🦜 Bavarde', 'Chatterbox']];
+const wallet = () => Math.max(0, S.xp - (S.spent || 0));
 const LVL_XP = 400;
 function levelInfo() {
   const lv = Math.floor(S.xp / LVL_XP);
   return {lv: lv + 1, name: LEVEL_NAMES[Math.min(lv, LEVEL_NAMES.length - 1)], into: S.xp % LVL_XP};
 }
+const deckDone = d => DECK_ITEMS[d.id].every(it => ((S.cards[keyOf(it, 'fr')] || {}).reps || (S.cards[keyOf(it, 'en')] || {}).reps) > 0);
+const doneDecks = () => DECKS.filter(deckDone).length;
 const BADGES = [
-  ['1', 'First lesson', 'You finished day 1.', () => S.course.day > 1],
-  ['Oui', 'First conversation', 'You finished your first mission with Max.', () => S.talks >= 1],
-  ['3', 'Three in a row', '3 days in a row.', () => S.streak.best >= 3],
-  ['7', 'One week', '7 days in a row.', () => S.streak.best >= 7],
-  ['Son', 'All the sounds', 'You learned all ' + SOUNDS.length + ' sounds of French.', () => SOUNDS.every(u => S.snd[u.id])],
-  ['100', '100 words', 'You know 100 words and phrases.', () => knownCount() >= 100],
-  ['10', 'Bavarde', '10 conversations with Max. Bavarde = chatterbox!', () => S.talks >= 10],
-  ['30', 'One month', '30 days in a row.', () => S.streak.best >= 30],
-  ['Fini', '30-day plan', 'You finished the whole 30-day plan.', () => S.course.day > LESSONS.length],
-  ['300', '300 words', 'You know 300 words and phrases.', () => knownCount() >= 300],
-  ['800', '800 words', 'You know 800 words and phrases. Chapeau !', () => knownCount() >= 800],
+  ['🌱', 'First lesson', 'Finish day 1.', () => S.course.day > 1],
+  ['💬', 'First conversation', 'Finish your first mission with Max.', () => S.talks >= 1],
+  ['🔥', 'Three in a row', '3 days in a row.', () => S.streak.best >= 3],
+  ['⭐', 'One week', '7 days in a row.', () => S.streak.best >= 7],
+  ['🌟', 'Two weeks', '14 days in a row.', () => S.streak.best >= 14],
+  ['🏅', 'One month', '30 days in a row.', () => S.streak.best >= 30],
+  ['🎴', 'Sticker starter', 'Collect 10 sound stickers.', () => SOUNDS.filter(u => S.snd[u.id]).length >= 10],
+  ['🎵', 'Full album', 'Collect all ' + SOUNDS.length + ' sound stickers.', () => SOUNDS.every(u => S.snd[u.id])],
+  ['💯', '100 words', 'Know 100 words and phrases.', () => knownCount() >= 100],
+  ['🌈', '300 words', 'Know 300 words and phrases.', () => knownCount() >= 300],
+  ['🏔️', '800 words', 'Know 800 words and phrases. Chapeau !', () => knownCount() >= 800],
+  ['🦜', 'Bavarde', '10 conversations with Max. Bavarde = chatterbox!', () => S.talks >= 10],
+  ['💞', 'Best friends', '25 conversations with Max.', () => S.talks >= 25],
+  ['🎓', '30-day plan', 'Finish the whole 30-day plan.', () => S.course.day > LESSONS.length],
+  ['📗', 'First full deck', 'Collect every card of one deck.', () => doneDecks() >= 1],
+  ['🇧🇪', 'Belgian expert', 'Collect every card of Belgian French.', () => deckDone(DECKS.find(d => d.id === 'belgian'))],
+  ['💐', 'Part of the family', 'Collect every card of His people.', () => deckDone(DECKS.find(d => d.id === 'people'))],
+  ['👑', 'Collector queen', 'Collect every card of every deck.', () => doneDecks() === DECKS.length],
+  ['🪙', 'Big saver', 'Earn 1,000 XP.', () => S.xp >= 1000],
+  ['🛍️', 'First treat', 'Buy your first reward in the shop.', () => (S.owned || []).length >= 1],
+  ['🎁', 'Spoiled', 'Buy 5 rewards.', () => (S.owned || []).length >= 5],
 ];
 
 /* ============================================================
@@ -1589,9 +1764,10 @@ function toast(msg) {
 const ICON_SPEAK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const ICON_SHOW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 const ICON_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-const ICON_BUBBLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>';
+const ICON_BUBBLE_OLD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>';
+const ICON_BUBBLE = '💬';
 const REG_LABEL = {tu: 'tu · casual', vous: 'vous · polite'};
-const listenBtn = (it, label = 'Listen') => `<button class="mini" data-act="speak" data-id="${esc(it.id)}">${ICON_SPEAK} ${label}</button>`;
+const listenBtn = (it, label = 'Listen') => `<button class="mini" data-act="speak" data-id="${esc(it.id)}">${label.startsWith('🔊') ? label : ICON_SPEAK + ' ' + label}</button>`;
 const genChip = it => it.gen ? `<span class="chip gen">${it.gen === 'f' ? 'la · feminine' : 'le · masculine'}</span>` : '';
 
 let tab = 'home';
@@ -1623,7 +1799,7 @@ function deckRow(d) {
   const c = deckCounts(d);
   return `
         <div class="deck" style="--c:${d.color}">
-          <span class="dot"></span>
+          <span class="emo" aria-hidden="true">${d.emoji}</span>
           <div>
             <div class="deck-name">${esc(d.name)}<span class="frn">${esc(d.fr)}</span></div>
             <div class="deck-meta">${c.items} items · ${c.seen} of ${c.total} cards started${REG_LABEL[d.reg] ? ' · ' + d.reg : ''}</div>
@@ -1645,7 +1821,7 @@ function weekStrip() {
 }
 function levelBar() {
   const L = levelInfo();
-  return `<div class="lvl"><div class="lvl-top"><span><b>Level ${L.lv}</b> · ${L.name[0]} <span class="muted">(${L.name[1]})</span></span><span class="muted">${S.xp} XP</span></div>
+  return `<div class="lvl"><div class="lvl-top"><span><b>Level ${L.lv}</b> · ${L.name[0]} <span class="muted">(${L.name[1]})</span></span><span class="muted">${S.xp} XP · 🪙 ${wallet()} to spend</span></div>
     <div class="bar" style="--c:var(--accent);height:8px"><i style="width:${L.into / LVL_XP * 100}%"></i></div></div>`;
 }
 function soundChunk() {
@@ -1666,12 +1842,12 @@ function todayPanel() {
     main = `
       <div><div class="eyebrow">Today · day ${L.n}${L.n <= LESSONS.length ? ' of ' + LESSONS.length : ''}</div>
       <h1 class="lesson-title">${esc(L.t)} <span class="frn">${esc(L.fr)}</span></h1></div>
-      <div class="chips">${L.g ? `<span class="chip">grammar: ${esc(L.g.p)}</span>` : `<span class="chip">${L.review ? 'review day' : 'new words'}</span>`}${snd.length ? `<span class="chip">sounds: ${snd.map(u => esc(u.label)).join(' · ')}</span>` : ''}<span class="chip">about ${minutesFor(q, L)} min</span><span class="chip">${q.filter(e => !S.cards[e.k]).length} new · ${q.filter(e => S.cards[e.k]).length} review</span></div>
-      <button class="btn btn-primary" data-act="lesson" style="min-height:62px;font-size:20px">Start today's lesson</button>
+      <div class="chips">${L.g ? `<span class="chip">grammar: ${esc(L.g.p)}</span>` : `<span class="chip">${L.review ? 'review day' : 'new words'}</span>`}${snd.length ? `<span class="chip">✨ ${snd.length} new sound stickers</span>` : ''}<span class="chip">about ${minutesFor(q, L)} min</span><span class="chip">${q.filter(e => !S.cards[e.k]).length} new · ${q.filter(e => S.cards[e.k]).length} review</span></div>
+      <button class="btn btn-primary" data-act="lesson" style="min-height:62px;font-size:20px">✨ Start today's lesson</button>
       <p class="muted small">Sounds of the day → topic and grammar → cards → tonight's conversation with Max.</p>`;
   } else {
     main = `
-      <div><div class="eyebrow">Today</div><h1 class="lesson-title">Lesson done! <span class="frn">Bravo !</span></h1></div>
+      <div><div class="eyebrow">Today</div><h1 class="lesson-title">Lesson done! 🎉 <span class="frn">Bravo !</span></h1></div>
       <div class="btn-row">
         ${due.length ? `<button class="btn btn-soft" data-act="start">Extra practice (${due.length})</button>` : ''}
         <button class="btn btn-line" data-act="lesson">Bonus: next lesson now</button>
@@ -1679,7 +1855,7 @@ function todayPanel() {
   }
   const mission = P ? `
     <div class="mission-mini">
-      <span class="mark" aria-hidden="true">P</span>
+      <span class="mark" aria-hidden="true">💕</span>
       <div><div class="eyebrow">Tonight's conversation · day ${P.n}</div><p>${esc(missionFor(P.n, P.deck).task)}</p></div>
       <div class="btn-row" style="grid-column:1 / -1"><button class="btn btn-line" data-act="mission">Open</button><button class="btn btn-primary" data-act="talked">We talked! +30</button></div>
     </div>` : '';
@@ -1691,7 +1867,7 @@ function todayPanel() {
 function viewHome() {
   const lc = ladderCounts();
   const steps = [
-    {lab: 'Pronunciation + your sounds', when: 'new cards', sample: '<span class="fr mix">b<span class="hp">oh<span class="nas">n</span></span>zh<b class="ks">ou</b>r</span>'},
+    {lab: 'French + 🗣️', when: 'new cards', sample: '<span class="fr">bonj<b class="kn">ou</b>r</span><span class="pron">boh<span class="nas">n</span><span class="dot">·</span><b class="st">zhoor</b></span>'},
     {lab: 'French', when: 'when you know all its sounds', sample: '<span class="fr">bonjour</span>'},
     {lab: 'Known well', when: 'after 3 weeks', sample: '<span class="fr">bonjour ✓</span>'},
   ];
@@ -1700,7 +1876,7 @@ function viewHome() {
 
   <section class="section">
     <div><h2>How the help fades</h2>
-    <p class="muted small" style="margin-top:4px">New cards show the easy pronunciation, but every sound you have learned (in the sounds of the day) already appears in normal French spelling, in <b style="color:var(--accent)">teal</b>. Sound by sound, the card becomes normal French. The numbers show your cards at each step.</p></div>
+    <p class="muted small" style="margin-top:4px">New cards show the French with a 🗣️ pronunciation bubble under it. Sounds you have collected light up in <b class="kn">mint</b>. When you know every sound in a card, the bubble goes away (tap 🗣️ to see it again). The numbers show your cards at each step.</p></div>
     <div class="ladder">
       ${steps.map((s, i) => `<div class="step"><span class="sample">${s.sample}</span><span class="lab">${s.lab}</span><span class="when">${s.when}</span><span class="cnt">${lc[i]}</span></div>`).join('')}
     </div>
@@ -1723,12 +1899,12 @@ function phraseRows() {
     if (phraseDeck !== 'all' && phraseDeck !== d.id) return;
     const rows = DECK_ITEMS[d.id].filter(it => !q || plain(it.en).includes(q) || plain(it.fr).includes(q));
     if (!rows.length) return;
-    html += `<h3 class="group-h" style="--c:${d.color}"><span class="dot"></span>${esc(d.name)} <span class="muted small" style="font-weight:400">${esc(d.fr)}</span></h3>`;
+    html += `<h3 class="group-h" style="--c:${d.color}"><span class="gemo" aria-hidden="true">${d.emoji}</span>${esc(d.name)} <span class="muted small" style="font-weight:400">${esc(d.fr)}</span></h3>`;
     html += rows.slice(0, q ? 60 : 400).map(it => `
       <div class="phrase">
         <div class="fr">${frText(it.fr)}</div>
-        <div class="pron">${pronHTML(it)}</div>
-        <div class="en">${esc(it.en)}${it.be ? ' · <b style="color:var(--hard)">Belgian</b>' : ''}</div>
+        <div class="pron">🗣️ ${pronHTML(it)}</div>
+        <div class="en">${esc(it.en)}${it.be ? ' · 🇧🇪 <b style="color:var(--hard)">Belgian</b>' : ''}</div>
         <div class="acts">
           <button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button>
           <button class="icon-btn" data-act="big" data-id="${esc(it.id)}" aria-label="Show it big">${ICON_SHOW}</button>
@@ -1744,7 +1920,7 @@ function viewPhrases() {
     <input class="search" id="phraseSearch" type="search" placeholder="Search in English or French" value="${esc(phraseQuery)}" autocomplete="off">
     <div class="filter">
       <button data-act="pdeck" data-id="all" aria-pressed="${phraseDeck === 'all'}">All</button>
-      ${DECKS.map(d => `<button data-act="pdeck" data-id="${d.id}" aria-pressed="${phraseDeck === d.id}">${esc(d.name)}</button>`).join('')}
+      ${DECKS.map(d => `<button data-act="pdeck" data-id="${d.id}" aria-pressed="${phraseDeck === d.id}">${d.emoji} ${esc(d.name)}</button>`).join('')}
     </div>
     <div class="plist" id="plist">${phraseRows()}</div>
   </section>`;
@@ -1784,13 +1960,15 @@ function viewProgress() {
     <div class="legend"><span><i class="light"></i>studied</span><span><i></i>lesson done</span><span><b class="stamp-mini">${ICON_BUBBLE}</b>talked with Max</span></div>
   </section>
   <section class="section">
-    <h2>Sounds you know</h2>
-    <p class="muted small">${SOUNDS.filter(u => S.snd[u.id]).length} of ${SOUNDS.length} French sounds and spelling rules. ${S.settings.soundsPerDay} new ones come with each lesson.</p>
-    <div class="sgrid">${SOUNDS.map(u => `<span class="st-tile ${S.snd[u.id] ? 'got' : ''}">${esc(u.label)}<small>${esc(u.say)}</small></span>`).join('')}</div>
+    <h2>🎴 Sound stickers · ${SOUNDS.filter(u => S.snd[u.id]).length}/${SOUNDS.length}</h2>
+    <p class="muted small">Collect all ${SOUNDS.length} French sounds. ${S.settings.soundsPerDay} new stickers come with each lesson. Tap a sticker to hear its word.</p>
+    <div class="sgrid">${SOUNDS.map((u, i) => S.snd[u.id]
+      ? `<button class="st-tile got" data-act="sticker" data-id="${u.id}"><span class="se">${STICKERS[u.id][0]}</span><b>${esc(u.label)}</b><small>${esc(STICKERS[u.id][1])}</small></button>`
+      : `<span class="st-tile locked"><span class="se">❓</span><b>#${i + 1}</b><small>not found yet</small></span>`).join('')}</div>
   </section>
   <section class="section">
-    <h2>Badges</h2>
-    <div class="badges">${BADGES.map(([k, name, desc, test]) => { const ok = test(); return `<div class="badge ${ok ? 'got' : ''}"><span class="bi">${k}</span><div><b>${name}</b><p>${esc(desc)}</p></div></div>`; }).join('')}</div>
+    <h2>🏅 Badges · ${BADGES.filter(x => x[3]()).length}/${BADGES.length}</h2>
+    <div class="badges">${BADGES.map(([k, name, desc, test]) => { const ok = test(); return `<div class="badge ${ok ? 'got' : ''}"><span class="bi">${ok ? k : '🔒'}</span><div><b>${name}</b><p>${esc(desc)}</p></div></div>`; }).join('')}</div>
   </section>
   <section class="section">
     <h2>The 30-day plan</h2>
@@ -1807,14 +1985,14 @@ function viewProgress() {
     </div>
   </section>
   <section class="section">
-    <h2>By deck</h2>
+    <h2>📚 Card album · ${doneDecks()}/${DECKS.length} decks complete</h2>
     <div class="legend"><span><i></i>known well</span><span><i class="light"></i>learning</span></div>
     <div class="decks">
       ${DECKS.map(d => { const c = deckCounts(d); return `
       <div class="deck" style="--c:${d.color};grid-template-columns:auto 1fr">
-        <span class="dot"></span>
+        <span class="emo" aria-hidden="true">${deckDone(d) ? '🏅' : d.emoji}</span>
         <div><div class="deck-name">${esc(d.name)}<span class="frn">${esc(d.fr)}</span></div>
-        <div class="deck-meta">${c.strong} known well · ${c.seen - c.strong} learning · ${c.total - c.seen} new</div>
+        <div class="deck-meta">${deckDone(d) ? '✨ Complete! · ' : ''}${c.strong} known well · ${c.seen - c.strong} learning · ${c.total - c.seen} new</div>
         <div class="bar"><i style="width:${c.strong / c.total * 100}%"></i><i style="width:${(c.seen - c.strong) / c.total * 100}%"></i></div></div>
       </div>`; }).join('')}
     </div>
@@ -1844,6 +2022,81 @@ function viewProgress() {
   </section>`;
 }
 
+/* ============================================================
+   REWARD SHOP: spend XP on real-life rewards from Max. Your level never goes down:
+   spending uses the "XP to spend" wallet (all XP earned minus what you spent).
+   ============================================================ */
+const REWARDS = [
+  ['hug', '🤗', 'A long hug from Max', 50],
+  ['song', '🎤', 'Max sings you a French song', 100],
+  ['waffle', '🧇', 'A Belgian waffle', 150],
+  ['dishes', '🧽', 'Max does the dishes for a day', 200],
+  ['movie', '🎬', 'Movie night, you choose the film', 200],
+  ['choco', '🍫', 'A box of Belgian pralines', 250],
+  ['bath', '🛁', 'A cosy bath evening, Max prepares everything', 250],
+  ['massage', '💆‍♀️', 'A massage from Max (20 minutes)', 300],
+  ['sleep', '😴', 'A sleep-in morning, Max does the morning jobs', 300],
+  ['frites', '🍟', 'A friterie date', 300],
+  ['breakfast', '🥐', 'Breakfast in bed', 350],
+  ['dinner', '🍳', 'Max cooks your favourite dinner', 400],
+  ['letter', '💌', 'A love letter in French from Max', 500],
+  ['hike', '🥾', 'A hike or paddle day, you choose where', 600],
+  ['flowers', '💐', 'A flower bouquet from Max', 800],
+  ['surprise', '🎁', 'A surprise gift from Max', 1000],
+].map(([id, e, n, p]) => ({id, e, n, p}));
+const PRICES = [50, 100, 200, 300, 500, 800, 1000];
+let buyArm = null, useArm = null, rmArm = null, newPrice = 300, shopMsg = '', draft = {n: '', e: ''};
+const allRewards = () => [...REWARDS, ...(S.custom || []).map(r => ({...r, custom: true}))];
+const dateText = t => new Date(t).toLocaleDateString('en-GB', {day: 'numeric', month: 'long'});
+function rewardCard(r) {
+  const have = wallet(), can = have >= r.p;
+  let act;
+  if (buyArm === r.id) act = `<p class="small"><b>Buy for 🪙 ${r.p}?</b></p><div class="btn-row" style="width:100%"><button class="btn btn-primary" data-act="buyyes" data-id="${esc(r.id)}">Yes! 🎉</button><button class="btn btn-line" data-act="buyno">No</button></div>`;
+  else if (can) act = `<button class="btn btn-primary" data-act="buy" data-id="${esc(r.id)}">Buy</button>`;
+  else act = `<div class="rbar" aria-hidden="true"><i style="width:${Math.round(have / r.p * 100)}%"></i></div><span class="need">${r.p - have} XP to go</span>`;
+  const rm = r.custom ? (rmArm === r.id ? `<button class="btn btn-line" data-act="rmyes" data-id="${esc(r.id)}" style="color:var(--again)">Remove it</button>` : `<button class="rm" data-act="rm" data-id="${esc(r.id)}" aria-label="Remove this reward">✕</button>`) : '';
+  return `<div class="reward ${can ? 'can' : ''}"><span class="r-emo" aria-hidden="true">${esc(r.e)}</span><b>${esc(r.n)}</b><span class="price">🪙 ${r.p}</span>${act}${rm}</div>`;
+}
+function viewShop() {
+  const owned = (S.owned || []).map((o, i) => ({...o, i}));
+  const open = owned.filter(o => !o.used).reverse(), used = owned.filter(o => o.used).reverse();
+  return `
+  <section class="section">
+    <div class="panel shop-head"><div><h2>🎁 Reward shop</h2><p class="small">Spend your XP on real rewards from Max. Your level never goes down.</p></div>
+      <div class="wallet"><b>🪙 ${wallet()}</b><span>XP to spend</span></div></div>
+    ${shopMsg ? `<p class="msg">${esc(shopMsg)}</p>` : ''}
+  </section>
+  ${open.length ? `<section class="section"><h2>🎟️ Your coupons · ${open.length}</h2>
+    <div class="coupons">${open.map(o => `<div class="coupon-row"><span class="ce" aria-hidden="true">${esc(o.e)}</span><b>${esc(o.n)}</b><span class="muted small">Bought on ${dateText(o.at)}</span>
+      <div class="btn-row">${useArm === o.i ? `<button class="btn btn-primary" data-act="useyes" data-i="${o.i}">Yes, Max did it! ✅</button><button class="btn btn-line" data-act="useno">Not yet</button>` : `<button class="btn btn-soft" data-act="coupon" data-i="${o.i}">💌 Show Max</button><button class="btn btn-line" data-act="use" data-i="${o.i}">Used ✅</button>`}</div></div>`).join('')}</div></section>` : ''}
+  <section class="section">
+    <h2>🛍️ Rewards</h2>
+    <div class="shop-grid">${allRewards().sort((a, b) => a.p - b.p).map(rewardCard).join('')}</div>
+  </section>
+  <section class="section">
+    <h2>✏️ Add your own reward</h2>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="field"><label for="rwName"><b>What is it?</b></label><input id="rwName" maxlength="60" placeholder="For example: Max makes pancakes" value="${esc(draft.n)}"></div>
+      <div class="field"><label for="rwEmoji"><b>Emoji</b></label><input id="rwEmoji" maxlength="8" placeholder="🥞" style="max-width:120px;font-size:24px" value="${esc(draft.e)}"></div>
+      <div class="field"><b>Price</b><div class="seg" role="group">${PRICES.map(v => `<button data-act="rwprice" data-v="${v}" aria-pressed="${newPrice === v}">🪙 ${v}</button>`).join('')}</div></div>
+      <button class="btn btn-primary" data-act="addreward">Add to the shop</button>
+    </div>
+  </section>
+  ${used.length ? `<section class="section"><h2>✅ Used coupons · ${used.length}</h2><div class="plist">${used.map(o => `<div class="phrase" style="grid-template-columns:auto 1fr"><span style="font-size:26px">${esc(o.e)}</span><div><b>${esc(o.n)}</b><div class="muted small">Used on ${dateText(o.used)}</div></div></div>`).join('')}</div></section>` : ''}`;
+}
+function showCoupon(o) {
+  const b = document.getElementById('big');
+  b.innerHTML = `<div class="coupon"><div class="c-emo" aria-hidden="true">${esc(o.e)}</div><div class="c-title">🎟️ Coupon for Aya</div><div class="c-name">${esc(o.n)}</div><div>Max, Aya earned this by learning French! 💕</div><div class="small">Bought on ${dateText(o.at)}</div></div><div class="close-hint">Tap anywhere to close</div>`;
+  b.hidden = false;
+}
+function syncBox() {
+  const st = {on: ['☁️', 'Saved to your Claude account.', 'Your progress stays even if this phone clears its storage, and it is private: only you can see it.'],
+    loading: ['⏳', 'Connecting to your account…', 'Your progress is already saved on this phone.'],
+    error: ['⚠️', 'Your account is not reachable right now.', 'Your progress is safe on this phone. It will be uploaded as soon as the connection works again.'],
+    local: ['📱', 'Saved on this phone only.', 'Open Parlons from your Claude account to keep your progress there too. A backup code (below) is an extra safety net.']}[cloud.status];
+  return `<div class="panel sync"><span class="se" aria-hidden="true">${st[0]}</span><div><b>${st[1]}</b><p class="muted small">${st[2]}</p></div></div>`;
+}
+
 function seg(key, opts) {
   return `<div class="seg" role="group">${opts.map(([v, l]) => `<button data-act="set" data-k="${key}" data-v="${v}" aria-pressed="${String(S.settings[key]) === String(v)}">${l}</button>`).join('')}</div>`;
 }
@@ -1855,8 +2108,8 @@ function viewSettings() {
     <div class="panel" style="padding-block:4px">
       <div class="setting"><h3>New cards per day</h3>${seg('newPerDay', [[10, '10'], [15, '15'], [20, '20'], [30, '30']])}</div>
       <div class="setting"><h3>New sounds per lesson</h3><p class="muted small">Reading and listening only, one sound at a time, with a memory trick and a short quiz.</p>${seg('soundsPerDay', [[2, '2'], [3, '3'], [4, '4']])}</div>
-      <div class="setting"><h3>Pronunciation help</h3><p class="muted small">Auto: cards show the pronunciation, with the sounds you have learned in normal French spelling. When you know all the sounds in a card, it is shown fully in French.</p>
-        ${seg('help', [['auto', 'Auto'], ['always', 'Always mixed'], ['never', 'French only (tap to see)']])}</div>
+      <div class="setting"><h3>🗣️ Pronunciation help</h3><p class="muted small">Auto: the French with a pronunciation bubble under it, until you know all the sounds in that card. Mixed: one line where the sounds you know are in French and the rest is pronunciation.</p>
+        ${seg('help', [['auto', 'Auto'], ['mix', 'Mixed'], ['always', 'Always show'], ['never', 'Hide (tap to see)']])}</div>
       <div class="setting"><h3>Card directions</h3><p class="muted small">Both ways: each phrase has an understand card (FR → EN) and a speaking card (EN → FR). The speaking card unlocks after the first one.</p>
         ${seg('dirs', [['both', 'Both ways'], ['fr', 'Only FR → EN'], ['en', 'Only EN → FR']])}</div>
       <div class="setting"><h3>Play French automatically</h3><p class="muted small">Off: the sound only plays when you tap Listen.</p>${seg('autoplay', [[true, 'On'], [false, 'Off']])}</div>
@@ -1868,8 +2121,9 @@ function viewSettings() {
     </div>
   </section>
   <section class="section">
-    <h2>Backup</h2>
-    <p class="muted small">Progress is saved only in this browser. Copy a backup code now and then, and keep it in a note or send it to yourself.</p>
+    <h2>💾 Your progress</h2>
+    ${syncBox()}
+    <p class="muted small">Extra safety net: copy a backup code now and then, and keep it in a note or send it to yourself.</p>
     <div class="btn-row"><button class="btn btn-soft" data-act="backup">Copy backup code</button></div>
     <textarea id="restoreBox" placeholder="Paste a backup code here to restore it"></textarea>
     <div class="btn-row"><button class="btn btn-line" data-act="restore">Restore from code</button></div>
@@ -1884,10 +2138,10 @@ function viewSettings() {
 function render() {
   applyLook();
   const v = document.getElementById('view');
-  v.innerHTML = tab === 'phrases' ? viewPhrases() : tab === 'progress' ? viewProgress() : tab === 'settings' ? viewSettings() : viewHome();
+  v.innerHTML = tab === 'phrases' ? viewPhrases() : tab === 'progress' ? viewProgress() : tab === 'settings' ? viewSettings() : tab === 'shop' ? viewShop() : viewHome();
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false'));
   const s = streakNow();
-  document.getElementById('streakPill').textContent = s ? s + (s === 1 ? ' day' : ' days') + ' in a row' : 'Day 1';
+  document.getElementById('streakPill').textContent = s ? '🔥 ' + s + (s === 1 ? ' day' : ' days') : '🌱 Day 1';
   if (tab === 'phrases') {
     preloadFor(DECKS.filter(d => phraseDeck === 'all' || d.id === phraseDeck).map(d => DECK_ITEMS[d.id][0]));
     const inp = document.getElementById('phraseSearch');
@@ -1910,23 +2164,27 @@ function startSession(extraNew = 0) {
 }
 function closeSession() {
   sess = null;
+  if (cloud.pending) { if ((cloud.pending.updatedAt || 0) > (S.updatedAt || 0)) { applyCloud(cloud.pending); } else { cloud.pending = null; cloudPush(); } }
   try { speechSynthesis.cancel(); } catch (e) {}
   player.pause();
   document.getElementById('study').hidden = true;
   document.body.style.overflow = '';
   render();
 }
+/* The French is always on top. New cards show the pronunciation bubble under it (sounds you know are
+   highlighted in the French); once you know every sound, the bubble hides behind "Show pronunciation". */
+const helpShown = lvl => lvl === 0 && S.settings.help !== 'mix';
 function frBlock(it, lvl, noHelp) {
   const len = it.fr.length;
   const size = len <= 8 ? 44 : len <= 16 ? 36 : len <= 30 ? 29 : 24;
-  const help = pronHTML(it);
-  const main = `<div class="fr-main fr${lvl === 0 ? ' mix' : ''}" style="font-size:${size}px">${lvl === 0 ? mixHTML(it) : frText(it.fr)}</div>`;
-  if (!help) return main;
-  return main + (noHelp ? '' : `<div class="pron fr-help" data-peek="help" hidden>${help}</div>`);
+  const mix = lvl === 0 && S.settings.help === 'mix';
+  const main = `<div class="fr-main fr${mix ? ' mix' : ''}" style="font-size:${size}px">${mix ? mixHTML(it) : lvl === 0 ? hunt(it) : frText(it.fr)}</div>`;
+  if (noHelp) return main;
+  return main + pronBubble(it, helpShown(lvl) ? '' : ' data-peek="help" hidden');
 }
 function peekButtons(it, lvl, noHelp) {
-  let b = listenBtn(it);
-  if (!noHelp && PRON[spoken(it.fr)]) b += `<button class="mini" data-act="peek">Show pronunciation</button>`;
+  let b = listenBtn(it, '🔊 Listen');
+  if (!noHelp && !helpShown(lvl) && PRON[spoken(it.fr)]) b += `<button class="mini" data-act="peek">🗣️ Show pronunciation</button>`;
   return `<div class="row-btns">${b}</div>`;
 }
 function showCard() {
@@ -1942,7 +2200,7 @@ function showCard() {
   if (!entry) {
     sess.cur = null;
     if (sess.mode === 'lesson') return finishLesson();
-    box.innerHTML = top + `<div class="done"><div class="big-fr">Bien joué !</div><p style="font-size:19px">Well done. You answered ${sess.answered} cards.</p>
+    box.innerHTML = top + `<div class="done"><div class="sticker-new">🥳</div><div class="big-fr">Bien joué !</div><p style="font-size:19px">Well done. You answered ${sess.answered} cards.</p>
       <div class="btn-row" style="width:100%"><button class="btn btn-soft" data-act="more">Learn 5 more</button><button class="btn btn-primary" data-act="close">Finish</button></div></div>`;
     return;
   }
@@ -1951,7 +2209,7 @@ function showCard() {
   const noHelp = !!entry.noHelp;
   const lvl = noHelp ? Math.max(1, levelFor(it)) : levelFor(it);
   sess.cur = {it, lvl, dir, k, noHelp, revealed: false};
-  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${esc(it.deck.name)}</span>${entry.retry ? '<span class="chip retry">second try</span>' : st ? '' : '<span class="chip">new</span>'}<span class="chip">${dir === 'fr' ? 'understand' : 'speak'}</span><span class="chip">${LEVELS[lvl]}</span>${REG_LABEL[it.reg] ? `<span class="chip">${it.reg}</span>` : ''}${it.be ? '<span class="chip bechip">Belgian</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
+  const chips = `<div class="chips"><span class="chip deckchip" style="--c:${it.deck.color}">${it.deck.emoji || ''} ${esc(it.deck.name)}</span>${entry.retry ? '<span class="chip retry">🔁 second try</span>' : st ? '' : '<span class="chip">✨ new</span>'}<span class="chip">${dir === 'fr' ? 'understand' : 'speak'}</span><span class="chip">${levelLabel(lvl)}</span>${REG_LABEL[it.reg] ? `<span class="chip">${it.reg}</span>` : ''}${it.be ? '<span class="chip bechip">Belgian</span>' : ''}<button class="chip star" id="starBtn" data-act="prio" aria-label="Importance: tap to change">${PRIO_TEXT[prioOf(it)]}</button></div>`;
   let front;
   if (dir === 'fr') {
     front = `<div class="ask">${noHelp ? 'Again, without the help. Can you say it?' : 'What does this mean?'}</div><div class="front">${frBlock(it, lvl, noHelp)}${peekButtons(it, lvl, noHelp)}</div>`;
@@ -2051,11 +2309,13 @@ function showSound() {
   const K = sess.snd, u = K.units[K.i];
   const ex = exampleFor(u);
   document.getElementById('studyIn').innerHTML = soundsTop(`Sound ${K.i + 1}/${K.units.length}`, (K.i / (K.units.length + 1)) * 100) + `
-    <div class="card sound-card"><div class="eyebrow">Sound of the day · ${K.i + 1} of ${K.units.length}</div>
+    <div class="card sound-card"><div class="eyebrow">🎴 New sticker · ${K.i + 1} of ${K.units.length}</div>
+      <button class="sticker-new" data-act="speak" data-id="${esc(u.stItem.id)}" aria-label="Listen: ${esc(STICKERS[u.id][1])}" style="background:none;border:0;cursor:pointer">${STICKERS[u.id][0]}</button>
+      <div class="muted">${esc(STICKERS[u.id][1])}</div>
       <div class="sound-big">${esc(u.label)}</div>
       <div class="sound-say"><span>sounds like</span> ${esc(u.say)}</div>
       <p class="trick">${esc(u.trick)}</p>
-      <div class="says" style="width:100%">${u.exItems.map(it => `<div class="say"><div style="text-align:left"><div class="fr">${highlight(it, u.id)}</div><div class="pron">${pronHTML(it)}</div></div>
+      <div class="says" style="width:100%">${u.exItems.map(it => `<div class="say"><div style="text-align:left"><div class="fr">${highlight(it, u.id)}</div><div class="pron">🗣️ ${pronHTML(it)}</div></div>
         <button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button></div>`).join('')}</div>
       ${u.vsItems.length ? `<div style="width:100%;display:flex;flex-direction:column;gap:6px"><div class="eyebrow" style="text-align:left">Listen to the difference</div>
         <div class="pairs">${u.vsItems.map(p => p.map(it => `<div class="pair"><div><div class="fr">${frText(it.fr)}</div><div class="pron">${pronHTML(it)}</div></div><button class="icon-btn" data-act="speak" data-id="${esc(it.id)}" aria-label="Listen">${ICON_SPEAK}</button></div>`).join('')).join('')}</div></div>` : ''}
@@ -2100,7 +2360,7 @@ function answerSound(v, el) {
 function finishSounds() {
   const K = sess.snd;
   K.units.forEach(u => { S.snd[u.id] = S.course.day; });
-  if (K.units.length) S.sndPos = SOUNDS.indexOf(K.units[K.units.length - 1]) + 1;
+  if (K.units.length) { S.sndPos = SOUNDS.indexOf(K.units[K.units.length - 1]) + 1; toast(`🎴 You collected ${K.units.map(u => STICKERS[u.id][0]).join(' ')}! ${SOUNDS.filter(x => S.snd[x.id]).length} of ${SOUNDS.length} stickers.`); }
   save();
   afterSounds();
 }
@@ -2148,7 +2408,8 @@ function finishLesson() {
     if (S.course.day === L.n) {
       S.course.day = L.n + 1; S.course.last = t; S.course.cur = null;
       S.course.pending = {n: L.n, deck: L.deck || null};
-      S.xp += 20; logToday().l = L.n; bumpStreak();
+      sess.chest = 10 + Math.floor(Math.random() * 31);   // 🎁 bonus chest: 10–40 XP
+      S.xp += 20 + sess.chest; logToday().l = L.n; bumpStreak();
       save();
     }
   }
@@ -2158,13 +2419,14 @@ function showMission(m, n, gained) {
   document.getElementById('studyIn').innerHTML = `
     <div class="study-top"><button class="icon-btn" data-act="close" aria-label="Close">${ICON_CLOSE}</button><div class="prog"><i style="width:100%"></i></div><span class="count">Day ${n}</span></div>
     <div class="card mission">
-      ${gained != null ? `<div class="won"><b>Bravo !</b> Day ${n} done · <b>+${gained} XP</b></div>` : ''}
-      <div class="mission-head"><span class="mark big-mark" aria-hidden="true">P</span><div><div class="eyebrow">Tonight's conversation</div><h2>Talk with Max</h2></div></div>
+      ${gained != null ? `<div class="won">🎉 <b>Bravo !</b> Day ${n} done · <b>+${gained} XP</b></div>` : ''}
+      ${gained != null && sess.chest ? `<div class="chest"><span class="ce" aria-hidden="true">🎁</span><span><b>Bonus chest!</b> +${sess.chest} XP for the shop</span></div>` : ''}
+      <div class="mission-head"><span class="mark big-mark" aria-hidden="true">💕</span><div><div class="eyebrow">Tonight's conversation</div><h2>Talk with Max</h2></div></div>
       <p class="task">${esc(m.task)}</p>
       <div><div class="eyebrow" style="margin-bottom:6px">You can start with</div><div class="says">${m.sayItems.map(sayRow).join('')}</div></div>
-      <div class="his"><div class="eyebrow">Max's part</div><p>${esc(m.his)}</p></div>
+      <div class="his"><div class="eyebrow">🧑 Max's part</div><p>${esc(m.his)}</p></div>
     </div>
-    <div class="btn-row"><button class="btn btn-line" data-act="close">Later</button><button class="btn btn-primary" data-act="talked" style="flex:2 1 180px">We talked! +30 XP</button></div>`;
+    <div class="btn-row"><button class="btn btn-line" data-act="close">Later</button><button class="btn btn-primary" data-act="talked" style="flex:2 1 180px">💬 We talked! +30 XP</button></div>`;
 }
 function openMission() {
   const P = S.course.pending; if (!P) return;
@@ -2178,7 +2440,7 @@ function talked() {
     S.course.pending = null; S.talks++; S.xp += 30; logToday().t = true;
     bumpStreak();
     save();
-    toast('Super ! +30 XP. A stamp is on today in your calendar.');
+    toast('💕 Super ! +30 XP. A stamp is on today in your calendar.');
   }
   closeSession();
 }
@@ -2188,7 +2450,7 @@ function talked() {
    ============================================================ */
 function showBig(it) {
   const b = document.getElementById('big');
-  b.innerHTML = `<div class="fr">${frText(it.fr)}</div><div class="sub pron">${pronHTML(it)}</div><div class="sub">${esc(it.en)}</div><div class="close-hint">Tap anywhere to close</div>`;
+  b.innerHTML = `<div class="fr">${frText(it.fr)}</div>${pronBubble(it)}<div class="sub">${esc(it.en)}</div><div class="close-hint">Tap anywhere to close</div>`;
   b.hidden = false;
 }
 
@@ -2197,8 +2459,10 @@ function showBig(it) {
    ============================================================ */
 document.addEventListener('click', e => {
   const tb = e.target.closest('.tab');
-  if (tb) { tab = tb.dataset.tab; resetArmed = false; backupMsg = ''; try { localStorage.setItem(KEY + '.tab', tab); } catch (er) {} render(); window.scrollTo(0, 0); return; }
+  if (tb) { tab = tb.dataset.tab; resetArmed = false; backupMsg = ''; shopMsg = ''; buyArm = useArm = rmArm = null; try { localStorage.setItem(KEY + '.tab', tab); } catch (er) {} render(); window.scrollTo(0, 0); return; }
   if (e.target.closest('#big')) { document.getElementById('big').hidden = true; return; }
+  const sh = e.target.closest('[data-act]');
+  if (sh && tab === 'shop' && !sess && shopAction(sh)) return;
   const el = e.target.closest('[data-act]');
   if (!el) return;
   const act = el.dataset.act;
@@ -2219,6 +2483,7 @@ document.addEventListener('click', e => {
   else if (act === 'big') showBig(ITEMS[el.dataset.id]);
   else if (act === 'peek') document.querySelectorAll('[data-peek="help"]').forEach(n => { n.hidden = !n.hidden; });
   else if (act === 'pdeck') { phraseDeck = el.dataset.id; render(); }
+  else if (act === 'sticker') { const u = SOUND_BY[el.dataset.id]; if (u) speak(u.stItem); }
   else if (act === 'set') {
     let v = el.dataset.v; const k = el.dataset.k;
     if (k === 'newPerDay' || k === 'rate' || k === 'soundsPerDay') v = +v;
@@ -2246,6 +2511,37 @@ document.addEventListener('click', e => {
     save(); resetArmed = false; render();
   }
 });
+function shopAction(el) {
+  const act = el.dataset.act, id = el.dataset.id, i = +el.dataset.i;
+  const nIn = document.getElementById('rwName'), eIn = document.getElementById('rwEmoji');
+  if (nIn) draft = {n: nIn.value, e: eIn.value};   // keep what you typed while the page redraws
+  if (act === 'buy') { buyArm = id; shopMsg = ''; }
+  else if (act === 'buyno') buyArm = null;
+  else if (act === 'buyyes') {
+    const r = allRewards().find(x => x.id === id);
+    if (r && wallet() >= r.p) {
+      S.spent = (S.spent || 0) + r.p;
+      (S.owned || (S.owned = [])).push({id: r.id, e: r.e, n: r.n, p: r.p, at: Date.now(), used: 0});
+      save(); shopMsg = ''; toast(`🎉 Coupon added: ${r.e} ${r.n}. Show it to Max!`);
+    }
+    buyArm = null;
+  }
+  else if (act === 'coupon') { showCoupon(S.owned[i]); return true; }
+  else if (act === 'use') useArm = i;
+  else if (act === 'useno') useArm = null;
+  else if (act === 'useyes') { if (S.owned[i]) { S.owned[i].used = Date.now(); save(); toast('✅ Enjoy it! 💕'); } useArm = null; }
+  else if (act === 'rwprice') newPrice = +el.dataset.v;
+  else if (act === 'addreward') {
+    const name = document.getElementById('rwName').value.trim(), emo = document.getElementById('rwEmoji').value.trim() || '🎀';
+    if (!name) { shopMsg = 'Write what the reward is first.'; }
+    else { (S.custom || (S.custom = [])).push({id: 'c' + Date.now(), e: emo, n: name, p: newPrice}); save(); shopMsg = ''; draft = {n: '', e: ''}; toast(`✨ ${emo} ${name} is in the shop!`); }
+  }
+  else if (act === 'rm') rmArm = id;
+  else if (act === 'rmyes') { S.custom = (S.custom || []).filter(r => r.id !== id); rmArm = null; save(); }
+  else return false;
+  const y = window.scrollY; render(); window.scrollTo(0, y);
+  return true;
+}
 document.addEventListener('change', e => {
   const el = e.target;
   if (el.dataset && el.dataset.act === 'deck') { S.settings.decks[el.dataset.id] = el.checked; save(); render(); }
@@ -2259,5 +2555,6 @@ document.addEventListener('keydown', e => {
 
 try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', () => { pickVoice(); if (tab === 'settings') render(); }); } catch (e) {}
 render();
+cloudInit();
 loadBundle('basics'); loadBundle('say');
 </script>
