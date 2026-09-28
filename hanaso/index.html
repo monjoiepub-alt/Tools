@@ -1325,6 +1325,12 @@ let S = load();
 let storageOK = false, lastSaved = null;
 try { localStorage.setItem(KEY + '.test', '1'); storageOK = localStorage.getItem(KEY + '.test') === '1'; localStorage.removeItem(KEY + '.test'); } catch (e) { storageOK = false; }
 let storagePersisted = null;
+/* In-app views (like the Claude app) may clear saved data when they close. Android marks them with "wv";
+   on iPhone, in-app views lack the word "Safari". */
+const UA = navigator.userAgent || '';
+const inAppView = /; wv\)/.test(UA) || (/iPhone|iPad/.test(UA) && !/Safari\//.test(UA)) || /Claude/i.test(UA);
+let storageWarnHidden = false;
+try { storageWarnHidden = localStorage.getItem(KEY + '.inappok') === '1'; } catch (e) {}
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(ok => { storagePersisted = ok; }).catch(() => {}); } catch (e) {}
 function save() {
   try { localStorage.setItem(KEY, JSON.stringify(S)); lastSaved = new Date(); storageOK = true; }
@@ -1774,7 +1780,7 @@ function todayPanel() {
       <div><div class="eyebrow">Tonight's conversation · day ${P.n}</div><p>${esc(missionFor(P.n, P.deck).task)}</p></div>
       <div class="btn-row" style="grid-column:1 / -1"><button class="btn btn-line" data-act="mission">Open</button><button class="btn btn-primary" data-act="talked">We talked! +30</button></div>
     </div>` : '';
-  const warn = storageOK ? '' : `<div class="warn">⚠️ <b>This browser is not saving your progress.</b> Open the link in Chrome or Safari itself (not inside another app, not in a private tab). Until then, copy a backup code in Settings after each lesson.</div>`;
+  const warn = inAppView && !storageWarnHidden ? `<div class="warn">📱 <b>You are inside an app, not in Chrome or Safari.</b> Your progress may be lost when the app closes. Open this link in Chrome (Android) or Safari (iPhone), then use "Add to Home screen" so it opens like an app.<button class="mini" data-act="hidewarn" style="margin-top:8px">I understand, hide this</button></div>` : storageOK ? '' : `<div class="warn">⚠️ <b>This browser is not saving your progress.</b> Open the link in Chrome or Safari itself (not inside another app, not in a private tab). Until then, copy a backup code in Settings after each lesson.</div>`;
   return `${warn}<section class="panel today">${main}${mission}
     <div class="week">${weekStrip()}</div>
     ${levelBar()}
@@ -2362,6 +2368,7 @@ document.addEventListener('click', e => {
   const act = el.dataset.act;
   if (act === 'start') startSession();
   else if (act === 'lesson') startLesson();
+  else if (act === 'hidewarn') { storageWarnHidden = true; try { localStorage.setItem(KEY + '.inappok', '1'); } catch (er) {} render(); }
   else if (act === 'buy') {
     const r = allRewards().find(x => x.id === el.dataset.id); if (!r) return;
     if (coins() < r.price) return;
