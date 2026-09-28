@@ -1,0 +1,848 @@
+<title>Aya &amp; Max Money Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F2F5F3; --surface:#FFFFFF; --ink:#15221E; --muted:#4E5D57; --line:#D6DED9;
+  --accent:#1C5D78; --accent-ink:#FFFFFF; --accent-soft:#DCEBF1; --marker:#E9B824;
+  --ok:#23794A; --ok-soft:#DDF0E3; --mid:#8A5A0E; --mid-soft:#F6EACB; --no:#A63D33; --no-soft:#F5DEDA;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+  --band:#1C5D78;
+  --font-body:"Lexend", "Segoe UI", system-ui, sans-serif;
+  --font-display:"Bricolage Grotesque", "Lexend", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1715; --surface:#16211E; --ink:#E7EFEB; --muted:#A3B2AC; --line:#2A3833;
+    --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
+    --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+    --band:#7CC0DB;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1715; --surface:#16211E; --ink:#E7EFEB; --muted:#A3B2AC; --line:#2A3833;
+  --accent:#7CC0DB; --accent-ink:#0F1715; --accent-soft:#183440;
+  --ok:#6FCF97; --ok-soft:#173826; --mid:#E3B45A; --mid-soft:#3A2E14; --no:#F08A7E; --no-soft:#3E1E1B;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  --band:#7CC0DB;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;letter-spacing:-0.01em}
+h2{font-size:1.6rem;font-weight:800;display:flex;align-items:center;gap:12px}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0;max-width:65ch}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--marker);outline-offset:2px;border-radius:6px}
+header.top{display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:8px;background:var(--marker);border-radius:2px;display:inline-block}
+.lead{font-size:1.1rem;color:var(--muted)}
+.muted{color:var(--muted)}
+.hint{color:var(--muted);font-size:.95rem}
+section{display:flex;flex-direction:column;gap:18px}
+.sec-head{display:flex;flex-direction:column;gap:6px}
+.step{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:inline-grid;place-items:center;font-size:1.1rem;flex:none}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px;align-items:start}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label,.lbl{font-size:.88rem;color:var(--muted);font-weight:500}
+.field small{font-size:.8rem;color:var(--muted)}
+input[type=number],input[type=text],select{font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:7px 10px;width:100%;min-width:0;font-variant-numeric:tabular-nums}
+input:focus,select:focus{border-color:var(--accent);outline:none}
+.unit{display:flex;align-items:center;gap:6px}
+.unit span{color:var(--muted);font-size:.9rem;flex:none}
+.check{display:flex;align-items:center;gap:10px;font-size:.95rem;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.btn{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{padding:3px 10px;font-size:.85rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:1.2rem;line-height:1;padding:4px 8px;border-radius:8px}
+.x:hover{background:var(--no-soft);color:var(--no)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.tile .k{font-size:.85rem;color:var(--muted)}
+.tile .v{font-family:var(--font-display);font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15}
+.tile .s{font-size:.85rem;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:.82rem;font-weight:600;width:fit-content}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.mid{background:var(--mid-soft);color:var(--mid)}
+.pill.no{background:var(--no-soft);color:var(--no)}
+
+/* tables */
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+thead th{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0;white-space:nowrap}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr.cls td{font-family:var(--font-display);font-weight:600;color:var(--ink);padding-top:14px;background:var(--bg)}
+tr.retire td{background:var(--accent-soft)}
+tr.short td{background:var(--no-soft)}
+.holdings{min-width:760px}
+.holdings input{padding:4px 8px}
+.holdings td.num input{width:78px;text-align:right}
+.yeartable{min-width:980px;font-size:.92rem}
+.swatch{width:12px;height:12px;border-radius:3px;display:inline-block;flex:none}
+.stratTag{font-size:.8rem;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.st-aggressive{background:var(--no-soft);color:var(--no)}
+.st-moderate{background:var(--mid-soft);color:var(--mid)}
+.st-safe{background:var(--ok-soft);color:var(--ok)}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-weight:500}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+/* bars */
+.stack{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px;background:var(--surface)}
+.stack i{display:block;height:100%;min-width:0}
+.stack i:first-child{border-radius:4px 0 0 4px}
+.stack i:last-child{border-radius:0 4px 4px 0}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.flow{display:flex;flex-direction:column;gap:6px}
+.flowrow{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;font-variant-numeric:tabular-nums;padding:4px 0;border-bottom:1px dashed var(--line)}
+.flowrow:last-child{border-bottom:0}
+.flowrow .acct{font-size:.8rem;color:var(--muted)}
+.flowrow .m{min-width:80px;text-align:right}
+.flowrow .y{min-width:90px;text-align:right;color:var(--muted)}
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.scard{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.scard.on{border-color:var(--accent)}
+.scard dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-variant-numeric:tabular-nums}
+.scard dt{color:var(--muted);font-size:.92rem}
+.scard dd{margin:0;text-align:right;font-weight:600}
+.scard .was{font-weight:400;color:var(--muted);font-size:.85rem}
+
+/* chart */
+.chartbox{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 8px 4px}
+.chartbox svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:10px;padding:8px 10px;font-size:.85rem;line-height:1.45;font-variant-numeric:tabular-nums;min-width:170px;box-shadow:0 4px 14px rgb(0 0 0 / .18);z-index:2}
+.tip b{font-weight:600}
+.tip .r{display:flex;justify-content:space-between;gap:12px}
+.axis text{fill:var(--muted);font-size:12px;font-family:var(--font-body)}
+.axis line{stroke:var(--line)}
+
+.notes{display:flex;flex-direction:column;gap:10px;margin:0;padding-left:1.2em}
+.notes li{max-width:75ch}
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+details summary{cursor:pointer;font-weight:600;font-family:var(--font-display);font-size:1.1rem}
+details[open] summary{margin-bottom:10px}
+.warn{color:var(--no);font-size:.9rem;font-weight:500}
+textarea{font:inherit;font-size:.85rem;width:100%;min-height:90px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:8px}
+footer{color:var(--muted);font-size:.9rem;display:flex;flex-direction:column;gap:8px}
+@media (max-width:560px){
+  .flowrow{grid-template-columns:auto 1fr auto}
+  .flowrow .y{display:none}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Built from “Plan investment” spreadsheet · assumptions checked Sept 2026</div>
+  <h1>Aya &amp; Max Money Plan</h1>
+  <p class="lead">Your spreadsheet, rebuilt so it counts inflation, fees, bad market years and tax on profit only. Change any number and everything updates. All euro amounts you type are in <b>today’s money</b>.</p>
+  <div class="row">
+    <button class="btn" id="resetBtn" type="button">Reset to spreadsheet numbers</button>
+    <span class="hint" id="saveState">Your changes are saved in this browser.</span>
+  </div>
+</header>
+
+<!-- RESULTS FIRST -->
+<section id="results">
+  <div class="sec-head">
+    <h2>The big picture</h2>
+    <p class="hint">2,000 possible futures, each with its own good and bad market years. Amounts in today’s euros.</p>
+  </div>
+  <div class="tiles" id="tiles"></div>
+  <div class="chartbox" id="fanBox">
+    <svg id="fan" viewBox="0 0 900 380" role="img" aria-label="Range of possible savings by age"></svg>
+    <div class="tip" id="fanTip" hidden></div>
+  </div>
+  <div class="legend">
+    <span><i class="swatch" style="background:var(--band);opacity:.18"></i>9 in 10 futures land in here</span>
+    <span><i class="swatch" style="background:var(--band);opacity:.38"></i>Half of futures land in here</span>
+    <span><i class="swatch" style="background:var(--band);height:3px"></i>Middle future (median)</span>
+    <span><i class="swatch" style="background:var(--s2);height:3px"></i>Your spreadsheet’s line</span>
+  </div>
+  <div class="panel" id="sheetCompare"></div>
+</section>
+
+<!-- STEP 1 BUDGET -->
+<section id="budget">
+  <div class="sec-head">
+    <h2><span class="step">1</span>Household budget</h2>
+    <p class="hint">Net pay per year (after income tax). This works out how much you can invest each year.</p>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <div class="fields">
+        <div class="field"><label for="b_incAya">Aya’s net pay / year</label><div class="unit"><input type="number" id="b_incAya" data-k="budget.incAya" step="500"><span>€</span></div></div>
+        <div class="field"><label for="b_incMax">Max’s net pay / year</label><div class="unit"><input type="number" id="b_incMax" data-k="budget.incMax" step="500"><span>€</span></div></div>
+        <div class="field"><label for="b_spend">Basic costs / year</label><div class="unit"><input type="number" id="b_spend" data-k="budget.spend" step="500"><span>€</span></div><small>Rent, food, insurance, travel basics</small></div>
+        <div class="field"><label for="b_savePct">Saving share of pay</label><div class="unit"><input type="number" id="b_savePct" data-k="budget.savePct" step="1"><span>%</span></div></div>
+        <div class="field"><label for="b_efHave">Emergency fund now</label><div class="unit"><input type="number" id="b_efHave" data-k="budget.efHave" step="500"><span>€</span></div><small>In the Belfius joint account</small></div>
+        <div class="field"><label for="b_efMonths">Emergency fund goal</label><div class="unit"><input type="number" id="b_efMonths" data-k="budget.efMonths" step="0.5"><span>months</span></div><small>Of basic costs. Sheet used 70% of a year = 8.4</small></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Where each month’s pay goes</h3>
+      <div class="stack" id="flowBar" aria-hidden="true"></div>
+      <div class="flow" id="flowList"></div>
+      <p class="hint" id="efNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2 PORTFOLIO -->
+<section id="portfolio">
+  <div class="sec-head">
+    <h2><span class="step">2</span>Three investment mixes</h2>
+    <p class="hint">“Typical yearly growth” is after fund fees. “Ups and downs” (volatility) shows how wild a normal year can be. Grey numbers show what the spreadsheet had.</p>
+  </div>
+  <div class="compare" id="stratCards"></div>
+  <div class="panel">
+    <h3>Mix by type</h3>
+    <div class="flow" id="allocBars"></div>
+    <div class="legend" id="allocLegend"></div>
+  </div>
+  <div class="panel">
+    <div class="row" style="justify-content:space-between">
+      <h3>Edit a mix</h3>
+      <div class="tabs" role="tablist" id="stratTabs"></div>
+    </div>
+    <div class="fields" id="classFields"></div>
+    <p class="warn" id="classWarn" hidden></p>
+    <div class="tablebox"><table class="holdings" id="holdTable"></table></div>
+    <p class="hint">“% of type” is the share inside that type (for example World is 45% of the stock part). Return and ups/downs are long-term yearly guesses in euros before inflation.</p>
+  </div>
+</section>
+
+<!-- STEP 3 LIFE PLAN -->
+<section id="plan">
+  <div class="sec-head">
+    <h2><span class="step">3</span>Life plan</h2>
+    <p class="hint">When you add money, when you take it out, and when you stop working.</p>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Start</h3>
+      <div class="fields">
+        <div class="field"><label for="p_startAge">Age at start</label><input type="number" id="p_startAge" data-k="plan.startAge"></div>
+        <div class="field"><label for="p_startYear">Start year</label><input type="number" id="p_startYear" data-k="plan.startYear"></div>
+        <div class="field"><label for="p_start">First investment</label><div class="unit"><input type="number" id="p_start" data-k="plan.start" step="1000"><span>€</span></div></div>
+      </div>
+      <h3>Money you add each year</h3>
+      <div id="periods" class="flow"></div>
+      <div class="row">
+        <button class="btn small" type="button" id="addPeriod">+ Add a period</button>
+        <button class="btn small" type="button" id="useBudget"></button>
+      </div>
+      <label class="check"><input type="checkbox" id="p_grow" data-b="plan.grow">Raise what we add with inflation each year (pay usually goes up)</label>
+    </div>
+    <div class="panel">
+      <h3>Retirement</h3>
+      <div class="fields">
+        <div class="field"><label for="p_retireAge">Stop adding, start living from it at age</label><input type="number" id="p_retireAge" data-k="plan.retireAge"></div>
+        <div class="field"><label for="p_spendOut">Take out each year</label><div class="unit"><input type="number" id="p_spendOut" data-k="plan.spend" step="1000"><span>€</span></div><small>After tax, in today’s money</small></div>
+        <div class="field"><label for="p_endAge">Plan until age</label><input type="number" id="p_endAge" data-k="plan.endAge"></div>
+        <div class="field"><label for="p_penAge">State / work pension from age</label><input type="number" id="p_penAge" data-k="plan.penAge"></div>
+        <div class="field"><label for="p_pen">Pension for both / year</label><div class="unit"><input type="number" id="p_pen" data-k="plan.pension" step="1000"><span>€</span></div><small>After tax, today’s money. Check tyoelake.fi and mypension.be</small></div>
+      </div>
+      <h3>Big moments &amp; places</h3>
+      <p class="hint">Amount = money taken out that year. Use 0 for a note only. A minus number adds money (a gift, a sale).</p>
+      <div id="events" class="flow"></div>
+      <div class="row"><button class="btn small" type="button" id="addEvent">+ Add a moment</button></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>When to switch mixes</h3>
+      <div class="field"><label for="p_switch">Rule</label>
+        <select id="p_switch" data-s="plan.switchMode">
+          <option value="balance">By size of savings (your spreadsheet’s rule)</option>
+          <option value="age">By age</option>
+          <option value="aggressive">Always Aggressive</option>
+          <option value="moderate">Always Moderate</option>
+          <option value="safe">Always Safe</option>
+        </select>
+      </div>
+      <div class="fields" id="switchBalance">
+        <div class="field"><label for="p_t1">Moderate from</label><div class="unit"><input type="number" id="p_t1" data-k="plan.t1" step="10000"><span>€</span></div></div>
+        <div class="field"><label for="p_t2">Safe from</label><div class="unit"><input type="number" id="p_t2" data-k="plan.t2" step="10000"><span>€</span></div></div>
+      </div>
+      <div class="fields" id="switchAge">
+        <div class="field"><label for="p_ageA">Moderate from age</label><input type="number" id="p_ageA" data-k="plan.ageA"></div>
+        <div class="field"><label for="p_ageB">Safe from age</label><input type="number" id="p_ageB" data-k="plan.ageB"></div>
+      </div>
+      <p class="hint">Below the first line the plan uses Aggressive. Amounts are in today’s money.</p>
+    </div>
+    <div class="panel">
+      <h3>Inflation, tax and costs</h3>
+      <div class="fields">
+        <div class="field"><label for="p_infl">Inflation / year</label><div class="unit"><input type="number" id="p_infl" data-k="plan.infl" step="0.1"><span>%</span></div><small>ECB target is 2%</small></div>
+        <div class="field"><label for="p_buy">Cost when buying</label><div class="unit"><input type="number" id="p_buy" data-k="plan.buyCost" step="0.05"><span>%</span></div><small>Broker fee + Belgian TOB tax</small></div>
+      </div>
+      <div class="field"><label for="p_tax">Tax on investment profit (where you live when you sell)</label>
+        <select id="p_tax" data-s="plan.tax">
+          <option value="fi">Finland: 30% of profit (34% above €30k), after 10 years only 60% counts</option>
+          <option value="be">Belgium (from 2026): 10% of profit above €10k a year</option>
+          <option value="jp">Japan: 20.315% of profit (outside NISA)</option>
+          <option value="custom">Custom % of profit</option>
+          <option value="sheet">Spreadsheet rule: 30% of the whole amount</option>
+        </select>
+      </div>
+      <div class="field" id="customTaxBox"><label for="p_customTax">Custom tax on profit</label><div class="unit"><input type="number" id="p_customTax" data-k="plan.customTax" step="1"><span>%</span></div></div>
+      <p class="hint" id="taxNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 4 TABLE -->
+<section id="years">
+  <div class="sec-head">
+    <h2><span class="step">4</span>Year by year</h2>
+    <p class="hint">The “middle” path: every year grows exactly at the typical rate. Real life will bounce around this line.</p>
+  </div>
+  <div class="row">
+    <label class="check"><input type="checkbox" id="showNominal">Show future euros (the number on your bank screen then) instead of today’s euros</label>
+  </div>
+  <div class="tablebox"><table class="yeartable" id="yearTable"></table></div>
+</section>
+
+<section id="about">
+  <div class="sec-head"><h2>What changed from the spreadsheet</h2></div>
+  <ol class="notes">
+    <li><b>Weighted returns.</b> The sheet used AVERAGE() inside each type, so a 12.5% fund counted as much as a 45% fund. Now each fund counts by its size.</li>
+    <li><b>Ups and downs.</b> The sheet grew every year by the same %. Here 2,000 random futures include crashes (with “fat tails”, so big drops happen about as often as in real markets). Crypto is modelled with 65–80% yearly swings.</li>
+    <li><b>Inflation.</b> €30,000 in 2058 buys about what €16,000 buys today at 2% inflation. Everything is shown in today’s money unless you switch the table.</li>
+    <li><b>Tax on profit only.</b> The sheet took 30% of every withdrawal on top. In real life only the profit part of what you sell is taxed. The tool tracks what you paid in, so it knows the profit share each year.</li>
+    <li><b>Fees.</b> Each fund’s yearly fee (TER) and a buying cost are subtracted.</li>
+    <li><b>Timing.</b> Money you add during a year grows for about half a year, not a full year.</li>
+    <li><b>“Total interest” fix.</b> The sheet’s total interest (end balance minus money put in) forgot the money taken out and the tax. The tiles above count it correctly.</li>
+    <li><b>Fixed links.</b> The Moderate and Aggressive tabs used the Safe capital cell ($A$3). Here each mix uses the real balance.</li>
+  </ol>
+  <details>
+    <summary>Save or move your plan</summary>
+    <p class="hint">Copy this text to keep a backup or open the plan on another device. Paste a saved plan and press Load.</p>
+    <textarea id="planText" aria-label="Plan as text"></textarea>
+    <div class="row">
+      <button class="btn" type="button" id="copyPlan">Copy plan</button>
+      <button class="btn" type="button" id="loadPlan">Load pasted plan</button>
+      <span class="hint" id="planMsg"></span>
+    </div>
+  </details>
+</section>
+
+<footer>
+  <p>This is a planning tool, not financial advice. Returns are guesses based on long-term forecasts from large asset managers (stocks roughly 5–7.5% a year in euros, bonds about 3%). Tax rules change and depend on where you live when you sell: check with Vero (Finland), SPF Finances (Belgium) or the NTA (Japan) before big moves.</p>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- defaults (from the spreadsheet) ---------- */
+const CLS = {
+  eq:{name:"Stocks (ETF)", role:"Main engine", color:"--s1"},
+  bd:{name:"Bonds", role:"Stability", color:"--s2"},
+  cr:{name:"Crypto", role:"Growth bet", color:"--s3"},
+  cm:{name:"Gold & raw materials", role:"Safety", color:"--s4"}
+};
+const CLS_KEYS = ["eq","bd","cr","cm"];
+/* correlation between types (same type uses the diagonal) */
+const RHO = {eq:{eq:.85,bd:.1,cr:.35,cm:.25}, bd:{bd:.7,cr:0,cm:.1}, cr:{cr:.75,cm:.15}, cm:{cm:.5}};
+const rho = (a,b) => RHO[a]?.[b] ?? RHO[b][a];
+const STRATS = ["aggressive","moderate","safe"];
+const SNAME = {aggressive:"Aggressive", moderate:"Moderate", safe:"Safe"};
+
+function items(eqW, sheetEq){
+  return [
+    {c:"eq", name:"World", tk:"VWCE / IWDA", w:eqW[0], ret:6.5, vol:15, ter:0.2, sheet:sheetEq[0]},
+    {c:"eq", name:"Europe", tk:"IEUR / Amundi MSCI Europe", w:eqW[1], ret:6.5, vol:16, ter:0.12, sheet:sheetEq[1]},
+    {c:"eq", name:"Emerging markets", tk:"EIMI / VFEM", w:eqW[2], ret:7, vol:19, ter:0.18, sheet:6.5},
+    {c:"eq", name:"US tech & AI", tk:"IUIT / XAIX", w:eqW[3], ret:7, vol:24, ter:0.3, sheet:9},
+    {c:"bd", name:"US treasuries", tk:"iShares USD Treasury UCITS", w:20, ret:3.5, vol:8, ter:0.07, sheet:3.2},
+    {c:"bd", name:"Euro company bonds", tk:"iShares Euro Corp (IEAC)", w:40, ret:3.5, vol:5, ter:0.2, sheet:3.5},
+    {c:"bd", name:"World government bonds", tk:"iShares Global Govt", w:30, ret:3, vol:5, ter:0.2, sheet:3.5},
+    {c:"bd", name:"Euro inflation-linked", tk:"IBCI / IEIL", w:10, ret:2.8, vol:6, ter:0.09, sheet:2.8},
+    {c:"cr", name:"Bitcoin", tk:"BTC (or ETP)", w:70, ret:8.5, vol:65, ter:0.4, sheet:8.5},
+    {c:"cr", name:"Ethereum", tk:"ETH (or ETP)", w:30, ret:9, vol:80, ter:0.4, sheet:9},
+    {c:"cm", name:"Gold", tk:"Xtrackers Physical Gold (XAD5)", w:60, ret:3.5, vol:15, ter:0.15, sheet:3.5},
+    {c:"cm", name:"Energy & metals", tk:"WisdomTree Energy", w:40, ret:3.5, vol:22, ter:0.4, sheet:4}
+  ];
+}
+function defaults(){
+  return {
+    budget:{incAya:35000, incMax:23000, spend:30000, savePct:24, efHave:21000, efMonths:8.4},
+    strategies:{
+      safe:{cls:{eq:40,bd:40,cr:10,cm:10}, items:items([45,12.5,25,17.5],[8,6])},
+      moderate:{cls:{eq:60,bd:20,cr:12,cm:8}, items:items([45,20,20,15],[7,5.5])},
+      aggressive:{cls:{eq:70,bd:0,cr:22,cm:8}, items:items([45,20,20,15],[7,5.5])}
+    },
+    plan:{
+      startAge:25, startYear:2027, start:30000,
+      periods:[{from:26,to:30,amt:2000},{from:31,to:55,amt:12000}],
+      grow:true,
+      retireAge:56, spend:30000, endAge:99, penAge:67, pension:0,
+      events:[
+        {age:25,label:"Finland",amt:0},{age:26,label:"Japan",amt:0},{age:27,label:"Australia",amt:0},
+        {age:28,label:"New Zealand",amt:0},{age:29,label:"Canada",amt:0},{age:30,label:"Finland van",amt:0},
+        {age:31,label:"Van life",amt:15000},{age:35,label:"Buy a house, divide and rent",amt:50000}
+      ],
+      switchMode:"balance", t1:350000, t2:500000, ageA:40, ageB:50,
+      infl:2, buyCost:0.2, tax:"fi", customTax:30
+    }
+  };
+}
+const KEY = "aya-max-money-plan-v1";
+let S;
+try{ S = JSON.parse(localStorage.getItem(KEY)) || defaults(); }catch(e){ S = defaults(); }
+if(!S.plan || !S.strategies || !S.budget) S = defaults();
+if(S.plan.penAge==null){ S.plan.penAge=67; S.plan.pension=0; }
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); $("saveState").textContent = "Your changes are saved in this browser."; }
+  catch(e){ $("saveState").textContent = "This browser can’t save changes. Use “Save or move your plan” below."; }
+}
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const eur0 = new Intl.NumberFormat("en-IE",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+const eur = v => eur0.format(Math.round(v||0));
+const pct = (v,d=1) => (v*100).toFixed(d).replace(/\.0$/,"") + "%";
+function short(v){
+  const a=Math.abs(v), s=v<0?"−":"";
+  if(a>=1e6) return s+"€"+(a/1e6).toFixed(a>=1e7?0:1).replace(/\.0$/,"")+"M";
+  if(a>=1e3) return s+"€"+Math.round(a/1e3)+"k";
+  return s+"€"+Math.round(a);
+}
+function getPath(p){ return p.split(".").reduce((o,k)=>o?.[k], S); }
+function setPath(p,v){ const ks=p.split("."); let o=S; for(let i=0;i<ks.length-1;i++) o=o[ks[i]]; o[ks.at(-1)]=v; }
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- budget ---------- */
+function budget(){
+  const b=S.budget, inc=b.incAya+b.incMax, save=inc*b.savePct/100;
+  const efGoal=b.spend/12*b.efMonths, efGap=Math.max(0,efGoal-b.efHave);
+  const efTop=Math.min(save, efGap);           // top up within one year
+  const invest=save-efTop;
+  const left=inc-save-b.spend;
+  const shA = inc? b.incAya/inc : .5;
+  return {inc, save, efGoal, efGap, efTop, invest, left, funA:left*shA, funM:left*(1-shA), shA};
+}
+
+/* ---------- portfolio math ---------- */
+function stratStats(key){
+  const st=S.strategies[key]; let ret=0, fee=0, sheet=0, list=[];
+  for(const c of CLS_KEYS){
+    const its=st.items.filter(i=>i.c===c), cw=(st.cls[c]||0)/100;
+    const sumW=its.reduce((a,i)=>a+(+i.w||0),0)||1;
+    let sAvg = its.length ? its.reduce((a,i)=>a+(+i.sheet||0),0)/its.length : 0;
+    sheet += cw*sAvg/100;
+    for(const i of its){ const W=cw*(+i.w||0)/sumW; list.push({W,c,vol:(+i.vol||0)/100}); ret+=W*(+i.ret||0)/100; fee+=W*(+i.ter||0)/100; }
+  }
+  let v=0;
+  for(const a of list) for(const b of list){ v += a.W*b.W*a.vol*b.vol*(a===b?1:rho(a.c,b.c)); }
+  const vol=Math.sqrt(v), net=ret-fee;
+  const s=Math.sqrt(Math.log(1+vol*vol/((1+net)*(1+net))));
+  const bad=Math.exp(Math.log(1+net)-1.645*s)-1;   // 1-in-20 year
+  const clsSum=CLS_KEYS.reduce((a,c)=>a+(+st.cls[c]||0),0);
+  return {ret, fee, net, vol, s, bad, sheet, clsSum};
+}
+
+/* ---------- simulation ---------- */
+function prep(){
+  const p=S.plan, years=Math.max(1,Math.min(90,p.endAge-p.startAge+1));
+  const inflow=new Array(years).fill(0), out=new Array(years).fill(0), notes=new Array(years).fill("");
+  for(let i=0;i<years;i++){
+    const age=p.startAge+i;
+    for(const pr of p.periods) if(age>=pr.from && age<=pr.to) inflow[i]+= +pr.amt||0;
+    if(age>=p.retireAge) out[i]+= Math.max(0,(+p.spend||0)-(age>=(+p.penAge||999)?(+p.pension||0):0));
+  }
+  for(const e of p.events){
+    const i=e.age-p.startAge; if(i<0||i>=years) continue;
+    if(e.label) notes[i]=notes[i]?notes[i]+" · "+e.label:e.label;
+    const a=+e.amt||0; if(a>=0) out[i]+=a; else inflow[i]+=-a;
+  }
+  const st={}; for(const k of STRATS) st[k]=stratStats(k);
+  return {p, years, inflow, out, notes, st, infl:(+p.infl||0)/100, buy:(+p.buyCost||0)/100};
+}
+function pickStrat(P, age, realBal){
+  const m=P.p.switchMode;
+  if(m==="balance") return realBal>=P.p.t2 ? "safe" : realBal>=P.p.t1 ? "moderate" : "aggressive";
+  if(m==="age") return age>=P.p.ageB ? "safe" : age>=P.p.ageA ? "moderate" : "aggressive";
+  return m;
+}
+function taxOn(P, gross, bal, basis, held, inf){
+  const rule=P.p.tax;
+  const share = bal>0 ? Math.max(0,1-basis/bal) : 0;
+  let gain=gross*share;
+  if(rule==="fi"){ gain=Math.min(gain, gross*(held>=10?0.6:0.8)); return 0.30*Math.min(gain,30000)+0.34*Math.max(0,gain-30000); }
+  if(rule==="be") return 0.10*Math.max(0, gain-10000*inf);
+  if(rule==="jp") return 0.20315*gain;
+  if(rule==="custom") return (+P.p.customTax||0)/100*gain;
+  return 0;
+}
+/* one path. retFn(strategy, yearIndex) returns that year's growth */
+function runPath(P, retFn, keepRows){
+  let bal=(+P.p.start||0)*(1-P.buy), basis=bal, failAge=null, rows=keepRows?[]:null;
+  let totAdd=bal, totOut=0, totTax=0, totGrowth=0;
+  for(let i=0;i<P.years;i++){
+    const age=P.p.startAge+i, inf=Math.pow(1+P.infl,i);
+    const start=bal;
+    // money out at start of year (after-tax amount wanted, in future euros)
+    const want=P.out[i]*inf; let gross=0, tax=0, got=0, shortY=false;
+    if(want>0){
+      if(P.p.tax==="sheet"){ gross=want*1.3; tax=want*0.3; }
+      else { gross=want; for(let k=0;k<6;k++){ tax=taxOn(P,gross,bal,basis,i,inf); gross=want+tax; } }
+      if(gross>bal+1e-6){ if(failAge===null) failAge=age; shortY=true; const f=bal>0?bal/gross:0; got=want*f; tax*=f; gross=bal; }
+      else got=want;
+      if(bal>0) basis-=basis*(gross/bal);
+      bal-=gross; if(bal<1e-6){bal=0;basis=0;}
+    }
+    const strat=pickStrat(P, age, bal/inf);
+    const r=retFn(strat,i);
+    const addRaw = P.inflow[i]*(P.p.grow?inf:1);
+    const add=addRaw*(1-P.buy);
+    const growth = bal*r + add*(Math.sqrt(1+r)-1);
+    bal = Math.max(0, bal+add+growth); basis+=add;
+    totAdd+=addRaw; totOut+=got; totTax+=tax; totGrowth+=growth;
+    if(rows) rows.push({age, year:P.p.startYear+i, note:P.notes[i], start, add:addRaw, growth, gross, tax, got, end:bal, strat, inf, short: shortY});
+  }
+  return {end:bal, failAge, rows, totAdd, totOut, totTax, totGrowth};
+}
+/* the spreadsheet's exact rules, for comparison */
+function runSheet(P){
+  let K=+P.p.start||0; const line=[];
+  for(let i=0;i<P.years;i++){
+    const age=P.p.startAge+i;
+    const E=i===0?0:P.inflow[i], I=P.out[i];
+    const F=K+E; const k=F>=P.p.t2?"safe":F>=P.p.t1?"moderate":"aggressive";
+    const G=i===0?0:F*P.st[k].sheet;
+    K=F+G-I*1.3; line.push(K);
+  }
+  return line;
+}
+/* random numbers: fixed seed so results don't jump around */
+function rng(seed){ let a=seed>>>0; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function normal(R){ let u=0; while(u===0) u=R(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*R()); }
+const DF=5, TSCALE=Math.sqrt((DF-2)/DF);
+function fatShock(R){ let c=0; for(let k=0;k<DF;k++){ const z=normal(R); c+=z*z; } return normal(R)/Math.sqrt(c/DF)*TSCALE; }
+function simulate(P, n, seed){
+  const R=rng(seed), Y=P.years, real=new Float64Array(n*Y); let ok=0; const fails=[];
+  const shocks=new Float64Array(Y);
+  for(let j=0;j<n;j++){
+    for(let i=0;i<Y;i++) shocks[i]=fatShock(R);
+    const res=runPath(P,(k,i)=>{ const s=P.st[k]; return Math.exp(Math.log(1+s.net)+s.s*shocks[i])-1; }, true);
+    for(let i=0;i<Y;i++) real[j*Y+i]=res.rows[i].end/res.rows[i].inf;
+    if(res.failAge===null) ok++; else fails.push(res.failAge);
+  }
+  const pc=[.05,.25,.5,.75,.95].map(()=>new Float64Array(Y)), col=new Float64Array(n);
+  for(let i=0;i<Y;i++){
+    for(let j=0;j<n;j++) col[j]=real[j*Y+i];
+    col.sort();
+    [.05,.25,.5,.75,.95].forEach((q,qi)=>pc[qi][i]=col[Math.min(n-1,Math.floor(q*(n-1)))]);
+  }
+  fails.sort((a,b)=>a-b);
+  return {success:ok/n, pc, fails};
+}
+function safeSpend(P){
+  // highest yearly spending (today's €) where at least 90% of futures last
+  const orig=P.out.slice(), base=+P.p.spend||0; let lo=0, hi=Math.max(base*3,60000);
+  const pen=a=>a>=(+P.p.penAge||999)?(+P.p.pension||0):0;
+  const test=sp=>{ for(let i=0;i<P.years;i++){ const a=P.p.startAge+i; P.out[i]=a>=P.p.retireAge ? orig[i]-Math.max(0,base-pen(a))+Math.max(0,sp-pen(a)) : orig[i]; } return simulate(P,500,7).success>=0.9; };
+  if(!test(lo)){ P.out=orig; return 0; }
+  for(let k=0;k<13;k++){ const mid=(lo+hi)/2; if(test(mid)) lo=mid; else hi=mid; }
+  P.out=orig; return Math.floor(lo/100)*100;
+}
+
+/* ---------- rendering: inputs ---------- */
+function fillInputs(){
+  document.querySelectorAll("[data-k]").forEach(el=>{ el.value=getPath(el.dataset.k); });
+  document.querySelectorAll("[data-s]").forEach(el=>{ el.value=getPath(el.dataset.s); });
+  document.querySelectorAll("[data-b]").forEach(el=>{ el.checked=!!getPath(el.dataset.b); });
+}
+function renderPeriods(){
+  $("periods").innerHTML = S.plan.periods.map((p,i)=>`
+    <div class="row" style="flex-wrap:nowrap">
+      <div class="field" style="flex:1"><label for="per${i}f">From age</label><input type="number" id="per${i}f" data-k="plan.periods.${i}.from" value="${p.from}"></div>
+      <div class="field" style="flex:1"><label for="per${i}t">To age</label><input type="number" id="per${i}t" data-k="plan.periods.${i}.to" value="${p.to}"></div>
+      <div class="field" style="flex:1.4"><label for="per${i}a">€ / year</label><input type="number" id="per${i}a" step="500" data-k="plan.periods.${i}.amt" value="${p.amt}"></div>
+      <button class="x" type="button" data-delp="${i}" aria-label="Remove this period" style="align-self:flex-end">×</button>
+    </div>`).join("") || `<p class="hint">No money added yet.</p>`;
+}
+function renderEvents(){
+  S.plan.events.sort((a,b)=>a.age-b.age);
+  $("events").innerHTML = S.plan.events.map((e,i)=>`
+    <div class="row" style="flex-wrap:nowrap">
+      <div class="field" style="flex:0 0 72px"><label for="ev${i}a">Age</label><input type="number" id="ev${i}a" data-k="plan.events.${i}.age" value="${e.age}"></div>
+      <div class="field" style="flex:2"><label for="ev${i}l">What</label><input type="text" id="ev${i}l" data-t="plan.events.${i}.label" value="${esc(e.label)}"></div>
+      <div class="field" style="flex:1.2"><label for="ev${i}m">€ out</label><input type="number" id="ev${i}m" step="1000" data-k="plan.events.${i}.amt" value="${e.amt}"></div>
+      <button class="x" type="button" data-dele="${i}" aria-label="Remove ${esc(e.label)}" style="align-self:flex-end">×</button>
+    </div>`).join("");
+}
+let tab = "moderate";
+function renderTabs(){
+  $("stratTabs").innerHTML = STRATS.map(k=>`<button class="tab" role="tab" type="button" aria-selected="${k===tab}" data-tab="${k}">${SNAME[k]}</button>`).join("");
+  const st=S.strategies[tab];
+  $("classFields").innerHTML = CLS_KEYS.map(c=>`
+    <div class="field"><label for="cls_${c}"><span class="swatch" style="background:var(${CLS[c].color});margin-right:6px"></span>${CLS[c].name}</label>
+    <div class="unit"><input type="number" id="cls_${c}" step="1" data-k="strategies.${tab}.cls.${c}" value="${st.cls[c]}"><span>%</span></div><small>${CLS[c].role}</small></div>`).join("");
+  let h=`<thead><tr><th>Fund</th><th>Ticker / example</th><th class="n">% of type</th><th class="n">Return %</th><th class="n">Ups/downs %</th><th class="n">Fee (TER) %</th><th class="n">Sheet said</th><th></th></tr></thead><tbody>`;
+  for(const c of CLS_KEYS){
+    h+=`<tr class="cls"><td colspan="8"><span class="swatch" style="background:var(${CLS[c].color});margin-right:8px"></span>${CLS[c].name} · ${st.cls[c]}% of the mix <button class="btn small" type="button" data-addi="${c}" style="margin-left:10px">+ fund</button></td></tr>`;
+    st.items.forEach((it,i)=>{ if(it.c!==c) return;
+      const b=`strategies.${tab}.items.${i}`;
+      h+=`<tr>
+        <td><input type="text" id="it${i}n" aria-label="Fund name" data-t="${b}.name" value="${esc(it.name)}"></td>
+        <td><input type="text" id="it${i}k" aria-label="Ticker" data-t="${b}.tk" value="${esc(it.tk)}"></td>
+        <td class="num n"><input type="number" id="it${i}w" aria-label="Percent of type" step="0.5" data-k="${b}.w" value="${it.w}"></td>
+        <td class="num n"><input type="number" id="it${i}r" aria-label="Expected return" step="0.1" data-k="${b}.ret" value="${it.ret}"></td>
+        <td class="num n"><input type="number" id="it${i}v" aria-label="Volatility" step="1" data-k="${b}.vol" value="${it.vol}"></td>
+        <td class="num n"><input type="number" id="it${i}f" aria-label="Fee" step="0.01" data-k="${b}.ter" value="${it.ter}"></td>
+        <td class="n muted">${it.sheet!=null&&it.sheet!==""?it.sheet+"%":"–"}</td>
+        <td><button class="x" type="button" data-deli="${i}" aria-label="Remove ${esc(it.name)}">×</button></td></tr>`;
+    });
+  }
+  $("holdTable").innerHTML=h+"</tbody>";
+}
+
+/* ---------- rendering: outputs ---------- */
+function renderBudget(){
+  const b=budget(), m=v=>eur(v/12);
+  const parts=[
+    {k:"Basic costs", acct:"Joint Wise", v:S.budget.spend, c:"--s1"},
+    {k:"Emergency fund top-up", acct:"Joint Belfius", v:b.efTop, c:"--s2"},
+    {k:"Invest", acct:"Interactive Brokers", v:b.invest, c:"--s3"},
+    {k:"Fun money Aya", acct:"Aya Wise", v:Math.max(0,b.funA), c:"--s4"},
+    {k:"Fun money Max", acct:"Max Wise", v:Math.max(0,b.funM), c:"--s5"}
+  ];
+  const tot=parts.reduce((a,p)=>a+p.v,0)||1;
+  $("flowBar").innerHTML=parts.filter(p=>p.v>0).map(p=>`<i style="flex:${p.v/tot};background:var(${p.c})" title="${p.k}"></i>`).join("");
+  $("flowList").innerHTML=`<div class="flowrow"><span></span><b>Pay in (Joint Wise)</b><span class="m"><b>${m(b.inc)}</b></span><span class="y">${eur(b.inc)} / yr</span></div>`+
+    parts.map(p=>`<div class="flowrow"><i class="swatch" style="background:var(${p.c})"></i><span>${p.k}<br><span class="acct">→ ${p.acct}</span></span><span class="m">${m(p.v)}</span><span class="y">${eur(p.v)} / yr</span></div>`).join("");
+  let note = `Emergency goal: ${eur(b.efGoal)} (${S.budget.efMonths} months). `;
+  note += b.efGap>0 ? `You still need ${eur(b.efGap)}; ${eur(b.efTop)} of it is topped up this year before investing.` : `The fund is full, so all savings (${eur(b.invest)} a year) can be invested.`;
+  if(b.left<0) note += ` ⚠ Costs and saving are higher than pay by ${eur(-b.left)} a year.`;
+  $("efNote").textContent=note;
+  $("useBudget").textContent=`Use budget: invest ${eur(b.invest)} / year`;
+  return b;
+}
+function renderStrats(P){
+  $("stratCards").innerHTML = STRATS.map(k=>{
+    const s=P.st[k];
+    return `<div class="scard${k===tab?" on":""}">
+      <h3><span class="stratTag st-${k}">${SNAME[k]}</span></h3>
+      <dl>
+        <dt>Typical yearly growth</dt><dd>${pct(s.net)} <div class="was">sheet: ${pct(s.sheet)}</div></dd>
+        <dt>After inflation</dt><dd>${pct((1+s.net)/(1+P.infl)-1)}</dd>
+        <dt>Ups and downs</dt><dd>±${pct(s.vol,0)}</dd>
+        <dt>A bad year (1 in 20)</dt><dd style="color:var(--no)">${pct(s.bad,0)}</dd>
+        <dt>Fund fees / year</dt><dd>${pct(s.fee,2)}</dd>
+      </dl>
+      ${Math.abs(s.clsSum-100)>0.01?`<p class="warn">Types add up to ${s.clsSum}%, not 100%.</p>`:""}
+    </div>`;}).join("");
+  $("allocBars").innerHTML = STRATS.map(k=>{
+    const st=S.strategies[k], tot=CLS_KEYS.reduce((a,c)=>a+(+st.cls[c]||0),0)||1;
+    return `<div class="flowrow" style="grid-template-columns:110px 1fr"><span>${SNAME[k]}</span>
+      <div class="stack" style="height:28px" role="img" aria-label="${SNAME[k]}: ${CLS_KEYS.map(c=>CLS[c].name+" "+st.cls[c]+"%").join(", ")}">
+      ${CLS_KEYS.filter(c=>st.cls[c]>0).map(c=>`<i style="flex:${st.cls[c]/tot};background:var(${CLS[c].color});display:grid;place-items:center;font-size:.75rem;color:#fff;font-weight:600" title="${CLS[c].name} ${st.cls[c]}%">${st.cls[c]>=10?st.cls[c]+"%":""}</i>`).join("")}
+      </div></div>`;}).join("");
+  $("allocLegend").innerHTML = CLS_KEYS.map(c=>`<span><i class="swatch" style="background:var(${CLS[c].color})"></i>${CLS[c].name}</span>`).join("");
+  const cs=P.st[tab].clsSum; $("classWarn").hidden=Math.abs(cs-100)<0.01; $("classWarn").textContent=`The four types add up to ${cs}%. Make them add up to 100%.`;
+}
+function renderTable(det){
+  const nom=$("showNominal").checked;
+  const f=(v,r)=>eur(nom?v:v/r.inf);
+  let h=`<thead><tr><th>Age</th><th>Year</th><th>Note</th><th class="n">Start</th><th class="n">Added</th><th class="n">Growth</th><th class="n">Taken out</th><th class="n">Tax</th><th class="n">End</th><th>Mix</th></tr></thead><tbody>`;
+  for(const r of det.rows){
+    const cls = r.short?"short":(r.age===S.plan.retireAge?"retire":"");
+    h+=`<tr class="${cls}"><td>${r.age}</td><td>${r.year}</td><td>${esc(r.note)}${r.age===S.plan.retireAge?(r.note?" · ":"")+"Retire":""}${r.short?" · money runs short":""}</td>
+      <td class="n">${f(r.start,r)}</td><td class="n">${r.add?f(r.add,r):"–"}</td><td class="n">${f(r.growth,r)}</td>
+      <td class="n">${r.got?f(r.got,r):"–"}</td><td class="n">${r.tax?f(r.tax,r):"–"}</td><td class="n"><b>${f(r.end,r)}</b></td>
+      <td><span class="stratTag st-${r.strat}">${SNAME[r.strat]}</span></td></tr>`;
+  }
+  $("yearTable").innerHTML=h+"</tbody>";
+}
+function tile(k,v,s,pill){ return `<div class="tile"><span class="k">${k}</span><span class="v">${v}</span>${pill||""}<span class="s">${s}</span></div>`; }
+function renderTiles(P, det, mc, safe){
+  const ri=Math.min(P.years-1, Math.max(0,S.plan.retireAge-S.plan.startAge-1));
+  const atRet=det.rows[ri], sr=mc.success;
+  const lvl = sr>=.9?"ok":sr>=.75?"mid":"no";
+  const lbl = sr>=.9?"✓ Strong":sr>=.75?"! Some risk":"✕ Risky";
+  const failTxt = mc.fails.length ? `In the bad futures, money runs out around age ${mc.fails[Math.floor(mc.fails.length/2)]}.` : `Money lasted in every future.`;
+  const growthReal = det.rows.reduce((a,r)=>a+r.growth/r.inf,0);
+  const taxReal = det.rows.reduce((a,r)=>a+r.tax/r.inf,0);
+  $("tiles").innerHTML =
+    tile(`Chance money lasts to ${S.plan.endAge}`, pct(sr,0), failTxt, `<span class="pill ${lvl}">${lbl}</span>`)+
+    tile(`Savings at ${S.plan.retireAge} (middle future)`, short(mc.pc[2][ri]), `Bad case (1 in 20): ${short(mc.pc[0][ri])} · Good case: ${short(mc.pc[4][ri])}`)+
+    tile(`Safe yearly spending from ${S.plan.retireAge}`, eur(safe), `Highest amount that lasts in 9 of 10 futures. You planned ${eur(S.plan.spend)}.`)+
+    tile(`Growth over the whole plan`, short(growthReal), `Tax paid: ${short(taxReal)}. Fees cost about ${short(feeCost(P))} by ${S.plan.retireAge}.`);
+}
+let feeMemo=0;
+function feeCost(P){ return feeMemo; }
+function computeFee(P){
+  const ri=Math.min(P.years-1, Math.max(0,S.plan.retireAge-S.plan.startAge-1));
+  const a=runPath(P,k=>P.st[k].net,true).rows[ri];
+  const b=runPath(P,k=>P.st[k].ret,true).rows[ri];
+  feeMemo = Math.max(0,(b.end-a.end)/a.inf);
+}
+function renderSheetCompare(P, det, mc, sheet){
+  const ri=Math.min(P.years-1, Math.max(0,S.plan.retireAge-S.plan.startAge-1)), last=P.years-1;
+  const row=(i,label)=>{ const r=det.rows[i]; return `<tr><td>${label}</td>
+    <td class="n">${eur(sheet[i])}</td><td class="n">${eur(sheet[i]/r.inf)}</td>
+    <td class="n"><b>${eur(mc.pc[2][i])}</b></td><td class="n">${eur(mc.pc[0][i])}</td></tr>`; };
+  $("sheetCompare").innerHTML = `
+    <h3>Your spreadsheet vs. this tool</h3>
+    <div class="tablebox"><table style="min-width:560px">
+      <thead><tr><th></th><th class="n">Sheet (as shown)</th><th class="n">Sheet in today’s €</th><th class="n">Tool: middle</th><th class="n">Tool: bad case</th></tr></thead>
+      <tbody>${row(ri,`End of age ${det.rows[ri].age}`)}${row(last,`End of age ${det.rows[last].age}`)}</tbody>
+    </table></div>
+    <p class="hint">The sheet’s numbers are future euros with no inflation, no bad years and no fees. “Bad case” is 1 future in 20: the one to plan for. Tool numbers are in today’s euros.</p>`;
+}
+
+/* ---------- fan chart ---------- */
+let fanData=null;
+function renderFan(P, mc, sheet){
+  const svg=$("fan"), W=900, H=380, m={l:62,r:18,t:16,b:34};
+  const ages=Array.from({length:P.years},(_,i)=>S.plan.startAge+i);
+  const sheetReal=sheet.map((v,i)=>v/Math.pow(1+P.infl,i));
+  let maxY=0; for(let i=0;i<P.years;i++) maxY=Math.max(maxY, mc.pc[3][i]*1.25, mc.pc[2][i], Math.min(sheetReal[i], mc.pc[4][i]));
+  maxY=niceMax(maxY||1);
+  const x=a=>m.l+(a-ages[0])/Math.max(1,ages.at(-1)-ages[0])*(W-m.l-m.r);
+  const y=v=>m.t+(1-Math.min(Math.max(v,0),maxY*1.001)/maxY)*(H-m.t-m.b);
+  const area=(lo,hi)=>"M"+ages.map((a,i)=>x(a)+","+y(hi[i])).join("L")+"L"+ages.slice().reverse().map((a,j)=>{const i=ages.length-1-j;return x(a)+","+y(lo[i]);}).join("L")+"Z";
+  const line=arr=>"M"+ages.map((a,i)=>x(a)+","+y(arr[i])).join("L");
+  let g=`<g class="axis">`;
+  for(let k=0;k<=4;k++){ const v=maxY*k/4; g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke-dasharray="${k?"2 4":""}"/><text x="${m.l-8}" y="${y(v)+4}" text-anchor="end">${short(v)}</text>`; }
+  const step=ages.length>50?10:5;
+  for(const a of ages) if(a%step===0) g+=`<text x="${x(a)}" y="${H-10}" text-anchor="middle">${a}</text>`;
+  g+=`</g>`;
+  const ra=S.plan.retireAge;
+  if(ra>=ages[0]&&ra<=ages.at(-1)) g+=`<line x1="${x(ra)}" x2="${x(ra)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${x(ra)+6}" y="${m.t+12}" fill="var(--muted)" font-size="12" font-family="var(--font-body)">Retire at ${ra}</text>`;
+  g+=`<path d="${area(mc.pc[0],mc.pc[4])}" fill="var(--band)" fill-opacity=".16"/>`;
+  g+=`<path d="${area(mc.pc[1],mc.pc[3])}" fill="var(--band)" fill-opacity=".30"/>`;
+  g+=`<path d="${line(sheetReal)}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-dasharray="6 4"/>`;
+  g+=`<path d="${line(mc.pc[2])}" fill="none" stroke="var(--band)" stroke-width="2.5"/>`;
+  const li=ages.length-1;
+  g+=`<circle cx="${x(ages[li])}" cy="${y(mc.pc[2][li])}" r="4.5" fill="var(--band)" stroke="var(--surface)" stroke-width="2"/>`;
+  g+=`<line id="cross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink)" stroke-opacity=".5" visibility="hidden"/>`;
+  g+=`<rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/>`;
+  svg.innerHTML=g;
+  fanData={ages,x,W,m,mc,sheetReal};
+  const hit=$("hit");
+  hit.addEventListener("pointermove",fanHover); hit.addEventListener("pointerdown",fanHover);
+  hit.addEventListener("pointerleave",()=>{$("fanTip").hidden=true;$("cross").setAttribute("visibility","hidden");});
+}
+function niceMax(v){ const p=Math.pow(10,Math.floor(Math.log10(v))); for(const k of [1,1.5,2,2.5,3,4,5,6,8,10]) if(k*p>=v) return k*p; return 10*p; }
+function fanHover(ev){
+  const {ages,x,W,mc,sheetReal}=fanData, svg=$("fan"), rect=svg.getBoundingClientRect();
+  const sx=(ev.clientX-rect.left)/rect.width*W;
+  let i=0,best=1e9; ages.forEach((a,k)=>{const d=Math.abs(x(a)-sx); if(d<best){best=d;i=k;}});
+  const cx=x(ages[i]); const c=$("cross"); c.setAttribute("x1",cx); c.setAttribute("x2",cx); c.setAttribute("visibility","visible");
+  const tip=$("fanTip");
+  tip.innerHTML=`<b>Age ${ages[i]} · ${S.plan.startYear+i}</b>
+    <div class="r"><span>Good case</span><span>${eur(mc.pc[4][i])}</span></div>
+    <div class="r"><span>Middle</span><b>${eur(mc.pc[2][i])}</b></div>
+    <div class="r"><span>Bad case</span><span>${eur(mc.pc[0][i])}</span></div>
+    <div class="r"><span>Spreadsheet</span><span>${eur(sheetReal[i])}</span></div>`;
+  tip.hidden=false;
+  const box=$("fanBox").getBoundingClientRect(), px=cx/W*rect.width+(rect.left-box.left);
+  const tw=tip.offsetWidth; tip.style.left=Math.min(Math.max(8,px+12+tw>box.width?px-tw-12:px+12),box.width-tw-8)+"px";
+  tip.style.top="18px";
+}
+
+/* ---------- main update ---------- */
+let mcTimer=null;
+function update(full){
+  const P=prep();
+  renderBudget(); renderStrats(P);
+  $("switchBalance").hidden=S.plan.switchMode!=="balance";
+  $("switchAge").hidden=S.plan.switchMode!=="age";
+  $("customTaxBox").hidden=S.plan.tax!=="custom";
+  $("taxNote").textContent = {
+    fi:"Finland: the first €30,000 of profit in a year is taxed 30%, above that 34%. If you held for 10+ years, only 60% of what you sell can count as profit (deemed acquisition cost).",
+    be:"Belgium: new 10% tax on profits from 2026. The first €10,000 of profit per person per year is free (the tool uses one exemption; as a couple you may have two).",
+    jp:"Japan: 20.315% on profit. Inside a NISA account it’s 0%, but only while you live in Japan.",
+    custom:"Your own % of profit.",
+    sheet:"Like the spreadsheet: 30% of every withdrawal is paid on top. This overstates tax a lot."
+  }[S.plan.tax];
+  const det=runPath(P,k=>P.st[k].net,true);
+  renderTable(det);
+  clearTimeout(mcTimer);
+  mcTimer=setTimeout(()=>{
+    const P2=prep(), mc=simulate(P2,2000,42), sheet=runSheet(P2);
+    computeFee(P2);
+    const safe=safeSpend(P2);
+    renderTiles(P2,det,mc,safe); renderFan(P2,mc,sheet); renderSheetCompare(P2,det,mc,sheet);
+    $("planText").value=JSON.stringify(S);
+  }, full?0:250);
+}
+
+/* ---------- events ---------- */
+document.addEventListener("input",e=>{
+  const el=e.target;
+  if(el.dataset.k){ const v=parseFloat(el.value); if(isNaN(v)) return; setPath(el.dataset.k,v); }
+  else if(el.dataset.t){ setPath(el.dataset.t,el.value); }
+  else if(el.dataset.s){ setPath(el.dataset.s,el.value); }
+  else if(el.dataset.b){ setPath(el.dataset.b,el.checked); }
+  else if(el.id==="showNominal"){ update(); return; }
+  else return;
+  save(); update();
+});
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.k && el.dataset.k.startsWith("plan.events")) renderEvents();
+  if(el.dataset.k && el.dataset.k.startsWith("strategies.") && el.dataset.k.includes(".cls.")) renderTabs();
+});
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button"); if(!t) return;
+  const d=t.dataset;
+  if(d.tab){ tab=d.tab; renderTabs(); update(); return; }
+  if(d.delp!=null){ S.plan.periods.splice(+d.delp,1); renderPeriods(); }
+  else if(d.dele!=null){ S.plan.events.splice(+d.dele,1); renderEvents(); }
+  else if(d.deli!=null){ S.strategies[tab].items.splice(+d.deli,1); renderTabs(); }
+  else if(d.addi){ S.strategies[tab].items.push({c:d.addi,name:"New fund",tk:"",w:0,ret:5,vol:15,ter:0.2,sheet:""}); renderTabs(); }
+  else if(t.id==="addPeriod"){ const last=S.plan.periods.at(-1); const f=last?last.to+1:S.plan.startAge+1; S.plan.periods.push({from:f,to:Math.max(f,S.plan.retireAge-1),amt:5000}); renderPeriods(); }
+  else if(t.id==="addEvent"){ S.plan.events.push({age:S.plan.startAge+5,label:"New moment",amt:0}); renderEvents(); }
+  else if(t.id==="useBudget"){
+    const inv=Math.round(budget().invest/100)*100;
+    const p=S.plan.periods.find(p=>p.to>=S.plan.retireAge-1)||S.plan.periods.at(-1);
+    if(p){ p.amt=inv; } else S.plan.periods.push({from:S.plan.startAge+1,to:S.plan.retireAge-1,amt:inv});
+    renderPeriods();
+  }
+  else if(t.id==="resetBtn"){
+    if(t.dataset.armed){ S=defaults(); delete t.dataset.armed; t.textContent="Reset to spreadsheet numbers"; fillInputs(); renderPeriods(); renderEvents(); renderTabs(); }
+    else { t.dataset.armed="1"; t.textContent="Press again to reset everything"; setTimeout(()=>{delete t.dataset.armed; t.textContent="Reset to spreadsheet numbers";},4000); return; }
+  }
+  else if(t.id==="copyPlan"){
+    const txt=$("planText"); txt.value=JSON.stringify(S);
+    navigator.clipboard?.writeText(txt.value).then(()=>$("planMsg").textContent="Copied.",()=>{txt.select();$("planMsg").textContent="Text selected: press Ctrl/Cmd + C.";})
+      ?? (txt.select(), $("planMsg").textContent="Text selected: press Ctrl/Cmd + C.");
+    return;
+  }
+  else if(t.id==="loadPlan"){
+    try{ const n=JSON.parse($("planText").value); if(!n.plan||!n.budget||!n.strategies) throw 0; S=n; fillInputs(); renderPeriods(); renderEvents(); renderTabs(); $("planMsg").textContent="Plan loaded."; }
+    catch(err){ $("planMsg").textContent="That text isn’t a saved plan. Copy the whole text again and retry."; return; }
+  }
+  else return;
+  save(); update();
+});
+
+fillInputs(); renderPeriods(); renderEvents(); renderTabs(); update(true);
+</script>
