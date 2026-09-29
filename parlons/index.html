@@ -1368,8 +1368,11 @@ function fromSaved(s) {
     streak: {...b.streak, ...(s.streak || {})}, course: {...blankCourse(), ...(s.course || {})}};
 }
 function load() {
-  try { const raw = localStorage.getItem(KEY); if (raw) return fromSaved(JSON.parse(raw)); } catch (e) {}
-  return blankSave();
+  let st = null;
+  try { const raw = localStorage.getItem(KEY); if (raw) st = fromSaved(JSON.parse(raw)); } catch (e) {}
+  // An offline copy (saved from Settings) carries the progress of the moment it was saved.
+  if (typeof PARLONS_START !== 'undefined' && PARLONS_START && (!st || (PARLONS_START.updatedAt || 0) > (st.updatedAt || 0))) st = fromSaved(PARLONS_START);
+  return st || blankSave();
 }
 let S = load();
 /* Progress is saved on this phone AND, privately, in your Claude account (the db capability),
@@ -2091,6 +2094,55 @@ function showCoupon(o) {
   b.innerHTML = `<div class="coupon"><div class="c-emo" aria-hidden="true">${esc(o.e)}</div><div class="c-title">🎟️ Coupon for Aya</div><div class="c-name">${esc(o.n)}</div><div>Max, Aya earned this by learning French! 💕</div><div class="small">Bought on ${dateText(o.at)}</div></div><div class="close-hint">Tap anywhere to close</div>`;
   b.hidden = false;
 }
+/* ============================================================
+   OFFLINE COPY: save the whole app (with every recording and today's progress) as one file.
+   ============================================================ */
+let offlineOK = null, offlineMsg = '', offlineBusy = false;
+async function offlineInit() {
+  try { offlineOK = !!(window.claude && typeof window.claude.use === 'function' && await window.claude.use('downloads')); } catch (e) { offlineOK = false; }
+  if (tab === 'settings' && !sess) render();
+}
+function offlineHTML() {
+  const clean = sel => {
+    const el = document.querySelector(sel); if (!el) return '';
+    const c = el.cloneNode(true);
+    c.querySelectorAll('script').forEach(x => x.remove());
+    const v = c.querySelector('#view'); if (v) v.innerHTML = '';
+    const si = c.querySelector('#studyIn'); if (si) si.innerHTML = '';
+    if (['#study', '#big', '#toast'].includes(sel)) { c.hidden = true; if (sel !== '#study') c.innerHTML = ''; }
+    return c.outerHTML;
+  };
+  const style = [...document.querySelectorAll('style')].find(x => x.textContent.includes('--font-body'));
+  const fonts = document.querySelector('link[href*="fonts.googleapis"]');
+  const inline = [...document.scripts].filter(x => !x.src).map(x => x.textContent);
+  const audio = inline.filter(t => t.trimStart().startsWith('const AUDIO_EMBED = {'));   // the built-in recordings
+  const app = inline.filter(t => /^\s*\/\* =+\s+CONTENT/.test(t));                        // the app itself
+  const script = t => '<script>' + t.replace(/<\/script/gi, '<\\/script') + '<\/script>';
+  const start = 'const PARLONS_START = ' + JSON.stringify(S).replace(/</g, '\\u003c') + ';';
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Parlons</title>'
+    + (fonts ? '<link rel="stylesheet" href="' + fonts.href + '">' : '') + '<style>' + (style ? style.textContent : '') + '</style></head><body>'
+    + ['.app', '.tabs', '#study', '#big', '#toast'].map(clean).join('\n')
+    + audio.map(script).join('') + script(start) + app.map(script).join('')
+    + '</body></html>';
+}
+async function saveOffline() {
+  if (offlineBusy) return;
+  offlineBusy = true; offlineMsg = '⏳ Preparing the file (12 MB)…'; render();
+  try {
+    const dl = await window.claude.use('downloads');
+    if (!dl) throw {code: 'unavailable'};
+    if (typeof AUDIO_EMBED === 'undefined') offlineMsg = '!This version has no built-in audio, so the copy would be silent.';
+    else {
+      await dl.save({filename: 'Parlons.html', data: new Blob([offlineHTML()], {type: 'text/html'})});
+      offlineMsg = '📱 Saved! Look for Parlons.html in your downloads (or where you chose to save it).';
+    }
+  } catch (e) {
+    const code = e && e.code;
+    offlineMsg = code === 'declined' ? '' : code === 'rate_limited' ? '!A save question is already open. Answer it first.' : code === 'too_large' ? '!The file is too big for this app. Open the link in your phone browser and try there.' : '!Saving is not possible here. Open the link in your phone browser or the Claude app and try again.';
+  }
+  offlineBusy = false; render();
+}
+
 function syncBox() {
   const st = {on: ['☁️', 'Saved to your Claude account.', 'Your progress stays even if this phone clears its storage, and it is private: only you can see it.'],
     loading: ['⏳', 'Connecting to your account…', 'Your progress is already saved on this phone.'],
@@ -2126,6 +2178,14 @@ function viewSettings() {
     <h2>💾 Your progress</h2>
     ${syncBox()}
     <p class="muted small">Extra safety net: copy a backup code now and then, and keep it in a note or send it to yourself.</p>
+    ${offlineOK || typeof PARLONS_START !== 'undefined' ? `<div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <h3 style="font-size:18px">📱 Offline copy</h3>
+      ${typeof PARLONS_START !== 'undefined' ? `<p class="small">You are using the <b>offline copy</b>. Your progress is saved on this phone only. To bring it back to the online Parlons: tap <b>Copy backup code</b> here, then paste it in the online version with <b>Restore from code</b>.</p>` : `<p class="small">Save the whole app, with all the French audio and your progress of today, as one file on this phone. It works without internet.</p>
+      <p class="muted small">Progress you make in the copy stays in the copy. To bring it back here, copy a backup code there and restore it here.</p>
+      <button class="btn btn-primary" data-act="offline" ${offlineBusy ? 'disabled' : ''}>💾 Save Parlons on this phone</button>
+      <p class="muted small"><b>Android:</b> open Files → Downloads → Parlons.html → open with Chrome.<br><b>iPhone:</b> the Files app can't run apps inside a file, so on iPhone keep using the link.</p>`}
+      ${offlineMsg ? `<p class="msg ${offlineMsg.startsWith('!') ? 'err' : ''}">${esc(offlineMsg.replace(/^!/, ''))}</p>` : ''}
+    </div>` : ''}
     <div class="btn-row"><button class="btn btn-soft" data-act="backup">Copy backup code</button></div>
     <textarea id="restoreBox" placeholder="Paste a backup code here to restore it"></textarea>
     <div class="btn-row"><button class="btn btn-line" data-act="restore">Restore from code</button></div>
@@ -2492,6 +2552,7 @@ document.addEventListener('click', e => {
     else if (k === 'autoplay') v = v === 'true';
     S.settings[k] = v; save(); render();
   }
+  else if (act === 'offline') saveOffline();
   else if (act === 'testvoice') speak(ITEMS['basics|Bonjour !']);
   else if (act === 'backup') {
     const code = JSON.stringify(S);
@@ -2558,5 +2619,6 @@ document.addEventListener('keydown', e => {
 try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', () => { pickVoice(); if (tab === 'settings') render(); }); } catch (e) {}
 render();
 cloudInit();
+offlineInit();
 loadBundle('basics'); loadBundle('say');
 </script>
