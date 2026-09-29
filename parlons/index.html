@@ -1420,27 +1420,41 @@ async function cloudInit() {
     const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
     const uid = user ? await user.id() : null;
     if (!db || !uid) throw new Error('no account here');
-    const col = db.collection('data/users/' + uid);
-    const snap = await col.get();
+    cloud.col = db.collection('data/users/' + uid); cloud.status = 'on';
+    await cloudPull(true);
+  } catch (e) { if (!cloud.col) cloud.status = 'local'; }
+  if (tab === 'settings' && !sess) render();
+}
+/* Compare with the account: the newer save wins. Runs when the app opens AND every time you come back to it,
+   so a page left open on one device (the MacBook) never overwrites what you did on another (the iPhone). */
+let pulling = false;
+async function cloudPull(first) {
+  if (!cloud.col || pulling) return;
+  pulling = true;
+  try {
+    const snap = await cloud.col.get();
     const docs = {};
     snap.docs.forEach(d => { const b = d.data(); if (b && typeof b.json === 'string') docs[d.id] = b.json; });
-    cloud.col = col; cloud.last = {...docs}; cloud.status = 'on';
+    cloud.last = {...docs};
     const main = docs.main ? JSON.parse(docs.main) : null;
     if (main && (main.updatedAt || 0) > (S.updatedAt || 0)) {
       main.cards = {};
       for (const id in docs) if (id.startsWith('cards-')) Object.assign(main.cards, JSON.parse(docs[id]));
-      if (sess) cloud.pending = main; else applyCloud(main);
-    } else if (!main || (main.updatedAt || 0) < (S.updatedAt || 0)) cloudPush();   // this phone is newer: upload it
-  } catch (e) { if (!cloud.col) cloud.status = 'local'; }
-  if (tab === 'settings' && !sess) render();
+      if (sess) cloud.pending = main; else applyCloud(main, first);
+    } else if (!main || (main.updatedAt || 0) < (S.updatedAt || 0)) cloudPush();   // this device is newer: upload it
+  } catch (e) { if (!first) cloud.status = 'error'; else throw e; }
+  finally { pulling = false; }
 }
-function applyCloud(main) {
+function applyCloud(main, first = true) {
   S = fromSaved(main); cloud.pending = null;
   try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
   render();
-  toast('☁️ Your progress was loaded from your account.');
+  toast(first ? '☁️ Your progress was loaded from your account.' : '☁️ Updated with what you did on your other device.');
 }
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && cloud.col) cloudPush(); });
+document.addEventListener('visibilitychange', () => {
+  if (!cloud.col) return;
+  if (document.visibilityState === 'hidden') cloudPush(); else cloudPull(false);
+});
 function today() { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
 function freshDay() { const t = today(); if (S.day.n !== t) S.day = {n: t, newSeen: 0, reviews: 0}; }
 function streakNow() { const t = today(); return (S.streak.last === t || S.streak.last === t - 1) ? S.streak.count : 0; }
@@ -2098,6 +2112,8 @@ function showCoupon(o) {
    OFFLINE COPY: save the whole app (with every recording and today's progress) as one file.
    ============================================================ */
 let offlineOK = null, offlineMsg = '', offlineBusy = false;
+// iPhone and iPad can't run an app that is saved as a file, so they get the Home Screen tip instead.
+const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 async function offlineInit() {
   try { offlineOK = !!(window.claude && typeof window.claude.use === 'function' && await window.claude.use('downloads')); } catch (e) { offlineOK = false; }
   if (tab === 'settings' && !sess) render();
@@ -2178,12 +2194,22 @@ function viewSettings() {
     <h2>💾 Your progress</h2>
     ${syncBox()}
     <p class="muted small">Extra safety net: copy a backup code now and then, and keep it in a note or send it to yourself.</p>
-    ${offlineOK || typeof PARLONS_START !== 'undefined' ? `<div class="panel" style="display:flex;flex-direction:column;gap:10px">
+    ${isIOS && typeof PARLONS_START === 'undefined' ? `<div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <h3 style="font-size:18px">📲 Parlons on your Home Screen</h3>
+      <p class="small">Put Parlons on your iPhone like a real app:</p>
+      <ol class="small" style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px">
+        <li>Open the Parlons link in <b>Safari</b> (log in to Claude if it asks).</li>
+        <li>Tap the <b>Share</b> button (the square with an arrow ⬆️).</li>
+        <li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li>
+      </ol>
+      <p class="muted small">It needs internet. Your progress is shared with your MacBook through your Claude account ☁️</p>
+    </div>` : ''}
+    ${!isIOS && (offlineOK || typeof PARLONS_START !== 'undefined') ? `<div class="panel" style="display:flex;flex-direction:column;gap:10px">
       <h3 style="font-size:18px">📱 Offline copy</h3>
-      ${typeof PARLONS_START !== 'undefined' ? `<p class="small">You are using the <b>offline copy</b>. Your progress is saved on this phone only. To bring it back to the online Parlons: tap <b>Copy backup code</b> here, then paste it in the online version with <b>Restore from code</b>.</p>` : `<p class="small">Save the whole app, with all the French audio and your progress of today, as one file on this phone. It works without internet.</p>
+      ${typeof PARLONS_START !== 'undefined' ? `<p class="small">You are using the <b>offline copy</b>. Your progress is saved on this device only. To bring it back to the online Parlons: tap <b>Copy backup code</b> here, then paste it in the online version with <b>Restore from code</b>.</p>` : `<p class="small">Save the whole app, with all the French audio and your progress of today, as one file on this computer. It works without internet, for example on a plane ✈️</p>
       <p class="muted small">Progress you make in the copy stays in the copy. To bring it back here, copy a backup code there and restore it here.</p>
-      <button class="btn btn-primary" data-act="offline" ${offlineBusy ? 'disabled' : ''}>💾 Save Parlons on this phone</button>
-      <p class="muted small"><b>Android:</b> open Files → Downloads → Parlons.html → open with Chrome.<br><b>iPhone:</b> the Files app can't run apps inside a file, so on iPhone keep using the link.</p>`}
+      <button class="btn btn-primary" data-act="offline" ${offlineBusy ? 'disabled' : ''}>💾 Save Parlons on this device</button>
+      <p class="muted small"><b>💻 Mac:</b> Finder → Downloads → double-click <b>Parlons.html</b>. If it opens as text, right-click → Open With → Safari (or Chrome).<br><b>🤖 Android:</b> Files → Downloads → Parlons.html → open with Chrome.<br><b>📱 iPhone:</b> not possible, keep using the link there.</p>`}
       ${offlineMsg ? `<p class="msg ${offlineMsg.startsWith('!') ? 'err' : ''}">${esc(offlineMsg.replace(/^!/, ''))}</p>` : ''}
     </div>` : ''}
     <div class="btn-row"><button class="btn btn-soft" data-act="backup">Copy backup code</button></div>
