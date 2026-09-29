@@ -1703,6 +1703,8 @@ const AUDIO = {}, audioLoading = {};
 const bundleOf = it => it.deck.id;
 function loadBundle(b) {
   if (AUDIO[b]) return Promise.resolve(AUDIO[b]);
+  // The single-file version (tools/build_single.py) carries every recording inside the page.
+  if (typeof AUDIO_EMBED !== 'undefined' && AUDIO_EMBED[b]) return Promise.resolve(AUDIO[b] = AUDIO_EMBED[b]);
   if (!audioLoading[b]) audioLoading[b] = fetch('audio/' + b + '.json').then(r => r.ok ? r.json() : {}).catch(() => ({})).then(d => (AUDIO[b] = d));
   return audioLoading[b];
 }

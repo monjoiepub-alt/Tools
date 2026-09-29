@@ -16,3 +16,13 @@ python3 tools/make_audio.py items.json audio            # recorded audio (SVOX P
 `AS_FRENCH` with a French-style spelling.
 
 If a phrase has no recorded audio, the app falls back to the phone's own voice.
+
+## One single HTML file
+
+The published artifact is one self-contained page with every recording inside it:
+
+```sh
+python3 tools/build_single.py index.html audio dist/parlons.html   # ~12 MB, must stay under 16 MB
+```
+
+`index.html` still works on its own too: without the built-in audio it loads `audio/<deck>.json`.
